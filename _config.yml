@@ -2,6 +2,9 @@ title: "Address Clustering Report"
 description: "Automated grouping of addresses by walkable proximity — Solution Overview for Management"
 author: "GitHub Copilot"
 
+url: "https://arcon-x.github.io"
+baseurl: "/Marius"
+
 theme: minima
 
 plugins:

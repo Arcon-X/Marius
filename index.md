@@ -12,7 +12,7 @@ This site documents the solution for grouping ~2,000 Austrian addresses into wal
 
 ## Documents
 
-- [Address Clustering & Walking Distance — Full Report](Address_Clustering_Report.html)
+- [Address Clustering & Walking Distance — Full Report]({{ "/Address_Clustering_Report" | relative_url }})
 
 ---
 
