@@ -1,7 +1,7 @@
 content = """\
 ---
 layout: default
-title: Nächstgelegene Adressen — Systemplanung
+title: Nächstgelegene Adressen — Systemplanung v2
 ---
 
 # Nächstgelegene Adressen — Vollständige Systemplanung
