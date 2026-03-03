@@ -152,3 +152,89 @@ Sort by distance, return top 5
         ↓
 Export to Excel + optional HTML map
 ```
+
+---
+
+## Scale Estimate: 10 Workers, Daily Route Planning
+
+### Assumptions
+
+| Parameter | Value |
+|---|---|
+| Field workers | 10 |
+| Addresses in pool | 2,000 |
+| Addresses visited per worker per day | ~15 |
+| KNN queries per worker per day | 1 (morning plan) + 1 re-plan midday = **2** |
+| N (nearest addresses returned) | 5 |
+| Working days per month | 22 |
+
+---
+
+### Request Volume Breakdown
+
+#### Geocoding Requests (Nominatim / OpenStreetMap)
+
+| Event | Requests | Frequency |
+|---|---|---|
+| Initial setup — geocode all 2,000 addresses | 2,000 | **Once only**, then cached |
+| Daily — geocode each worker's origin (start location) | 10 | Per day |
+| Daily — re-plan midday (optional) | 10 | Per day |
+| **Total daily (after setup)** | **~20 requests/day** | |
+| **Total monthly** | **~440 requests/month** | |
+
+> Nominatim allows ~1 request/second and is designed for reasonable use — 20 req/day is negligible.
+
+---
+
+#### KNN Computation — Phase 1 Straight-line (No API)
+
+All math runs **locally** in Python. Zero external requests per query.
+
+| Event | API calls |
+|---|---|
+| Calculate distance to all 2,000 addresses | **0** — computed on-device |
+| Sort and return top 5 | **0** |
+| **Cost** | **$0 forever** |
+
+---
+
+#### Walking Distance Refinement — Phase 2 (Optional API)
+
+Strategy: narrow to top 20 candidates via straight-line, then call walking API for only those 20.
+
+| Event | Elements per query | Queries/day | Elements/day |
+|---|---|---|---|
+| 10 workers × 2 queries | 20 candidates | 20 queries | **400 elements/day** |
+| Monthly (22 days) | | | **~8,800 elements/month** |
+
+**Cost per provider:**
+
+| Provider | Free Tier | Monthly usage | Monthly cost |
+|---|---|---|---|
+| **Nominatim + Phase 1 only** | Unlimited | 440 geocodes | **$0** |
+| **OpenRouteService (ORS)** | 500 req/day | 400 elements/day | **$0** (well within free tier) |
+| **Google Maps Distance Matrix** | $200 credit/month | 8,800 elements × $0.005 | **~$0.44/month** |
+| **OSRM self-hosted** | Unlimited | Unlimited | **$0** (server cost only) |
+
+---
+
+### Coverage — How Long to Visit All 2,000 Addresses?
+
+```
+10 workers × 15 visits/day = 150 addresses covered per day
+2,000 addresses ÷ 150 per day = ~13–14 working days ≈ 3 weeks
+```
+
+> Workers naturally gravitate toward the same geographic zones if starting from similar origins — use different starting points per worker to maximize daily coverage spread.
+
+---
+
+### Summary — Is Free Tier Sufficient?
+
+| Metric | Free Tier Limit | Our Usage | OK? |
+|---|---|---|---|
+| Nominatim geocoding | ~1,000 req/day safe | 20 req/day | ✅ Yes |
+| ORS walking API | 500 req/day | ~20 req/day | ✅ Yes |
+| Google Maps credit | $200/month | ~$0.44/month | ✅ Yes |
+
+**Conclusion: 10 workers doing daily route planning against 2,000 addresses costs $0/month on free tiers. Even with Google Maps, the cost is under $1/month.**
