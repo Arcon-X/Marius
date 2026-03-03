@@ -7,13 +7,39 @@ title: Nächstgelegene Adressen — Systemplanung
 
 **Datum:** 3. März 2026  
 **Erstellt von:** GitHub Copilot  
-**Thema:** End-to-End Systemdesign für ein webbasiertes Adress-Routingtool mit Statusverwaltung
+**Thema:** End-to-End Systemdesign — webbasiertes Adress-Routingtool mit Login, Statusverwaltung und Archivierung
 
 ---
 
-## Systemüberblick
+## Entscheidungen (bestätigt)
 
-Ein Mitarbeiter öffnet eine Webseite, gibt seinen Standort an (GPS oder manuell), wählt die gewünschte Anzahl an Adressen und erhält eine nach Entfernung sortierte Liste. Nach Bestätigung werden die Adressen als belegt markiert und stehen anderen Mitarbeitern nicht mehr zur Verfügung. Am Ende des Tages ist der Pool geleert — eine automatische Rücksetzung erfolgt täglich um Mitternacht.
+| Frage | Entscheidung |
+|---|---|
+| Login erforderlich? | **Ja** — Benutzer werden vorab vom Admin angelegt |
+| Tages-Reset? | **Nein** — nicht benötigt (Erklärung unten) |
+| Besuchte Adressen | **Dauerhaft archiviert** — einsehbar, nicht gelöscht |
+| Protokollierung | **Ja** — jede Adresse protokolliert Benutzer + Zeitpunkt |
+
+---
+
+## Warum kein Tages-Reset?
+
+Ein automatischer Tages-Reset würde bedeuten, dass bereits erledigte Adressen täglich wieder in den Pool zurückkehren — das widerspricht dem Ziel, Fortschritt dauerhaft zu verfolgen.
+
+Stattdessen gilt:
+- Adressen durchlaufen drei Status: `verfügbar` → `in Bearbeitung` → `archiviert`
+- `archiviert` ist **dauerhaft** — nur ein Admin kann eine Adresse manuell reaktivieren
+- Supervisoren können jederzeit einsehen, wer welche Adressen wann bearbeitet hat
+
+---
+
+## Adress-Status (Lebenszyklus)
+
+```
+VERFÜGBAR  ──[Mitarbeiter übernimmt]──►  IN BEARBEITUNG  ──[Mitarbeiter erledigt]──►  ARCHIVIERT
+    ▲                                                                                       │
+    └───────────────────────────[Admin reaktiviert — Ausnahmefall]───────────────────────── ┘
+```
 
 ---
 
@@ -21,62 +47,60 @@ Ein Mitarbeiter öffnet eine Webseite, gibt seinen Standort an (GPS oder manuell
 
 ```
 1. Mitarbeiter öffnet Webseite (Smartphone oder PC)
-          ↓
-2. Standort ermitteln:
+         ↓
+2. LOGIN:
+   [Benutzername / E-Mail]  [Passwort]  [Anmelden]
+   (Zugangsdaten werden vom Admin vergeben)
+         ↓
+3. Standort ermitteln:
    [GPS automatisch] ODER [Adresse manuell eingeben]
-          ↓
-3. Anzahl gewünschter Adressen wählen (z. B. 5 / 10 / 15)
-          ↓
-4. System liefert sortierte Liste:
-   Rang | Adresse                       | Entfernung
-    1   | 1200 Wien, Grünentorgasse 12   |   180 m
-    2   | 1200 Wien, Wallensteinstr. 5   |   340 m
-    3   | 1190 Wien, Heiligenstädter 69  |   610 m
-    4   | 1200 Wien, Dresdner Str. 44    |   820 m
-    5   | 1210 Wien, Floridsdorfer Hstr. |  1,1 km
-          ↓
-5. Mitarbeiter prüft Liste und klickt [Adressen übernehmen]
-          ↓
-6. Bestätigungsdialog erscheint:
-   "Diese 5 Adressen als 'In Bearbeitung' markieren?"
-   [Bestätigen]  [Abbrechen]
-          ↓
-7. Adressen werden sofort als belegt markiert
-   (nicht mehr für andere Mitarbeiter sichtbar)
-          ↓
-8. Mitarbeiter arbeitet die Adressen ab
-          ↓
-9. Neue Abfrage → nächste verfügbare Adressen
-          ↓
-10. Um Mitternacht: automatische Rücksetzung aller Adressen
+         ↓
+4. Anzahl wählen: [5]  [10]  [15]
+         ↓
+5. System liefert sortierte Liste (nur VERFÜGBARE Adressen):
+   Rang │ Adresse                       │ Entfernung
+    1   │ 1200 Wien, Grünentorgasse 12   │   180 m
+    2   │ 1200 Wien, Wallensteinstr. 5   │   340 m
+    3   │ 1190 Wien, Heiligenstädter 69  │   610 m
+    4   │ 1200 Wien, Dresdner Str. 44    │   820 m
+    5   │ 1210 Wien, Floridsdorfer Hstr. │  1,1 km
+         ↓
+6. Dialog: '5 Adressen reservieren?'  [Bestätigen] [Abbrechen]
+         ↓
+7. Status → IN BEARBEITUNG (für andere Mitarbeiter unsichtbar)
+         ↓
+8. Mitarbeiter besucht Adresse → klickt [✓ Erledigt]
+         ↓
+9. Dialog: 'Adresse als erledigt markieren?'
+   Optional: Notiz hinterlassen
+   [Erledigt]  [Abbrechen]
+         ↓
+10. Status → ARCHIVIERT
+    Protokoll: Benutzer + Datum + Uhrzeit gespeichert
+         ↓
+11. Neue Abfrage → nächste verfügbare Adressen
 ```
 
 ---
 
 ## Architektur
 
-### Komponenten
-
 ```
-FRONTEND  (GitHub Pages — statisches HTML/JS)
-  - Standortermittlung (GPS / manuelle Eingabe)
-  - Auswahl der Anzahl N
-  - Anzeige der sortierten Adressliste
-  - Bestätigungsdialog
-        |
-        | REST API (HTTPS)
+FRONTEND  (GitHub Pages — HTML/JS)
+  ├── Login-Seite
+  ├── Standort + Adresslisten-Suche
+  ├── [✓ Erledigt]-Button pro Adresse
+  ├── Persönliche Archiv-Ansicht (eigene History)
+  └── Admin-Seite (Benutzerverwaltung + Auswertungen)
+        │
+        │ HTTPS + Supabase Auth JWT
         ↓
 BACKEND  (Supabase — kostenlos)
-  - PostgreSQL Datenbank mit PostGIS
-  - Automatisch generierte REST API
-  - KNN-Abfrage via SQL (ST_Distance + ORDER BY)
-  - Echtzeit-Statusverwaltung (belegt/frei)
-        |
-        | Geplanter Job (täglich 00:00 Uhr)
-        ↓
-AUTOMATISIERUNG  (GitHub Actions — kostenlos)
-  - Cron-Job täglich um Mitternacht
-  - Setzt alle Adressen auf "verfügbar" zurück
+  ├── Auth: Login / Benutzer anlegen / deaktivieren
+  ├── PostgreSQL + PostGIS (KNN-Abfragen)
+  ├── Row Level Security (RLS):
+  │     Mitarbeiter sieht nur eigene IN-BEARBEITUNG-Adressen
+  └── Protokoll-Tabelle: vollständiges Audit-Log
 ```
 
 ### Technologie-Stack
@@ -84,16 +108,27 @@ AUTOMATISIERUNG  (GitHub Actions — kostenlos)
 | Schicht | Technologie | Kosten |
 |---|---|---|
 | Frontend-Hosting | GitHub Pages | Kostenlos |
-| Datenbank | Supabase (PostgreSQL + PostGIS) | Kostenlos (500 MB) |
-| REST API | Supabase Auto-API | Kostenlos |
+| Authentifizierung | Supabase Auth (E-Mail + Passwort) | Kostenlos |
+| Datenbank | Supabase PostgreSQL + PostGIS | Kostenlos (500 MB) |
+| REST API + Sicherheit | Supabase Auto-API + RLS | Kostenlos |
 | Geolokalisierung | Browser Geolocation API | Kostenlos |
 | Geokodierung (einmalig) | Nominatim (OpenStreetMap) | Kostenlos |
-| Tages-Reset | GitHub Actions Cron | Kostenlos |
+| Admin-Panel | Supabase Studio (eingebaut) | Kostenlos |
 | **Gesamtkosten** | | **$0 / Monat** |
 
 ---
 
 ## Datenbankstruktur
+
+### Tabelle: `benutzer` (Supabase Auth)
+
+| Spalte | Typ | Beschreibung |
+|---|---|---|
+| `id` | UUID | Eindeutige Benutzer-ID |
+| `email` | TEXT | Login-E-Mail |
+| `name` | TEXT | Anzeigename (z. B. "Maria K.") |
+| `aktiv` | BOOLEAN | `false` = deaktiviert |
+| `erstellt_am` | TIMESTAMP | Datum der Kontoerstellung |
 
 ### Tabelle: `adressen`
 
@@ -105,63 +140,87 @@ AUTOMATISIERUNG  (GitHub Actions — kostenlos)
 | `strasse` | TEXT | Straße + Hausnummer |
 | `lat` | FLOAT | GPS-Breitengrad |
 | `lon` | FLOAT | GPS-Längengrad |
-| `standort` | GEOMETRY | PostGIS-Punkt (für KNN-Abfragen) |
-| `belegt` | BOOLEAN | `true` = bereits übernommen |
-| `belegt_von` | TEXT | Name/ID des Mitarbeiters |
-| `belegt_um` | TIMESTAMP | Zeitpunkt der Übernahme |
+| `standort` | GEOMETRY | PostGIS-Punkt (KNN-Abfragen) |
+| `status` | TEXT | `verfuegbar` / `in_bearbeitung` / `archiviert` |
+| `benutzer_id` | UUID | Wer hat diese Adresse übernommen/erledigt |
+| `uebernommen_am` | TIMESTAMP | Zeitpunkt der Übernahme |
+| `erledigt_am` | TIMESTAMP | Zeitpunkt der Archivierung |
 
-### KNN-Abfrage (SQL-Beispiel)
+### Tabelle: `protokoll` (vollständiges Audit-Log)
+
+| Spalte | Typ | Beschreibung |
+|---|---|---|
+| `id` | UUID | Log-Eintrag ID |
+| `adressen_id` | UUID | Verknüpfte Adresse |
+| `benutzer_id` | UUID | Benutzer der Aktion |
+| `aktion` | TEXT | `uebernommen` / `erledigt` / `reaktiviert` |
+| `zeitpunkt` | TIMESTAMP | Wann |
+| `notiz` | TEXT | Optionale Bemerkung des Mitarbeiters |
+
+---
+
+## SQL-Beispiele
+
+### KNN — nächste 5 verfügbare Adressen
 
 ```sql
 SELECT id, plz, ort, strasse,
        ST_Distance(standort, ST_MakePoint(16.3738, 48.2082)) AS entfernung_m
 FROM adressen
-WHERE belegt = false
+WHERE status = 'verfuegbar'
 ORDER BY standort <-> ST_MakePoint(16.3738, 48.2082)
 LIMIT 5;
 ```
 
-> `<->` ist der PostGIS KNN-Operator — extrem schnell, auch bei 2.000 Adressen.
-
----
-
-## Tages-Reset (GitHub Actions)
-
-Jeden Tag um Mitternacht wird automatisch folgender SQL-Befehl ausgeführt:
+### Adresse als erledigt archivieren
 
 ```sql
 UPDATE adressen
-SET belegt = false,
-    belegt_von = null,
-    belegt_um = null;
+SET status = 'archiviert', erledigt_am = NOW()
+WHERE id = 'ADRESS-UUID' AND benutzer_id = auth.uid();
+
+INSERT INTO protokoll (adressen_id, benutzer_id, aktion, zeitpunkt, notiz)
+VALUES ('ADRESS-UUID', auth.uid(), 'erledigt', NOW(), 'Optionale Notiz');
 ```
 
-Konfiguration in `.github/workflows/reset.yml`:
+### Admin-Auswertung: Wer hat was erledigt?
 
-```yaml
-on:
-  schedule:
-    - cron: '0 22 * * *'  # 22:00 UTC = 00:00 Wien (MEZ)
+```sql
+SELECT b.name, COUNT(*) AS erledigt, DATE(p.zeitpunkt) AS datum
+FROM protokoll p
+JOIN benutzer b ON b.id = p.benutzer_id
+WHERE p.aktion = 'erledigt'
+GROUP BY b.name, DATE(p.zeitpunkt)
+ORDER BY datum DESC, erledigt DESC;
 ```
 
 ---
 
 ## Frontend — Seitenaufbau
 
+### Login
 ```
 +----------------------------------------+
 |  Adress-Routing Tool                   |
+|  ─────────────────────────────────     |
+|  E-Mail:    [_______________________]  |
+|  Passwort:  [_______________________]  |
+|                                        |
+|  [Anmelden]                            |
 +----------------------------------------+
-|  Mein Standort:                        |
-|  [GPS ermitteln]  ODER                 |
-|  [Adresse eingeben_________________]   |
-|                                        |
-|  Anzahl Adressen: [5]                  |
-|                                        |
+```
+
+### Hauptseite
+```
++----------------------------------------+
+|  Hallo, Maria K.          [Abmelden]   |
++----------------------------------------+
+|  Standort: [GPS] ODER [Adresse]        |
+|  Anzahl:   [5 ▼]                       |
 |  [Nächste Adressen suchen]             |
 +----------------------------------------+
-|  Ergebnisse: (1.850 verbleibend)       |
-|  --------------------------------      |
+|  Pool: 1.673 Adressen verfügbar        |
+|  ───────────────────────────────────   |
 |  1.  Grünentorgasse 12, 1200 Wien      |
 |      180 m                             |
 |  2.  Wallensteinstraße 5, 1200 Wien    |
@@ -169,23 +228,34 @@ on:
 |  3.  Heiligenstädter Str. 69, 1190 W.  |
 |      610 m                             |
 |                                        |
-|  [Adressen übernehmen]                 |
+|  [✅ Adressen übernehmen]              |
 +----------------------------------------+
 ```
 
-### Bestätigungsdialog
-
+### Meine aktiven Adressen
 ```
-+-------------------------------------+
-|  Adressen übernehmen?               |
-|                                     |
-|  3 Adressen werden als              |
-|  "In Bearbeitung" markiert und      |
-|  sind für andere nicht mehr         |
-|  sichtbar.                          |
-|                                     |
-|  [Bestätigen]      [Abbrechen]      |
-+-------------------------------------+
++----------------------------------------+
+|  Meine Adressen (in Bearbeitung: 3)    |
+|  ───────────────────────────────────   |
+|  📍 Grünentorgasse 12, 1200 Wien       |
+|     Übernommen: 08:32                  |
+|     [✓ Erledigt markieren]             |
+|  ───────────────────────────────────   |
+|  📍 Wallensteinstraße 5, 1200 Wien     |
+|     Übernommen: 08:32                  |
+|     [✓ Erledigt markieren]             |
++----------------------------------------+
+```
+
+### Meine erledigten Adressen (Archiv)
+```
++----------------------------------------+
+|  Meine erledigten Adressen             |
+|  ───────────────────────────────────   |
+|  ✅ Grünentorgasse 12    03.03. 10:15  |
+|  ✅ Meidlinger Hauptstr. 02.03. 14:42  |
+|  ✅ Thaliastraße 99      01.03. 09:08  |
++----------------------------------------+
 ```
 
 ---
@@ -193,65 +263,64 @@ on:
 ## Einmaliger Setup-Prozess
 
 ```
-Schritt 1:  Excel/CSV mit 2.000 Adressen bereitstellen
-            ↓
-Schritt 2:  Python-Skript ausführen:
-            - Adressen einlesen
-            - Mit Nominatim geokodieren (~33 Min.)
-            - Koordinaten in Supabase-Datenbank laden
-            ↓
-Schritt 3:  GitHub Pages Webseite einrichten (bereits erledigt ✅)
-            ↓
-Schritt 4:  Supabase-Projekt anlegen (kostenlos, 5 Min.)
-            ↓
-Schritt 5:  GitHub Actions Cron-Reset konfigurieren
-            ↓
-            System läuft täglich autonom
+Schritt 1: Supabase-Konto anlegen → supabase.com (kostenlos, 5 Min.)
+           ↓
+Schritt 2: Datenbank-Tabellen erstellen (SQL-Skript wird bereitgestellt)
+           ↓
+Schritt 3: Python-Skript ausführen:
+           - Excel/CSV einlesen
+           - Adressen geokodieren via Nominatim (~33 Min.)
+           - Koordinaten in Supabase importieren
+           ↓
+Schritt 4: Mitarbeiter-Konten anlegen (Name + E-Mail pro Person)
+           ↓
+Schritt 5: Frontend deployen auf GitHub Pages
+           ↓
+Schritt 6: Test mit echten Benutzern + Abnahme
+           ↓
+           System läuft — kein weiterer Wartungsaufwand
 ```
 
 ---
 
-## Skalierungsschätzung: 10 Mitarbeiter, Tagesbetrieb
+## Skalierung: 10 Mitarbeiter, Tagesbetrieb
 
 | Kennzahl | Wert |
 |---|---|
 | Mitarbeiter | 10 |
-| Adressen gesamt | 2.000 |
-| Besuche pro Mitarbeiter/Tag | ~15 |
-| Abfragen pro Mitarbeiter/Tag | ~4 (morgens + nach jedem Block) |
-| Gesamtabfragen/Tag | ~40 |
-| Abdeckung pro Tag | ~150 Adressen |
-| Tage bis Pool leer | ~13–14 Arbeitstage (~3 Wochen) |
+| Adressen im Pool | 2.000 |
+| Besuche/Mitarbeiter/Tag | ~15 |
+| Abfragen/Tag gesamt | ~40 |
+| Abdeckung/Tag | ~150 Adressen |
+| Pool leer nach | ~13–14 Arbeitstage |
 
-### API-Kosten
-
-| Dienst | Kostenloses Limit | Unsere Nutzung | OK? |
+| Dienst | Limit (kostenlos) | Unsere Nutzung | OK? |
 |---|---|---|---|
-| Supabase DB | 500 MB, 50.000 Anfragen/Monat | ~880 Anfragen/Monat | ✅ Ja |
-| GitHub Pages | Unbegrenzt | Statische Seite | ✅ Ja |
-| GitHub Actions | 2.000 Min./Monat | 1 Min./Tag = 31 Min. | ✅ Ja |
-| Nominatim | ~1.000 Anfragen/Tag | 2.000 einmalig | ✅ Ja |
+| Supabase Auth | 50.000 Nutzer | 10 Nutzer | ✅ |
+| Supabase DB | 500 MB, 50k Anfragen/Monat | <1k Anfragen/Monat | ✅ |
+| GitHub Pages | Unbegrenzt | Statisch | ✅ |
+| Nominatim | ~1.000/Tag | 2.000 einmalig | ✅ |
 | **Gesamt** | | | **$0/Monat** |
 
 ---
 
 ## Projektplan
 
-| Phase | Aufgabe | Aufwand | Kosten |
-|---|---|---|---|
-| **1** | Supabase-Projekt anlegen, Tabelle erstellen | 1 Std. | $0 |
-| **2** | Python-Skript: Geokodierung + DB-Import | 2–3 Std. | $0 |
-| **3** | Frontend HTML/JS entwickeln | 4–6 Std. | $0 |
-| **4** | GitHub Actions Cron-Reset einrichten | 30 Min. | $0 |
-| **5** | Test mit echten Adressen + Abnahme | 1–2 Std. | $0 |
-| **Gesamt** | | **~1–2 Tage** | **$0** |
+| Phase | Aufgabe | Aufwand |
+|---|---|---|
+| 1 | Supabase + Tabellen + Auth einrichten | 2 Std. |
+| 2 | Geokodierung + DB-Import (Python) | 2–3 Std. |
+| 3 | Frontend: Login + Suche + Erledigt | 6–8 Std. |
+| 4 | Frontend: Archiv + Admin-Auswertung | 2–3 Std. |
+| 5 | Test + Abnahme | 1–2 Std. |
+| **Gesamt** | | **~2 Arbeitstage** |
 
 ---
 
-## Offene Fragen / Nächste Schritte
+## Nächste Schritte
 
-- [ ] Sollen Mitarbeiter sich einloggen (mit Namen/ID) oder anonym arbeiten?
-- [ ] Soll der Tages-Reset täglich automatisch erfolgen, oder manuell ausgelöst werden?
-- [ ] Sollen bereits besuchte Adressen dauerhaft aus dem Pool entfernt werden (nicht nur täglich zurückgesetzt)?
-- [ ] Gewünschte Sprache der Weboberfläche: Deutsch
-- [ ] Excel/CSV-Datei mit den 2.000 Adressen für Schritt 2 bereitstellen
+- [ ] Supabase-Konto anlegen: https://supabase.com
+- [ ] Mitarbeiterliste bereitstellen (Name + E-Mail aller Benutzer)
+- [ ] Excel/CSV mit den 2.000 Adressen bereitstellen
+- [ ] Entscheidung: Soll der Mitarbeiter bei "Erledigt" eine optionale Notiz eingeben können?
+- [ ] Entscheidung: Soll es eine Karten-Ansicht (Map mit Pins) geben?
