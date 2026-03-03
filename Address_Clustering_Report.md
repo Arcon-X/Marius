@@ -11,7 +11,7 @@ title: Nächstgelegene Adressen — Systemplanung
 
 ---
 
-## Entscheidungen (bestätigt)
+## Entscheidungen (alle bestätigt)
 
 | Frage | Entscheidung |
 |---|---|
@@ -19,6 +19,8 @@ title: Nächstgelegene Adressen — Systemplanung
 | Tages-Reset? | **Nein** — nicht benötigt (Erklärung unten) |
 | Besuchte Adressen | **Dauerhaft archiviert** — einsehbar, nicht gelöscht |
 | Protokollierung | **Ja** — jede Adresse protokolliert Benutzer + Zeitpunkt |
+| Notiz bei "Erledigt" | **Ja** — optionales Freitextfeld im Erledigt-Dialog |
+| Karten-Ansicht | **Ja** — interaktive Karte mit Pins (Leaflet.js + OpenStreetMap) |
 
 ---
 
@@ -65,18 +67,21 @@ VERFÜGBAR  ──[Mitarbeiter übernimmt]──►  IN BEARBEITUNG  ──[Mita
     4   │ 1200 Wien, Dresdner Str. 44    │   820 m
     5   │ 1210 Wien, Floridsdorfer Hstr. │  1,1 km
          ↓
+   OPTIONAL: [Karten-Ansicht] — Pins auf OpenStreetMap-Karte
+         ↓
 6. Dialog: '5 Adressen reservieren?'  [Bestätigen] [Abbrechen]
          ↓
 7. Status → IN BEARBEITUNG (für andere Mitarbeiter unsichtbar)
          ↓
-8. Mitarbeiter besucht Adresse → klickt [✓ Erledigt]
+8. Mitarbeiter besucht Adresse → klickt [✓ Erledigt markieren]
          ↓
-9. Dialog: 'Adresse als erledigt markieren?'
-   Optional: Notiz hinterlassen
-   [Erledigt]  [Abbrechen]
+9. Dialog mit optionalem Notizfeld:
+   'Adresse als erledigt markieren?'
+   Notiz (optional): [________________________________]
+   [✓ Erledigt]  [Abbrechen]
          ↓
 10. Status → ARCHIVIERT
-    Protokoll: Benutzer + Datum + Uhrzeit gespeichert
+    Protokoll: Benutzer + Datum + Uhrzeit + Notiz gespeichert
          ↓
 11. Neue Abfrage → nächste verfügbare Adressen
 ```
@@ -89,8 +94,9 @@ VERFÜGBAR  ──[Mitarbeiter übernimmt]──►  IN BEARBEITUNG  ──[Mita
 FRONTEND  (GitHub Pages — HTML/JS)
   ├── Login-Seite
   ├── Standort + Adresslisten-Suche
-  ├── [✓ Erledigt]-Button pro Adresse
-  ├── Persönliche Archiv-Ansicht (eigene History)
+  ├── Karten-Ansicht (Leaflet.js + OpenStreetMap-Tiles)
+  ├── [✓ Erledigt]-Button mit Notizfeld pro Adresse
+  ├── Persönliche Archiv-Ansicht (eigene History + Notizen)
   └── Admin-Seite (Benutzerverwaltung + Auswertungen)
         │
         │ HTTPS + Supabase Auth JWT
@@ -100,7 +106,7 @@ BACKEND  (Supabase — kostenlos)
   ├── PostgreSQL + PostGIS (KNN-Abfragen)
   ├── Row Level Security (RLS):
   │     Mitarbeiter sieht nur eigene IN-BEARBEITUNG-Adressen
-  └── Protokoll-Tabelle: vollständiges Audit-Log
+  └── Protokoll-Tabelle: vollständiges Audit-Log inkl. Notizen
 ```
 
 ### Technologie-Stack
@@ -112,6 +118,7 @@ BACKEND  (Supabase — kostenlos)
 | Datenbank | Supabase PostgreSQL + PostGIS | Kostenlos (500 MB) |
 | REST API + Sicherheit | Supabase Auto-API + RLS | Kostenlos |
 | Geolokalisierung | Browser Geolocation API | Kostenlos |
+| Karten-Ansicht | Leaflet.js + OpenStreetMap-Tiles | Kostenlos |
 | Geokodierung (einmalig) | Nominatim (OpenStreetMap) | Kostenlos |
 | Admin-Panel | Supabase Studio (eingebaut) | Kostenlos |
 | **Gesamtkosten** | | **$0 / Monat** |
@@ -164,7 +171,7 @@ BACKEND  (Supabase — kostenlos)
 ### KNN — nächste 5 verfügbare Adressen
 
 ```sql
-SELECT id, plz, ort, strasse,
+SELECT id, plz, ort, strasse, lat, lon,
        ST_Distance(standort, ST_MakePoint(16.3738, 48.2082)) AS entfernung_m
 FROM adressen
 WHERE status = 'verfuegbar'
@@ -172,7 +179,7 @@ ORDER BY standort <-> ST_MakePoint(16.3738, 48.2082)
 LIMIT 5;
 ```
 
-### Adresse als erledigt archivieren
+### Adresse als erledigt archivieren (mit Notiz)
 
 ```sql
 UPDATE adressen
@@ -180,7 +187,7 @@ SET status = 'archiviert', erledigt_am = NOW()
 WHERE id = 'ADRESS-UUID' AND benutzer_id = auth.uid();
 
 INSERT INTO protokoll (adressen_id, benutzer_id, aktion, zeitpunkt, notiz)
-VALUES ('ADRESS-UUID', auth.uid(), 'erledigt', NOW(), 'Optionale Notiz');
+VALUES ('ADRESS-UUID', auth.uid(), 'erledigt', NOW(), 'Niemand angetroffen — Zettel hinterlassen');
 ```
 
 ### Admin-Auswertung: Wer hat was erledigt?
@@ -210,13 +217,14 @@ ORDER BY datum DESC, erledigt DESC;
 +----------------------------------------+
 ```
 
-### Hauptseite
+### Hauptseite — Listenansicht
 ```
 +----------------------------------------+
 |  Hallo, Maria K.          [Abmelden]   |
 +----------------------------------------+
 |  Standort: [GPS] ODER [Adresse]        |
 |  Anzahl:   [5 ▼]                       |
+|  [Liste]  [Karte]                      |
 |  [Nächste Adressen suchen]             |
 +----------------------------------------+
 |  Pool: 1.673 Adressen verfügbar        |
@@ -229,6 +237,44 @@ ORDER BY datum DESC, erledigt DESC;
 |      610 m                             |
 |                                        |
 |  [✅ Adressen übernehmen]              |
++----------------------------------------+
+```
+
+### Hauptseite — Karten-Ansicht (Leaflet.js)
+```
++----------------------------------------+
+|  Hallo, Maria K.          [Abmelden]   |
++----------------------------------------+
+|  Standort: [GPS] ODER [Adresse]        |
+|  Anzahl:   [5 ▼]    [Liste]  [Karte]  |
++----------------------------------------+
+|  ┌──────────────────────────────────┐  |
+|  │  🔵 (Ich — mein Standort)        │  |
+|  │                                  │  |
+|  │  📍1  180m                       │  |
+|  │  📍2  340m    📍3  610m          │  |
+|  │                  📍4  820m       │  |
+|  │         📍5  1,1km               │  |
+|  │  [OpenStreetMap]                 │  |
+|  └──────────────────────────────────┘  |
+|                                        |
+|  [✅ Adressen übernehmen]              |
++----------------------------------------+
+  Klick auf Pin → Adresse + Entfernung
+```
+
+### Erledigt-Dialog (mit optionaler Notiz)
+```
++----------------------------------------+
+|  ✓ Adresse erledigt markieren?         |
+|  ─────────────────────────────────     |
+|  Grünentorgasse 12, 1200 Wien          |
+|                                        |
+|  Notiz (optional):                     |
+|  [________________________________]    |
+|  z. B. "Nicht angetroffen"             |
+|                                        |
+|  [✓ Erledigt]     [Abbrechen]          |
 +----------------------------------------+
 ```
 
@@ -249,13 +295,16 @@ ORDER BY datum DESC, erledigt DESC;
 
 ### Meine erledigten Adressen (Archiv)
 ```
-+----------------------------------------+
-|  Meine erledigten Adressen             |
-|  ───────────────────────────────────   |
-|  ✅ Grünentorgasse 12    03.03. 10:15  |
-|  ✅ Meidlinger Hauptstr. 02.03. 14:42  |
-|  ✅ Thaliastraße 99      01.03. 09:08  |
-+----------------------------------------+
++--------------------------------------------------+
+|  Meine erledigten Adressen                       |
+|  ───────────────────────────────────             |
+|  ✅ Grünentorgasse 12    03.03. 10:15            |
+|     Notiz: (keine)                               |
+|  ✅ Meidlinger Hauptstr. 02.03. 14:42            |
+|     Notiz: "Nicht angetroffen — Zettel"          |
+|  ✅ Thaliastraße 99      01.03. 09:08            |
+|     Notiz: "Einwurf verweigert"                  |
++--------------------------------------------------+
 ```
 
 ---
@@ -299,6 +348,7 @@ Schritt 6: Test mit echten Benutzern + Abnahme
 | Supabase Auth | 50.000 Nutzer | 10 Nutzer | ✅ |
 | Supabase DB | 500 MB, 50k Anfragen/Monat | <1k Anfragen/Monat | ✅ |
 | GitHub Pages | Unbegrenzt | Statisch | ✅ |
+| OpenStreetMap-Tiles | Fair-Use | Wenige Nutzer | ✅ |
 | Nominatim | ~1.000/Tag | 2.000 einmalig | ✅ |
 | **Gesamt** | | | **$0/Monat** |
 
@@ -310,10 +360,11 @@ Schritt 6: Test mit echten Benutzern + Abnahme
 |---|---|---|
 | 1 | Supabase + Tabellen + Auth einrichten | 2 Std. |
 | 2 | Geokodierung + DB-Import (Python) | 2–3 Std. |
-| 3 | Frontend: Login + Suche + Erledigt | 6–8 Std. |
-| 4 | Frontend: Archiv + Admin-Auswertung | 2–3 Std. |
-| 5 | Test + Abnahme | 1–2 Std. |
-| **Gesamt** | | **~2 Arbeitstage** |
+| 3 | Frontend: Login + Suche + Erledigt + Notiz | 6–8 Std. |
+| 4 | Frontend: Karten-Ansicht (Leaflet.js) | 3–4 Std. |
+| 5 | Frontend: Archiv + Admin-Auswertung | 2–3 Std. |
+| 6 | Test + Abnahme | 1–2 Std. |
+| **Gesamt** | | **~2,5 Arbeitstage** |
 
 ---
 
@@ -322,5 +373,4 @@ Schritt 6: Test mit echten Benutzern + Abnahme
 - [ ] Supabase-Konto anlegen: https://supabase.com
 - [ ] Mitarbeiterliste bereitstellen (Name + E-Mail aller Benutzer)
 - [ ] Excel/CSV mit den 2.000 Adressen bereitstellen
-- [ ] Entscheidung: Soll der Mitarbeiter bei "Erledigt" eine optionale Notiz eingeben können?
-- [ ] Entscheidung: Soll es eine Karten-Ansicht (Map mit Pins) geben?
+- [ ] Entwicklung starten (Phase 1 → Supabase Setup)
