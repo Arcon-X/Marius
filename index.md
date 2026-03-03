@@ -18,51 +18,23 @@ title: NOVUM-ZIV Unterschriften — Planungsdokument
 body { font-family: 'Segoe UI', Arial, sans-serif; color: var(--bnz-text); max-width: 900px; margin: 0 auto; padding: 1rem 1.5rem; }
 h1   { color: var(--bnz-dunkel); border-bottom: 4px solid var(--bnz-gruen); padding-bottom: .3em; }
 h2   { color: var(--bnz-gruen); border-left: 5px solid var(--bnz-gruen); padding-left: .6em; margin-top: 2em; }
-h3   { color: var(--bnz-dunkel); }
+h3   { color: var(--bnz-dunkel); margin-top: 1em; }
 table { width:100%; border-collapse: collapse; margin: .5em 0; font-size: .93em; }
 th    { background: var(--bnz-gruen); color: var(--bnz-weiss); padding: .45em .8em; text-align:left; }
 td    { padding: .35em .8em; border-bottom: 1px solid #ddd; }
 tr:nth-child(even) td { background: var(--bnz-grau); }
 blockquote { border-left: 4px solid var(--bnz-gruen-hell); background: var(--bnz-gruen-blass); padding: .7em 1.2em; border-radius: 4px; margin: .5em 0; }
 code  { background: var(--bnz-grau); padding: .1em .3em; border-radius: 3px; font-size: .9em; }
-pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); padding: .8em 1em; overflow-x: auto; font-size: .88em; }
+pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); padding: .8em 1em; overflow-x: auto; font-size: .88em; border-radius: 0 4px 4px 0; }
 .warn { border-left: 4px solid var(--bnz-warn-rand); background: var(--bnz-warn); padding: .7em 1.2em; border-radius: 4px; margin: .8em 0; }
-
-/* Aufklappbare Abschnitte */
-details {
-  border: 1px solid #cde;
-  border-radius: 6px;
-  margin: .5em 0;
-  background: var(--bnz-weiss);
-}
-details[open] {
-  border-color: var(--bnz-gruen-hell);
-}
-summary {
-  padding: .65em 1em;
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--bnz-dunkel);
-  background: var(--bnz-gruen-blass);
-  border-radius: 6px;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: .5em;
-}
-summary::-webkit-details-marker { display: none; }
-summary::before {
-  content: "▶";
-  font-size: .75em;
-  color: var(--bnz-gruen);
-  transition: transform .2s;
-}
-details[open] summary::before { transform: rotate(90deg); }
-details > *:not(summary) { padding: .8em 1em; }
-
-/* Statusbadges */
-.badge-plan  { background:#E8F5EE; color:#2C6E49; border:1px solid #4C9A6F; border-radius:4px; padding:.1em .5em; font-size:.85em; }
-.badge-offen { background:#FFF8E1; color:#8a6000; border:1px solid #F9A825; border-radius:4px; padding:.1em .5em; font-size:.85em; }
+details { border: 1px solid #b8d8c8; border-radius: 6px; margin: .5em 0; }
+details[open] { border-color: var(--bnz-gruen-hell); }
+details > div { padding: .5em 1.2em 1em 1.2em; }
+summary { padding: .65em 1em; cursor: pointer; font-weight: 600; color: var(--bnz-dunkel);
+  background: var(--bnz-gruen-blass); border-radius: 6px; user-select: none; }
+details[open] > summary { border-radius: 6px 6px 0 0; border-bottom: 1px solid #b8d8c8; }
+.badge-plan  { background:#E8F5EE; color:#2C6E49; border:1px solid #4C9A6F; border-radius:4px; padding:.1em .5em; font-size:.85em; font-weight:normal; }
+.badge-offen { background:#FFF8E1; color:#8a6000; border:1px solid #F9A825; border-radius:4px; padding:.1em .5em; font-size:.85em; font-weight:normal; }
 </style>
 
 # 📋 NOVUM-ZIV Unterschriften
@@ -77,14 +49,14 @@ details > *:not(summary) { padding: .8em 1em; }
 | Bereich | Stand |
 |---|---|
 | Distanz-Methode | ✅ Echte Gehstrecke (OSRM) |
-| Hosting / Datenbank | ✅ Hetzner CX22 (EU, ~€ 3,79/Mt.) |
+| Hosting / Datenbank | ✅ Hetzner CX22, Deutschland, EU-DSGVO |
 | Login | ✅ Ja — Admin legt 19 Konten an |
 | Tages-Reset | ❌ Nein — Fortschritt dauerhaft |
 | Karten-Ansicht | ✅ Leaflet.js + OpenStreetMap |
 | Protokollierung | ✅ Audit-Log mit Notizfeld |
-| DSGVO | <span class="badge-offen">⚠️ zu besprechen</span> — Option B/C |
+| DSGVO | <span class="badge-offen">⚠️ zu besprechen</span> Option B / C |
 | Gesamtkosten | **€ 3,79 / Monat** |
-| Projektdauer (Planung) | ~3 Arbeitstage |
+| Projektdauer (Schätzung) | ~3 Arbeitstage |
 
 ---
 
@@ -97,7 +69,8 @@ details > *:not(summary) { padding: .8em 1em; }
 ## 2 · Entscheidungen
 
 <details open>
-<summary>📋 Alle bestätigten Entscheidungen anzeigen</summary>
+<summary>📋 Alle bestätigten Entscheidungen</summary>
+<div markdown="1">
 
 | Frage | Entscheidung | Begründung |
 |---|---|---|
@@ -110,16 +83,18 @@ details > *:not(summary) { padding: .8em 1em; }
 | Karten-Ansicht | ✅ Ja — Leaflet.js + OSM | Kostenlos, kein API-Key |
 | Protokollierung | ✅ Ja — Audit-Log | Wer, wann, Ergebnis |
 
+</div>
 </details>
 
 ---
 
 ## 3 · Datenschutz & Hosting <span class="badge-offen">⚠️ zu besprechen</span>
 
-<div class="warn">⚠️ Die App verarbeitet personenbezogene Daten (Adressen, Logins, Besuchsprotokolle). Bitte vor Entwicklungsstart klären.</div>
+<div class="warn">⚠️ Die App verarbeitet personenbezogene Daten (Adressen, Logins, Besuchsprotokolle). Hosting-Entscheidung bitte vor Entwicklungsstart bestätigen.</div>
 
 <details>
-<summary>❓ Option B — Eigener Server (Hetzner) · <span class="badge-plan">geplant</span></summary>
+<summary>✅ Option B — Eigener Server (Hetzner) <span class="badge-plan">geplant</span></summary>
+<div markdown="1">
 
 Datenbank auf selbst gemietem EU-Server — kein US-Dienst, kein Drittanbieter hat Datenzugriff.
 
@@ -133,19 +108,21 @@ Datenbank auf selbst gemietem EU-Server — kein US-Dienst, kein Drittanbieter h
 | AVV (DSGVO-Pflicht) | ✅ Auf Anfrage verfügbar |
 | Kündigung | Monatlich — nach Wahl löschen, Daten weg |
 
-**Alternativ (100 % österreichisch):** [anexia.com](https://www.anexia.com/de/) — Wien, ~€ 20/Mt., maximale DSGVO-Sicherheit.
+> **Alternativ (100 % österreichisch):** [anexia.com](https://www.anexia.com/de/) — Wien, ~€ 20/Mt.
 
 ```
 Hetzner CX22 (€ 3,79/Mt.)
   └── Ubuntu 24.04
         ├── PostgreSQL 16 + PostGIS 3
-        └── PostgREST (REST-API)
+        └── PostgREST (REST-API, kostenlos)
 ```
 
+</div>
 </details>
 
 <details>
-<summary>❓ Option C — Keine personenbezogenen Daten in der Cloud · <span class="badge-offen">zu besprechen</span></summary>
+<summary>❓ Option C — Keine personenbezogenen Daten in der Cloud <span class="badge-offen">zu besprechen</span></summary>
+<div markdown="1">
 
 Nur anonymisierte Adress-IDs in der Datenbank — keine Namen der Wahlberechtigten.
 
@@ -154,16 +131,18 @@ Nur anonymisierte Adress-IDs in der Datenbank — keine Namen der Wahlberechtigt
 | Stark reduziertes DSGVO-Risiko | Weniger nützliche Auswertungen |
 | Auch mit Supabase (US) denkbar | Admin muss IDs manuell zuordnen |
 
-> Zu klären: Enthält die Adressliste der Zahnärztekammer Namen, oder nur Adressen? Falls nur Adressen → Option C kaum nötig.
+> **Zu klären:** Enthält die Adressliste der Zahnärztekammer Namen, oder nur Adressen? Falls nur Adressen → Option C kaum nötig.
 
+</div>
 </details>
 
 ---
 
-## 4 · Benutzerliste (19 Personen)
+## 4 · Benutzerliste
 
 <details>
-<summary>👥 Alle 19 Kandidat:innen anzeigen — 1 Admin + 18 Mitarbeiter:innen</summary>
+<summary>👥 Alle 19 Kandidat:innen — 1 Admin + 18 Mitarbeiter:innen</summary>
+<div markdown="1">
 
 | # | Name | Funktion | Rolle | E-Mail (Platzhalter) |
 |---|---|---|---|---|
@@ -189,6 +168,7 @@ Nur anonymisierte Adress-IDs in der Datenbank — keine Namen der Wahlberechtigt
 
 > ⚠️ E-Mail-Adressen sind Platzhalter — echte Adressen vor Setup eintragen.
 
+</div>
 </details>
 
 ---
@@ -197,6 +177,7 @@ Nur anonymisierte Adress-IDs in der Datenbank — keine Namen der Wahlberechtigt
 
 <details>
 <summary>🔄 Vollständigen Ablauf anzeigen</summary>
+<div markdown="1">
 
 ```
 START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIEREN → BESUCHEN → ERLEDIGEN
@@ -220,7 +201,7 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
   └────────────┬─────────────────┘
                ▼
   ┌──────────────────────────────────────────────────────┐
-  │  ⚙️  ROUTING (im Hintergrund)                         │
+  │  ⚙️  ROUTING (automatisch im Hintergrund)             │
   │  1. Server: 50 räumlich nächste Adressen             │
   │  2. OSRM:   echte Gehzeit für jede Adresse           │
   │  3. Sortierung nach Gehminuten                       │
@@ -230,6 +211,7 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
   │  📋 ERGEBNISLISTE  /  🗺️ KARTE                        │
   │  1.  Grünentorgasse 12   3 min  (220 m)              │
   │  2.  Wallensteinstr. 5   5 min  (390 m)              │
+  │  Pool: X Adressen noch verfügbar                     │
   └────────────┬─────────────────────────────────────────┘
                ▼
   ┌──────────────────────────────┐
@@ -248,12 +230,14 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
 ```
 
 **Status-Lebenszyklus:**
+
 ```
   VERFÜGBAR ──[übernommen]──► IN BEARBEITUNG ──[erledigt]──► ARCHIVIERT
      ▲                                                            │
      └──────────────── Admin reaktiviert (Ausnahmefall) ──────────┘
 ```
 
+</div>
 </details>
 
 ---
@@ -262,6 +246,7 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
 
 <details>
 <summary>🏗️ Architekturdiagramm anzeigen</summary>
+<div markdown="1">
 
 ```
   ┌──────────────────────────────────────────────────────┐
@@ -281,6 +266,7 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
        EU-DSGVO-konform · kein US-Dienst
 ```
 
+</div>
 </details>
 
 ---
@@ -289,8 +275,9 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
 
 <details>
 <summary>🗄️ Tabellenstruktur + SQL-Beispiele anzeigen</summary>
+<div markdown="1">
 
-**Tabelle `adressen`**
+### Tabelle `adressen`
 
 | Spalte | Typ | Beschreibung |
 |---|---|---|
@@ -302,7 +289,7 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
 | `benutzer_id` | UUID | Zuständige Person |
 | `erledigt_am` | TIMESTAMP | Zeitpunkt |
 
-**Tabelle `protokoll`**
+### Tabelle `protokoll`
 
 | Spalte | Typ | Beschreibung |
 |---|---|---|
@@ -312,14 +299,16 @@ START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIE
 | `zeitpunkt` | TIMESTAMP | Wann |
 | `notiz` | TEXT | Optionale Bemerkung |
 
-**Vorfilter SQL (50 Kandidaten):**
+### Vorfilter SQL
+
 ```sql
 SELECT id, strasse, plz, lat, lon
 FROM adressen WHERE status = 'verfuegbar'
 ORDER BY standort <-> ST_MakePoint(:lon, :lat) LIMIT 50;
 ```
 
-**OSRM-Abfrage (JavaScript):**
+### OSRM-Abfrage (JavaScript)
+
 ```javascript
 const r = await fetch(
   `https://router.project-osrm.org/route/v1/foot/${meinLon},${meinLat};${a.lon},${a.lat}?overview=false`
@@ -328,6 +317,7 @@ const { duration, distance } = (await r.json()).routes[0];
 // Sortieren nach duration (Sekunden), Top N anzeigen
 ```
 
+</div>
 </details>
 
 ---
@@ -336,8 +326,9 @@ const { duration, distance } = (await r.json()).routes[0];
 
 <details>
 <summary>🎨 Farbpalette + Screen-Mockups anzeigen</summary>
+<div markdown="1">
 
-**BNZ Farbpalette (von bnz-wien.at):**
+### BNZ Farbpalette (von bnz-wien.at)
 
 | Farbe | Hex | Verwendung |
 |---|---|---|
@@ -345,6 +336,8 @@ const { duration, distance } = (await r.json()).routes[0];
 | BNZ Grün Hell | `#4C9A6F` | Hover, Akzente |
 | BNZ Grün Blass | `#E8F5EE` | Hintergründe, Zebrastreifen |
 | BNZ Dunkel | `#1A2E22` | Navbar, Seitenüberschriften |
+
+### Screen-Mockups
 
 ```
 LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
@@ -362,6 +355,7 @@ LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
                          └──────────────────────┘
 ```
 
+</div>
 </details>
 
 ---
@@ -369,7 +363,8 @@ LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
 ## 9 · Kosten & Skalierung
 
 <details>
-<summary>💰 Kostenübersicht anzeigen — Gesamt: €3,79/Monat</summary>
+<summary>💰 Kostenübersicht — Gesamt: €3,79 / Monat</summary>
+<div markdown="1">
 
 **19 Benutzer:innen · ~2.000 Adressen · Wahlkampf-Zeitraum**
 
@@ -382,6 +377,7 @@ LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
 | Nominatim (Geokodierung, einmalig) | € 0 | 2.000 Adressen einmalig |
 | **Gesamt** | **€ 3,79 / Monat** | Bei 2 Monaten: **€ 7,58 gesamt** |
 
+</div>
 </details>
 
 ---
@@ -389,7 +385,8 @@ LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
 ## 10 · Projektplan
 
 <details>
-<summary>📅 Alle Phasen anzeigen — ~3 Arbeitstage</summary>
+<summary>📅 Alle Phasen — Schätzung ~3 Arbeitstage</summary>
+<div markdown="1">
 
 | Phase | Aufgabe | Aufwand |
 |---|---|---|
@@ -404,6 +401,7 @@ LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
 | **8** | Nach Wahl: Server löschen, Daten vernichten | 30 Min. |
 | **Gesamt** | | **~3–3,5 Arbeitstage** |
 
+</div>
 </details>
 
 ---
