@@ -4,7 +4,7 @@ title: Adress-Routing Tool
 ---
 
 # 📍 Adress-Routing Tool — One Pager
-**Datum:** 3. März 2026 · **Version:** 1.0 · **Status:** In Planung
+**Datum:** 3. März 2026 · **Version:** 2.0 · **Status:** In Planung
 
 ---
 
@@ -16,7 +16,7 @@ title: Adress-Routing Tool
 | 2 | [Bestätigte Entscheidungen](#2-bestätigte-entscheidungen) |
 | 3 | [Benutzerablauf](#3-benutzerablauf) |
 | 4 | [Systemarchitektur](#4-systemarchitektur) |
-| 5 | [Datenbank](#5-datenbank) |
+| 5 | [Datenbank & Routing-Logik](#5-datenbank--routing-logik) |
 | 6 | [Frontend-Ansichten](#6-frontend-ansichten) |
 | 7 | [Kosten & Skalierung](#7-kosten--skalierung) |
 | 8 | [Projektplan](#8-projektplan) |
@@ -26,11 +26,21 @@ title: Adress-Routing Tool
 
 ## 1 · Ziel & Idee
 
-> Mitarbeiter finden mit einem Klick die **N nächstgelegenen freien Adressen** aus einem Pool von ~2.000 Wiener Adressen — sortiert nach Luftlinie, visualisiert auf einer Karte. Besuchte Adressen werden dauerhaft protokolliert.
+> Mitarbeiter finden mit einem Klick die **N nächstgelegenen freien Adressen** aus einem Pool von ~2.000 Wiener Adressen — sortiert nach **echter Gehzeit** (nicht Luftlinie), visualisiert auf einer Karte. Besuchte Adressen werden dauerhaft protokolliert.
+
+**Distanz-Ansatz: Echte Gehstrecke via OSRM**
+
+| | Luftlinie (verworfen) | Gehstrecke via OSRM ✅ |
+|---|---|---|
+| Genauigkeit | Grob — ignoriert Straßen | Exakt — echter Fußweg |
+| Kosten | $0 | $0 — OSRM ist Open Source |
+| API-Key nötig | Nein | Nein |
+| Datenbasis | GPS-Abstand | OpenStreetMap-Straßennetz |
+| Geschwindigkeit | Sofort | ~100 ms pro Adresse |
 
 **Kernfunktionen:**
-- 🔍 GPS-basierte KNN-Suche (K nächste Nachbarn)
-- 🗺️ Karten-Ansicht mit Pins (Leaflet.js + OpenStreetMap)
+- 🚶 Routing via OSRM (Open Source Routing Machine) — kostenlos, kein API-Key
+- 🗺️ Karten-Ansicht mit Pins und echten Routen (Leaflet.js + OpenStreetMap)
 - ✅ Erledigt-markieren mit optionaler Notiz
 - 🔒 Login pro Mitarbeiter (Admin legt Konten an)
 - 📋 Vollständiges Audit-Log (wer, wann, was, Notiz)
@@ -41,6 +51,7 @@ title: Adress-Routing Tool
 
 | Frage | Entscheidung | Begründung |
 |---|---|---|
+| Distanz-Art | ✅ Echte Gehstrecke (OSRM) | Relevanter als Luftlinie |
 | Login? | ✅ Ja — Admin legt Benutzer an | Zuordnung Besuche → Person |
 | Tages-Reset? | ❌ Nein | Fortschritt soll dauerhaft bleiben |
 | Archivierung | ✅ Permanent | Erledigte Adressen bleiben archiviert |
@@ -80,12 +91,21 @@ title: Adress-Routing Tool
                │
                ▼
   ┌──────────────────────────────────────────────────────┐
+  │  ⚙️  ROUTING (automatisch im Hintergrund)             │
+  │                                                      │
+  │  1. Supabase: 50 nächste Adressen vorab filtern      │
+  │  2. OSRM-API: echte Gehzeit für jede Adresse         │
+  │  3. Sortierung nach Gehminuten                       │
+  └────────────┬─────────────────────────────────────────┘
+               │
+               ▼
+  ┌──────────────────────────────────────────────────────┐
   │  📋 ERGEBNISLISTE  /  🗺️ KARTEN-ANSICHT              │
   │                                                      │
-  │  Rang  Adresse                     Entfernung        │
-  │   1    Grünentorgasse 12, 1200 W.    180 m           │
-  │   2    Wallensteinstr. 5, 1200 W.    340 m           │
-  │   3    Heiligenstädter Str. 69       610 m           │
+  │  Rang  Adresse                    Gehzeit            │
+  │   1    Grünentorgasse 12, 1200 W.  3 min  (220 m)   │
+  │   2    Wallensteinstr. 5, 1200 W.  5 min  (390 m)   │
+  │   3    Heiligenstädter Str. 69     8 min  (640 m)   │
   │                                                      │
   │  Pool: 1.673 verfügbare Adressen                     │
   └────────────┬─────────────────────────────────────────┘
@@ -136,29 +156,35 @@ title: Adress-Routing Tool
   │                                                                 │
   │  ┌─────────┐  ┌──────────────┐  ┌────────┐  ┌──────────────┐  │
   │  │  Login  │  │  Hauptseite  │  │  Karte │  │  Archiv /    │  │
-  │  │         │  │  Liste + KNN │  │  Pins  │  │  Admin-View  │  │
+  │  │         │  │  Gehstrecken │  │  Routen│  │  Admin-View  │  │
   │  └─────────┘  └──────────────┘  └────────┘  └──────────────┘  │
-  └─────────────────────────┬───────────────────────────────────────┘
-                            │  HTTPS + Supabase Auth JWT
-                            ▼
-  ┌─────────────────────────────────────────────────────────────────┐
-  │  BACKEND  —  Supabase (kostenlos)                               │
-  │                                                                 │
-  │  ┌──────────────┐  ┌───────────────────┐  ┌─────────────────┐  │
-  │  │  Auth        │  │  PostgreSQL        │  │  Row Level      │  │
-  │  │  Login /     │  │  + PostGIS         │  │  Security (RLS) │  │
-  │  │  JWT Tokens  │  │  KNN <-> Operator  │  │  pro Benutzer   │  │
-  │  └──────────────┘  └───────────────────┘  └─────────────────┘  │
-  │                                                                 │
-  │  ┌──────────────────────────────────────────────────────────┐   │
-  │  │  Protokoll-Tabelle: Audit-Log (wer · wann · was · Notiz) │   │
-  │  └──────────────────────────────────────────────────────────┘   │
-  └─────────────────────────────────────────────────────────────────┘
+  └──────────┬──────────────────────────────────────────────────────┘
+             │                              │
+             │ Supabase Auth JWT            │ OSRM Routing API
+             ▼                              ▼
+  ┌─────────────────────┐        ┌──────────────────────────────┐
+  │  BACKEND — Supabase │        │  OSRM  (router.project-      │
+  │                     │        │  osrm.org  —  kostenlos)     │
+  │  Auth + PostgreSQL  │        │                              │
+  │  Adress-Pool        │        │  GET /route/v1/foot/         │
+  │  Protokoll-Log      │        │  lon1,lat1;lon2,lat2         │
+  │  RLS pro Benutzer   │        │  → Gehminuten + Meter        │
+  └─────────────────────┘        └──────────────────────────────┘
+```
+
+**Routing-Ablauf im Frontend (JavaScript):**
+
+```
+1. Supabase:  50 räumlich nächste verfügbare Adressen holen (Vorfilter)
+2. OSRM:      Für jede der 50 Adressen: echte Gehzeit abfragen
+              (parallel — ~50 Requests in <2 Sek.)
+3. Sortieren: Nach Gehminuten aufsteigend
+4. Anzeigen:  Top N in Liste + Karte
 ```
 
 ---
 
-## 5 · Datenbank
+## 5 · Datenbank & Routing-Logik
 
 **`adressen`** — Haupttabelle
 
@@ -167,7 +193,7 @@ title: Adress-Routing Tool
 | `id` | UUID | Eindeutige ID |
 | `plz`, `ort`, `strasse` | TEXT | Adresse |
 | `lat`, `lon` | FLOAT | GPS-Koordinaten |
-| `standort` | GEOMETRY | PostGIS-Punkt für KNN |
+| `standort` | GEOMETRY | PostGIS-Punkt (Vorfilter) |
 | `status` | TEXT | `verfuegbar` / `in_bearbeitung` / `archiviert` |
 | `benutzer_id` | UUID | Zuständiger Mitarbeiter |
 | `erledigt_am` | TIMESTAMP | Zeitpunkt der Archivierung |
@@ -182,15 +208,36 @@ title: Adress-Routing Tool
 | `zeitpunkt` | TIMESTAMP | Wann |
 | `notiz` | TEXT | Optionale Bemerkung |
 
-**KNN-Abfrage (nächste 5 verfügbare Adressen):**
+**Schritt 1 — Vorfilter (Supabase SQL, 50 Kandidaten):**
 
 ```sql
-SELECT strasse, plz, ort,
-       ST_Distance(standort, ST_MakePoint(16.3738, 48.2082)) AS meter
+SELECT id, strasse, plz, ort, lat, lon
 FROM adressen
 WHERE status = 'verfuegbar'
 ORDER BY standort <-> ST_MakePoint(16.3738, 48.2082)
-LIMIT 5;
+LIMIT 50;
+```
+
+**Schritt 2 — Echte Gehzeit (OSRM, JavaScript):**
+
+```javascript
+// Für jede der 50 Kandidaten-Adressen:
+const res = await fetch(
+  `https://router.project-osrm.org/route/v1/foot/
+   ${meinLon},${meinLat};${adresse.lon},${adresse.lat}
+   ?overview=false`
+);
+const data = await res.json();
+const gehsekunden = data.routes[0].duration;  // z. B. 187 Sek. = ~3 Min.
+const meter       = data.routes[0].distance;  // z. B. 220 m
+```
+
+**Schritt 3 — Sortieren + Top N zurückgeben (JavaScript):**
+
+```javascript
+kandidaten
+  .sort((a, b) => a.gehsekunden - b.gehsekunden)
+  .slice(0, anzahl);  // Top 5 / 10 / 15
 ```
 
 ---
@@ -201,15 +248,16 @@ LIMIT 5;
 LOGIN              HAUPTSEITE (Liste)         KARTE              ERLEDIGT-DIALOG
 ┌──────────────┐   ┌──────────────────────┐   ┌──────────────┐   ┌──────────────┐
 │ Routing Tool │   │ Hallo, Maria [Logout]│   │🔵 Ich        │   │ ✓ Erledigt?  │
-│              │   ├──────────────────────┤   │              │   │──────────────│
+│              │   ├──────────────────────┤   │   ╲Route 1   │   │──────────────│
 │ E-Mail:      │   │ Standort: [GPS][Adr] │   │  📍1  📍2   │   │ Grünentorg.  │
 │ [__________] │   │ Anzahl:  [5▼]        │   │        📍3   │   │ 12, 1200 W.  │
 │              │   │ [Liste] [Karte]       │   │   📍4        │   │              │
 │ Passwort:    │   │ [Adressen suchen]    │   │      📍5     │   │ Notiz:       │
 │ [__________] │   ├──────────────────────┤   │              │   │ [__________] │
 │              │   │ Pool: 1.673 frei     │   │ [OSM-Karte]  │   │              │
-│ [Anmelden]   │   │ 1. Grünentorg. 180m  │   │              │   │[✓] [Abbr.]   │
-└──────────────┘   │ 2. Wallenstein. 340m │   └──────────────┘   └──────────────┘
+│ [Anmelden]   │   │ 1. Grünentorg.  3min │   │              │   │[✓] [Abbr.]   │
+└──────────────┘   │ 2. Wallenstein. 5min │   └──────────────┘   └──────────────┘
+                   │ 3. Heiligenst.  8min │
                    │ [✅ Übernehmen]       │
                    └──────────────────────┘
 
@@ -237,16 +285,21 @@ AKTIVE ADRESSEN                    ARCHIV (eigene History)
 |---|---|
 | Abdeckung pro Tag | ~150 Adressen |
 | Pool aufgebraucht nach | ~13–14 Arbeitstage |
-| API-Kosten laufend | $0 / Monat |
+| OSRM-Requests/Abfrage | ~50 (Vorfilter-Kandidaten) |
+| OSRM-Requests/Tag | ~2.000 (40 Abfragen × 50) |
+| OSRM-Limit | Kein offizielles Limit (Fair-Use) |
 
 | Dienst | Kostenlos-Limit | Nutzung | Status |
 |---|---|---|---|
 | Supabase Auth | 50.000 Nutzer | 10 Nutzer | ✅ |
 | Supabase DB | 500 MB · 50k Req/Monat | <1k Req/Monat | ✅ |
 | GitHub Pages | Unbegrenzt | Statisch | ✅ |
+| OSRM (Routing) | Fair-Use · kein API-Key | ~2k Req/Tag | ✅ |
 | Leaflet.js + OSM-Tiles | Fair-Use | Wenige Nutzer | ✅ |
 | Nominatim (Geokodierung) | ~1.000/Tag | 2.000 einmalig | ✅ |
 | **Gesamtkosten** | | | **$0/Monat** |
+
+> **Hinweis:** Bei stark erhöhtem Volumen kann OSRM einfach selbst gehostet werden (kostenlos, eigener Server). Alternativ: OpenRouteService (2.000 Req/Tag kostenlos, API-Key erforderlich).
 
 ---
 
@@ -256,11 +309,11 @@ AKTIVE ADRESSEN                    ARCHIV (eigene History)
 |---|---|---|
 | **1** | Supabase einrichten · Tabellen · Auth | 2 Std. |
 | **2** | Geokodierung + Daten-Import (Python) | 2–3 Std. |
-| **3** | Frontend: Login · KNN-Suche · Erledigt + Notiz | 6–8 Std. |
-| **4** | Frontend: Karten-Ansicht (Leaflet.js) | 3–4 Std. |
+| **3** | Frontend: Login · OSRM-Routing · Erledigt + Notiz | 8–10 Std. |
+| **4** | Frontend: Karten-Ansicht mit Routen (Leaflet.js) | 3–4 Std. |
 | **5** | Frontend: Archiv · Admin-Auswertung | 2–3 Std. |
 | **6** | Test · Abnahme · Go-Live | 1–2 Std. |
-| **Gesamt** | | **~2,5 Arbeitstage** |
+| **Gesamt** | | **~2,5–3 Arbeitstage** |
 
 ---
 
@@ -273,4 +326,4 @@ AKTIVE ADRESSEN                    ARCHIV (eigene History)
 
 ---
 
-*Alle Kosten: **$0/Monat** · Stack: GitHub Pages · Supabase · Leaflet.js · OpenStreetMap*
+*Alle Kosten: **$0/Monat** · Stack: GitHub Pages · Supabase · OSRM · Leaflet.js · OpenStreetMap*
