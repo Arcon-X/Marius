@@ -373,17 +373,23 @@ const {{ duration, distance }} =
   <div class="card">
     <div class="cost-hero">
       <div class="amount">~€ 20</div>
-      <div class="period">pro Monat (Anexia, Wien)</div>
-      <div class="total">2 Monate gesamt: ~€ 40</div>
+      <div class="period">pro Monat · Option B: Anexia (Wien, AT)</div>
+      <div class="total">bei 2 Monaten Wahlkampf: <strong>~€ 40 gesamt</strong></div>
     </div>
     <div class="card-body" style="padding-top:0;">
-      <div class="tbl-wrap"><table><tbody>
-        <tr><td>Anexia Server (Wien, Server + DB)</td><td><strong>~€ 20</strong></td></tr>
-        <tr><td>GitHub Pages (Frontend)</td><td>€ 0</td></tr>
-        <tr><td>OSRM (Routing)</td><td>€ 0</td></tr>
-        <tr><td>Leaflet.js + OSM (Karte)</td><td>€ 0</td></tr>
-        <tr><td>Nominatim (Geokodierung)</td><td>€ 0</td></tr>
-      </tbody></table></div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Dienst</th><th>Option B — Anexia (AT)</th><th>Budgetalternative — Hetzner (DE)</th></tr></thead>
+        <tbody>
+          <tr><td>Server + Datenbank</td><td><strong>~€ 20 / Monat</strong></td><td>€ 3,79 / Monat</td></tr>
+          <tr><td>GitHub Pages (Frontend)</td><td>€ 0</td><td>€ 0</td></tr>
+          <tr><td>OSRM (Routing)</td><td>€ 0</td><td>€ 0</td></tr>
+          <tr><td>Leaflet.js + OSM (Karte)</td><td>€ 0</td><td>€ 0</td></tr>
+          <tr><td>Nominatim (Geokodierung, einmalig)</td><td>€ 0</td><td>€ 0</td></tr>
+          <tr style="font-weight:700;background:#E8F5EE;"><td><strong>Gesamt / Monat</strong></td><td><strong>~€ 20</strong></td><td><strong>€ 3,79</strong></td></tr>
+          <tr style="font-weight:700;background:#E8F5EE;"><td><strong>Gesamt 2 Monate</strong></td><td><strong>~€ 40</strong></td><td><strong>€ 7,58</strong></td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:.7rem;font-size:.8rem;color:var(--sub);">Preisdifferenz Anexia vs. Hetzner: ~€ 32 für 2 Monate. Vorteil Anexia: 100 % österreichisches Unternehmen, Standort Wien.</p>
     </div>
   </div>
   <div class="section-title">BNZ Farbpalette</div>
