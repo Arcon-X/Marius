@@ -15,65 +15,94 @@ title: NOVUM-ZIV Unterschriften — Planungsdokument
   --bnz-warn:       #FFF8E1;
   --bnz-warn-rand:  #F9A825;
 }
-body { font-family: 'Segoe UI', Arial, sans-serif; color: var(--bnz-text); }
+body { font-family: 'Segoe UI', Arial, sans-serif; color: var(--bnz-text); max-width: 900px; margin: 0 auto; padding: 1rem 1.5rem; }
 h1   { color: var(--bnz-dunkel); border-bottom: 4px solid var(--bnz-gruen); padding-bottom: .3em; }
 h2   { color: var(--bnz-gruen); border-left: 5px solid var(--bnz-gruen); padding-left: .6em; margin-top: 2em; }
 h3   { color: var(--bnz-dunkel); }
-table { width:100%; border-collapse: collapse; margin: 1em 0; }
-th    { background: var(--bnz-gruen); color: var(--bnz-weiss); padding: .5em .8em; text-align:left; }
-td    { padding: .4em .8em; border-bottom: 1px solid #ddd; }
+table { width:100%; border-collapse: collapse; margin: .5em 0; font-size: .93em; }
+th    { background: var(--bnz-gruen); color: var(--bnz-weiss); padding: .45em .8em; text-align:left; }
+td    { padding: .35em .8em; border-bottom: 1px solid #ddd; }
 tr:nth-child(even) td { background: var(--bnz-grau); }
-blockquote { border-left: 4px solid var(--bnz-gruen-hell); background: var(--bnz-gruen-blass); padding: .8em 1.2em; border-radius: 4px; }
-code  { background: var(--bnz-grau); padding: .1em .3em; border-radius: 3px; }
-pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); padding: 1em; overflow-x: auto; }
-.warn { border-left: 4px solid var(--bnz-warn-rand); background: var(--bnz-warn); padding: .8em 1.2em; border-radius: 4px; margin: 1em 0; }
-.plan { border-left: 4px solid var(--bnz-gruen); background: var(--bnz-gruen-blass); padding: .8em 1.2em; border-radius: 4px; margin: 1em 0; }
+blockquote { border-left: 4px solid var(--bnz-gruen-hell); background: var(--bnz-gruen-blass); padding: .7em 1.2em; border-radius: 4px; margin: .5em 0; }
+code  { background: var(--bnz-grau); padding: .1em .3em; border-radius: 3px; font-size: .9em; }
+pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); padding: .8em 1em; overflow-x: auto; font-size: .88em; }
+.warn { border-left: 4px solid var(--bnz-warn-rand); background: var(--bnz-warn); padding: .7em 1.2em; border-radius: 4px; margin: .8em 0; }
+
+/* Aufklappbare Abschnitte */
+details {
+  border: 1px solid #cde;
+  border-radius: 6px;
+  margin: .5em 0;
+  background: var(--bnz-weiss);
+}
+details[open] {
+  border-color: var(--bnz-gruen-hell);
+}
+summary {
+  padding: .65em 1em;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--bnz-dunkel);
+  background: var(--bnz-gruen-blass);
+  border-radius: 6px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: .5em;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: "▶";
+  font-size: .75em;
+  color: var(--bnz-gruen);
+  transition: transform .2s;
+}
+details[open] summary::before { transform: rotate(90deg); }
+details > *:not(summary) { padding: .8em 1em; }
+
+/* Statusbadges */
+.badge-plan  { background:#E8F5EE; color:#2C6E49; border:1px solid #4C9A6F; border-radius:4px; padding:.1em .5em; font-size:.85em; }
+.badge-offen { background:#FFF8E1; color:#8a6000; border:1px solid #F9A825; border-radius:4px; padding:.1em .5em; font-size:.85em; }
 </style>
 
-# 📋 NOVUM-ZIV Unterschriften — Planungsdokument
-**Projekt:** NOVUM-ZIV Unterschriften · **Stand:** 3. März 2026 · **Phase:** Planung  
-**Organisation:** [BNZ Bündnis NOVUM–ZIV](https://www.bnz-wien.at/) · Zahnärztekammerwahl Wien 2026
+# 📋 NOVUM-ZIV Unterschriften
+**Stand:** 3. März 2026 · **Phase:** Planung · **Org:** [BNZ Bündnis NOVUM–ZIV](https://www.bnz-wien.at/) · Zahnärztekammerwahl Wien 2026
 
-> ⚠️ **Planungsdokument** — noch kein Code, keine Datenbank, keine Live-Umgebung. Alle Angaben sind Entwürfe zur internen Abstimmung.
+> ⚠️ **Planungsdokument** — noch kein Code, keine Live-Umgebung. Alle Angaben sind Entwürfe zur internen Abstimmung.
 
 ---
 
-## Inhaltsverzeichnis
+## Schnellübersicht
 
-| # | Abschnitt |
+| Bereich | Stand |
 |---|---|
-| 1 | [Ziel & Kontext](#1-ziel--kontext) |
-| 2 | [Entscheidungen](#2-entscheidungen) |
-| 3 | [Datenschutz & Hosting — zu besprechen](#3-datenschutz--hosting--zu-besprechen) |
-| 4 | [Geplante Benutzerliste](#4-geplante-benutzerliste) |
-| 5 | [Benutzerablauf](#5-benutzerablauf) |
-| 6 | [Systemarchitektur](#6-systemarchitektur) |
-| 7 | [Datenbank & Routing-Logik](#7-datenbank--routing-logik) |
-| 8 | [Frontend-Ansichten & Farbschema](#8-frontend-ansichten--farbschema) |
-| 9 | [Kosten & Skalierung](#9-kosten--skalierung) |
-| 10 | [Projektplan](#10-projektplan) |
-| 11 | [Nächste Schritte](#11-nächste-schritte) |
+| Distanz-Methode | ✅ Echte Gehstrecke (OSRM) |
+| Hosting / Datenbank | ✅ Hetzner CX22 (EU, ~€ 3,79/Mt.) |
+| Login | ✅ Ja — Admin legt 19 Konten an |
+| Tages-Reset | ❌ Nein — Fortschritt dauerhaft |
+| Karten-Ansicht | ✅ Leaflet.js + OpenStreetMap |
+| Protokollierung | ✅ Audit-Log mit Notizfeld |
+| DSGVO | <span class="badge-offen">⚠️ zu besprechen</span> — Option B/C |
+| Gesamtkosten | **€ 3,79 / Monat** |
+| Projektdauer (Planung) | ~3 Arbeitstage |
 
 ---
 
 ## 1 · Ziel & Kontext
 
-> Mitarbeiter:innen des BNZ Bündnisses finden mit einem Klick die **N nächstgelegenen
-> freien Adressen** aus einem Pool von ~2.000 Wiener Wahlberechtigten — sortiert nach
-> **echter Gehzeit** — und protokollieren Unterschriften dauerhaft mit Namensangabe.
-
-**Anlass:** Zahnärztekammerwahl Wien 2026  
-**Bündnis:** NOVUM–ZIV  
-**Aufgabe der App:** Hausbesuche koordinieren, Fortschritt tracken, Doppelbesuche vermeiden.
+> Kandidat:innen finden mit einem Klick die **N nächstgelegenen freien Adressen** aus ~2.000 Wiener Wahlberechtigten — sortiert nach echter Gehzeit — und protokollieren Unterschriften dauerhaft mit Namensangabe. Doppelbesuche werden automatisch verhindert.
 
 ---
 
 ## 2 · Entscheidungen
 
+<details open>
+<summary>📋 Alle bestätigten Entscheidungen anzeigen</summary>
+
 | Frage | Entscheidung | Begründung |
 |---|---|---|
 | Distanz-Art | ✅ Echte Gehstrecke (OSRM) | Relevanter als Luftlinie |
-| Hosting / Datenbank | ✅ Option B — eigener Server (Hetzner) | DSGVO-sicher, kein US-Dienst |
+| Hosting / Datenbank | ✅ Option B — Hetzner (EU) | DSGVO-sicher, kein US-Dienst |
 | Login? | ✅ Ja — Admin legt Benutzer an | Zuordnung Besuche → Person |
 | Tages-Reset? | ❌ Nein | Fortschritt soll dauerhaft bleiben |
 | Archivierung | ✅ Permanent | Besuchte Adressen bleiben archiviert |
@@ -81,76 +110,62 @@ pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); pa
 | Karten-Ansicht | ✅ Ja — Leaflet.js + OSM | Kostenlos, kein API-Key |
 | Protokollierung | ✅ Ja — Audit-Log | Wer, wann, Ergebnis |
 
----
-
-## 3 · Datenschutz & Hosting — zu besprechen
-
-<div class="warn">
-⚠️ <strong>Zu besprechen</strong> — Die App verarbeitet personenbezogene Daten (Adressen von Wahlberechtigten, Mitarbeiter-Logins, Besuchsprotokolle). Die Hosting-Entscheidung hat rechtliche Konsequenzen (DSGVO). Bitte vor Entwicklungsstart klären.
-</div>
-
-### Was ist datenschutzrelevant?
-
-| Datenkategorie | Konkret | DSGVO? |
-|---|---|---|
-| Adressen der Wahlberechtigten | Name + Adresse aus Mitgliederliste | ⚠️ Ja — Zweckbindung beachten |
-| Mitarbeiter-Logins | E-Mail + Passwort | ✅ Ja |
-| Besuchsprotokolle | Wer war wann wo, Ergebnis | ✅ Ja |
-
-Nach der Wahl müssen **alle** personenbezogenen Daten gelöscht und der Server abgeschaltet werden.
+</details>
 
 ---
 
-### ❓ Option B — Eigener Server (EU) · **geplant**
+## 3 · Datenschutz & Hosting <span class="badge-offen">⚠️ zu besprechen</span>
 
-Datenbank läuft auf einem **selbst gemieteten Server** in der EU — kein US-Dienst, kein Drittanbieter hat Zugriff auf die Daten.
+<div class="warn">⚠️ Die App verarbeitet personenbezogene Daten (Adressen, Logins, Besuchsprotokolle). Bitte vor Entwicklungsstart klären.</div>
 
-**Empfohlener Anbieter: Hetzner Cloud**
+<details>
+<summary>❓ Option B — Eigener Server (Hetzner) · <span class="badge-plan">geplant</span></summary>
+
+Datenbank auf selbst gemietem EU-Server — kein US-Dienst, kein Drittanbieter hat Datenzugriff.
 
 | Kriterium | Detail |
 |---|---|
 | Unternehmen | Hetzner Online GmbH — deutsches Unternehmen |
-| Serverstandort | Nürnberg / Falkenstein (Deutschland) · EU-DSGVO |
-| US-Bezug | ❌ Keiner — rein europäisches Unternehmen |
+| Serverstandort | Nürnberg / Falkenstein (Deutschland) · EU |
+| US-Bezug | ❌ Keiner |
 | Preis | ab **€ 3,79 / Monat** (CX22 — 2 vCPU, 4 GB RAM) |
 | PostgreSQL + PostGIS | ✅ Einfach installierbar |
-| Vertrag / DPA | ✅ Auftragsverarbeitungsvertrag (AVV) auf Anfrage |
-| Kündigung | Monatlich · nach der Wahl einfach löschen |
+| AVV (DSGVO-Pflicht) | ✅ Auf Anfrage verfügbar |
+| Kündigung | Monatlich — nach Wahl löschen, Daten weg |
 
-> **Alternativ (100 % österreichisch):** [anexia](https://www.anexia.com/de/) — Wiener Unternehmen, Rechenzentrum Wien, teurer (~€ 20/Monat), aber maximale DSGVO-Sicherheit. Sinnvoll wenn die Zahnärztekammer darauf besteht.
+**Alternativ (100 % österreichisch):** [anexia.com](https://www.anexia.com/de/) — Wien, ~€ 20/Mt., maximale DSGVO-Sicherheit.
 
-**Was auf dem Server läuft:**
 ```
 Hetzner CX22 (€ 3,79/Mt.)
-  └── Ubuntu 24.04 LTS
+  └── Ubuntu 24.04
         ├── PostgreSQL 16 + PostGIS 3
-        │     ├── Tabelle: adressen (2.000 Zeilen)
-        │     └── Tabelle: protokoll (Audit-Log)
-        └── PostgREST (REST-API, kostenlos)
-              → Verbindung vom Frontend per HTTPS
+        └── PostgREST (REST-API)
 ```
 
----
+</details>
 
-### ❓ Option C — Keine personenbezogenen Daten in der Cloud · zu besprechen
+<details>
+<summary>❓ Option C — Keine personenbezogenen Daten in der Cloud · <span class="badge-offen">zu besprechen</span></summary>
 
-Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine Namen, keine Vor-/Nachnamen der Wahlberechtigten.
+Nur anonymisierte Adress-IDs in der Datenbank — keine Namen der Wahlberechtigten.
 
 | Vorteil | Nachteil |
 |---|---|
 | Stark reduziertes DSGVO-Risiko | Weniger nützliche Auswertungen |
-| Auch mit Supabase (US-Dienst) denkbar | Admin muss IDs manuell zuordnen |
-| Einfacherer Datenschutz-Nachweis | Notizen können keine Namen enthalten |
+| Auch mit Supabase (US) denkbar | Admin muss IDs manuell zuordnen |
 
-> Zu klären: Enthält die Adressliste der Zahnärztekammer Namen der Mitglieder, oder nur Adressen? Falls nur Adressen → Option C kaum nötig, da ohnehin keine Namen verarbeitet werden.
+> Zu klären: Enthält die Adressliste der Zahnärztekammer Namen, oder nur Adressen? Falls nur Adressen → Option C kaum nötig.
+
+</details>
 
 ---
 
-## 4 · Geplante Benutzerliste
+## 4 · Benutzerliste (19 Personen)
 
-**Admin:** Dr. Marius Romanin · **Mitarbeiter:innen:** alle 18 weiteren Kandidat:innen
+<details>
+<summary>👥 Alle 19 Kandidat:innen anzeigen — 1 Admin + 18 Mitarbeiter:innen</summary>
 
-| # | Name | Funktion / Kandidatur | Rolle App | E-Mail (Platzhalter) |
+| # | Name | Funktion | Rolle | E-Mail (Platzhalter) |
 |---|---|---|---|---|
 | 1 | Dr. Marius Romanin | 2. Vizepräsidentin | **Admin** | marius.romanin@bnz-wien.at |
 | 2 | OMR Dr. Franz Hastermann | Präsident | Mitarbeiter | franz.hastermann@bnz-wien.at |
@@ -174,15 +189,20 @@ Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine N
 
 > ⚠️ E-Mail-Adressen sind Platzhalter — echte Adressen vor Setup eintragen.
 
+</details>
+
 ---
 
 ## 5 · Benutzerablauf
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│            NOVUM-ZIV Unterschriften — Benutzerablauf                │
-└─────────────────────────────────────────────────────────────────────┘
+<details>
+<summary>🔄 Vollständigen Ablauf anzeigen</summary>
 
+```
+START → LOGIN → STANDORT → ANZAHL → ROUTING → LISTE/KARTE → RESERVIEREN → BESUCHEN → ERLEDIGEN
+```
+
+```
   ┌──────────┐
   │  START   │  Kandidat:in öffnet Webseite (Smartphone / PC)
   └────┬─────┘
@@ -192,7 +212,7 @@ Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine N
   └────────────┬─────────────────┘
                ▼
   ┌──────────────────────────────┐
-  │  📍 STANDORT ERMITTELN       │  [GPS automatisch] ODER [Adresse eingeben]
+  │  📍 STANDORT ERMITTELN       │  [GPS] ODER [Adresse eingeben]
   └────────────┬─────────────────┘
                ▼
   ┌──────────────────────────────┐
@@ -200,81 +220,77 @@ Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine N
   └────────────┬─────────────────┘
                ▼
   ┌──────────────────────────────────────────────────────┐
-  │  ⚙️  ROUTING (automatisch im Hintergrund)             │
-  │  1. Server: 50 räumlich nächste Adressen (Vorfilter) │
-  │  2. OSRM: echte Gehzeit für jede Adresse             │
+  │  ⚙️  ROUTING (im Hintergrund)                         │
+  │  1. Server: 50 räumlich nächste Adressen             │
+  │  2. OSRM:   echte Gehzeit für jede Adresse           │
   │  3. Sortierung nach Gehminuten                       │
   └────────────┬─────────────────────────────────────────┘
                ▼
   ┌──────────────────────────────────────────────────────┐
-  │  📋 ERGEBNISLISTE  /  🗺️ KARTEN-ANSICHT              │
-  │  1. Grünentorgasse 12, 1200 W.   3 min  (220 m)      │
-  │  2. Wallensteinstr. 5, 1200 W.   5 min  (390 m)      │
-  │  Pool: X Adressen noch verfügbar                     │
+  │  📋 ERGEBNISLISTE  /  🗺️ KARTE                        │
+  │  1.  Grünentorgasse 12   3 min  (220 m)              │
+  │  2.  Wallensteinstr. 5   5 min  (390 m)              │
   └────────────┬─────────────────────────────────────────┘
                ▼
   ┌──────────────────────────────┐
-  │  💬 RESERVIERUNGS-DIALOG     │  → Status: IN BEARBEITUNG
+  │  💬 RESERVIEREN              │  → Status: IN BEARBEITUNG
   │  [✅ Bestätigen] [Abbrechen]  │
   └────────────┬─────────────────┘
-               │  (Kandidat:in besucht Adresse)
+               │  (Adresse besuchen)
                ▼
   ┌──────────────────────────────┐
-  │  ✓ ERLEDIGT-DIALOG           │
-  │  [✅ Unterschrift erhalten]   │  → ARCHIVIERT + Protokoll
-  │  [❌ Nicht angetroffen]       │
+  │  ✓ ERLEDIGT                  │
+  │  [✅ Unterschrift erhalten]   │
+  │  [❌ Nicht angetroffen]       │  → ARCHIVIERT + Protokoll
   │  [⏭️  Nicht interessiert]     │
   │  Notiz (optional): [_______] │
-  └────────────┬─────────────────┘
-               ▼
-       Neue Abfrage starten
+  └──────────────────────────────┘
 ```
 
-**Adress-Status:**
+**Status-Lebenszyklus:**
 ```
   VERFÜGBAR ──[übernommen]──► IN BEARBEITUNG ──[erledigt]──► ARCHIVIERT
      ▲                                                            │
      └──────────────── Admin reaktiviert (Ausnahmefall) ──────────┘
 ```
 
+</details>
+
 ---
 
 ## 6 · Systemarchitektur
 
-**Geplant: Option B — eigener Hetzner-Server (EU)**
+<details>
+<summary>🏗️ Architekturdiagramm anzeigen</summary>
 
 ```
-  ┌──────────────────────────────────────────────────────────────────┐
-  │  FRONTEND  —  GitHub Pages (HTML / CSS / JavaScript)             │
-  │  Farben: BNZ Grün #2C6E49                                        │
-  │  ┌─────────┐  ┌──────────────┐  ┌────────┐  ┌───────────────┐  │
-  │  │  Login  │  │  Hauptseite  │  │  Karte │  │  Archiv /     │  │
-  │  │  (JWT)  │  │  Gehstrecken │  │  Routen│  │  Admin-View   │  │
-  │  └─────────┘  └──────────────┘  └────────┘  └───────────────┘  │
-  └──────────┬───────────────────────────────────────────────────────┘
-             │ HTTPS + JWT-Auth                  │ OSRM (kostenlos)
-             ▼                                   ▼
-  ┌──────────────────────────┐        ┌──────────────────────────┐
-  │  Hetzner CX22            │        │  router.project-osrm.org │
-  │  € 3,79/Monat            │        │  Fußgänger-Routing Wien  │
-  │  Standort: Deutschland   │        │  → Minuten + Meter       │
-  │                          │        └──────────────────────────┘
-  │  PostgreSQL 16           │
-  │  + PostGIS 3             │
-  │  + PostgREST (API)       │
-  │  + Auth (selbst gebaut   │
-  │    oder Authelia/JWT)    │
-  └──────────────────────────┘
-       ↑ EU-DSGVO-konform
-       ↑ Kein US-Unternehmen
-       ↑ Nur wir haben Zugriff
+  ┌──────────────────────────────────────────────────────┐
+  │  FRONTEND — GitHub Pages (kostenlos)                 │
+  │  HTML / CSS (BNZ Grün #2C6E49) / JavaScript          │
+  │  Login · Suche · Liste · Karte · Archiv · Admin      │
+  └──────────┬───────────────────────────────────────────┘
+             │ HTTPS + JWT                │ OSRM (kostenlos)
+             ▼                            ▼
+  ┌──────────────────────┐   ┌────────────────────────────┐
+  │  Hetzner CX22 (EU)   │   │  router.project-osrm.org   │
+  │  € 3,79/Monat        │   │  Fußgänger-Routing Wien    │
+  │  PostgreSQL + PostGIS│   │  → Gehminuten + Meter      │
+  │  PostgREST (API)     │   └────────────────────────────┘
+  │  JWT-Auth            │
+  └──────────────────────┘
+       EU-DSGVO-konform · kein US-Dienst
 ```
+
+</details>
 
 ---
 
-## 7 · Datenbank & Routing-Logik
+## 7 · Datenbank & Routing
 
-**`adressen`**
+<details>
+<summary>🗄️ Tabellenstruktur + SQL-Beispiele anzeigen</summary>
+
+**Tabelle `adressen`**
 
 | Spalte | Typ | Beschreibung |
 |---|---|---|
@@ -286,7 +302,7 @@ Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine N
 | `benutzer_id` | UUID | Zuständige Person |
 | `erledigt_am` | TIMESTAMP | Zeitpunkt |
 
-**`protokoll`** — Audit-Log
+**Tabelle `protokoll`**
 
 | Spalte | Typ | Beschreibung |
 |---|---|---|
@@ -296,7 +312,7 @@ Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine N
 | `zeitpunkt` | TIMESTAMP | Wann |
 | `notiz` | TEXT | Optionale Bemerkung |
 
-**Vorfilter SQL:**
+**Vorfilter SQL (50 Kandidaten):**
 ```sql
 SELECT id, strasse, plz, lat, lon
 FROM adressen WHERE status = 'verfuegbar'
@@ -305,24 +321,30 @@ ORDER BY standort <-> ST_MakePoint(:lon, :lat) LIMIT 50;
 
 **OSRM-Abfrage (JavaScript):**
 ```javascript
-const r = await fetch(`https://router.project-osrm.org/route/v1/foot/
-  ${meinLon},${meinLat};${a.lon},${a.lat}?overview=false`);
+const r = await fetch(
+  `https://router.project-osrm.org/route/v1/foot/${meinLon},${meinLat};${a.lon},${a.lat}?overview=false`
+);
 const { duration, distance } = (await r.json()).routes[0];
+// Sortieren nach duration (Sekunden), Top N anzeigen
 ```
+
+</details>
 
 ---
 
-## 8 · Frontend-Ansichten & Farbschema
+## 8 · Frontend-Mockups & Farbschema
 
-**Farbpalette (BNZ Wien):**
+<details>
+<summary>🎨 Farbpalette + Screen-Mockups anzeigen</summary>
+
+**BNZ Farbpalette (von bnz-wien.at):**
 
 | Farbe | Hex | Verwendung |
 |---|---|---|
-| BNZ Grün | `#2C6E49` | Primärfarbe, Buttons, Überschriften |
+| BNZ Grün | `#2C6E49` | Buttons, Überschriften, Tabellen-Header |
 | BNZ Grün Hell | `#4C9A6F` | Hover, Akzente |
 | BNZ Grün Blass | `#E8F5EE` | Hintergründe, Zebrastreifen |
-| BNZ Dunkel | `#1A2E22` | Seitenüberschriften, Navbar |
-| Weiß | `#FFFFFF` | Seitenhintergrund |
+| BNZ Dunkel | `#1A2E22` | Navbar, Seitenüberschriften |
 
 ```
 LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
@@ -330,61 +352,71 @@ LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
 │ BNZ Logo        │      │ NOVUM-ZIV [Abmelden] │   │ ✓ Erledigt?     │
 │─────────────────│      ├──────────────────────┤   │─────────────────│
 │ E-Mail:         │      │ GPS ○  Adresse ○      │   │ Grünentorg. 12  │
-│ [_____________] │      │ Anzahl: [5▼]          │   │ 1200 Wien       │
-│ Passwort:       │      │ [Liste] [Karte]        │   │                 │
-│ [_____________] │      │ [🔍 Suchen]            │   │[✅ Unterschrift] │
-│                 │      ├──────────────────────┤   │[❌ Nicht angetr.]│
-│ [Anmelden]      │      │ 1. Grünentorg.  3min  │   │[⏭  Kein Inter.] │
-│  #2C6E49        │      │ 2. Wallenstein. 5min  │   │                 │
-└─────────────────┘      │ [✅ Übernehmen]        │   │ Notiz:[_______] │
-                         └──────────────────────┘   └─────────────────┘
+│ [_____________] │      │ Anzahl: [5▼]          │   │─────────────────│
+│ Passwort:       │      │ [Liste] [Karte]        │   │[✅ Unterschrift] │
+│ [_____________] │      │ [🔍 Suchen]            │   │[❌ Nicht angetr.]│
+│                 │      ├──────────────────────┤   │[⏭  Kein Inter.] │
+│ [  Anmelden  ]  │      │ 1. Grünentorg.  3min  │   │                 │
+│   #2C6E49       │      │ 2. Wallenstein. 5min  │   │ Notiz:[_______] │
+└─────────────────┘      │ [✅ Übernehmen]        │   └─────────────────┘
+                         └──────────────────────┘
 ```
+
+</details>
 
 ---
 
 ## 9 · Kosten & Skalierung
 
-**19 Benutzer:innen · ~2.000 Wiener Adressen · Wahlkampf-Zeitraum**
+<details>
+<summary>💰 Kostenübersicht anzeigen — Gesamt: €3,79/Monat</summary>
+
+**19 Benutzer:innen · ~2.000 Adressen · Wahlkampf-Zeitraum**
 
 | Dienst | Kosten | Anmerkung |
 |---|---|---|
-| Hetzner CX22 (Server + DB) | **€ 3,79 / Monat** | Nur für Wahlkampf-Dauer, danach löschen |
+| Hetzner CX22 (Server + DB) | **€ 3,79 / Monat** | Nach Wahl löschen |
 | GitHub Pages (Frontend) | € 0 | Kostenlos |
-| OSRM (Routing) | € 0 | Open Source, kein API-Key |
+| OSRM (Routing) | € 0 | Open Source |
 | Leaflet.js + OSM | € 0 | Open Source |
 | Nominatim (Geokodierung, einmalig) | € 0 | 2.000 Adressen einmalig |
-| **Gesamt** | **€ 3,79 / Monat** | |
+| **Gesamt** | **€ 3,79 / Monat** | Bei 2 Monaten: **€ 7,58 gesamt** |
 
-> Bei 2 Monaten Wahlkampf: **€ 7,58 Gesamtkosten.**
+</details>
 
 ---
 
 ## 10 · Projektplan
 
+<details>
+<summary>📅 Alle Phasen anzeigen — ~3 Arbeitstage</summary>
+
 | Phase | Aufgabe | Aufwand |
 |---|---|---|
 | **0** | DSGVO-Entscheidung finalisieren (Option B / C) | Besprechung |
-| **1** | Hetzner-Server mieten · PostgreSQL + PostGIS installieren | 2–3 Std. |
-| **2** | Auth-System einrichten (JWT-Login, 19 Konten) | 2 Std. |
+| **1** | Hetzner-Server · PostgreSQL + PostGIS | 2–3 Std. |
+| **2** | Auth-System · 19 Konten anlegen | 2 Std. |
 | **3** | Geokodierung + Daten-Import (Python) | 2–3 Std. |
-| **4** | Frontend: BNZ-Design · Login · OSRM-Routing · Erledigt-Dialog | 8–10 Std. |
+| **4** | Frontend: Login · Routing · Erledigt-Dialog | 8–10 Std. |
 | **5** | Frontend: Karten-Ansicht (Leaflet.js) | 3–4 Std. |
 | **6** | Frontend: Archiv · Admin-Auswertung | 2–3 Std. |
-| **7** | Test mit allen 19 Benutzer:innen · Go-Live | 2 Std. |
+| **7** | Test · Go-Live | 2 Std. |
 | **8** | Nach Wahl: Server löschen, Daten vernichten | 30 Min. |
 | **Gesamt** | | **~3–3,5 Arbeitstage** |
+
+</details>
 
 ---
 
 ## 11 · Nächste Schritte
 
-- [ ] **DSGVO-Entscheidung** — Option B (Hetzner) oder Option C besprechen und bestätigen
-- [ ] **Adressliste bereitstellen** — Excel/CSV mit den ~2.000 Wiener Adressen
-- [ ] **E-Mail-Adressen bestätigen** — echte E-Mails aller 19 Kandidat:innen
-- [ ] **Hetzner-Konto anlegen** → [hetzner.com/cloud](https://www.hetzner.com/cloud) *(5 Min.)*
+- [ ] <span class="badge-offen">zu besprechen</span> **DSGVO** — Option B (Hetzner) oder Option C bestätigen
+- [ ] **Adressliste** bereitstellen — Excel/CSV mit ~2.000 Wiener Adressen
+- [ ] **E-Mail-Adressen** aller 19 Kandidat:innen bestätigen
+- [ ] **Hetzner-Konto anlegen** → [hetzner.com/cloud](https://www.hetzner.com/cloud)
 - [ ] **Entwicklung freigeben** — Startschuss Phase 1
 
 ---
 
 *Planungsdokument · NOVUM-ZIV Unterschriften · BNZ Bündnis NOVUM–ZIV · Wien 2026*  
-*Farben: [bnz-wien.at](https://www.bnz-wien.at/) · Stack (geplant): GitHub Pages · Hetzner · PostgreSQL · OSRM · Leaflet.js*
+*Stack (geplant): GitHub Pages · Hetzner · PostgreSQL · OSRM · Leaflet.js*
