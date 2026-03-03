@@ -1,240 +1,240 @@
 ---
 layout: default
-title: Nearest Address Finder — Solution Report
+title: Nächstgelegene Adressen — Lösungsbericht
 ---
 
-# Nearest Address Finder — Solution Report
+# Nächstgelegene Adressen — Lösungsbericht
 
-**Date:** March 3, 2026  
-**Prepared by:** GitHub Copilot  
-**Topic:** Find the N nearest addresses from a list of ~2,000 based on a given origin location
+**Datum:** 3. März 2026  
+**Erstellt von:** GitHub Copilot  
+**Thema:** Ermittlung der N nächstgelegenen Adressen aus einer Liste von ca. 2.000 Einträgen, ausgehend von einem beliebigen Startpunkt
 
 ---
 
-## Business Requirement
+## Anforderung
 
-The team maintains a list of approximately **2,000 Austrian addresses** (stored in Excel/CSV). Given any **origin address** and a desired **count N**, the system must return the **N nearest addresses** from the list — sorted by distance from the origin.
+Das Team verwaltet eine Liste von ca. **2.000 österreichischen Adressen** (gespeichert in Excel/CSV). Ausgehend von einer **Startadresse** und einer gewünschten **Anzahl N** soll das System die **N nächstgelegenen Adressen** aus der Liste zurückliefern — sortiert nach Entfernung vom Startpunkt.
 
-**Example:** Starting from the office at Jägerstraße 23/4, 1200 Wien — find the 5 nearest addresses from the full list.
+**Beispiel:** Startpunkt Büro Jägerstraße 23/4, 1200 Wien — finde die 5 nächstgelegenen Adressen aus der Gesamtliste.
 
-**Example address list:**
+**Beispiel-Adressliste:**
 
-| ZIP  | City | Street                    |
+| PLZ  | Ort  | Straße                    |
 |------|------|---------------------------|
 | 1190 | Wien | Heiligenstädter Straße 69/10 |
 | 1200 | Wien | Jägerstraße 23/4          |
 | 1220 | Wien | Trondheimgasse sa/1/14    |
 
-**Use cases:** field work planning, canvassing route scheduling, tariff assignment optimization.
+**Anwendungsfälle:** Außendienstplanung, Haustürbesuche, Tarifzuordnung, Gebietsoptimierung.
 
 ---
 
-## Recommended Solution: Two-Phase Approach
+## Empfohlene Lösung: Zweiphasiger Ansatz
 
-### Phase 1 — Straight-line KNN Search (Free, immediate)
+### Phase 1 — Luftliniensuche mit KNN (Kostenlos, sofort einsetzbar)
 
-**How it works:**
-1. Each address in the list is **geocoded once** (converted to GPS coordinates) using OpenStreetMap's Nominatim service — no cost, no API key required. Results are cached locally.
-2. The **origin address** is also geocoded (one request).
-3. Straight-line (Haversine) distances are calculated from the origin to every address in the list.
-4. The list is **sorted by distance** and the top N addresses are returned.
-5. Results are exported to Excel, sorted nearest-first.
+**Funktionsweise:**
+1. Jede Adresse der Liste wird **einmalig geokodiert** (in GPS-Koordinaten umgewandelt) — kostenlos über den OpenStreetMap-Dienst Nominatim, kein API-Schlüssel erforderlich. Ergebnisse werden lokal zwischengespeichert.
+2. Der **Startpunkt** wird ebenfalls geokodiert (eine Anfrage).
+3. Luftlinienabstände (Haversine-Formel) werden vom Startpunkt zu allen 2.000 Adressen berechnet.
+4. Die Liste wird **nach Entfernung sortiert** und die Top-N Adressen zurückgegeben.
+5. Ergebnisse werden in Excel exportiert, sortiert von nächster zu weitester.
 
-**Example output for N=5:**
+**Beispielausgabe für N=5:**
 
-| Rank | ZIP  | City | Street | Distance |
-|------|------|------|--------|----------|
+| Rang | PLZ  | Ort  | Straße | Entfernung |
+|------|------|------|--------|------------|
 | 1 | 1200 | Wien | Grünentorgasse 12 | 180 m |
 | 2 | 1200 | Wien | Wallensteinstraße 5/3 | 340 m |
 | 3 | 1190 | Wien | Heiligenstädter Straße 69/10 | 610 m |
 | 4 | 1200 | Wien | Dresdner Straße 44 | 820 m |
-| 5 | 1210 | Wien | Floridsdorfer Hauptstraße 1 | 1.1 km |
+| 5 | 1210 | Wien | Floridsdorfer Hauptstraße 1 | 1,1 km |
 
-**Technical stack:**
+**Technischer Stack:**
 
-| Component | Tool | Cost |
+| Komponente | Werkzeug | Kosten |
 |-----------|------|------|
-| Geocoding | Nominatim (OpenStreetMap) | Free |
-| KNN search | scipy / numpy (Haversine) | Free |
-| Input/Output | pandas + openpyxl | Free |
-| Language | Python 3 | Free |
+| Geokodierung | Nominatim (OpenStreetMap) | Kostenlos |
+| KNN-Suche | scipy / numpy (Haversine) | Kostenlos |
+| Ein-/Ausgabe | pandas + openpyxl | Kostenlos |
+| Programmiersprache | Python 3 | Kostenlos |
 
-**Estimated geocoding time:** ~33 minutes for 2,000 addresses (Nominatim enforces 1 request/second)  
-> Geocoding results are cached in a local CSV — subsequent queries against the same list are **instant**.
+**Geschätzte Geokodierungszeit:** ~33 Minuten für 2.000 Adressen (Nominatim erlaubt max. 1 Anfrage/Sekunde)  
+> Geokodierungsergebnisse werden in einer lokalen CSV-Datei gespeichert — alle weiteren Abfragen gegen dieselbe Liste sind **sofort** verfügbar.
 
-**Accuracy note:** Straight-line distance does not account for physical obstacles (rivers, parks, one-way streets). For Vienna (Wien), urban density makes this accurate to within 10–15% of real walking distance.
+**Genauigkeitshinweis:** Die Luftliniendistanz berücksichtigt keine physischen Hindernisse (Flüsse, Parks, Einbahnstraßen). Für Wien ist die Genauigkeit im Vergleich zur tatsächlichen Gehstrecke typischerweise **10–15 % Abweichung**.
 
 ---
 
-### Phase 2 — Actual Walking Distance Refinement (Optional, adds cost)
+### Phase 2 — Echte Gehstrecke (Optional, mit Kosten)
 
-If real street-level walking distances are required (e.g. the origin is near a river or park that skews straight-line results), a routing API can be called for **only the top N candidates** returned by Phase 1 — keeping API call volume minimal.
+Falls reale Gehstrecken erforderlich sind (z. B. Startpunkt liegt nahe einem Fluss oder Park), kann ein Routing-API für **nur die Top-N Kandidaten** aus Phase 1 aufgerufen werden — minimales API-Volumen, maximale Genauigkeit.
 
-| Provider | Free Tier | Cost per query batch (N=5) | Notes |
+| Anbieter | Kostenloses Kontingent | Kosten je Abfrage (N=5) | Hinweis |
 |---|---|---|---|
-| **Google Maps Distance Matrix API** | $200/month credit | ~$0.005 per query | Easy to use, very accurate |
-| **OpenRouteService (ORS)** | 500 requests/day free | ~$0 on free tier for low volume | EU-based, good for Austria |
-| **HERE Maps Matrix Routing** | 1,000 requests/day free | ~$0 on free tier | |
-| **OSRM (self-hosted)** | Unlimited | Server cost only | Best if querying thousands of times/day |
+| **Google Maps Distance Matrix API** | $200 Guthaben/Monat | ~$0,005 je Abfrage | Einfach, sehr genau |
+| **OpenRouteService (ORS)** | 500 Anfragen/Tag kostenlos | ~$0 im kostenlosen Tarif | EU-basiert, ideal für Österreich |
+| **HERE Maps Matrix Routing** | 1.000 Anfragen/Tag kostenlos | ~$0 im kostenlosen Tarif | |
+| **OSRM (selbst gehostet)** | Unbegrenzt | Nur Serverkosten | Beste Wahl bei hohem Volumen |
 
-**Smart hybrid strategy (cost-optimized):**
-- Phase 1 (free) narrows 2,000 addresses down to top 20 candidates using straight-line distance
-- Phase 2 calls the walking API for only those 20 candidates to get precise results
-- Final top N are returned sorted by real walking distance
-- This reduces API calls from 2,000 to just 20 per query — cutting costs by **99%**
-
----
-
-## Recommended Phased Rollout
-
-```
-Phase 1 (Week 1):  Geocode all 2,000 addresses + build KNN query tool  →  $0 cost
-Phase 2 (Week 2):  Test queries with real origin addresses, review results
-Phase 3 (TBD):     Add walking API refinement if straight-line accuracy is insufficient
-```
+**Kostenoptimierte Hybridstrategie:**
+- Phase 1 (kostenlos) reduziert die 2.000 Adressen auf die 20 nächstgelegenen Kandidaten
+- Phase 2 ruft das Routing-API nur für diese 20 Kandidaten auf
+- Ergebnis: Top-N nach echter Gehstrecke sortiert
+- API-Aufrufe werden von 2.000 auf 20 reduziert — **99 % Kostenersparnis**
 
 ---
 
-## Output
+## Empfohlener Projektplan
 
-The tool accepts:
-- **Origin address** (ZIP + City + Street, or free text)
-- **N** — number of nearest addresses to return
+```
+Phase 1 (Woche 1):  Alle 2.000 Adressen geokodieren + KNN-Tool implementieren  →  $0 Kosten
+Phase 2 (Woche 2):  Tests mit echten Startadressen, Ergebniskontrolle
+Phase 3 (nach Bedarf):  Routing-API ergänzen, falls Luftliniengenauigkeit nicht ausreicht
+```
 
-And produces a sorted Excel output:
+---
 
-| Column | Description |
+## Ausgabe
+
+Das Tool nimmt entgegen:
+- **Startadresse** (PLZ + Ort + Straße oder Freitext)
+- **N** — Anzahl der zurückzugebenden nächstgelegenen Adressen
+
+Und liefert eine sortierte Excel-Ausgabe:
+
+| Spalte | Beschreibung |
 |---|---|
-| `Rank` | 1 = nearest, 2 = second nearest, etc. |
-| `ZIP` | Postal code |
-| `City` | City |
-| `Street` | Street address |
-| `Latitude` | GPS latitude |
-| `Longitude` | GPS longitude |
-| `Distance_m` | Straight-line distance from origin in meters |
-| `Walking_m` *(Phase 2)* | Real walking distance in meters (optional) |
+| `Rang` | 1 = nächste, 2 = zweitnächste, usw. |
+| `PLZ` | Postleitzahl |
+| `Ort` | Stadt |
+| `Straße` | Straßenadresse |
+| `Breitengrad` | GPS-Breitengrad |
+| `Längengrad` | GPS-Längengrad |
+| `Entfernung_m` | Luftlinienabstand vom Startpunkt in Metern |
+| `Gehstrecke_m` *(Phase 2)* | Echte Gehstrecke in Metern (optional) |
 
-Optionally, an **interactive HTML map** can also be generated showing the origin pin and the N nearest addresses.
-
----
-
-## Next Steps
-
-- [ ] Confirm default value of N (e.g. return 5 nearest? 10? configurable per query?)
-- [ ] Confirm output format (Excel only, or also HTML map with pins)
-- [ ] Provide sample Excel/CSV file with the 2,000 addresses for development
-- [ ] Decide if Phase 2 (real walking distance) is needed after Phase 1 results are reviewed
+Optional kann auch eine **interaktive HTML-Karte** erzeugt werden, die den Startpunkt und die N nächstgelegenen Adressen als Pins anzeigt.
 
 ---
 
-## Summary
+## Nächste Schritte
 
-| | Phase 1 (Straight-line KNN) | Phase 2 (Walking API refinement) |
+- [ ] Standardwert für N bestätigen (z. B. 5 nächste? 10? Konfigurierbar je Abfrage?)
+- [ ] Ausgabeformat bestätigen (nur Excel oder auch HTML-Karte mit Pins)
+- [ ] Excel/CSV-Datei mit den 2.000 Adressen für die Entwicklung bereitstellen
+- [ ] Entscheidung: ist Phase 2 (echte Gehstrecke) nach Review von Phase 1 notwendig?
+
+---
+
+## Zusammenfassung
+
+| | Phase 1 (Luftlinien-KNN) | Phase 2 (Routing-API) |
 |---|---|---|
-| **Cost** | $0 | $0 on free tiers for low volume |
-| **Accuracy** | Good (±10–15% vs real walking) | High (real street routing) |
-| **Speed** | ~33 min geocoding (once), then instant | +1–2 sec per query for API call |
-| **Complexity** | Low | Low–Medium |
-| **Recommended?** | Yes — start here | Add only if accuracy is critical |
+| **Kosten** | $0 | $0 im kostenlosen Tarif bei geringem Volumen |
+| **Genauigkeit** | Gut (±10–15 % ggü. echter Gehstrecke) | Hoch (reale Straßenführung) |
+| **Geschwindigkeit** | ~33 Min. Geokodierung (einmalig), danach sofort | +1–2 Sek. je Abfrage durch API-Aufruf |
+| **Komplexität** | Niedrig | Niedrig–Mittel |
+| **Empfehlung** | Ja — hier starten | Nur ergänzen, wenn Genauigkeit kritisch ist |
 
 ---
 
-## How It Works — Simple Flow
+## Ablauf — Einfache Darstellung
 
 ```
-User provides:  "Jägerstraße 23/4, 1200 Wien"  +  N = 5
+Eingabe:  "Jägerstraße 23/4, 1200 Wien"  +  N = 5
         ↓
-Geocode origin address  →  (lat, lon)
+Startadresse geokodieren  →  (Breitengrad, Längengrad)
         ↓
-Calculate distance from origin to all 2,000 addresses
+Entfernung zum Startpunkt für alle 2.000 Adressen berechnen
         ↓
-Sort by distance, return top 5
+Nach Entfernung sortieren, Top 5 zurückgeben
         ↓
-Export to Excel + optional HTML map
+Export nach Excel + optionale HTML-Karte
 ```
 
 ---
 
-## Scale Estimate: 10 Workers, Daily Route Planning
+## Skalierungsschätzung: 10 Mitarbeiter, tägliche Routenplanung
 
-### Assumptions
+### Annahmen
 
-| Parameter | Value |
+| Parameter | Wert |
 |---|---|
-| Field workers | 10 |
-| Addresses in pool | 2,000 |
-| Addresses visited per worker per day | ~15 |
-| KNN queries per worker per day | 1 (morning plan) + 1 re-plan midday = **2** |
-| N (nearest addresses returned) | 5 |
-| Working days per month | 22 |
+| Außendienstmitarbeiter | 10 |
+| Adressen im Pool | 2.000 |
+| Besuche pro Mitarbeiter pro Tag | ~15 |
+| KNN-Abfragen pro Mitarbeiter pro Tag | 1 (Morgenplanung) + 1 Neuplanung mittags = **2** |
+| N (zurückgegebene nächste Adressen) | 5 |
+| Arbeitstage pro Monat | 22 |
 
 ---
 
-### Request Volume Breakdown
+### Anfragevolumen im Detail
 
-#### Geocoding Requests (Nominatim / OpenStreetMap)
+#### Geokodierungs-Anfragen (Nominatim / OpenStreetMap)
 
-| Event | Requests | Frequency |
+| Ereignis | Anfragen | Häufigkeit |
 |---|---|---|
-| Initial setup — geocode all 2,000 addresses | 2,000 | **Once only**, then cached |
-| Daily — geocode each worker's origin (start location) | 10 | Per day |
-| Daily — re-plan midday (optional) | 10 | Per day |
-| **Total daily (after setup)** | **~20 requests/day** | |
-| **Total monthly** | **~440 requests/month** | |
+| Ersteinrichtung — alle 2.000 Adressen geokodieren | 2.000 | **Einmalig**, danach gecacht |
+| Täglich — Startpunkt je Mitarbeiter geokodieren | 10 | Pro Tag |
+| Täglich — Neuplanung mittags (optional) | 10 | Pro Tag |
+| **Gesamt täglich (nach Einrichtung)** | **~20 Anfragen/Tag** | |
+| **Gesamt monatlich** | **~440 Anfragen/Monat** | |
 
-> Nominatim allows ~1 request/second and is designed for reasonable use — 20 req/day is negligible.
+> Nominatim erlaubt ~1 Anfrage/Sekunde und ist für normalen Gebrauch ausgelegt — 20 Anfragen/Tag sind vernachlässigbar.
 
 ---
 
-#### KNN Computation — Phase 1 Straight-line (No API)
+#### KNN-Berechnung — Phase 1 Luftlinie (Kein API)
 
-All math runs **locally** in Python. Zero external requests per query.
+Alle Berechnungen laufen **lokal** in Python. Keine externen Anfragen je Abfrage.
 
-| Event | API calls |
+| Ereignis | API-Aufrufe |
 |---|---|
-| Calculate distance to all 2,000 addresses | **0** — computed on-device |
-| Sort and return top 5 | **0** |
-| **Cost** | **$0 forever** |
+| Entfernung zu allen 2.000 Adressen berechnen | **0** — lokal berechnet |
+| Sortieren und Top 5 ausgeben | **0** |
+| **Kosten** | **$0, dauerhaft** |
 
 ---
 
-#### Walking Distance Refinement — Phase 2 (Optional API)
+#### Gehstrecken-Verfeinerung — Phase 2 (Optionales API)
 
-Strategy: narrow to top 20 candidates via straight-line, then call walking API for only those 20.
+Strategie: Luftlinie auf Top-20-Kandidaten eingrenzen, dann Routing-API nur für diese 20 aufrufen.
 
-| Event | Elements per query | Queries/day | Elements/day |
+| Ereignis | Elemente je Abfrage | Abfragen/Tag | Elemente/Tag |
 |---|---|---|---|
-| 10 workers × 2 queries | 20 candidates | 20 queries | **400 elements/day** |
-| Monthly (22 days) | | | **~8,800 elements/month** |
+| 10 Mitarbeiter × 2 Abfragen | 20 Kandidaten | 20 Abfragen | **400 Elemente/Tag** |
+| Monatlich (22 Tage) | | | **~8.800 Elemente/Monat** |
 
-**Cost per provider:**
+**Kosten je Anbieter:**
 
-| Provider | Free Tier | Monthly usage | Monthly cost |
+| Anbieter | Kostenloses Kontingent | Monatliche Nutzung | Monatliche Kosten |
 |---|---|---|---|
-| **Nominatim + Phase 1 only** | Unlimited | 440 geocodes | **$0** |
-| **OpenRouteService (ORS)** | 500 req/day | 400 elements/day | **$0** (well within free tier) |
-| **Google Maps Distance Matrix** | $200 credit/month | 8,800 elements × $0.005 | **~$0.44/month** |
-| **OSRM self-hosted** | Unlimited | Unlimited | **$0** (server cost only) |
+| **Nominatim + Phase 1** | Unbegrenzt | 440 Geokodierungen | **$0** |
+| **OpenRouteService (ORS)** | 500 Anfragen/Tag | 400 Elemente/Tag | **$0** (weit unter dem Limit) |
+| **Google Maps Distance Matrix** | $200 Guthaben/Monat | 8.800 Elemente × $0,005 | **~$0,44/Monat** |
+| **OSRM selbst gehostet** | Unbegrenzt | Unbegrenzt | **$0** (nur Serverkosten) |
 
 ---
 
-### Coverage — How Long to Visit All 2,000 Addresses?
+### Abdeckung — Wie lange für alle 2.000 Adressen?
 
 ```
-10 workers × 15 visits/day = 150 addresses covered per day
-2,000 addresses ÷ 150 per day = ~13–14 working days ≈ 3 weeks
+10 Mitarbeiter × 15 Besuche/Tag = 150 Adressen pro Tag
+2.000 Adressen ÷ 150 pro Tag = ~13–14 Arbeitstage ≈ 3 Wochen
 ```
 
-> Workers naturally gravitate toward the same geographic zones if starting from similar origins — use different starting points per worker to maximize daily coverage spread.
+> Mitarbeiter tendieren zu ähnlichen geografischen Zonen, wenn sie vom gleichen Startpunkt starten — verschiedene Startpunkte je Mitarbeiter maximieren die tägliche Abdeckung.
 
 ---
 
-### Summary — Is Free Tier Sufficient?
+### Fazit — Reichen kostenlose Kontingente aus?
 
-| Metric | Free Tier Limit | Our Usage | OK? |
+| Kennzahl | Kostenloses Limit | Unsere Nutzung | Ausreichend? |
 |---|---|---|---|
-| Nominatim geocoding | ~1,000 req/day safe | 20 req/day | ✅ Yes |
-| ORS walking API | 500 req/day | ~20 req/day | ✅ Yes |
-| Google Maps credit | $200/month | ~$0.44/month | ✅ Yes |
+| Nominatim Geokodierung | ~1.000 Anfragen/Tag sicher | 20 Anfragen/Tag | ✅ Ja |
+| ORS Routing-API | 500 Anfragen/Tag | ~20 Anfragen/Tag | ✅ Ja |
+| Google Maps Guthaben | $200/Monat | ~$0,44/Monat | ✅ Ja |
 
-**Conclusion: 10 workers doing daily route planning against 2,000 addresses costs $0/month on free tiers. Even with Google Maps, the cost is under $1/month.**
+**Fazit: 10 Mitarbeiter mit täglicher Routenplanung gegen 2.000 Adressen verursachen $0/Monat Kosten im kostenlosen Tarif. Selbst mit Google Maps liegen die Kosten unter $1/Monat.**

@@ -1,29 +1,29 @@
 ---
 layout: default
-title: Home
+title: Startseite
 nav_order: 1
 ---
 
-# Nearest Address Finder
+# Nächstgelegene Adressen — Tool
 
-This site documents the solution for finding the N nearest addresses from a list of ~2,000 Austrian addresses, starting from any given origin location.
-
----
-
-## Documents
-
-- [Nearest Address Finder — Full Report]({{ "/Address_Clustering_Report" | relative_url }})
+Diese Seite dokumentiert die Lösung zur Ermittlung der N nächstgelegenen Adressen aus einer Liste von ca. 2.000 österreichischen Adressen, ausgehend von einem beliebigen Startpunkt.
 
 ---
 
-## Quick Summary
+## Dokumente
 
-| Phase | Method | Cost |
-|-------|--------|------|
-| Phase 1 | Geocode all addresses once, then KNN straight-line search | **$0** |
-| Phase 2 | Real walking distance API for top N candidates | $0 on free tiers |
+- [Nächstgelegene Adressen — Vollständiger Lösungsbericht]({{ "/Address_Clustering_Report" | relative_url }})
 
-> Input: origin address + N → Output: N nearest addresses sorted by distance.
+---
+
+## Kurzübersicht
+
+| Phase | Methode | Kosten |
+|-------|---------|--------|
+| Phase 1 | Einmalige Geokodierung aller Adressen, dann KNN-Luftliniensuche | **$0** |
+| Phase 2 | Echte Gehstrecken-API für die Top-N Kandidaten | $0 im kostenlosen Tarif |
+
+> Eingabe: Startadresse + N → Ausgabe: N nächstgelegene Adressen, sortiert nach Entfernung.
 
 ---
 
