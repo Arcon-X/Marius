@@ -1,0 +1,10 @@
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+*.xlsx
+*.csv
+__pycache__/
+*.py[cod]
+.env

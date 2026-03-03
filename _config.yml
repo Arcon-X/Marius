@@ -1,0 +1,27 @@
+title: "Address Clustering Report"
+description: "Automated grouping of addresses by walkable proximity — Solution Overview for Management"
+author: "GitHub Copilot"
+
+theme: minima
+
+plugins:
+  - jekyll-relative-links
+  - jekyll-seo-tag
+
+relative_links:
+  enabled: true
+  collections: true
+
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
