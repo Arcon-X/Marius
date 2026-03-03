@@ -1,5 +1,5 @@
-title: "Address Clustering Report"
-description: "Automated grouping of addresses by walkable proximity — Solution Overview for Management"
+title: "Nearest Address Finder"
+description: "Find the N nearest addresses from a list of 2,000 — Solution Overview for Management"
 author: "GitHub Copilot"
 
 url: "https://arcon-x.github.io"
