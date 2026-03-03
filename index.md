@@ -4,7 +4,6 @@ title: NOVUM-ZIV Unterschriften — Planungsdokument
 ---
 
 <style>
-/* Farben basierend auf bnz-wien.at */
 :root {
   --bnz-gruen:      #2C6E49;
   --bnz-gruen-hell: #4C9A6F;
@@ -13,6 +12,8 @@ title: NOVUM-ZIV Unterschriften — Planungsdokument
   --bnz-grau:       #F5F5F5;
   --bnz-text:       #1C1C1C;
   --bnz-weiss:      #FFFFFF;
+  --bnz-warn:       #FFF8E1;
+  --bnz-warn-rand:  #F9A825;
 }
 body { font-family: 'Segoe UI', Arial, sans-serif; color: var(--bnz-text); }
 h1   { color: var(--bnz-dunkel); border-bottom: 4px solid var(--bnz-gruen); padding-bottom: .3em; }
@@ -25,6 +26,8 @@ tr:nth-child(even) td { background: var(--bnz-grau); }
 blockquote { border-left: 4px solid var(--bnz-gruen-hell); background: var(--bnz-gruen-blass); padding: .8em 1.2em; border-radius: 4px; }
 code  { background: var(--bnz-grau); padding: .1em .3em; border-radius: 3px; }
 pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); padding: 1em; overflow-x: auto; }
+.warn { border-left: 4px solid var(--bnz-warn-rand); background: var(--bnz-warn); padding: .8em 1.2em; border-radius: 4px; margin: 1em 0; }
+.plan { border-left: 4px solid var(--bnz-gruen); background: var(--bnz-gruen-blass); padding: .8em 1.2em; border-radius: 4px; margin: 1em 0; }
 </style>
 
 # 📋 NOVUM-ZIV Unterschriften — Planungsdokument
@@ -41,14 +44,15 @@ pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); pa
 |---|---|
 | 1 | [Ziel & Kontext](#1-ziel--kontext) |
 | 2 | [Entscheidungen](#2-entscheidungen) |
-| 3 | [Geplante Benutzerliste](#3-geplante-benutzerliste) |
-| 4 | [Benutzerablauf](#4-benutzerablauf) |
-| 5 | [Systemarchitektur](#5-systemarchitektur) |
-| 6 | [Datenbank & Routing-Logik](#6-datenbank--routing-logik) |
-| 7 | [Frontend-Ansichten & Farbschema](#7-frontend-ansichten--farbschema) |
-| 8 | [Kosten & Skalierung](#8-kosten--skalierung) |
-| 9 | [Projektplan](#9-projektplan) |
-| 10 | [Nächste Schritte](#10-nächste-schritte) |
+| 3 | [Datenschutz & Hosting — zu besprechen](#3-datenschutz--hosting--zu-besprechen) |
+| 4 | [Geplante Benutzerliste](#4-geplante-benutzerliste) |
+| 5 | [Benutzerablauf](#5-benutzerablauf) |
+| 6 | [Systemarchitektur](#6-systemarchitektur) |
+| 7 | [Datenbank & Routing-Logik](#7-datenbank--routing-logik) |
+| 8 | [Frontend-Ansichten & Farbschema](#8-frontend-ansichten--farbschema) |
+| 9 | [Kosten & Skalierung](#9-kosten--skalierung) |
+| 10 | [Projektplan](#10-projektplan) |
+| 11 | [Nächste Schritte](#11-nächste-schritte) |
 
 ---
 
@@ -59,8 +63,8 @@ pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); pa
 > **echter Gehzeit** — und protokollieren Unterschriften dauerhaft mit Namensangabe.
 
 **Anlass:** Zahnärztekammerwahl Wien 2026  
-**Bündnis:** NOVUM–ZIV (Bündnis NOVUM + Zahnärztlicher Interessenverband Österreichs)  
-**Aufgabe der App:** Hausbesuche zur Unterschriftensammlung koordinieren, Fortschritt tracken, Doppelbesuche vermeiden.
+**Bündnis:** NOVUM–ZIV  
+**Aufgabe der App:** Hausbesuche koordinieren, Fortschritt tracken, Doppelbesuche vermeiden.
 
 ---
 
@@ -69,20 +73,82 @@ pre   { background: var(--bnz-grau); border-left: 3px solid var(--bnz-gruen); pa
 | Frage | Entscheidung | Begründung |
 |---|---|---|
 | Distanz-Art | ✅ Echte Gehstrecke (OSRM) | Relevanter als Luftlinie |
+| Hosting / Datenbank | ✅ Option B — eigener Server (Hetzner) | DSGVO-sicher, kein US-Dienst |
 | Login? | ✅ Ja — Admin legt Benutzer an | Zuordnung Besuche → Person |
 | Tages-Reset? | ❌ Nein | Fortschritt soll dauerhaft bleiben |
 | Archivierung | ✅ Permanent | Besuchte Adressen bleiben archiviert |
-| Notiz bei Erledigt | ✅ Ja — optionales Freitextfeld | Z. B. „Unterschrift erhalten" / „Nicht angetroffen" |
+| Notiz bei Erledigt | ✅ Ja — optionales Freitextfeld | Z. B. „Unterschrift erhalten" |
 | Karten-Ansicht | ✅ Ja — Leaflet.js + OSM | Kostenlos, kein API-Key |
 | Protokollierung | ✅ Ja — Audit-Log | Wer, wann, Ergebnis |
 
 ---
 
-## 3 · Geplante Benutzerliste
+## 3 · Datenschutz & Hosting — zu besprechen
 
-Alle Kandidat:innen von bnz-wien.at als geplante App-Benutzer:innen.  
-**Admin** = Dr. Marius Romanin (Projektverantwortung)  
-**Mitarbeiter:innen** = alle anderen Kandidat:innen als gleichwertige Nutzer:innen
+<div class="warn">
+⚠️ <strong>Zu besprechen</strong> — Die App verarbeitet personenbezogene Daten (Adressen von Wahlberechtigten, Mitarbeiter-Logins, Besuchsprotokolle). Die Hosting-Entscheidung hat rechtliche Konsequenzen (DSGVO). Bitte vor Entwicklungsstart klären.
+</div>
+
+### Was ist datenschutzrelevant?
+
+| Datenkategorie | Konkret | DSGVO? |
+|---|---|---|
+| Adressen der Wahlberechtigten | Name + Adresse aus Mitgliederliste | ⚠️ Ja — Zweckbindung beachten |
+| Mitarbeiter-Logins | E-Mail + Passwort | ✅ Ja |
+| Besuchsprotokolle | Wer war wann wo, Ergebnis | ✅ Ja |
+
+Nach der Wahl müssen **alle** personenbezogenen Daten gelöscht und der Server abgeschaltet werden.
+
+---
+
+### ❓ Option B — Eigener Server (EU) · **geplant**
+
+Datenbank läuft auf einem **selbst gemieteten Server** in der EU — kein US-Dienst, kein Drittanbieter hat Zugriff auf die Daten.
+
+**Empfohlener Anbieter: Hetzner Cloud**
+
+| Kriterium | Detail |
+|---|---|
+| Unternehmen | Hetzner Online GmbH — deutsches Unternehmen |
+| Serverstandort | Nürnberg / Falkenstein (Deutschland) · EU-DSGVO |
+| US-Bezug | ❌ Keiner — rein europäisches Unternehmen |
+| Preis | ab **€ 3,79 / Monat** (CX22 — 2 vCPU, 4 GB RAM) |
+| PostgreSQL + PostGIS | ✅ Einfach installierbar |
+| Vertrag / DPA | ✅ Auftragsverarbeitungsvertrag (AVV) auf Anfrage |
+| Kündigung | Monatlich · nach der Wahl einfach löschen |
+
+> **Alternativ (100 % österreichisch):** [anexia](https://www.anexia.com/de/) — Wiener Unternehmen, Rechenzentrum Wien, teurer (~€ 20/Monat), aber maximale DSGVO-Sicherheit. Sinnvoll wenn die Zahnärztekammer darauf besteht.
+
+**Was auf dem Server läuft:**
+```
+Hetzner CX22 (€ 3,79/Mt.)
+  └── Ubuntu 24.04 LTS
+        ├── PostgreSQL 16 + PostGIS 3
+        │     ├── Tabelle: adressen (2.000 Zeilen)
+        │     └── Tabelle: protokoll (Audit-Log)
+        └── PostgREST (REST-API, kostenlos)
+              → Verbindung vom Frontend per HTTPS
+```
+
+---
+
+### ❓ Option C — Keine personenbezogenen Daten in der Cloud · zu besprechen
+
+Nur **anonymisierte Adress-IDs** werden in der Datenbank gespeichert — keine Namen, keine Vor-/Nachnamen der Wahlberechtigten.
+
+| Vorteil | Nachteil |
+|---|---|
+| Stark reduziertes DSGVO-Risiko | Weniger nützliche Auswertungen |
+| Auch mit Supabase (US-Dienst) denkbar | Admin muss IDs manuell zuordnen |
+| Einfacherer Datenschutz-Nachweis | Notizen können keine Namen enthalten |
+
+> Zu klären: Enthält die Adressliste der Zahnärztekammer Namen der Mitglieder, oder nur Adressen? Falls nur Adressen → Option C kaum nötig, da ohnehin keine Namen verarbeitet werden.
+
+---
+
+## 4 · Geplante Benutzerliste
+
+**Admin:** Dr. Marius Romanin · **Mitarbeiter:innen:** alle 18 weiteren Kandidat:innen
 
 | # | Name | Funktion / Kandidatur | Rolle App | E-Mail (Platzhalter) |
 |---|---|---|---|---|
@@ -102,18 +168,15 @@ Alle Kandidat:innen von bnz-wien.at als geplante App-Benutzer:innen.
 | 14 | Drin Andrea Bednar-Brandt | Referat Niederlassung (Sukz.) | Mitarbeiter | andrea.bednar-brandt@bnz-wien.at |
 | 15 | Drin Anita Elmauthaler | Referat Soziales & Jungzahnärzt:innen | Mitarbeiter | anita.elmauthaler@bnz-wien.at |
 | 16 | Drin Petra Stühlinger | Referat Soziales (Sukzessorin) | Mitarbeiter | petra.stuehlinger@bnz-wien.at |
-| 17 | Drin Lama Hamisch MSc | Referat Vergemeinschaftungsformen & Angestellte | Mitarbeiter | lama.hamisch@bnz-wien.at |
+| 17 | Drin Lama Hamisch MSc | Referat Vergemeinschaftungsformen | Mitarbeiter | lama.hamisch@bnz-wien.at |
 | 18 | Dr. Otis Rezegh | Referat Vergemeins. (Sukzessor) | Mitarbeiter | otis.rezegh@bnz-wien.at |
 | 19 | Drin Selma Husejnovic | Kommunikation / Öffentlichkeit | Mitarbeiter | selma.husejnovic@bnz-wien.at |
 
-> ⚠️ **E-Mail-Adressen sind Platzhalter** — echte Adressen vor Setup eintragen.  
-> Login-Passwörter werden beim Setup einmalig per E-Mail versendet (Supabase Auth).
-
-**Gesamt: 19 Benutzer:innen** (1 Admin + 18 Mitarbeiter:innen)
+> ⚠️ E-Mail-Adressen sind Platzhalter — echte Adressen vor Setup eintragen.
 
 ---
 
-## 4 · Benutzerablauf
+## 5 · Benutzerablauf
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -123,67 +186,51 @@ Alle Kandidat:innen von bnz-wien.at als geplante App-Benutzer:innen.
   ┌──────────┐
   │  START   │  Kandidat:in öffnet Webseite (Smartphone / PC)
   └────┬─────┘
-       │
        ▼
   ┌──────────────────────────────┐
   │  🔐 LOGIN                    │  E-Mail + Passwort (vom Admin vergeben)
   └────────────┬─────────────────┘
-               │
                ▼
   ┌──────────────────────────────┐
-  │  📍 STANDORT ERMITTELN       │  [GPS automatisch]
-  │                              │  ODER [Adresse eingeben]
+  │  📍 STANDORT ERMITTELN       │  [GPS automatisch] ODER [Adresse eingeben]
   └────────────┬─────────────────┘
-               │
                ▼
   ┌──────────────────────────────┐
   │  🔢 ANZAHL WÄHLEN            │  [5]  [10]  [15]
   └────────────┬─────────────────┘
-               │
                ▼
   ┌──────────────────────────────────────────────────────┐
   │  ⚙️  ROUTING (automatisch im Hintergrund)             │
-  │  1. Supabase: 50 räumlich nächste Adressen (Vorfilter)│
-  │  2. OSRM: echte Gehzeit für jede Adresse            │
+  │  1. Server: 50 räumlich nächste Adressen (Vorfilter) │
+  │  2. OSRM: echte Gehzeit für jede Adresse             │
   │  3. Sortierung nach Gehminuten                       │
   └────────────┬─────────────────────────────────────────┘
-               │
                ▼
   ┌──────────────────────────────────────────────────────┐
   │  📋 ERGEBNISLISTE  /  🗺️ KARTEN-ANSICHT              │
-  │  Rang  Adresse                      Gehzeit          │
-  │   1    Grünentorgasse 12, 1200 W.   3 min  (220 m)   │
-  │   2    Wallensteinstr. 5, 1200 W.   5 min  (390 m)   │
-  │   3    Heiligenstädter Str. 69      8 min  (640 m)   │
+  │  1. Grünentorgasse 12, 1200 W.   3 min  (220 m)      │
+  │  2. Wallensteinstr. 5, 1200 W.   5 min  (390 m)      │
   │  Pool: X Adressen noch verfügbar                     │
   └────────────┬─────────────────────────────────────────┘
-               │
                ▼
   ┌──────────────────────────────┐
-  │  💬 RESERVIERUNGS-DIALOG     │  „5 Adressen übernehmen?"
-  │  [✅ Bestätigen] [Abbrechen]  │  → Status: IN BEARBEITUNG
+  │  💬 RESERVIERUNGS-DIALOG     │  → Status: IN BEARBEITUNG
+  │  [✅ Bestätigen] [Abbrechen]  │
   └────────────┬─────────────────┘
-               │   (Kandidat:in besucht Adresse)
+               │  (Kandidat:in besucht Adresse)
                ▼
   ┌──────────────────────────────┐
   │  ✓ ERLEDIGT-DIALOG           │
-  │  Ergebnis wählen:            │
-  │  [✅ Unterschrift erhalten]   │
+  │  [✅ Unterschrift erhalten]   │  → ARCHIVIERT + Protokoll
   │  [❌ Nicht angetroffen]       │
   │  [⏭️  Nicht interessiert]     │
   │  Notiz (optional): [_______] │
-  │  → Status: ARCHIVIERT        │
   └────────────┬─────────────────┘
-               │
-       ┌───────┴────────┐
-       ▼                ▼
-  Alle erledigt?    Noch offen?
-  → Neue Abfrage    → Weiter
-  starten           mit aktiver Liste
+               ▼
+       Neue Abfrage starten
 ```
 
-**Adress-Status Lebenszyklus:**
-
+**Adress-Status:**
 ```
   VERFÜGBAR ──[übernommen]──► IN BEARBEITUNG ──[erledigt]──► ARCHIVIERT
      ▲                                                            │
@@ -192,32 +239,40 @@ Alle Kandidat:innen von bnz-wien.at als geplante App-Benutzer:innen.
 
 ---
 
-## 5 · Systemarchitektur
+## 6 · Systemarchitektur
+
+**Geplant: Option B — eigener Hetzner-Server (EU)**
 
 ```
   ┌──────────────────────────────────────────────────────────────────┐
   │  FRONTEND  —  GitHub Pages (HTML / CSS / JavaScript)             │
-  │  Farben: BNZ Grün #2C6E49 · Hintergrund #FFFFFF · Text #1C1C1C  │
-  │                                                                  │
+  │  Farben: BNZ Grün #2C6E49                                        │
   │  ┌─────────┐  ┌──────────────┐  ┌────────┐  ┌───────────────┐  │
   │  │  Login  │  │  Hauptseite  │  │  Karte │  │  Archiv /     │  │
-  │  │  BNZ    │  │  Gehstrecken │  │  Routen│  │  Admin-View   │  │
-  │  │  Logo   │  │  + Ergebnis  │  │  Pins  │  │  Auswertung   │  │
+  │  │  (JWT)  │  │  Gehstrecken │  │  Routen│  │  Admin-View   │  │
   │  └─────────┘  └──────────────┘  └────────┘  └───────────────┘  │
-  └─────────┬────────────────────────────────────────────────────────┘
-            │ Supabase JWT                  │ OSRM Routing
-            ▼                              ▼
-  ┌─────────────────────┐        ┌─────────────────────────────┐
-  │  Supabase (gratis)  │        │  OSRM (gratis, kein Key)    │
-  │  Auth + PostgreSQL  │        │  router.project-osrm.org    │
-  │  19 Benutzer:innen  │        │  Fußgänger-Routing Wien     │
-  │  Protokoll-Log      │        │  → Minuten + Meter          │
-  └─────────────────────┘        └─────────────────────────────┘
+  └──────────┬───────────────────────────────────────────────────────┘
+             │ HTTPS + JWT-Auth                  │ OSRM (kostenlos)
+             ▼                                   ▼
+  ┌──────────────────────────┐        ┌──────────────────────────┐
+  │  Hetzner CX22            │        │  router.project-osrm.org │
+  │  € 3,79/Monat            │        │  Fußgänger-Routing Wien  │
+  │  Standort: Deutschland   │        │  → Minuten + Meter       │
+  │                          │        └──────────────────────────┘
+  │  PostgreSQL 16           │
+  │  + PostGIS 3             │
+  │  + PostgREST (API)       │
+  │  + Auth (selbst gebaut   │
+  │    oder Authelia/JWT)    │
+  └──────────────────────────┘
+       ↑ EU-DSGVO-konform
+       ↑ Kein US-Unternehmen
+       ↑ Nur wir haben Zugriff
 ```
 
 ---
 
-## 6 · Datenbank & Routing-Logik
+## 7 · Datenbank & Routing-Logik
 
 **`adressen`**
 
@@ -237,11 +292,11 @@ Alle Kandidat:innen von bnz-wien.at als geplante App-Benutzer:innen.
 |---|---|---|
 | `adressen_id` | UUID | Verknüpfte Adresse |
 | `benutzer_id` | UUID | Wer |
-| `aktion` | TEXT | `uebernommen` / `unterschrift` / `nicht_angetroffen` / `nicht_interessiert` |
+| `aktion` | TEXT | `unterschrift` / `nicht_angetroffen` / `nicht_interessiert` |
 | `zeitpunkt` | TIMESTAMP | Wann |
 | `notiz` | TEXT | Optionale Bemerkung |
 
-**Vorfilter SQL (50 Kandidaten):**
+**Vorfilter SQL:**
 ```sql
 SELECT id, strasse, plz, lat, lon
 FROM adressen WHERE status = 'verfuegbar'
@@ -253,80 +308,83 @@ ORDER BY standort <-> ST_MakePoint(:lon, :lat) LIMIT 50;
 const r = await fetch(`https://router.project-osrm.org/route/v1/foot/
   ${meinLon},${meinLat};${a.lon},${a.lat}?overview=false`);
 const { duration, distance } = (await r.json()).routes[0];
-// duration = Sekunden, distance = Meter
 ```
 
 ---
 
-## 7 · Frontend-Ansichten & Farbschema
+## 8 · Frontend-Ansichten & Farbschema
 
-**Farbpalette (BNZ Wien — bnz-wien.at):**
+**Farbpalette (BNZ Wien):**
 
 | Farbe | Hex | Verwendung |
 |---|---|---|
 | BNZ Grün | `#2C6E49` | Primärfarbe, Buttons, Überschriften |
-| BNZ Grün Hell | `#4C9A6F` | Hover-Zustände, Akzente |
-| BNZ Grün Blass | `#E8F5EE` | Hintergründe, Tabellen-Zebrastreifen |
+| BNZ Grün Hell | `#4C9A6F` | Hover, Akzente |
+| BNZ Grün Blass | `#E8F5EE` | Hintergründe, Zebrastreifen |
 | BNZ Dunkel | `#1A2E22` | Seitenüberschriften, Navbar |
 | Weiß | `#FFFFFF` | Seitenhintergrund |
-| Text | `#1C1C1C` | Fließtext |
 
 ```
-LOGIN (BNZ Design)       HAUPTSEITE                 ERLEDIGT-DIALOG
-┌─────────────────┐      ┌────────────────────────┐  ┌─────────────────┐
-│ ████ BNZ Logo   │      │ NOVUM-ZIV  [Abmelden]  │  │ ✓ Erledigt?     │
-│  #1A2E22        │      ├────────────────────────┤  │─────────────────│
-│─────────────────│      │ GPS ○  Adresse ○        │  │ Grünentorg. 12  │
-│ E-Mail:         │      │ Anzahl: [5▼]            │  │ 1200 Wien       │
-│ [_____________] │      │ [Liste] [Karte]          │  │                 │
-│ Passwort:       │      │ [🔍 Suchen] #2C6E49     │  │ [✅ Unterschrift]│
-│ [_____________] │      ├────────────────────────┤  │ [❌ Nicht angetr]│
-│                 │      │ 1. Grünentorg.  3 min   │  │ [⏭  Kein Inter.] │
-│ [Anmelden]      │      │ 2. Wallenstein. 5 min   │  │                 │
-│  Button #2C6E49 │      │ [✅ Übernehmen]          │  │ Notiz:[_______] │
-└─────────────────┘      └────────────────────────┘  └─────────────────┘
+LOGIN                    HAUPTSEITE                 ERLEDIGT-DIALOG
+┌─────────────────┐      ┌──────────────────────┐   ┌─────────────────┐
+│ BNZ Logo        │      │ NOVUM-ZIV [Abmelden] │   │ ✓ Erledigt?     │
+│─────────────────│      ├──────────────────────┤   │─────────────────│
+│ E-Mail:         │      │ GPS ○  Adresse ○      │   │ Grünentorg. 12  │
+│ [_____________] │      │ Anzahl: [5▼]          │   │ 1200 Wien       │
+│ Passwort:       │      │ [Liste] [Karte]        │   │                 │
+│ [_____________] │      │ [🔍 Suchen]            │   │[✅ Unterschrift] │
+│                 │      ├──────────────────────┤   │[❌ Nicht angetr.]│
+│ [Anmelden]      │      │ 1. Grünentorg.  3min  │   │[⏭  Kein Inter.] │
+│  #2C6E49        │      │ 2. Wallenstein. 5min  │   │                 │
+└─────────────────┘      │ [✅ Übernehmen]        │   │ Notiz:[_______] │
+                         └──────────────────────┘   └─────────────────┘
 ```
 
 ---
 
-## 8 · Kosten & Skalierung
+## 9 · Kosten & Skalierung
 
 **19 Benutzer:innen · ~2.000 Wiener Adressen · Wahlkampf-Zeitraum**
 
-| Dienst | Limit (kostenlos) | Nutzung | Status |
-|---|---|---|---|
-| Supabase Auth | 50.000 Nutzer | 19 Nutzer | ✅ |
-| Supabase DB | 500 MB · 50k Req/Monat | <5k Req/Monat | ✅ |
-| GitHub Pages | Unbegrenzt | Statisch | ✅ |
-| OSRM Routing | Fair-Use · kein Key | ~5k Req/Tag | ✅ |
-| Leaflet.js + OSM | Fair-Use | 19 Nutzer | ✅ |
-| Nominatim (einmalig) | ~1.000/Tag | 2.000 einmalig | ✅ |
-| **Gesamtkosten** | | | **$0 / Monat** |
+| Dienst | Kosten | Anmerkung |
+|---|---|---|
+| Hetzner CX22 (Server + DB) | **€ 3,79 / Monat** | Nur für Wahlkampf-Dauer, danach löschen |
+| GitHub Pages (Frontend) | € 0 | Kostenlos |
+| OSRM (Routing) | € 0 | Open Source, kein API-Key |
+| Leaflet.js + OSM | € 0 | Open Source |
+| Nominatim (Geokodierung, einmalig) | € 0 | 2.000 Adressen einmalig |
+| **Gesamt** | **€ 3,79 / Monat** | |
+
+> Bei 2 Monaten Wahlkampf: **€ 7,58 Gesamtkosten.**
 
 ---
 
-## 9 · Projektplan
+## 10 · Projektplan
 
 | Phase | Aufgabe | Aufwand |
 |---|---|---|
-| **1** | Supabase einrichten · Tabellen · 19 Auth-Konten | 2 Std. |
-| **2** | Geokodierung + Daten-Import (Python) | 2–3 Std. |
-| **3** | Frontend: BNZ-Design · Login · OSRM-Routing · Erledigt-Dialog | 8–10 Std. |
-| **4** | Frontend: Karten-Ansicht mit Routen (Leaflet.js) | 3–4 Std. |
-| **5** | Frontend: Archiv · Admin-Auswertung (nur Dr. Romanin) | 2–3 Std. |
-| **6** | Test mit allen 19 Benutzer:innen · Abnahme · Go-Live | 2 Std. |
-| **Gesamt** | | **~3 Arbeitstage** |
+| **0** | DSGVO-Entscheidung finalisieren (Option B / C) | Besprechung |
+| **1** | Hetzner-Server mieten · PostgreSQL + PostGIS installieren | 2–3 Std. |
+| **2** | Auth-System einrichten (JWT-Login, 19 Konten) | 2 Std. |
+| **3** | Geokodierung + Daten-Import (Python) | 2–3 Std. |
+| **4** | Frontend: BNZ-Design · Login · OSRM-Routing · Erledigt-Dialog | 8–10 Std. |
+| **5** | Frontend: Karten-Ansicht (Leaflet.js) | 3–4 Std. |
+| **6** | Frontend: Archiv · Admin-Auswertung | 2–3 Std. |
+| **7** | Test mit allen 19 Benutzer:innen · Go-Live | 2 Std. |
+| **8** | Nach Wahl: Server löschen, Daten vernichten | 30 Min. |
+| **Gesamt** | | **~3–3,5 Arbeitstage** |
 
 ---
 
-## 10 · Nächste Schritte
+## 11 · Nächste Schritte
 
+- [ ] **DSGVO-Entscheidung** — Option B (Hetzner) oder Option C besprechen und bestätigen
 - [ ] **Adressliste bereitstellen** — Excel/CSV mit den ~2.000 Wiener Adressen
 - [ ] **E-Mail-Adressen bestätigen** — echte E-Mails aller 19 Kandidat:innen
-- [ ] **Supabase-Konto anlegen** → [supabase.com](https://supabase.com) *(5 Min.)*
+- [ ] **Hetzner-Konto anlegen** → [hetzner.com/cloud](https://www.hetzner.com/cloud) *(5 Min.)*
 - [ ] **Entwicklung freigeben** — Startschuss Phase 1
 
 ---
 
 *Planungsdokument · NOVUM-ZIV Unterschriften · BNZ Bündnis NOVUM–ZIV · Wien 2026*  
-*Farben: [bnz-wien.at](https://www.bnz-wien.at/) · Stack (geplant): GitHub Pages · Supabase · OSRM · Leaflet.js*
+*Farben: [bnz-wien.at](https://www.bnz-wien.at/) · Stack (geplant): GitHub Pages · Hetzner · PostgreSQL · OSRM · Leaflet.js*
