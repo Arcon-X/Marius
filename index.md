@@ -177,7 +177,7 @@ details[open]>summary{border-bottom:1px solid var(--bdr)}
   <div class="section-title">Projektstatus</div>
   <div class="status-grid">
     <div class="stat-chip chip-ok"><span class="chip-icon">🗺️</span><span class="chip-label">Distanz</span><span class="chip-val">Echte Gehzeit</span></div>
-    <div class="stat-chip chip-ok"><span class="chip-icon">🖥️</span><span class="chip-label">Hosting</span><span class="chip-val">Hetzner EU</span></div>
+    <div class="stat-chip chip-ok"><span class="chip-icon">🖥️</span><span class="chip-label">Hosting</span><span class="chip-val">Anexia (AT)</span></div>
     <div class="stat-chip chip-ok"><span class="chip-icon">🔐</span><span class="chip-label">Login</span><span class="chip-val">19 Konten</span></div>
     <div class="stat-chip chip-no"><span class="chip-icon">🔄</span><span class="chip-label">Tages-Reset</span><span class="chip-val">Kein Reset</span></div>
     <div class="stat-chip chip-ok"><span class="chip-icon">🗺️</span><span class="chip-label">Karte</span><span class="chip-val">Leaflet.js</span></div>
@@ -192,10 +192,10 @@ details[open]>summary{border-bottom:1px solid var(--bdr)}
   <div class="section-title">Nächste Schritte</div>
   <div class="card"><div class="card-body">
     <ul class="checklist">
-      <li><span class="check-icon">⚠️</span><div><strong>DSGVO</strong> — Option B (Hetzner) oder Option C bestätigen</div></li>
+      <li><span class="check-icon">⚠️</span><div><strong>DSGVO</strong> — Option B (Anexia) oder Option C bestätigen</div></li>
       <li><span class="check-icon">📄</span><div><strong>Adressliste</strong> bereitstellen — Excel/CSV mit ~2.000 Wiener Adressen</div></li>
       <li><span class="check-icon">📧</span><div><strong>E-Mail-Adressen</strong> aller 19 Kandidat:innen bestätigen</div></li>
-      <li><span class="check-icon">🖥️</span><div><strong>Hetzner-Konto anlegen</strong> → hetzner.com/cloud</div></li>
+      <li><span class="check-icon">🖥️</span><div><strong>Anexia-Konto anlegen</strong> → <a href="https://www.anexia.com/de/" style="color:var(--g)">anexia.com</a></div></li>
       <li><span class="check-icon">🚀</span><div><strong>Entwicklung freigeben</strong> — Startschuss Phase 1</div></li>
     </ul>
   </div></div>
@@ -212,7 +212,7 @@ details[open]>summary{border-bottom:1px solid var(--bdr)}
       <thead><tr><th>Frage</th><th>Entscheidung</th></tr></thead>
       <tbody>
         <tr><td>Distanz-Art</td><td>✅ Echte Gehzeit (OSRM)</td></tr>
-        <tr><td>Hosting</td><td>✅ Option B — Hetzner (EU)</td></tr>
+        <tr><td>Hosting</td><td>✅ Option B — Anexia (AT, Wien)</td></tr>
         <tr><td>Login</td><td>✅ Admin legt Konten an</td></tr>
         <tr><td>Tages-Reset</td><td>❌ Nein — dauerhafter Fortschritt</td></tr>
         <tr><td>Archivierung</td><td>✅ Permanent</td></tr>
@@ -227,20 +227,20 @@ details[open]>summary{border-bottom:1px solid var(--bdr)}
     ⚠️ Die App verarbeitet personenbezogene Daten (Adressen, Logins, Besuchsprotokolle). Hosting-Entscheidung bitte vor Entwicklungsstart bestätigen.
   </div>
   <details open>
-    <summary>✅ Option B — Hetzner (EU) &nbsp;<span style="background:#E8F5EE;color:#2C6E49;border:1px solid #4C9A6F;border-radius:4px;padding:1px 6px;font-size:.72rem;font-weight:600;">geplant</span></summary>
+    <summary>✅ Option B — Anexia (AT, Wien) &nbsp;<span style="background:#E8F5EE;color:#2C6E49;border:1px solid #4C9A6F;border-radius:4px;padding:1px 6px;font-size:.72rem;font-weight:600;">geplant</span></summary>
     <div class="acc-body">
-      <p>Datenbank auf selbst gemietem EU-Server — kein US-Dienst, kein Drittanbieter hat Datenzugriff.</p>
+      <p>Datenbank auf selbst gemietem österreichischem Server — 100 % österreichisches Unternehmen, kein US-Dienst, kein Drittanbieter hat Datenzugriff.</p>
       <div class="tbl-wrap"><table><tbody>
-        <tr><td><strong>Unternehmen</strong></td><td>Hetzner Online GmbH (Deutschland)</td></tr>
-        <tr><td><strong>Standort</strong></td><td>Nürnberg / Falkenstein · EU</td></tr>
+        <tr><td><strong>Unternehmen</strong></td><td>Anexia Internetdienstleistungs GmbH (<strong>Österreich</strong>)</td></tr>
+        <tr><td><strong>Standort</strong></td><td>Wien (Österreich) · EU</td></tr>
         <tr><td><strong>US-Bezug</strong></td><td>❌ Keiner</td></tr>
-        <tr><td><strong>Preis</strong></td><td>ab <strong>€ 3,79 / Monat</strong> (CX22)</td></tr>
+        <tr><td><strong>Preis</strong></td><td>ab <strong>~€ 20 / Monat</strong></td></tr>
         <tr><td><strong>PostgreSQL + PostGIS</strong></td><td>✅ Einfach installierbar</td></tr>
-        <tr><td><strong>AVV (DSGVO)</strong></td><td>✅ Auf Anfrage verfügbar</td></tr>
+        <tr><td><strong>AVV (DSGVO)</strong></td><td>✅ Verfügbar</td></tr>
         <tr><td><strong>Kündigung</strong></td><td>Monatlich — nach Wahl löschen</td></tr>
       </tbody></table></div>
-      <p style="margin-top:.6rem;font-size:.82rem;color:var(--sub);">Alternativ (100 % österreichisch): <strong>anexia.com</strong> — Wien, ~€ 20/Mt.</p>
-<pre>Hetzner CX22 (€ 3,79/Mt.)
+      <p style="margin-top:.6rem;font-size:.82rem;color:var(--sub);">Budgetäre Alternative: <strong>Hetzner (DE)</strong> ab € 3,79/Mt. — ebenfalls EU, aber deutsches Unternehmen.</p>
+<pre>Anexia Server (Wien, AT)
   └── Ubuntu 24.04
         ├── PostgreSQL 16 + PostGIS 3
         └── PostgREST (REST-API)</pre>
@@ -302,8 +302,8 @@ details[open]>summary{border-bottom:1px solid var(--bdr)}
            │ HTTPS+JWT       │ OSRM
            ▼                 ▼
 ┌─────────────────┐  ┌──────────────────┐
-│  Hetzner CX22   │  │ project-osrm.org   │
-│  € 3,79/Monat   │  │ Fußgänger-Routing  │
+│  Anexia (Wien)  │  │ project-osrm.org   │
+│  ~€ 20/Monat    │  │ Fußgänger-Routing  │
 │  PostgreSQL 16  │  │ → Gehmin + Meter   │
 │  PostGIS 3      │  └──────────────────┘
 │  PostgREST      │
@@ -372,13 +372,13 @@ const {{ duration, distance }} =
   <div class="section-title">Kosten</div>
   <div class="card">
     <div class="cost-hero">
-      <div class="amount">€ 3,79</div>
-      <div class="period">pro Monat (Hetzner CX22)</div>
-      <div class="total">2 Monate gesamt: € 7,58</div>
+      <div class="amount">~€ 20</div>
+      <div class="period">pro Monat (Anexia, Wien)</div>
+      <div class="total">2 Monate gesamt: ~€ 40</div>
     </div>
     <div class="card-body" style="padding-top:0;">
       <div class="tbl-wrap"><table><tbody>
-        <tr><td>Hetzner CX22 (Server + DB)</td><td><strong>€ 3,79</strong></td></tr>
+        <tr><td>Anexia Server (Wien, Server + DB)</td><td><strong>~€ 20</strong></td></tr>
         <tr><td>GitHub Pages (Frontend)</td><td>€ 0</td></tr>
         <tr><td>OSRM (Routing)</td><td>€ 0</td></tr>
         <tr><td>Leaflet.js + OSM (Karte)</td><td>€ 0</td></tr>
@@ -420,7 +420,7 @@ const {{ duration, distance }} =
   <div class="card"><div class="card-body">
     <ul class="phase-list">
       <li class="phase-item"><div class="phase-num">0</div><div class="phase-info"><strong>DSGVO finalisieren</strong><span>Option B / C bestätigen</span></div></li>
-      <li class="phase-item"><div class="phase-num">1</div><div class="phase-info"><strong>Hetzner-Server</strong><span>PostgreSQL + PostGIS · 2–3 Std.</span></div></li>
+      <li class="phase-item"><div class="phase-num">1</div><div class="phase-info"><strong>Anexia-Server (Wien)</strong><span>PostgreSQL + PostGIS · 2–3 Std.</span></div></li>
       <li class="phase-item"><div class="phase-num">2</div><div class="phase-info"><strong>Auth-System</strong><span>19 Konten anlegen · 2 Std.</span></div></li>
       <li class="phase-item"><div class="phase-num">3</div><div class="phase-info"><strong>Geokodierung + Import</strong><span>Python · ~2.000 Adressen · 2–3 Std.</span></div></li>
       <li class="phase-item"><div class="phase-num">4</div><div class="phase-info"><strong>Frontend: Kernfunktionen</strong><span>Login · Routing · Erledigt-Dialog · 8–10 Std.</span></div></li>
