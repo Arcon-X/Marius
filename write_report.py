@@ -1,3 +1,4 @@
+content = """\
 ---
 layout: default
 title: Nächstgelegene Adressen — Systemplanung
@@ -255,3 +256,10 @@ Schritt 5:  GitHub Actions Cron-Reset konfigurieren
 - [ ] Sollen bereits besuchte Adressen dauerhaft aus dem Pool entfernt werden (nicht nur täglich zurückgesetzt)?
 - [ ] Gewünschte Sprache der Weboberfläche: Deutsch
 - [ ] Excel/CSV-Datei mit den 2.000 Adressen für Schritt 2 bereitstellen
+"""
+
+with open('D:/GIT/Marius/Address_Clustering_Report.md', 'w', encoding='utf-8') as f:
+    f.write(content)
+
+lines = content.count('\n')
+print(f'Done. {lines} lines written.')
