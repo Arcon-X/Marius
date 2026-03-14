@@ -252,9 +252,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 }
 .log-item:last-child{border-bottom:none}
 .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:.35rem}
-.ld-unterschrift{background:#7B6BC4}
-.ld-nicht_angetroffen{background:var(--red)}
-.ld-kein_interesse{background:#8b5cf6}
+.ld-waehlt_uns{background:#7B6BC4}
+.ld-waehlt_nicht{background:var(--red)}
+.ld-ueberlegt{background:#D4C800}
+.ld-kein_interesse_wahl{background:#9ca3af}
+.ld-sonstige{background:#3b82f6}
 .ld-uebernommen{background:var(--wbdr)}
 .ld-reaktiviert{background:#3b82f6}
 .log-main{flex:1}
@@ -410,14 +412,20 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <div class="dlg-title">Ergebnis eintragen</div>
     <div class="dlg-addr" id="dlg-addr-text"></div>
     <div class="dlg-options">
-      <button class="dlg-opt" data-action="unterschrift" onclick="dlg.select(this)">
-        &#9989; Unterschrift erhalten
+      <button class="dlg-opt" data-action="waehlt_uns" onclick="dlg.select(this)">
+        &#128314; Wählt uns
       </button>
-      <button class="dlg-opt" data-action="nicht_angetroffen" onclick="dlg.select(this)">
-        &#128682; Nicht angetroffen
+      <button class="dlg-opt" data-action="waehlt_nicht" onclick="dlg.select(this)">
+        &#10060; Wählt uns nicht
       </button>
-      <button class="dlg-opt" data-action="kein_interesse" onclick="dlg.select(this)">
-        &#9197; Kein Interesse
+      <button class="dlg-opt" data-action="ueberlegt" onclick="dlg.select(this)">
+        &#129300; Überlegt noch
+      </button>
+      <button class="dlg-opt" data-action="kein_interesse_wahl" onclick="dlg.select(this)">
+        &#128683; Kein Interesse an der Wahl
+      </button>
+      <button class="dlg-opt" data-action="sonstige" onclick="dlg.select(this)">
+        &#128172; Sonstige Angaben
       </button>
     </div>
     <textarea id="dlg-note" class="dlg-note" rows="2"
@@ -792,8 +800,8 @@ function renderArchive(){
   if(!archived.length){
     el.innerHTML='<div class="empty-state"><div class="big">📦</div>Noch keine abgeschlossenen Adressen.</div>';return;
   }
-  const ICONS={unterschrift:'✅',nicht_angetroffen:'🚪',kein_interesse:'⏭',reaktiviert:'🔄'};
-  const LABELS={unterschrift:'Unterschrift',nicht_angetroffen:'Nicht angetroffen',kein_interesse:'Kein Interesse',reaktiviert:'Reaktiviert'};
+  const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',reaktiviert:'🔄'};
+  const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',reaktiviert:'Reaktiviert'};
   el.innerHTML=`<div class="section-title">${archived.length} abgeschlossen${isAdmin?' (alle)':''}</div>`+
     archived.map(a=>{
       const entry=log.find(l=>l.adressen_id===a.id&&l.aktion!=='uebernommen');
@@ -818,14 +826,14 @@ function renderAdmin(){
   const total=adressen.length;
   const verf=adressen.filter(a=>a.status==='verfuegbar').length;
   const bear=adressen.filter(a=>a.status==='in_bearbeitung').length;
-  const unter=log.filter(l=>l.aktion==='unterschrift').length;
+  const unter=log.filter(l=>l.aktion==='waehlt_uns').length;
   q('#admin-stats').innerHTML=`
     <div class="stat-chip chip-b"><span class="sc-icon">🏠</span><span class="sc-label">Gesamt</span><span class="sc-val">${total}</span></div>
     <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
     <div class="stat-chip chip-y"><span class="sc-icon">📌</span><span class="sc-label">Reserviert</span><span class="sc-val">${bear}</span></div>
-    <div class="stat-chip chip-r"><span class="sc-icon">📝</span><span class="sc-label">Unterschriften</span><span class="sc-val">${unter}</span></div>`;
-  const ICONS={unterschrift:'✅',nicht_angetroffen:'🚪',kein_interesse:'⏭',uebernommen:'📌',reaktiviert:'🔄'};
-  const LABELS={unterschrift:'Unterschrift',nicht_angetroffen:'Nicht angetroffen',kein_interesse:'Kein Interesse',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
+    <div class="stat-chip chip-r"><span class="sc-icon">🗳️</span><span class="sc-label">Wählt uns</span><span class="sc-val">${unter}</span></div>`;
+  const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
+  const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
   const recent=log.slice(0,15);
   q('#admin-log').innerHTML=recent.length?recent.map(l=>{
     const u=DEMO_USERS.find(u=>u.id===l.benutzer_id);
@@ -843,12 +851,12 @@ function renderAdmin(){
     const mine=S.getAdressen().filter(a=>a.benutzer_id===u.id);
     const active=mine.filter(a=>a.status==='in_bearbeitung').length;
     const done=mine.filter(a=>a.status==='archiviert').length;
-    const unt=log.filter(l=>l.benutzer_id===u.id&&l.aktion==='unterschrift').length;
+    const unt=log.filter(l=>l.benutzer_id===u.id&&l.aktion==='waehlt_uns').length;
     return`<div class="log-item">
       <div class="log-dot" style="background:${u.rolle==='admin'?'var(--g)':'#3b82f6'}"></div>
       <div class="log-main">
         <div class="log-aktion">${u.name}${u.rolle==='admin'?' 👑':''}</div>
-        <div class="log-detail">Aktiv: ${active} · Erledigt: ${done} · Unterschriften: ${unt}</div>
+        <div class="log-detail">Aktiv: ${active} · Erledigt: ${done} · Wählt uns: ${unt}</div>
       </div>
     </div>`;
   }).join('');
