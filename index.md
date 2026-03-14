@@ -9,15 +9,15 @@ layout: null
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1A2E22">
+<meta name="theme-color" content="#2D2060">
 <meta name="robots" content="noindex,nofollow">
 <title>NOVUM-ZIV Unterschriften</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
-  --g:#2C6E49;--g-h:#4C9A6F;--g-l:#E8F5EE;--dark:#1A2E22;
-  --txt:#1C1C1C;--sub:#6b7280;--bg:#F4F7F5;--card:#fff;
-  --bdr:#D5E8DC;--red:#C0392B;--warn:#FFF3CD;--wbdr:#F9A825;
+  --g:#7B6BC4;--g-h:#9A8BE0;--g-l:#EEEAF9;--dark:#2D2060;
+  --txt:#1C1C1C;--sub:#6b7280;--bg:#F2F0FA;--card:#fff;
+  --bdr:#D4CEF0;--red:#C0392B;--warn:#FFFDE0;--wbdr:#D4C800;
   --h-px:56px;--n-px:60px;--r:12px;--sha:0 2px 8px rgba(0,0,0,.10);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -27,7 +27,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 /* LOGIN */
 #scr-login{
   min-height:100dvh;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(160deg,var(--dark) 0%,#2C6E49 100%);padding:1.5rem;
+  background:linear-gradient(160deg,var(--dark) 0%,#7B6BC4 100%);padding:1.5rem;
 }
 .login-card{
   background:#fff;border-radius:18px;padding:2rem 1.75rem;width:100%;max-width:370px;
@@ -68,10 +68,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   box-shadow:0 2px 8px rgba(0,0,0,.35);
 }
 .ab-logo{font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-.3px}
-.ab-logo span{color:#4C9A6F}
+.ab-logo span{color:#9A8BE0}
 .ab-badge{font-size:.64rem;font-weight:700;background:var(--g);color:#fff;border-radius:4px;padding:1px 5px}
-.ab-user{flex:1;font-size:.72rem;color:#a0b8a8;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ab-logout{background:none;border:none;color:#5a8a6a;cursor:pointer;font-size:.78rem;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.ab-user{flex:1;font-size:.72rem;color:#B8B0D8;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab-logout{background:none;border:none;color:#8A7AC8;cursor:pointer;font-size:.78rem;padding:2px 6px;border-radius:4px;white-space:nowrap}
 .ab-logout:hover{color:#fff}
 .app-main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .panel{display:none;padding:.75rem .85rem;max-width:680px;margin:0 auto}
@@ -126,7 +126,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .gps-btn:active{background:var(--g);color:#fff}
 .loc-display{
   background:var(--g-l);border-radius:8px;padding:.5rem .85rem;
-  font-size:.8rem;color:#2C6E49;font-weight:600;margin-bottom:.55rem;
+  font-size:.8rem;color:#7B6BC4;font-weight:600;margin-bottom:.55rem;
   display:flex;align-items:center;gap:.4rem;
 }
 .num-selector{display:flex;gap:.5rem;margin-bottom:.75rem}
@@ -174,7 +174,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .btn-done:hover{background:var(--g-l)}
 .mine-pill{
   display:inline-block;font-size:.65rem;font-weight:700;border-radius:4px;
-  padding:2px 6px;background:#FFF3CD;color:#7a5500;
+  padding:2px 6px;background:#FFFDE0;color:#5A5000;
 }
 
 /* MEINE */
@@ -252,7 +252,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 }
 .log-item:last-child{border-bottom:none}
 .log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:.35rem}
-.ld-unterschrift{background:#2C6E49}
+.ld-unterschrift{background:#7B6BC4}
 .ld-nicht_angetroffen{background:var(--red)}
 .ld-kein_interesse{background:#8b5cf6}
 .ld-uebernommen{background:var(--wbdr)}
