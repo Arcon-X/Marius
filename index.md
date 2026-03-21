@@ -189,7 +189,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .mine-street{font-size:.9rem;font-weight:700}
 .mine-plz{font-size:.73rem;color:var(--sub);margin-bottom:.2rem}
 .mine-since{font-size:.7rem;color:var(--sub)}
-.mine-actions{padding:.2rem 1rem .75rem}
+.mine-actions{padding:.2rem 1rem .75rem;display:flex;gap:.4rem;align-items:center}
 
 /* DIALOG */
 .dlg-overlay{
@@ -229,6 +229,19 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;
 }
 .btn-save:disabled{background:#9ca3af;cursor:not-allowed}
+/* EDIT DIALOG */
+.edit-form{display:flex;flex-direction:column;gap:.65rem;margin-bottom:.9rem}
+.edit-row{display:flex;gap:.5rem}
+.edit-field{display:flex;flex-direction:column;gap:.2rem;flex:1}
+.edit-field.shrink{flex:0 0 5.5rem}
+.edit-field label{font-size:.7rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.04em}
+.edit-inp{border:1.5px solid var(--bdr);border-radius:8px;padding:.45rem .65rem;font-size:.9rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;transition:border .15s;color:var(--dark)}
+.edit-inp:focus{border-color:var(--g)}
+.edit-geo{font-size:.78rem;padding:.45rem .65rem;border-radius:8px;margin-bottom:.75rem}
+.edit-geo.geo-ok{background:#f0faf4;color:#2C6E49;border:1px solid #a7f3d0}
+.edit-geo.geo-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
+.btn-edit-addr{padding:.28rem .55rem;font-size:.78rem;border-radius:8px;border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-family:inherit;color:var(--sub);transition:all .15s;white-space:nowrap}
+.btn-edit-addr:hover{border-color:var(--g);color:var(--g)}
 
 /* MAP / KARTE */
 #p-karte{padding:0!important;display:flex;flex-direction:column;overflow:hidden}
@@ -433,6 +446,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="card" id="admin-users"></div>
       <div class="section-title">Demo-Daten</div>
       <button class="btn-reset" onclick="S.reset()">&#128465; Alle Demo-Daten zur&uuml;cksetzen</button>
+      <button class="btn-reset" style="margin-top:.5rem;background:#1d4ed8;color:#fff" onclick="exportAdressen()">&#128229; Adressen als JSON exportieren</button>
     </div>
 
   </main>
@@ -486,6 +500,51 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <div class="dlg-footer">
       <button class="btn-cancel" onclick="dlg.close()">Abbrechen</button>
       <button class="btn-save" id="dlg-save" onclick="dlg.save()" disabled>Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT DIALOG -->
+<div id="edit-dlg-overlay" class="dlg-overlay hidden"
+     onclick="if(event.target===this)editDlg.close()">
+  <div class="dlg-card">
+    <div class="dlg-title">&#9998; Adresse bearbeiten</div>
+    <div class="edit-form">
+      <div class="edit-row">
+        <div class="edit-field shrink">
+          <label>Titel</label>
+          <input id="ef-titel" class="edit-inp" type="text" placeholder="Dr.">
+        </div>
+        <div class="edit-field">
+          <label>Name (Arzt / &Auml;rztin)</label>
+          <input id="ef-name" class="edit-inp" type="text" placeholder="Max Mustermann">
+        </div>
+      </div>
+      <div class="edit-row">
+        <div class="edit-field">
+          <label>Stra&szlig;e</label>
+          <input id="ef-strasse" class="edit-inp" type="text">
+        </div>
+        <div class="edit-field shrink">
+          <label>HNr.</label>
+          <input id="ef-hnr" class="edit-inp" type="text">
+        </div>
+      </div>
+      <div class="edit-row">
+        <div class="edit-field shrink">
+          <label>PLZ</label>
+          <input id="ef-plz" class="edit-inp" type="text" maxlength="4">
+        </div>
+        <div class="edit-field">
+          <label>&nbsp;</label>
+          <div style="padding:.48rem 0;font-size:.88rem;color:var(--sub)">Wien</div>
+        </div>
+      </div>
+    </div>
+    <div id="edit-geo" class="edit-geo hidden"></div>
+    <div class="dlg-footer">
+      <button class="btn-cancel" onclick="editDlg.close()">Abbrechen</button>
+      <button class="btn-save" id="edit-save-btn" onclick="editDlg.save()">&#128204; Speichern</button>
     </div>
   </div>
 </div>
@@ -2172,8 +2231,10 @@ function renderResults(list){
     const cur=adressen.find(x=>x.id===a.id)||a;
     const isMine=cur.status==='in_bearbeitung'&&cur.benutzer_id===user.id;
     let actions='';
+    const isAdmin=user.rolle==='admin';
     if(isMine)actions=`<button class="btn-done" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>`;
     else if(cur.status==='verfuegbar')actions=`<button class="btn-take" onclick="uebernehmen('${a.id}')">📌 Übernehmen</button>`;
+    if(isAdmin||isMine)actions+=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>`;
     return`<div class="addr-card" id="card-${a.id}">
       <div class="addr-header">
         <div class="addr-num">${idx+1}</div>
@@ -2241,6 +2302,84 @@ const dlg={
   close(){hideEl('dlg-overlay');this.currentId=null;this.selectedAction=null;}
 };
 
+/* ── EDIT DIALOG ─────────────────────────────────────── */
+const editDlg={
+  currentId:null,
+  open(id){
+    this.currentId=id;
+    const a=S.getAdressen().find(x=>x.id===id);
+    if(!a)return;
+    document.getElementById('ef-titel').value=a.titel||'';
+    document.getElementById('ef-name').value=a.name||'';
+    document.getElementById('ef-strasse').value=a.strasse||'';
+    document.getElementById('ef-hnr').value=a.hnr||'';
+    document.getElementById('ef-plz').value=a.plz||'';
+    const geo=document.getElementById('edit-geo');
+    geo.className='edit-geo hidden';geo.textContent='';
+    const btn=document.getElementById('edit-save-btn');
+    btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
+    showEl('edit-dlg-overlay');
+  },
+  async save(){
+    const btn=document.getElementById('edit-save-btn');
+    btn.disabled=true;btn.textContent='\u23f3 Geocodierung \u2026';
+    const geo=document.getElementById('edit-geo');
+    const adressen=S.getAdressen();
+    const a=adressen.find(x=>x.id===this.currentId);
+    if(!a){this.close();return;}
+    // Felder aktualisieren
+    const titel=document.getElementById('ef-titel').value.trim();
+    const name=document.getElementById('ef-name').value.trim();
+    a.titel=titel||undefined;
+    a.name=name||undefined;
+    a.strasse=document.getElementById('ef-strasse').value.trim();
+    a.hnr=document.getElementById('ef-hnr').value.trim();
+    a.plz=document.getElementById('ef-plz').value.trim();
+    // Geocodierung via Nominatim
+    try{
+      const queryStr=`${a.hnr} ${a.strasse}, ${a.plz} Wien, Austria`;
+      const url='https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(queryStr)+'&format=json&limit=1&accept-language=de';
+      const res=await fetch(url,{headers:{'User-Agent':'NOVUM-ZIV-Demo/1.0'}});
+      const data=await res.json();
+      if(data.length){
+        a.lat=parseFloat(data[0].lat);a.lon=parseFloat(data[0].lon);
+        delete a.notiz;
+        geo.className='edit-geo geo-ok';
+        geo.textContent='\u2705 Koordinaten aktualisiert: '+data[0].display_name.split(',').slice(0,2).join(', ');
+      }else{
+        geo.className='edit-geo geo-warn';
+        geo.textContent='\u26a0\ufe0f Adresse nicht gefunden \u2013 Koordinaten unver\u00e4ndert. Bitte Schreibweise pr\u00fcfen.';
+      }
+    }catch(e){
+      geo.className='edit-geo geo-warn';
+      geo.textContent='\u26a0\ufe0f Geocoding-Fehler \u2013 Koordinaten unver\u00e4ndert.';
+    }
+    geo.classList.remove('hidden');
+    S.saveAdressen(adressen);
+    btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
+    toast('Adresse gespeichert \u2713');
+    // Ansichten aktualisieren
+    if(lastResults.length)renderResults(lastResults);
+    if(currentTab==='meine')renderMeine();
+    if(currentTab==='archive')renderArchive();
+    if(currentTab==='karte'){renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
+    if(currentTab==='admin')renderAdmin();
+  },
+  close(){hideEl('edit-dlg-overlay');this.currentId=null;}
+};
+
+function exportAdressen(){
+  const data=S.getAdressen();
+  const json=JSON.stringify(data,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='adressen_export_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast('Export gestartet \u2713');
+}
+
 /* ── MEINE ───────────────────────────────────────────── */
 function renderMeine(){
   const user=auth.current();
@@ -2264,7 +2403,8 @@ function renderMeine(){
           </div>
         </div>
         <div class="mine-actions">
-          <button class="btn-done" style="width:100%" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>
+          <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>
+          <button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️</button>
         </div>
       </div>`;
     }).join('');
@@ -2295,14 +2435,16 @@ function renderArchive(){
       const icon=entry?ICONS[entry.aktion]||'📋':'📋';
       const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
       const label=entry?LABELS[entry.aktion]||entry.aktion:'';
+      const canEdit=isAdmin||a.benutzer_id===user.id;
       return`<div class="arch-card">
         <div class="arch-header">
           <div class="arch-icon">${icon}</div>
-          <div>
+          <div style="flex:1">
             <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
             <div class="arch-meta">${label}${when?' · '+when:''}${entry&&entry.notiz?' · '+entry.notiz:''}</div>
           </div>
+          ${canEdit?`<button class="btn-edit-addr" style="align-self:flex-start" onclick="editDlg.open('${a.id}')">⚙️</button>`:''}
         </div>
       </div>`;
     }).join('');
@@ -2425,12 +2567,14 @@ function renderKarteList(){
   el.innerHTML=`<div style="font-size:.72rem;color:var(--sub);font-weight:700;margin-bottom:.5rem;padding-left:.1rem">${list.length} Adressen</div>`+
     list.map(a=>{
       const isMine=a.benutzer_id===user.id;
+      const isAdmin=user.rolle==='admin';
       const dotCls=STATUS_DOT[a.status]||'kl-dot-arch';
       const statusLabel=STATUS_LABEL[a.status]||a.status;
       const arztLine=(a.titel||a.name)?[a.titel,a.name].filter(Boolean).join(' '):'';
       let action='';
       if(a.status==='verfuegbar')action=`<button class="btn-take" style="padding:.35rem .65rem;font-size:.75rem" onclick="uebernehmen('${a.id}')">📌</button>`;
       else if(isMine)action=`<button class="btn-done" style="padding:.35rem .65rem;font-size:.75rem" onclick="dlg.open('${a.id}')">✏️</button>`;
+      if(isAdmin||isMine)action+=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️</button>`;
       return`<div class="kl-card">
         <div class="kl-dot ${dotCls}"></div>
         <div class="kl-main">
