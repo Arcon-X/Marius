@@ -76,6 +76,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .app-main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .panel{display:none;padding:.75rem .85rem;max-width:680px;margin:0 auto}
 .panel.active{display:block}
+#p-karte.active{display:flex}
 .bottom-nav{
   position:fixed;bottom:0;left:0;right:0;z-index:300;
   background:var(--card);border-top:1.5px solid #e0e0e0;
@@ -2066,13 +2067,20 @@ const db={
     const now=Date.now();
     if(now-_sbLastSync<30000)return null;
     try{
-      const res=await fetch(SB_URL+'/rest/v1/adressen?select=*&limit=2000',{headers:this._hG()});
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      const rows=await res.json();
-      if(!rows.length){await this._seed();return null;}
+      // Pagination: Supabase limitiert auf 1000 Rows pro Request
+      let all=[];let offset=0;const PAGE=1000;
+      while(true){
+        const res=await fetch(SB_URL+'/rest/v1/adressen?select=*&limit='+PAGE+'&offset='+offset,{headers:this._hG()});
+        if(!res.ok)throw new Error('HTTP '+res.status);
+        const rows=await res.json();
+        all=all.concat(rows);
+        if(rows.length<PAGE)break;
+        offset+=PAGE;
+      }
+      if(!all.length){await this._seed();return null;}
       _sbLastSync=now;
       // Leere Strings aus CSV-Import normalisieren
-      const clean=rows.map(r=>({
+      const clean=all.map(r=>({
         ...r,
         lat:r.lat!=null?parseFloat(r.lat):null,
         lon:r.lon!=null?parseFloat(r.lon):null,
