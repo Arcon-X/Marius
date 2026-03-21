@@ -2685,7 +2685,9 @@ function updateMap(){
     });
     const m=L.marker([a.lat,a.lon],{icon}).addTo(leafletMap);
     const arztLine=(a.titel||a.name)?`<br><span style="color:#7B6BC4;font-size:.85em">${[a.titel,a.name].filter(Boolean).join(' ')}</span>`:'';
-    m.bindPopup(`<strong>${a.strasse} ${a.hnr}</strong>${arztLine}<br>${a.plz} Wien<br><em>${{verfuegbar:'Verfügbar',in_bearbeitung:'Reserviert',archiviert:'Erledigt'}[a.status]||a.status}</em>${isMine?'<br><strong>📌 Deine Adresse</strong>':''}`);
+    const statusLabels={verfuegbar:'Verf\u00fcgbar',in_bearbeitung:'Reserviert',archiviert:'Erledigt'};
+    const sLabel=statusLabels[a.status]||a.status;
+    m.bindPopup(`<strong>${a.strasse} ${a.hnr}</strong>${arztLine}<br>${a.plz} Wien<br><em>${sLabel}</em>${isMine?'<br><strong>\ud83d\udccc Deine Adresse</strong>':''}`);
     mapMarkers.push(m);
   });
   if(userLoc){
