@@ -2071,7 +2071,19 @@ const db={
       const rows=await res.json();
       if(!rows.length){await this._seed();return null;}
       _sbLastSync=now;
-      S.saveAdressen(rows);
+      // Leere Strings aus CSV-Import normalisieren
+      const clean=rows.map(r=>({
+        ...r,
+        lat:r.lat!=null?parseFloat(r.lat):null,
+        lon:r.lon!=null?parseFloat(r.lon):null,
+        benutzer_id:r.benutzer_id||null,
+        reserviert_am:r.reserviert_am||null,
+        erledigt_am:r.erledigt_am||null,
+        notiz:r.notiz||null,
+        titel:r.titel||null,
+        name:r.name||null,
+      }));
+      S.saveAdressen(clean);
       const pr=await fetch(SB_URL+'/rest/v1/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
       if(pr.ok){const pl=await pr.json();S.saveProtokoll(pl);}
       return rows;
@@ -2674,16 +2686,19 @@ function updateMap(){
   const user=auth.current();
   const COL={verfuegbar:'#2C6E49',in_bearbeitung:'#E67E00',archiviert:'#9ca3af'};
   const list=karteGetFiltered();
-  document.getElementById('kf-count').textContent=list.length+' Adressen';
+  const countEl=document.getElementById('kf-count');
+  if(countEl)countEl.textContent=list.length+' Adressen';
   list.forEach(a=>{
+    const lat=parseFloat(a.lat);const lon=parseFloat(a.lon);
+    if(!isFinite(lat)||!isFinite(lon))return;
     const col=COL[a.status]||'#9ca3af';
-    const isMine=a.benutzer_id===user.id;
+    const isMine=a.benutzer_id&&a.benutzer_id===user.id;
     const size=isMine?16:12;
     const icon=L.divIcon({
       html:`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${col};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)${isMine?';outline:2px solid '+col:''}"></div>`,
       className:'',iconSize:[size,size],iconAnchor:[size/2,size/2]
     });
-    const m=L.marker([a.lat,a.lon],{icon}).addTo(leafletMap);
+    const m=L.marker([lat,lon],{icon}).addTo(leafletMap);
     const arztLine=(a.titel||a.name)?`<br><span style="color:#7B6BC4;font-size:.85em">${[a.titel,a.name].filter(Boolean).join(' ')}</span>`:'';
     const statusLabels={verfuegbar:'Verf\u00fcgbar',in_bearbeitung:'Reserviert',archiviert:'Erledigt'};
     const sLabel=statusLabels[a.status]||a.status;
