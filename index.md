@@ -245,7 +245,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .btn-edit-addr:hover{border-color:var(--g);color:var(--g)}
 
 /* MAP / KARTE */
-#p-karte{padding:0!important;display:flex;flex-direction:column;overflow:hidden}
+#p-karte{padding:0!important;flex-direction:column;overflow:hidden}
 .karte-toolbar{
   flex-shrink:0;background:var(--card);border-bottom:1px solid var(--bdr);
   padding:.5rem .75rem .45rem;display:flex;flex-direction:column;gap:.4rem;z-index:200;
@@ -2193,7 +2193,12 @@ function showTab(tab){
   if(tab==='meine')renderMeine();
   if(tab==='archive')renderArchive();
   if(tab==='admin')renderAdmin();
-  if(tab==='karte'){initMap();renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
+  if(tab==='karte'){
+    initMap();
+    renderKarteToolbar();
+    if(karteMode==='map')updateMap();else renderKarteList();
+    setTimeout(()=>leafletMap&&leafletMap.invalidateSize(),300);
+  }
   window.scrollTo({top:0,behavior:'instant'});
   // Hintergrund-Sync mit Supabase
   db.load().then(rows=>{
@@ -2682,6 +2687,9 @@ function renderKarteList(){
 
 function initMap(){
   if(mapInited)return;mapInited=true;
+  // Sicherstellen dass das Panel sichtbar und dimensioniert ist
+  const mapEl=document.getElementById('map');
+  if(!mapEl||mapEl.offsetHeight===0){mapInited=false;return;}
   leafletMap=L.map('map',{zoomControl:true}).setView([48.2082,16.3738],13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19
