@@ -230,9 +230,47 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 }
 .btn-save:disabled{background:#9ca3af;cursor:not-allowed}
 
-/* MAP */
-#p-karte{padding:0!important}
-#map{height:calc(100dvh - var(--h-px) - var(--n-px) - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+/* MAP / KARTE */
+#p-karte{padding:0!important;display:flex;flex-direction:column;overflow:hidden}
+.karte-toolbar{
+  flex-shrink:0;background:var(--card);border-bottom:1px solid var(--bdr);
+  padding:.5rem .75rem .45rem;display:flex;flex-direction:column;gap:.4rem;z-index:200;
+}
+.karte-top-row{display:flex;align-items:center;gap:.4rem}
+.kf-scroll{display:flex;gap:.35rem;overflow-x:auto;scrollbar-width:none;padding-bottom:1px;flex:1}
+.kf-scroll::-webkit-scrollbar{display:none}
+.kf-chip{
+  flex-shrink:0;padding:.3rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700;
+  border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-family:inherit;
+  white-space:nowrap;transition:all .15s;color:var(--sub);
+}
+.kf-chip.active{background:var(--g);border-color:var(--g);color:#fff}
+.kf-chip.kfc-verf.active{background:#2C6E49;border-color:#2C6E49;color:#fff}
+.kf-chip.kfc-bear.active{background:#E67E00;border-color:#E67E00;color:#fff}
+.kf-chip.kfc-arch.active{background:#6b7280;border-color:#6b7280;color:#fff}
+.karte-view-btns{display:flex;gap:.3rem;flex-shrink:0}
+.view-btn{
+  padding:.3rem .65rem;border-radius:20px;font-size:.72rem;font-weight:700;
+  border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-family:inherit;
+  transition:all .15s;color:var(--sub);white-space:nowrap;
+}
+.view-btn.active{background:var(--dark);border-color:var(--dark);color:#fff}
+.kf-count{font-size:.71rem;color:var(--sub);font-weight:600;align-self:center;white-space:nowrap}
+#map{flex:1;min-height:0}
+#karte-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.6rem .75rem}
+.kl-card{
+  background:var(--card);border-radius:var(--r);box-shadow:var(--sha);
+  margin-bottom:.5rem;padding:.6rem .85rem;display:flex;align-items:center;gap:.65rem;
+}
+.kl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.kl-dot-verf{background:#2C6E49}
+.kl-dot-bear{background:#E67E00}
+.kl-dot-arch{background:#6b7280}
+.kl-main{flex:1;min-width:0}
+.kl-street{font-size:.88rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kl-arzt{font-size:.73rem;color:var(--g);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kl-meta{font-size:.71rem;color:var(--sub)}
+.kl-actions{flex-shrink:0}
 
 /* ADMIN */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.85rem}
@@ -363,7 +401,21 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
     <!-- KARTE -->
     <div id="p-karte" class="panel">
+      <div class="karte-toolbar">
+        <div class="karte-top-row">
+          <div class="kf-scroll" id="kf-status"></div>
+          <div class="karte-view-btns">
+            <button class="view-btn active" id="btn-kv-map" onclick="karteView('map')">&#128506; Karte</button>
+            <button class="view-btn" id="btn-kv-list" onclick="karteView('list')">&#128203; Liste</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div class="kf-scroll" id="kf-plz"></div>
+          <span class="kf-count" id="kf-count"></span>
+        </div>
+      </div>
       <div id="map"></div>
+      <div id="karte-list" class="hidden"></div>
     </div>
 
     <!-- ARCHIV -->
@@ -2007,7 +2059,7 @@ function showTab(tab){
   if(tab==='meine')renderMeine();
   if(tab==='archive')renderArchive();
   if(tab==='admin')renderAdmin();
-  if(tab==='karte'){initMap();updateMap();}
+  if(tab==='karte'){initMap();renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
   window.scrollTo({top:0,behavior:'instant'});
 }
 
@@ -2300,27 +2352,123 @@ function renderAdmin(){
 
 /* ── MAP ─────────────────────────────────────────────── */
 let leafletMap=null,mapMarkers=[];
+const karteState={status:'all',plz:'all'};
+let karteMode='map';
+
+function karteGetFiltered(){
+  const all=S.getAdressen();
+  const user=auth.current();
+  return all.filter(a=>{
+    if(karteState.status==='__mine__'){if(a.benutzer_id!==user.id)return false;}
+    else if(karteState.status!=='all'&&a.status!==karteState.status)return false;
+    if(karteState.plz!=='all'&&a.plz!==karteState.plz)return false;
+    return true;
+  });
+}
+
+function renderKarteToolbar(){
+  const all=S.getAdressen();
+  // Status-Chips
+  const statusChips=[
+    {val:'all',   label:'Alle',       cls:''},
+    {val:'verfuegbar',   label:'🟢 Verfügbar',  cls:'kfc-verf'},
+    {val:'in_bearbeitung',label:'🟡 Reserviert', cls:'kfc-bear'},
+    {val:'archiviert',   label:'✅ Erledigt',   cls:'kfc-arch'},
+  ];
+  const myId=auth.current()?.id;
+  statusChips.push({val:'__mine__',label:'📌 Meine',cls:''});
+  const sCont=document.getElementById('kf-status');
+  sCont.innerHTML=statusChips.map(c=>
+    `<button class="kf-chip ${c.cls}${karteState.status===c.val?' active':''}" onclick="karteSetStatus('${c.val}')">${c.label}</button>`
+  ).join('');
+  // PLZ-Chips
+  const plzs=[...new Set(all.map(a=>a.plz))].sort();
+  const pCont=document.getElementById('kf-plz');
+  pCont.innerHTML=`<button class="kf-chip${karteState.plz==='all'?' active':''}" onclick="karteSetPlz('all')">Alle PLZ</button>`+
+    plzs.map(p=>`<button class="kf-chip${karteState.plz===p?' active':''}" onclick="karteSetPlz('${p}')">${p}</button>`).join('');
+  // Zähler
+  const count=karteGetFiltered().length;
+  document.getElementById('kf-count').textContent=count+' Adressen';
+}
+
+function karteSetStatus(val){
+  karteState.status=val;
+  renderKarteToolbar();
+  if(karteMode==='map')updateMap();else renderKarteList();
+}
+function karteSetPlz(val){
+  karteState.plz=val;
+  renderKarteToolbar();
+  if(karteMode==='map')updateMap();else renderKarteList();
+}
+
+function karteView(mode){
+  karteMode=mode;
+  document.getElementById('btn-kv-map').classList.toggle('active',mode==='map');
+  document.getElementById('btn-kv-list').classList.toggle('active',mode==='list');
+  const mapEl=document.getElementById('map');
+  const listEl=document.getElementById('karte-list');
+  if(mode==='map'){mapEl.classList.remove('hidden');listEl.classList.add('hidden');setTimeout(()=>leafletMap&&leafletMap.invalidateSize(),100);}
+  else{mapEl.classList.add('hidden');listEl.classList.remove('hidden');renderKarteList();}
+}
+
+function renderKarteList(){
+  const user=auth.current();
+  const list=karteGetFiltered();
+  const el=document.getElementById('karte-list');
+  if(!list.length){
+    el.innerHTML='<div class="empty-state"><div class="big">🔍</div>Keine Adressen für diesen Filter.</div>';
+    return;
+  }
+  const STATUS_DOT={verfuegbar:'kl-dot-verf',in_bearbeitung:'kl-dot-bear',archiviert:'kl-dot-arch'};
+  const STATUS_LABEL={verfuegbar:'Verfügbar',in_bearbeitung:'Reserviert',archiviert:'Erledigt'};
+  el.innerHTML=`<div style="font-size:.72rem;color:var(--sub);font-weight:700;margin-bottom:.5rem;padding-left:.1rem">${list.length} Adressen</div>`+
+    list.map(a=>{
+      const isMine=a.benutzer_id===user.id;
+      const dotCls=STATUS_DOT[a.status]||'kl-dot-arch';
+      const statusLabel=STATUS_LABEL[a.status]||a.status;
+      const arztLine=(a.titel||a.name)?[a.titel,a.name].filter(Boolean).join(' '):'';
+      let action='';
+      if(a.status==='verfuegbar')action=`<button class="btn-take" style="padding:.35rem .65rem;font-size:.75rem" onclick="uebernehmen('${a.id}')">📌</button>`;
+      else if(isMine)action=`<button class="btn-done" style="padding:.35rem .65rem;font-size:.75rem" onclick="dlg.open('${a.id}')">✏️</button>`;
+      return`<div class="kl-card">
+        <div class="kl-dot ${dotCls}"></div>
+        <div class="kl-main">
+          <div class="kl-street">${a.strasse} ${a.hnr}</div>
+          ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
+          <div class="kl-meta">${a.plz} Wien &nbsp;·&nbsp; ${statusLabel}${isMine?' &nbsp;·&nbsp; 📌 Meine':''}</div>
+        </div>
+        ${action?`<div class="kl-actions">${action}</div>`:''}
+      </div>`;
+    }).join('');
+}
+
 function initMap(){
   if(mapInited)return;mapInited=true;
   leafletMap=L.map('map',{zoomControl:true}).setView([48.2082,16.3738],13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19
   }).addTo(leafletMap);
+  renderKarteToolbar();
 }
 function updateMap(){
   if(!leafletMap)return;
   mapMarkers.forEach(m=>m.remove());mapMarkers=[];
   const user=auth.current();
-  const COL={verfuegbar:'#2C6E49',in_bearbeitung:'#F9A825',archiviert:'#9ca3af'};
-  S.getAdressen().filter(a=>a.status!=='archiviert').forEach(a=>{
+  const COL={verfuegbar:'#2C6E49',in_bearbeitung:'#E67E00',archiviert:'#9ca3af'};
+  const list=karteGetFiltered();
+  document.getElementById('kf-count').textContent=list.length+' Adressen';
+  list.forEach(a=>{
     const col=COL[a.status]||'#9ca3af';
+    const isMine=a.benutzer_id===user.id;
+    const size=isMine?16:12;
     const icon=L.divIcon({
-      html:`<div style="width:12px;height:12px;border-radius:50%;background:${col};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>`,
-      className:'',iconSize:[12,12],iconAnchor:[6,6]
+      html:`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${col};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)${isMine?';outline:2px solid '+col:''}"></div>`,
+      className:'',iconSize:[size,size],iconAnchor:[size/2,size/2]
     });
     const m=L.marker([a.lat,a.lon],{icon}).addTo(leafletMap);
-    const isMine=a.benutzer_id===user.id;
-    m.bindPopup(`<strong>${a.strasse} ${a.hnr}</strong><br>${a.plz} Wien<br>Status: ${a.status}${isMine?'<br><em>Deine Adresse</em>':''}`);
+    const arztLine=(a.titel||a.name)?`<br><span style="color:#7B6BC4;font-size:.85em">${[a.titel,a.name].filter(Boolean).join(' ')}</span>`:'';
+    m.bindPopup(`<strong>${a.strasse} ${a.hnr}</strong>${arztLine}<br>${a.plz} Wien<br><em>${{verfuegbar:'Verfügbar',in_bearbeitung:'Reserviert',archiviert:'Erledigt'}[a.status]||a.status}</em>${isMine?'<br><strong>📌 Deine Adresse</strong>':''}`);
     mapMarkers.push(m);
   });
   if(userLoc){
