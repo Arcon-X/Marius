@@ -1,114 +1,69 @@
-Adressen ohne Koordinaten (120 Stück)
+Adressen ohne Koordinaten (73 Stück)
 ============================================================
 
-[a0003]  Bashar Namat Behnam Abu Al-Soof | Trondheimgasse sa/1/14 1220 Wien
-[a0025] Dr. Omar Ali Hussein Al Azzawi | Erdberger Länder 20/16 1030 Wien
-[a0033] Dr. Vera Theresa Albrecht | Ameisbachzeiele 155 1160 Wien
 [a0055] Dr. Julian Andersson | Mariahilfer Straße 74b / DG B 1070 Wien
 [a0065] DDr. Karin Assadian | Gersthofer Straße 20/1 Top B2 1180 Wien
 [a0071] Dr. Walter Augustin | Wopenkaststraße 6/6/1-2 1110 Wien
 [a0083] DDr. Rodica-Florica Bandila | Hockegasse 17 Top B01 1180 Wien
-[a0140] Dr. Reinhard Blindhofer | Engertstraße 56/4/2 1200 Wien
 [a0148] DDr. Ioana Brana | Pernerstorfer Gasse 5/1/7 1100 Wien
 [a0152] Dr. Meike Irene Braun | Margaretenstraße 166, 1. Stock 1050 Wien
 [a0165] DDr. Michael Bulla | Zschokkegasse 140, 2. Stock 1220 Wien
-[a0184] Dr. Roland Cekon | Meidlinger Hauptstraße 65/1/4 + 8 1120 Wien
 [a0202] Univ.-Prof.Dr. Adriano Crismani | Wagramer Straße 25 Stiege 1/9 1220 Wien
 [a0218] Dr. Robert Deak | Karl Popper Straße 8 / 2. OG Top 204 1100 Wien
-[a0246] Dr. Ewa Drabinski | Wagramer Straße 25 /1/1/b-2 1220 Wien
 [a0250] DDr. Alexandra-Ioana Draskovits | Skrauptstraße 24/18/2 1210 Wien
 [a0277] Dr. Anita Elmauthaler | Albert Schweitzer Gasse 6/OG/B 1 1140 Wien
 [a0283] DDr. Dan-Romulus Enachescu | Puchsbaumplatz 11 Top 11 1100 Wien
 [a0284] Ddr. Miriana Enachescu | Puchsbaumplatz 11 Top 11 1100 Wien
 [a0291] Ass.-Prof. DDr. Lukas Ertl | Währinger Straße 27 Stige 1/11 1090 Wien
-[a0300] Dr. Ekaterina Fakhr Douz Douzani | Zschokkegasse 140 / 2 OG 1220 Wien
 [a0306] Dr. Hani Farr | Leonhard Bernstein Straße 8/2/2 1220 Wien
 [a0310] Dr. Hannah Helinde Feichtinger | Dr. Heinrich Maier Straße 71 Haus 1 1180 Wien
-[a0324] DDr. Claudia Forster | Dornbacher Straßer 125/1 1170 Wien
 [a0346] Prof. DDr. Gabor Fürst | Rötzergasse 24 / 2 Top 4 1170 Wien
 [a0379] DDr. Ildiko Gellerd | Leonhard Bernstein Straße 8/1/6 1220 Wien
-[a0387] Dr. Alexander Gerschenson | Rresselgasse 5/14 1040 Wien
 [a0406] Dr. Bernhard Glatzl | Erlaaer Straße 53 Lokal 2a 1230 Wien
 [a0477] Dr. med. dent. Thomas Alexander Heinz Hartmann | Altgasse 25A / 3 / 1 /4 1130 Wien
-[a0479] Dr. Wolfgang Hassler | Werdetorgasse 12(8 1010 Wien
 [a0495] Mag. rer. soc. oec. Dr. med. univ. Vera Helmer-Josef | Wehlistraße 71-81 Stiege 11 / 2 1200 Wien
-[a0522] MR Dr. Eva Maria Höller | Weingartenallee 24 / H 50 1220 Wien
-[a0544] Dr. Arian Honarwasch | M0ßbachergasse 12/62 1140 Wien
 [a0555] Dr. Selma Husejnagic | Zschokkegasse 140, 2. Stock 1220 Wien
-[a0575] Dr. Adela Janas | Engertsstraße 81/2 1200 Wien
 [a0586] Dr. med. dent. Aneta Jesch | Exenbergerweg 2/4/9 Top 38 1110 Wien
 [a0587] Dr. Philip Jesch | Hertha Firnbergstraße 10/1/1 1100 Wien
 [a0591] Dr. Irena Jokovic | Zschokkegasse 140, 2. Stock 1220 Wien
 [a0594] Dr. Peter Jordan | Erdbergstraße 52-60/3/1 Top 5 1030 Wien
-[a0597] Dr. Julius Junez | Hintschigasse 3/3/3 1100 Wien
-[a0622] Dr. Iljko Katusic | Kaiserebersdorferstraße 16/4 1110 Wien
 [a0648] Dr. Andrej Klimscha | Thurngase 15A 14 1090 Wien
-[a0650] Dr. Claudia Simone Kloodt | Lazarettgasse 19 DG 1090 Wien
 [a0678] Dr. Margit Kosma | Schaumburger Gasse 16/10 1040 Wien
 [a0704] Dr. Daniela Kubiena | Heinestraße 43 Stg. 2 / 4 / 16 1020 Wien
-[a0708] Dr. Stephan Kucsko | Nothargasse 8 1130 Wien
 [a0751]  Bogna Leputsch | Franz Jonas Platz 1 Top 1 1210 Wien
 [a0779] DDr. Paul Loser | Schüttaustraße 1-39 / 2 / 6 1220 Wien
-[a0788] Dr. Eva Cynthia Lupu | Kirchengase 39/10 1070 Wien
 [a0796] Dr. Karin Maczek | Prager Straße 93-99 / 6 / 3-4 1210 Wien
 [a0801] Dr. Martin Mai | Anton Baumgartner Straße 44 Block A / 3 1230 Wien
 [a0805] Dr. med. univ. Dr. med. dent. Dominik Majewski | Breitenfurter Straße 360-368 / 2 / 1 1230 Wien
 [a0809] Dr. Emil Florin Mamut | Marktgemeindegasse 44-50 / 4 / 5 1230 Wien
-[a0814] Dr. Emilia Marinova | Hernalser Hauptstraße 24-26 / 4 1170 Wien
-[a0819] Dr. Georgeta Maria Felicia Marton | Hauslabgasse 6-8 / 3 / 3 1050 Wien
 [a0820] Dr. Katalin Martyan | Leonard Bernstein Straße 8/1 EG 6 1220 Wien
-[a0839] Dr. Peter Mazevski | Währinger Straße 132 A / 2 / 14 1180 Wien
 [a0845] Zahnärztin Roksolana Melesh | Franz Koci Straße 15 Stg. 4/2 1100 Wien
-[a0849] Dr. Sarah Metzker | Tuchlauben 7a / 6 / 13 1010 Wien
 [a0852] Dr. Valerie Michel | Castellezgasse 36-38 Top 8 1020 Wien
 [a0878] Dr. Andreas Moravetz | Anton Frank Gasse 3 Top 10 1180 Wien
-[a0893] DDr Dietrich Mühlenhof | Wildpretmakrt 6/2/7 1010 Wien
 [a0906] Dr. Kristof Mulik | Konstanziagasse 31-35 / II / Top 1 1220 Wien
 [a0931]  Maciej Jan Niechcial | Neuwaldegger Straße 50-54 / 5 / 1 1170 Wien
 [a0940] Dr. Apti Nuhaev | Klosterneuburger Straße 118-122 / 4 / 8 1200 Wien
-[a0962] Dr. Gabor Papp | Gasgasse 4 / 5 / 12 1150 Wien
-[a0965] Dr. Ivana Pasler | Rampersdorfergasse 68 1050 Wien
 [a0989] Dr. Herbert Peternel | Rasumofskygasse 9-11 Tür 8 1030 Wien
-[a1008]  David Pintaric | Leipziger Straße 52-54 / 23-24 1200 Wien
 [a1013] Dr. Ana Piribauer | Klosterneuburger Straße 99-105 /4 / R1 1200 Wien
 [a1014] Dr. Wolfgang Pirker | Wollzeile 6-8 / DG / 65 1010 Wien
 [a1018] Dr. Elisabeth Pittschieler | Reichsratsstraße 5 / 2. Stock / Top 4a 1010 Wien
 [a1024] Dr. Kathrin Pohn-Zachenhofer | Nußdorfer Straße 11a Tür 16 1090 Wien
 [a1026] Dr. med. dent. Raziye Sibel Polat | Stadlauer Straße 62/5/17 MED 22 1220 Wien
-[a1027] Dr. Anida Poljak Campara | Rampersdorffergasse 68 1050 Wien
-[a1048] Dr. Leonard Victor Prisecariu | Knöllgasse 19.21 / 1 / 2 1100 Wien
-[a1064] Dr. Georg Quinto | Brünner Straße 70 / 3 / 101 1210 Wien
-[a1065] Dr. Marta Quinto | Brünner Straße 70 / 3 / 101 1210 Wien
-[a1068] Dr. Piotr Rachubinski | Laaerbergstraße 3/4 1100 Wien
 [a1077] Dr. Alexandra Ramsebner | Ziedlergasse 11-13 Lokal 1a 1230 Wien
 [a1084] Dr. Xiaohui Rausch-Fan | Währinger Straße 23 Top 1 1090 Wien
 [a1085] Dr. Wiktor Rawik | Wimmeriner Platz 1/1 Top 3+4 1110 Wien
-[a1091] Dr. Julia Reibach | Haslingergasse 20-22 / 31 1170 Wien
-[a1092] Dr. Markus Johannes Reibach | Haslingergasse 20-22 / 31 1170 Wien
-[a1099] Dr. Theresa Reichsthaler | Breitenseer Straße 13 / 8 -14 1140 Wien
-[a1112] Dr. Otis Rezegh | Werdetorgasse 2/2/10 1010 Wien
 [a1153] Dr. Elisabeth Salem | Zentagasse 40-42 / 1 Top 6 1050 Wien
 [a1154] Dr. med. dent. Nicole Salem | Zentagasse 40-42 / 1 Top 6 1050 Wien
-[a1185] Dr. Karl Scheidl | Leonard Bernstein Straße 4-6 / 10 / 3 1220 Wien
-[a1186] Dr. Heinrich Karl Schiebel | Thaliastraße 159 / 8 / 1+2 1160 Wien
 [a1188] Dr. Andreas Schiedlbauer | Simonsgasse 25 Top 3-4 1220 Wien
 [a1189] Dr. Thomas Schillinger | Fasangartengasse 4 / EG / Lokal 4 1130 Wien
-[a1208] Dr. med. dent. Meri-Ioana Schneider | Schwedenplatz 3-4 / 1 / 15 1010 Wien
 [a1209] ZA Steffen Roland Schneider | Währinger Gürtel 18-20, Abteilung MKG 1090 Wien
 [a1218] Dr. Alexandra Schön | Hietzinger Kaie 85 - 3. OG 1130 Wien
 [a1219] Dr. Simon-Iza Schön | Hietzinger Kaie 85 - 3. OG 1130 Wien
 [a1226] Dr. Timm Cornelius Schott | Freudplatz 3, Zimmer 517 1020 Wien
 [a1230] Dr. Gloria Schreiner | Degengasse 70 Stiege 4 / 1 / B2 1160 Wien
-[a1233] Dr. med. dent. Krisztian Schuder | Wilhelmstraße qc/2/5 1120 Wien
-[a1248] Dr. Corina Teodora Scridon | Rampersdorffergasse 68 1050 Wien
 [a1284] Dr. Karin Slowak-Hajek | Schöllerhofgasse 5/3 1020 Wien
-[a1287] Dr. Michael Sobczyk | Otoo Probst Straße 25/13/3 1100 Wien
 [a1350] Dr. Martina Swerak | Schlesienplatz 5 1080 Wien
-[a1372] DDr. Hannelore Terzer | Gudrunstraße 137 - 139 / 3 / 1 1100 Wien
-[a1373] Dr. Ameliia Terziyska-Poser | Simmeringer Hauptstraße 108A / 1 / R2 1110 Wien
-[a1375] Dr. Thomas Teszner | Taborstraße 21A / 1 / 12a 1020 Wien
 [a1381] Dr. med. univ. Dr. med. dent. Gunther Tischler | Müllnergasse 26 Top 27 1090 Wien
-[a1392] Dr. Astrid Franziska Treffler | Am Kohlmarkt 7/4/34 1010 Wien
 [a1398] Dr. med. univ. Angelo Trödhan | Erdbergstraße 52-60 / 3 / Top 5 1030 Wien
 [a1411] DDr. Sonja Ulreich | Hütteldorfer Straße 124 Tür 2 1140 Wien
 [a1415] Dr. med. univ. Martin Urschitz | Forsthausgasse 16-20 Stiege 3 1200 Wien
@@ -118,6 +73,4 @@ Adressen ohne Koordinaten (120 Stück)
 [a1491] Dr. med. dent. Dijana Wirth | Billrothgasse 29/4 1190 Wien
 [a1502] Dr. med. dent. Sonja Wolf | Leopoldauerstraße 76 Top 1 1210 Wien
 [a1520] Dr. Johann Michael Zadina | Ginkoweg 6 1220 Wien
-[a1521] Dr. Manuela Zagler | Durchlaufstraße 14 / 1a 34 1200 Wien
-[a1526] Dr. Gerhard Zehetner | Linzer Straße 383-385 EG5 1140 Wien
 [a1533] DDr. Matthias Zimmermann | Weidemanngasse 1/1/115 1170 Wien
