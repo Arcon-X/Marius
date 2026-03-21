@@ -2055,6 +2055,59 @@ const SEED_ADRESSEN = [
   {id:'a1544',plz:'1060',strasse:'Mariahilfer Straße',hnr:'85/87',titel:'Dr.',name:'Elena Zymbal',lat:48.19748,lon:16.34833},
 ];
 
+/* ── SUPABASE ────────────────────────────────────────── */
+const SB_URL='https://xxmgaouwzvwfhhhecejk.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4bWdhb3V3enZ3ZmhoaGVjZWprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDU2NTksImV4cCI6MjA4OTY4MTY1OX0.zCxbMSOJMJgAj0A0Z5HrAZL4QDJC5rtxEi0CljFPe5U';
+let _sbLastSync=0;
+const db={
+  _hG(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};},
+  _h(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};},
+  async load(){
+    const now=Date.now();
+    if(now-_sbLastSync<30000)return null;
+    try{
+      const res=await fetch(SB_URL+'/rest/v1/adressen?select=*&limit=2000',{headers:this._hG()});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      const rows=await res.json();
+      if(!rows.length){await this._seed();return null;}
+      _sbLastSync=now;
+      S.saveAdressen(rows);
+      const pr=await fetch(SB_URL+'/rest/v1/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
+      if(pr.ok){const pl=await pr.json();S.saveProtokoll(pl);}
+      return rows;
+    }catch(e){console.warn('Supabase:',e.message);return null;}
+  },
+  async _seed(){
+    toast('Erstmalig Daten hochladen … bitte warten');
+    const rows=SEED_ADRESSEN.map(a=>({
+      id:a.id,plz:a.plz,strasse:a.strasse,hnr:a.hnr,
+      titel:a.titel||null,name:a.name||null,
+      lat:a.lat,lon:a.lon,status:'verfuegbar',
+      benutzer_id:null,reserviert_am:null,erledigt_am:null,notiz:a.notiz||null
+    }));
+    for(let i=0;i<rows.length;i+=400){
+      await fetch(SB_URL+'/rest/v1/adressen',{method:'POST',headers:this._h(),body:JSON.stringify(rows.slice(i,i+400))});
+    }
+    _sbLastSync=Date.now();
+    toast('Upload abgeschlossen ✓');
+  },
+  async patch(id,fields){
+    try{await fetch(SB_URL+'/rest/v1/adressen?id=eq.'+id,{method:'PATCH',headers:this._h(),body:JSON.stringify(fields)});}
+    catch(e){console.warn('SB patch:',e.message);}
+  },
+  async postProtokoll(entry){
+    try{await fetch(SB_URL+'/rest/v1/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(entry)});}
+    catch(e){console.warn('SB log:',e.message);}
+  },
+  async resetAll(){
+    await Promise.all([
+      fetch(SB_URL+'/rest/v1/adressen?id=not.is.null',{method:'PATCH',headers:this._h(),body:JSON.stringify({status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null})}),
+      fetch(SB_URL+'/rest/v1/protokoll?id=not.is.null',{method:'DELETE',headers:this._h()})
+    ]).catch(()=>{});
+    _sbLastSync=0;
+  }
+};
+
 /* ── STORAGE ─────────────────────────────────────────── */
 const S = {
   KEY_ADR:'nv_adressen',KEY_LOG:'nv_protokoll',KEY_SES:'nv_session',
@@ -2067,10 +2120,11 @@ const S = {
     return JSON.parse(raw);
   },
   saveAdressen(list){localStorage.setItem(this.KEY_ADR,JSON.stringify(list));},
+  saveProtokoll(list){localStorage.setItem(this.KEY_LOG,JSON.stringify(list));},
   getProtokoll(){return JSON.parse(localStorage.getItem(this.KEY_LOG)||'[]');},
   addProtokoll(entry){
     const log=this.getProtokoll();log.unshift(entry);
-    if(log.length>200)log.splice(200);
+    if(log.length>500)log.splice(500);
     localStorage.setItem(this.KEY_LOG,JSON.stringify(log));
   },
   getSession(){return JSON.parse(localStorage.getItem(this.KEY_SES)||'null');},
@@ -2079,6 +2133,7 @@ const S = {
   reset(){
     localStorage.removeItem(this.KEY_ADR);
     localStorage.removeItem(this.KEY_LOG);
+    db.resetAll();
     toast('Daten zurückgesetzt ✓');
     setTimeout(()=>location.reload(),900);
   }
@@ -2120,6 +2175,15 @@ function showTab(tab){
   if(tab==='admin')renderAdmin();
   if(tab==='karte'){initMap();renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
   window.scrollTo({top:0,behavior:'instant'});
+  // Hintergrund-Sync mit Supabase
+  db.load().then(rows=>{
+    if(!rows||currentTab!==tab)return;
+    updateMeineBadge();
+    if(tab==='meine')renderMeine();
+    if(tab==='archive')renderArchive();
+    if(tab==='admin')renderAdmin();
+    if(tab==='karte'){renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
+  });
 }
 
 /* ── INIT ────────────────────────────────────────────── */
@@ -2128,6 +2192,8 @@ function initApp(user){
   q('#ab-user').textContent=user.name;
   if(user.rolle==='admin')showEl('nav-admin');
   updateMeineBadge();
+  // Supabase laden (im Hintergrund, Badge danach aktualisieren)
+  db.load().then(rows=>{if(rows)updateMeineBadge();});
 }
 
 /* ── LOCATION ────────────────────────────────────────── */
@@ -2260,9 +2326,12 @@ function uebernehmen(id){
   if(!a||a.status!=='verfuegbar'){toast('Adresse nicht mehr verfügbar');return;}
   a.status='in_bearbeitung';a.benutzer_id=user.id;a.reserviert_am=new Date().toISOString();
   S.saveAdressen(adressen);
-  S.addProtokoll({id:uid(),adressen_id:id,benutzer_id:user.id,
+  const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
     aktion:'uebernommen',zeitpunkt:new Date().toISOString(),notiz:'',
-    adresse:`${a.strasse} ${a.hnr}, ${a.plz}`});
+    adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+  S.addProtokoll(prot);
+  db.patch(id,{status:'in_bearbeitung',benutzer_id:user.id,reserviert_am:a.reserviert_am});
+  db.postProtokoll(prot);
   updateMeineBadge();
   toast(`Übernommen: ${a.strasse} ${a.hnr} ✓`);
   if(lastResults.length)renderResults(lastResults);
@@ -2293,9 +2362,12 @@ const dlg={
     const now=new Date().toISOString();
     a.status='archiviert';a.erledigt_am=now;
     S.saveAdressen(adressen);
-    S.addProtokoll({id:uid(),adressen_id:a.id,benutzer_id:user.id,
+    const prot={id:uid(),adressen_id:a.id,benutzer_id:user.id,
       aktion:this.selectedAction,zeitpunkt:now,notiz:q('#dlg-note').value.trim(),
-      adresse:`${a.strasse} ${a.hnr}, ${a.plz}`});
+      adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+    S.addProtokoll(prot);
+    db.patch(a.id,{status:'archiviert',erledigt_am:now});
+    db.postProtokoll(prot);
     updateMeineBadge();toast('Gespeichert ✓');this.close();
     if(lastResults.length)renderResults(lastResults);
   },
@@ -2356,6 +2428,7 @@ const editDlg={
     }
     geo.classList.remove('hidden');
     S.saveAdressen(adressen);
+    db.patch(a.id,{strasse:a.strasse,hnr:a.hnr,plz:a.plz,titel:a.titel||null,name:a.name||null,lat:a.lat||null,lon:a.lon||null,notiz:a.notiz||null});
     btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
     toast('Adresse gespeichert \u2713');
     // Ansichten aktualisieren
