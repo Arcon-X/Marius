@@ -445,6 +445,17 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="card" id="admin-log"></div>
       <div class="section-title">Team (19 Kandidat:innen)</div>
       <div class="card" id="admin-users"></div>
+      <div class="section-title">Adressliste</div>
+      <div class="karte-toolbar" style="border-radius:var(--r);border-bottom:none;margin-bottom:.4rem;box-shadow:var(--sha)">
+        <div class="karte-top-row">
+          <div class="kf-scroll" id="af-status"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem">
+          <div class="kf-scroll" id="af-plz"></div>
+          <span class="kf-count" id="af-count"></span>
+        </div>
+      </div>
+      <div id="admin-addr-list"></div>
       <div class="section-title">Demo-Daten</div>
       <button class="btn-reset" onclick="S.reset()">&#128465; Alle Demo-Daten zur&uuml;cksetzen</button>
       <button class="btn-reset" style="margin-top:.5rem;background:#1d4ed8;color:#fff" onclick="exportAdressen()">&#128229; Adressen als JSON exportieren</button>
@@ -2588,7 +2599,75 @@ function renderAdmin(){
       </div>
     </div>`;
   }).join('');
+  renderAdminFilter();
+  renderAdminList();
 }
+
+/* ── ADMIN FILTER ─────────────────────────────────────── */
+const adminState={status:'all',plz:'all'};
+function adminGetFiltered(){
+  const all=S.getAdressen();
+  const user=auth.current();
+  return all.filter(a=>{
+    if(adminState.status==='__mine__'){if(a.benutzer_id!==user.id)return false;}
+    else if(adminState.status!=='all'&&a.status!==adminState.status)return false;
+    if(adminState.plz!=='all'&&a.plz!==adminState.plz)return false;
+    return true;
+  });
+}
+function renderAdminFilter(){
+  const all=S.getAdressen();
+  const statusChips=[
+    {val:'all',label:'Alle',cls:''},
+    {val:'verfuegbar',label:'🟢 Verfügbar',cls:'kfc-verf'},
+    {val:'in_bearbeitung',label:'🟡 Reserviert',cls:'kfc-bear'},
+    {val:'archiviert',label:'✅ Erledigt',cls:'kfc-arch'},
+    {val:'__mine__',label:'📌 Meine',cls:''},
+  ];
+  const sCont=document.getElementById('af-status');
+  if(!sCont)return;
+  sCont.innerHTML=statusChips.map(c=>
+    `<button class="kf-chip ${c.cls}${adminState.status===c.val?' active':''}" onclick="adminSetStatus('${c.val}')">${c.label}</button>`
+  ).join('');
+  const plzs=[...new Set(all.map(a=>a.plz))].sort();
+  const pCont=document.getElementById('af-plz');
+  pCont.innerHTML=`<button class="kf-chip${adminState.plz==='all'?' active':''}" onclick="adminSetPlz('all')">Alle PLZ</button>`+
+    plzs.map(p=>`<button class="kf-chip${adminState.plz===p?' active':''}" onclick="adminSetPlz('${p}')">${p}</button>`).join('');
+  document.getElementById('af-count').textContent=adminGetFiltered().length+' Adressen';
+}
+function renderAdminList(){
+  const user=auth.current();
+  const list=adminGetFiltered();
+  const el=document.getElementById('admin-addr-list');
+  if(!el)return;
+  if(!list.length){
+    el.innerHTML='<div class="empty-state"><div class="big">🔍</div>Keine Adressen für diesen Filter.</div>';
+    return;
+  }
+  const STATUS_DOT={verfuegbar:'kl-dot-verf',in_bearbeitung:'kl-dot-bear',archiviert:'kl-dot-arch'};
+  const STATUS_LABEL={verfuegbar:'Verfügbar',in_bearbeitung:'Reserviert',archiviert:'Erledigt'};
+  el.innerHTML=list.map(a=>{
+    const isMine=a.benutzer_id===user.id;
+    const dotCls=STATUS_DOT[a.status]||'kl-dot-arch';
+    const statusLabel=STATUS_LABEL[a.status]||a.status;
+    const arztLine=(a.titel||a.name)?[a.titel,a.name].filter(Boolean).join(' '):'';
+    let action=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️</button>`;
+    if(a.status==='verfuegbar')action=`<button class="btn-take" style="padding:.35rem .65rem;font-size:.75rem" onclick="uebernehmen('${a.id}')">📌</button>`+action;
+    else if(isMine)action=`<button class="btn-done" style="padding:.35rem .65rem;font-size:.75rem" onclick="dlg.open('${a.id}')">✏️</button>`+action;
+    const ownerName=DEMO_USERS.find(u=>u.id===a.benutzer_id)?.name||'';
+    return`<div class="kl-card">
+      <div class="kl-dot ${dotCls}"></div>
+      <div class="kl-main">
+        <div class="kl-street">${a.strasse} ${a.hnr}</div>
+        ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
+        <div class="kl-meta">${a.plz} Wien &nbsp;·&nbsp; ${statusLabel}${ownerName?' &nbsp;·&nbsp; 👤 '+ownerName:''}</div>
+      </div>
+      <div class="kl-actions">${action}</div>
+    </div>`;
+  }).join('');
+}
+function adminSetStatus(val){adminState.status=val;renderAdminFilter();renderAdminList();}
+function adminSetPlz(val){adminState.plz=val;renderAdminFilter();renderAdminList();}
 
 /* ── MAP ─────────────────────────────────────────────── */
 let leafletMap=null,mapMarkers=[];
