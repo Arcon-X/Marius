@@ -76,7 +76,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .app-main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .panel{display:none;padding:.75rem .85rem;max-width:680px;margin:0 auto}
 .panel.active{display:block}
-#p-karte.active{display:flex}
+#p-karte.active{display:flex;height:calc(100dvh - var(--h-px) - env(safe-area-inset-top) - var(--n-px) - env(safe-area-inset-bottom))}
 .bottom-nav{
   position:fixed;bottom:0;left:0;right:0;z-index:300;
   background:var(--card);border-top:1.5px solid #e0e0e0;
@@ -2248,6 +2248,7 @@ const loc={
       pos=>{
         userLoc={lat:pos.coords.latitude,lon:pos.coords.longitude,label:'GPS-Standort'};
         setLocDisplay('GPS-Standort');toast('Standort ermittelt ✓');
+        if(leafletMap)updateMap();
       },
       err=>{toast('GPS-Fehler: '+err.message);},
       {enableHighAccuracy:true,timeout:10000}
