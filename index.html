@@ -2808,7 +2808,8 @@ const editDlg={
       if(data.length){
         a.lat=parseFloat(data[0].lat);a.lon=parseFloat(data[0].lon);
         const parts=data[0].display_name.split(',').map(s=>s.trim());
-        a.geo_name=parts.slice(1,3).join(', ')||parts[0];
+        const meaningful=parts.filter(p=>/[a-zA-ZäöüÄÖÜß]/.test(p));// rein-numerische Teile raus
+        a.geo_name=meaningful.slice(1,3).join(', ')||meaningful[0]||parts[0];
         delete a.notiz;
         geo.className='edit-geo geo-ok';
         geo.textContent='\u2705 Koordinaten aktualisiert: '+data[0].display_name.split(',').slice(0,2).join(', ');

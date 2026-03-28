@@ -2,7 +2,6 @@
 # NOVUM-ZIV — geo_name für alle Adressen mit Koordinaten aktualisieren
 # Nutzt Nominatim Reverse-Geocoding → Teil nach Straßenname (Viertel, Bezirk)
 # Direkt auf dem Server via psql ausführen
-set -e
 
 DB="novumziv"
 TOTAL=$(sudo -u postgres psql -t -A -d $DB -c \
@@ -38,8 +37,9 @@ try:
   dn=d.get('display_name','')
   if dn:
     parts=[p.strip() for p in dn.split(',')]
-    # Alles nach dem Straßennamen (Viertel, Bezirksteil)
-    print(', '.join(parts[1:3]) if len(parts)>2 else parts[0])
+    # Rein-numerische Teile herausfiltern, dann Straße überspringen → Viertel/Bezirk
+    meaningful=[p for p in parts if any(c.isalpha() for c in p)]
+    print(', '.join(meaningful[1:3]) if len(meaningful)>1 else (meaningful[0] if meaningful else ''))
   else:
     print('')
 except:
