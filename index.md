@@ -12,6 +12,7 @@ layout: null
 <meta name="theme-color" content="#2D2060">
 <meta name="robots" content="noindex,nofollow">
 <title>NOVUM-ZIV Unterschriften</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦷</text></svg>">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' https://*.tile.openstreetmap.org data:; connect-src 'self' https://204.168.217.211.nip.io https://nominatim.openstreetmap.org https://router.project-osrm.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <style>
@@ -436,11 +437,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   <div class="login-card">
     <div class="login-logo">NOVUM<span>-ZIV</span></div>
     <div class="login-sub">Unterschriften &middot; Zahnaerztekammerwahl Wien 2026</div>
-    <label for="inp-email">E-Mail</label>
-    <input id="inp-email" type="email" autocomplete="email">
-    <label for="inp-pw">Passwort</label>
-    <input id="inp-pw" type="password" autocomplete="current-password">
-    <button class="btn-primary" onclick="auth.login()">Anmelden</button>
+    <form onsubmit="event.preventDefault();auth.login()" autocomplete="on">
+      <label for="inp-email">E-Mail</label>
+      <input id="inp-email" type="email" autocomplete="email">
+      <label for="inp-pw">Passwort</label>
+      <input id="inp-pw" type="password" autocomplete="current-password">
+      <button type="submit" class="btn-primary">Anmelden</button>
+    </form>
     <div id="login-err" class="login-err"></div>
     <a class="pw-forgot" onclick="showForgotPw()">Passwort vergessen?</a>
   </div>
@@ -657,14 +660,16 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
     <div class="settings-section">
       <div style="font-size:.88rem;font-weight:700;margin-bottom:.3rem">Passwort ändern</div>
-      <label class="settings-label" for="set-pw-old">Aktuelles Passwort</label>
-      <input id="set-pw-old" class="settings-input" type="password" autocomplete="current-password">
-      <label class="settings-label" for="set-pw-new">Neues Passwort</label>
-      <input id="set-pw-new" class="settings-input" type="password" autocomplete="new-password">
-      <label class="settings-label" for="set-pw-confirm">Neues Passwort bestätigen</label>
-      <input id="set-pw-confirm" class="settings-input" type="password" autocomplete="new-password">
-      <div id="set-pw-msg" class="settings-msg"></div>
-      <button class="btn-settings" onclick="settingsDlg.savePw()">Passwort ändern</button>
+      <form onsubmit="event.preventDefault();settingsDlg.savePw()" autocomplete="on">
+        <label class="settings-label" for="set-pw-old">Aktuelles Passwort</label>
+        <input id="set-pw-old" class="settings-input" type="password" autocomplete="current-password">
+        <label class="settings-label" for="set-pw-new">Neues Passwort</label>
+        <input id="set-pw-new" class="settings-input" type="password" autocomplete="new-password">
+        <label class="settings-label" for="set-pw-confirm">Neues Passwort bestätigen</label>
+        <input id="set-pw-confirm" class="settings-input" type="password" autocomplete="new-password">
+        <div id="set-pw-msg" class="settings-msg"></div>
+        <button type="submit" class="btn-settings">Passwort ändern</button>
+      </form>
     </div>
 
     <div class="dlg-footer" style="margin-top:1rem">
@@ -2407,8 +2412,6 @@ const settingsDlg={
 };
 
 document.addEventListener('DOMContentLoaded',()=>{
-  q('#inp-pw').addEventListener('keydown',e=>{if(e.key==='Enter')auth.login();});
-  q('#inp-email').addEventListener('keydown',e=>{if(e.key==='Enter')q('#inp-pw').focus();});
   const lastEmail=localStorage.getItem('nv_last_email');
   if(lastEmail){q('#inp-email').value=lastEmail;}
   const ses=auth.current();
