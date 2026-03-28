@@ -2425,6 +2425,18 @@ const dlg={
     q('#dlg-addr-text').textContent=a?`${a.strasse} ${a.hnr}, ${a.plz} Wien${arztLine}`:id;
     q('#dlg-note').value='';q('#dlg-save').disabled=true;
     qAll('.dlg-opt').forEach(b=>b.classList.remove('selected'));
+    // Beim Korrigieren: bestehenden Eintrag vorausfüllen
+    if(a&&a.status==='archiviert'){
+      const log=S.getProtokoll();
+      const entry=log.find(l=>l.adressen_id===id&&l.aktion!=='uebernommen'&&l.aktion!=='reaktiviert');
+      if(entry){
+        this.selectedAction=entry.aktion;
+        q('#dlg-note').value=entry.notiz||'';
+        q('#dlg-save').disabled=false;
+        const btn=q(`.dlg-opt[data-action="${entry.aktion}"]`);
+        if(btn)btn.classList.add('selected');
+      }
+    }
     showEl('dlg-overlay');
   },
   select(btn){
