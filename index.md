@@ -2089,7 +2089,7 @@ const SEED_ADRESSEN = [
 ];
 
 /* ── SERVER (PostgREST) ──────────────────────────────── */
-const SB_URL='http://204.168.217.211/api';
+const SB_URL='https://204.168.217.211.nip.io/api';
 let _sbLastSync=0;
 let _dbUsers=[];
 const db={
