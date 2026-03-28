@@ -128,6 +128,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   font-family:inherit;font-weight:700;font-size:.78rem;white-space:nowrap;
 }
 .gps-btn:active{background:var(--g);color:#fff}
+.refresh-btn{
+  background:none;border:none;cursor:pointer;font-size:1rem;padding:2px 4px;
+  color:var(--g);flex-shrink:0;border-radius:6px;transition:background .15s;
+}
+.refresh-btn:active{background:var(--g-l)}
 .loc-display{
   background:var(--g-l);border-radius:8px;padding:.5rem .85rem;
   font-size:.8rem;color:#7B6BC4;font-weight:600;margin-bottom:.55rem;
@@ -504,18 +509,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       </div>
       <div id="loc-display" class="loc-display hidden">
         &#128205; <span id="loc-text"></span>
+        <button class="refresh-btn" onclick="doSearch()" title="Aktualisieren">&#128260;</button>
       </div>
-      <div class="section-title">Anzahl Adressen</div>
-      <div class="num-selector" id="num-selector">
-        <button class="num-btn" onclick="setNum(5)">5</button>
-        <button class="num-btn sel" onclick="setNum(10)">10</button>
-        <button class="num-btn" onclick="setNum(15)">15</button>
-        <button class="num-btn" onclick="setNum(20)">20</button>
-      </div>
-      <button class="search-btn" id="search-btn" onclick="doSearch()">
-        <span id="search-icon">&#128269;</span>
-        <span id="search-label">N&auml;chste Adressen suchen</span>
-      </button>
       <div id="results-wrap" style="margin-top:.85rem"></div>
     </div>
 
@@ -2509,15 +2504,12 @@ function initApp(user){
   updateMeineBadge();
   // Supabase laden (im Hintergrund, Badge danach aktualisieren)
   db.load().then(rows=>{if(rows)updateMeineBadge();});
+  // Automatisch nächste Adressen ab Standardstandort laden
+  doSearch();
 }
 
 /* ── LOCATION ────────────────────────────────────────── */
 let userLoc=null,selectedNum=10;
-
-function setNum(n){
-  selectedNum=n;
-  qAll('.num-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)===n));
-}
 
 const loc={
   getGPS(){
@@ -2528,6 +2520,7 @@ const loc={
         userLoc={lat:pos.coords.latitude,lon:pos.coords.longitude,label:'GPS-Standort'};
         setLocDisplay('GPS-Standort');toast('Standort ermittelt ✓');
         if(leafletMap)updateMap();
+        doSearch();
       },
       err=>{toast('GPS-Fehler: '+err.message);},
       {enableHighAccuracy:true,timeout:10000}
@@ -2543,6 +2536,7 @@ const loc={
       if(!data.length){toast('Adresse nicht gefunden');return;}
       userLoc={lat:parseFloat(data[0].lat),lon:parseFloat(data[0].lon),label:data[0].display_name.split(',')[0]};
       setLocDisplay(userLoc.label);toast('Adresse gefunden ✓');
+      doSearch();
     }catch(e){toast('Geocoding-Fehler');}
   }
 };
@@ -2555,8 +2549,8 @@ async function doSearch(){
     userLoc={lat:48.2082,lon:16.3738,label:'Stephansplatz (Standard)'};
     setLocDisplay(userLoc.label);
   }
-  const btn=q('#search-btn');
-  btn.disabled=true;q('#search-label').textContent='Suche läuft …';q('#search-icon').textContent='⏳';
+  const refreshBtn=q('.refresh-btn');
+  if(refreshBtn)refreshBtn.disabled=true;
   try{
     const adressen=S.getAdressen();
     const user=auth.current();
@@ -2575,9 +2569,7 @@ async function doSearch(){
     results.sort((a,b)=>a.dauer_s-b.dauer_s);
     renderResults(results.slice(0,selectedNum));
   }finally{
-    btn.disabled=false;
-    q('#search-label').textContent='Nächste Adressen suchen';
-    q('#search-icon').textContent='🔍';
+    if(refreshBtn)refreshBtn.disabled=false;
   }
 }
 
