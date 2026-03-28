@@ -161,6 +161,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .addr-main{flex:1;min-width:0}
 .addr-street{font-size:.92rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .addr-arzt{font-size:.75rem;color:var(--g);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.addr-geoname{font-size:.68rem;color:#9A8BE0;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.05rem}
 .addr-plz{font-size:.75rem;color:var(--sub)}
 .addr-time{text-align:right;flex-shrink:0}
 .addr-min{font-size:1rem;font-weight:800;color:var(--g)}
@@ -2274,6 +2275,7 @@ const db={
         erledigt_am:r.erledigt_am||null,
         notiz:r.notiz||null,
         titel:r.titel||null,
+        geo_name:r.geo_name||null,
       }));
       S.saveAdressen(clean);
       const pr=await fetch(SB_URL+'/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
@@ -2619,6 +2621,7 @@ function renderResults(list){
         <div class="addr-main">
           <div class="addr-street">${a.strasse} ${a.hnr}</div>
           ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
+          ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
           <div class="addr-plz">${a.plz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}</div>
         </div>
         <div class="addr-time">
@@ -2783,6 +2786,7 @@ const editDlg={
       const data=await res.json();
       if(data.length){
         a.lat=parseFloat(data[0].lat);a.lon=parseFloat(data[0].lon);
+        a.geo_name=data[0].display_name.split(',')[0].trim();
         delete a.notiz;
         geo.className='edit-geo geo-ok';
         geo.textContent='\u2705 Koordinaten aktualisiert: '+data[0].display_name.split(',').slice(0,2).join(', ');
@@ -2796,7 +2800,7 @@ const editDlg={
     }
     geo.classList.remove('hidden');
     S.saveAdressen(adressen);
-    const pOk=await db.patch(a.id,{strasse:a.strasse,hnr:a.hnr,plz:a.plz,titel:a.titel||null,name:a.name||null,lat:a.lat||null,lon:a.lon||null,notiz:a.notiz||null});
+    const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null});
     btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
     toast(pOk?'Adresse gespeichert \u2713':'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
     // Ansichten aktualisieren
@@ -2839,6 +2843,7 @@ function renderMeine(){
           <div class="mine-info">
             <div class="mine-street">${a.strasse} ${a.hnr}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
+            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
             <div class="mine-plz">${a.plz} Wien</div>
             <div class="mine-since">Reserviert: ${since}</div>
           </div>
@@ -2935,6 +2940,7 @@ function renderArchive(){
           <div style="flex:1">
             <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
+            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
             <div class="arch-meta">${label}${when?' · '+when:''}${entry&&entry.notiz?' · '+entry.notiz:''}</div>
           </div>
           ${canEdit?`<button class="btn-edit-addr" style="align-self:flex-start" onclick="editDlg.open('${a.id}')">⚙️</button>`:''}
@@ -3041,6 +3047,7 @@ function renderAdminList(){
       <div class="kl-main">
         <div class="kl-street">${a.strasse} ${a.hnr}</div>
         ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
+        ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
         <div class="kl-meta">${a.plz} Wien &nbsp;·&nbsp; ${statusLabel}${ownerName?' &nbsp;·&nbsp; 👤 '+ownerName:''}</div>
       </div>
       <div class="kl-actions">${action}</div>
