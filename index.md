@@ -2689,7 +2689,7 @@ function renderArchive(){
         ${canEdit?`<div class="arch-actions">
           <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis korrigieren</button>
           ${history.length?`<button class="btn-verlauf" onclick="toggleVerlauf('${a.id}')">📋 Verlauf</button>`:''}
-          <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')" title="Zurücksetzen">🔄</button>
+          <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')" title="Zurücksetzen">♻️</button>
         </div>`:''}
         ${history.length?`<div class="arch-history" id="hist-${a.id}">${histHtml}</div>`:''}
       </div>`;
