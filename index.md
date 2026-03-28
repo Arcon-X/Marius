@@ -11,9 +11,9 @@ layout: null
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#2D2060">
 <meta name="robots" content="noindex,nofollow">
-<title>NOVUM-ZIV Unterschriften</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦷</text></svg>">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' https://*.tile.openstreetmap.org data:; connect-src 'self' https://204.168.217.211.nip.io https://nominatim.openstreetmap.org https://router.project-osrm.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<title>NOVUM-ZIV Unterschriften</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A6%B7%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <style>
 :root{
@@ -661,6 +661,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <div class="settings-section">
       <div style="font-size:.88rem;font-weight:700;margin-bottom:.3rem">Passwort ändern</div>
       <form onsubmit="event.preventDefault();settingsDlg.savePw()" autocomplete="on">
+        <input type="hidden" id="set-pw-user" autocomplete="username">
         <label class="settings-label" for="set-pw-old">Aktuelles Passwort</label>
         <input id="set-pw-old" class="settings-input" type="password" autocomplete="current-password">
         <label class="settings-label" for="set-pw-new">Neues Passwort</label>
@@ -2370,6 +2371,7 @@ const settingsDlg={
     const u=auth.current();
     if(!u)return;
     q('#set-email').value=u.email||'';
+    q('#set-pw-user').value=u.email||'';
     q('#set-pw-old').value='';q('#set-pw-new').value='';q('#set-pw-confirm').value='';
     q('#set-email-msg').textContent='';q('#set-pw-msg').textContent='';
     q('#settings-overlay').classList.remove('hidden');
