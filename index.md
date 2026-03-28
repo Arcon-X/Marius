@@ -2088,32 +2088,32 @@ const SEED_ADRESSEN = [
   {id:'a1491',plz:'1060',strasse:'Mariahilfer Straße',hnr:'85-87',titel:'Dr.',name:'Elena Zymbal',lat:48.19749,lon:16.34821},
 ];
 
-/* ── SUPABASE ────────────────────────────────────────── */
-const SB_URL='https://xxmgaouwzvwfhhhecejk.supabase.co';
-const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4bWdhb3V3enZ3ZmhoaGVjZWprIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDU2NTksImV4cCI6MjA4OTY4MTY1OX0.zCxbMSOJMJgAj0A0Z5HrAZL4QDJC5rtxEi0CljFPe5U';
+/* ── SERVER (PostgREST) ──────────────────────────────── */
+const SB_URL='http://204.168.217.211/api';
 let _sbLastSync=0;
+let _dbUsers=[];
 const db={
-  _hG(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};},
-  _h(){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};},
+  _hG(){const t=auth.token();return t?{'Authorization':'Bearer '+t}:{};},
+  _h(){const t=auth.token();const h={'Content-Type':'application/json','Prefer':'return=minimal'};if(t)h['Authorization']='Bearer '+t;return h;},
   async load(){
     const now=Date.now();
     if(now-_sbLastSync<30000)return null;
     try{
-      // Pagination: Supabase limitiert auf 1000 Rows pro Request
       let all=[];let offset=0;const PAGE=1000;
       while(true){
-        const res=await fetch(SB_URL+'/rest/v1/adressen?select=*&limit='+PAGE+'&offset='+offset,{headers:this._hG()});
+        const res=await fetch(SB_URL+'/adressen?select=*&limit='+PAGE+'&offset='+offset,{headers:this._hG()});
         if(!res.ok)throw new Error('HTTP '+res.status);
         const rows=await res.json();
         all=all.concat(rows);
         if(rows.length<PAGE)break;
         offset+=PAGE;
       }
-      if(!all.length){await this._seed();return null;}
+      if(!all.length)return null;
       _sbLastSync=now;
-      // Leere Strings aus CSV-Import normalisieren
       const clean=all.map(r=>({
         ...r,
+        name:r.arzt_name||r.name||null,
+        hnr:r.hausnummer||r.hnr||null,
         lat:r.lat!=null?parseFloat(r.lat):null,
         lon:r.lon!=null?parseFloat(r.lon):null,
         benutzer_id:r.benutzer_id||null,
@@ -2121,40 +2121,28 @@ const db={
         erledigt_am:r.erledigt_am||null,
         notiz:r.notiz||null,
         titel:r.titel||null,
-        name:r.name||null,
       }));
       S.saveAdressen(clean);
-      const pr=await fetch(SB_URL+'/rest/v1/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
+      const pr=await fetch(SB_URL+'/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
       if(pr.ok){const pl=await pr.json();S.saveProtokoll(pl);}
-      return rows;
-    }catch(e){console.warn('Supabase:',e.message);return null;}
-  },
-  async _seed(){
-    toast('Erstmalig Daten hochladen … bitte warten');
-    const rows=SEED_ADRESSEN.map(a=>({
-      id:a.id,plz:a.plz,strasse:a.strasse,hnr:a.hnr,
-      titel:a.titel||null,name:a.name||null,
-      lat:a.lat,lon:a.lon,status:'verfuegbar',
-      benutzer_id:null,reserviert_am:null,erledigt_am:null,notiz:a.notiz||null
-    }));
-    for(let i=0;i<rows.length;i+=400){
-      await fetch(SB_URL+'/rest/v1/adressen',{method:'POST',headers:this._h(),body:JSON.stringify(rows.slice(i,i+400))});
-    }
-    _sbLastSync=Date.now();
-    toast('Upload abgeschlossen ✓');
+      // Benutzerliste laden
+      const ur=await fetch(SB_URL+'/benutzer?select=*',{headers:this._hG()});
+      if(ur.ok){_dbUsers=await ur.json();}
+      return clean;
+    }catch(e){console.warn('API:',e.message);return null;}
   },
   async patch(id,fields){
-    try{await fetch(SB_URL+'/rest/v1/adressen?id=eq.'+id,{method:'PATCH',headers:this._h(),body:JSON.stringify(fields)});}
-    catch(e){console.warn('SB patch:',e.message);}
+    try{await fetch(SB_URL+'/adressen?id=eq.'+id,{method:'PATCH',headers:this._h(),body:JSON.stringify(fields)});}
+    catch(e){console.warn('API patch:',e.message);}
   },
   async postProtokoll(entry){
-    try{await fetch(SB_URL+'/rest/v1/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(entry)});}
-    catch(e){console.warn('SB log:',e.message);}
+    try{await fetch(SB_URL+'/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(entry)});}
+    catch(e){console.warn('API log:',e.message);}
   },
   async resetAll(){
     await Promise.all([
-      fetch(SB_URL+'/rest/v1/adressen?id=not.is.null',{method:'PATCH',headers:this._h(),body:JSON.stringify({status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null})}),
-      fetch(SB_URL+'/rest/v1/protokoll?id=not.is.null',{method:'DELETE',headers:this._h()})
+      fetch(SB_URL+'/adressen?id=not.is.null',{method:'PATCH',headers:this._h(),body:JSON.stringify({status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null})}),
+      fetch(SB_URL+'/protokoll?id=not.is.null',{method:'DELETE',headers:this._h()})
     ]).catch(()=>{});
     _sbLastSync=0;
   }
@@ -2193,23 +2181,35 @@ const S = {
 
 /* ── AUTH ────────────────────────────────────────────── */
 const auth={
-  login(){
+  async login(){
     const email=q('#inp-email').value.trim().toLowerCase();
     const pw=q('#inp-pw').value;
-    const user=DEMO_USERS.find(u=>u.email.toLowerCase()===email&&u.pw===pw);
-    if(!user){q('#login-err').textContent='E-Mail oder Passwort falsch.';return;}
-    S.setSession(user);
     q('#login-err').textContent='';
-    initApp(user);
+    try{
+      const res=await fetch(SB_URL+'/rpc/login',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email,passwort:pw})
+      });
+      if(!res.ok){q('#login-err').textContent='E-Mail oder Passwort falsch.';return;}
+      const data=await res.json();
+      if(!data.token){q('#login-err').textContent='Login fehlgeschlagen.';return;}
+      const user={token:data.token,id:data.user_id,name:data.name,email:email,rolle:data.rolle};
+      S.setSession(user);
+      initApp(user);
+    }catch(e){q('#login-err').textContent='Server nicht erreichbar.';console.error(e);}
   },
   logout(){S.clearSession();location.reload();},
-  current(){return S.getSession();}
+  current(){return S.getSession();},
+  token(){const s=S.getSession();return s?.token||null;}
 };
 
 document.addEventListener('DOMContentLoaded',()=>{
   q('#inp-pw').addEventListener('keydown',e=>{if(e.key==='Enter')auth.login();});
   q('#inp-email').addEventListener('keydown',e=>{if(e.key==='Enter')q('#inp-pw').focus();});
   const ses=auth.current();
+  // Alte DEMO_USER-Session (kein token) invalidieren
+  if(ses&&!ses.token){S.clearSession();showEl('scr-login');return;}
   if(ses)initApp(ses);else showEl('scr-login');
 });
 
@@ -2623,7 +2623,7 @@ function renderAdmin(){
   const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
   const recent=log.slice(0,15);
   q('#admin-log').innerHTML=recent.length?recent.map(l=>{
-    const u=DEMO_USERS.find(u=>u.id===l.benutzer_id);
+  const u=(_dbUsers.find(u=>u.id===l.benutzer_id)||DEMO_USERS.find(u=>u.id===l.benutzer_id));
     const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
     return`<div class="log-item">
       <div class="log-dot ld-${l.aktion}"></div>
@@ -2634,7 +2634,7 @@ function renderAdmin(){
       </div>
     </div>`;
   }).join(''):'<div class="log-item" style="color:var(--sub)">Noch keine Einträge.</div>';
-  q('#admin-users').innerHTML=DEMO_USERS.map(u=>{
+  q('#admin-users').innerHTML=(_dbUsers.length?_dbUsers:DEMO_USERS).map(u=>{
     const mine=S.getAdressen().filter(a=>a.benutzer_id===u.id);
     const active=mine.filter(a=>a.status==='in_bearbeitung').length;
     const done=mine.filter(a=>a.status==='archiviert').length;
@@ -2702,7 +2702,7 @@ function renderAdminList(){
     let action=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️</button>`;
     if(a.status==='verfuegbar')action=`<button class="btn-take" style="padding:.35rem .65rem;font-size:.75rem" onclick="uebernehmen('${a.id}')">📌</button>`+action;
     else if(isMine)action=`<button class="btn-done" style="padding:.35rem .65rem;font-size:.75rem" onclick="dlg.open('${a.id}')">✏️</button>`+action;
-    const ownerName=DEMO_USERS.find(u=>u.id===a.benutzer_id)?.name||'';
+    const ownerName=(_dbUsers.find(u=>u.id===a.benutzer_id)||DEMO_USERS.find(u=>u.id===a.benutzer_id))?.name||'';
     return`<div class="kl-card">
       <div class="kl-dot ${dotCls}"></div>
       <div class="kl-main">
