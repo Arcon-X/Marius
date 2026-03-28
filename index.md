@@ -332,6 +332,27 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;
 }
 .btn-reaktiv:hover{background:#E67E00;color:#fff}
+.btn-verlauf{
+  flex:0 0 auto;padding:.5rem .8rem;background:#fff;color:var(--sub);
+  border:1.5px solid #d1d5db;border-radius:8px;font-size:.82rem;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.btn-verlauf:hover{border-color:var(--g);color:var(--g)}
+.arch-history{
+  border-top:1px solid #f0eef8;padding:.5rem 1rem .7rem;
+  display:none;
+}
+.arch-history.open{display:block}
+.hist-item{
+  display:flex;gap:.55rem;align-items:flex-start;
+  padding:.35rem 0;border-bottom:1px solid #f5f5f5;
+}
+.hist-item:last-child{border-bottom:none}
+.hist-dot{width:8px;height:8px;border-radius:50%;background:var(--g);margin-top:.35rem;flex-shrink:0}
+.hist-main{flex:1}
+.hist-aktion{font-size:.8rem;font-weight:700;color:var(--txt)}
+.hist-detail{font-size:.72rem;color:var(--sub)}
+.hist-notiz{font-size:.72rem;color:var(--sub);font-style:italic}
 
 /* TOAST */
 .toast{
@@ -2136,6 +2157,19 @@ const db={
     try{await fetch(SB_URL+'/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(dbEntry)});}
     catch(e){console.warn('API log:',e.message);}
   },
+  // Atomischer Claim: PATCH nur wenn status noch 'verfuegbar' — verhindert Doppelbuchung
+  async claim(id,benutzer_id,reserviert_am){
+    try{
+      const h={...this._h(),'Prefer':'return=representation'};
+      const res=await fetch(SB_URL+'/adressen?id=eq.'+id+'&status=eq.verfuegbar',{
+        method:'PATCH',headers:h,
+        body:JSON.stringify({status:'in_bearbeitung',benutzer_id,reserviert_am})
+      });
+      if(!res.ok)return true; // bei API-Fehler lokal weitermachen
+      const data=await res.json();
+      return data.length>0; // false = bereits von jemand anderem genommen
+    }catch(e){console.warn('API claim:',e.message);return true;}
+  },
   async resetAll(){
     await Promise.all([
       fetch(SB_URL+'/adressen?id=not.is.null',{method:'PATCH',headers:this._h(),body:JSON.stringify({status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null})}),
@@ -2378,17 +2412,26 @@ function renderResults(list){
 }
 
 /* ── ADDRESS ACTIONS ─────────────────────────────────── */
-function uebernehmen(id){
+async function uebernehmen(id){
   const user=auth.current();const adressen=S.getAdressen();
   const a=adressen.find(x=>x.id===id);
   if(!a||a.status!=='verfuegbar'){toast('Adresse nicht mehr verfügbar');return;}
-  a.status='in_bearbeitung';a.benutzer_id=user.id;a.reserviert_am=new Date().toISOString();
+  const now=new Date().toISOString();
+  // Atomischer DB-Check: nur reservieren wenn in DB noch verfuegbar
+  const ok=await db.claim(id,user.id,now);
+  if(!ok){
+    _sbLastSync=0;
+    await db.load();
+    toast('⚠️ Adresse wurde soeben von jemand anderem übernommen');
+    if(lastResults.length)renderResults(lastResults);
+    return;
+  }
+  a.status='in_bearbeitung';a.benutzer_id=user.id;a.reserviert_am=now;
   S.saveAdressen(adressen);
   const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
-    aktion:'uebernommen',zeitpunkt:new Date().toISOString(),notiz:'',
+    aktion:'uebernommen',zeitpunkt:now,notiz:'',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
   S.addProtokoll(prot);
-  db.patch(id,{status:'in_bearbeitung',benutzer_id:user.id,reserviert_am:a.reserviert_am});
   db.postProtokoll(prot);
   updateMeineBadge();
   toast(`Übernommen: ${a.strasse} ${a.hnr} ✓`);
@@ -2587,6 +2630,12 @@ function updateMeineBadge(){
   badge.textContent=count;count>0?showEl(badge):hideEl(badge);
 }
 
+function toggleVerlauf(id){
+  const el=document.getElementById('hist-'+id);
+  if(!el)return;
+  el.classList.toggle('open');
+}
+
 /* ── ARCHIVE ─────────────────────────────────────────── */
 function renderArchive(){
   const user=auth.current();const isAdmin=user.rolle==='admin';
@@ -2612,11 +2661,21 @@ function renderArchive(){
   const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',reaktiviert:'Reaktiviert'};
   el.innerHTML=`<div class="section-title">${archived.length} abgeschlossen${isAdmin?' (alle)':''}</div>`+
     archived.map(a=>{
-      const entry=log.find(l=>l.adressen_id===a.id&&l.aktion!=='uebernommen');
+      const entry=log.find(l=>l.adressen_id===a.id&&l.aktion!=='uebernommen'&&l.aktion!=='reaktiviert');
       const icon=entry?ICONS[entry.aktion]||'📋':'📋';
       const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
       const label=entry?LABELS[entry.aktion]||entry.aktion:'';
       const canEdit=isAdmin||a.benutzer_id===user.id;
+      // Verlauf aller Protokoll-Einträge für diese Adresse
+      const ICONS2={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
+      const LABELS2={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
+      const history=log.filter(l=>l.adressen_id===a.id).sort((x,y)=>new Date(y.zeitpunkt)-new Date(x.zeitpunkt));
+      const histHtml=history.map(l=>{
+        const u=(_dbUsers.find(x=>x.id===l.benutzer_id)||DEMO_USERS.find(x=>x.id===l.benutzer_id));
+        const uName=u?u.name:'?';
+        const lWhen=new Date(l.zeitpunkt).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        return`<div class="hist-item"><div class="hist-dot"></div><div class="hist-main"><div class="hist-aktion">${ICONS2[l.aktion]||'📋'} ${LABELS2[l.aktion]||l.aktion} · ${uName} · ${lWhen}</div>${l.notiz?`<div class="hist-notiz">„${l.notiz}"</div>`:''}</div></div>`;
+      }).join('');
       return`<div class="arch-card">
         <div class="arch-header">
           <div class="arch-icon">${icon}</div>
@@ -2629,8 +2688,10 @@ function renderArchive(){
         </div>
         ${canEdit?`<div class="arch-actions">
           <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis korrigieren</button>
-          <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')">🔄 Zurücksetzen</button>
+          ${history.length?`<button class="btn-verlauf" onclick="toggleVerlauf('${a.id}')">📋 Verlauf</button>`:''}
+          <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')" title="Zurücksetzen">🔄</button>
         </div>`:''}
+        ${history.length?`<div class="arch-history" id="hist-${a.id}">${histHtml}</div>`:''}
       </div>`;
     }).join('');
 }
