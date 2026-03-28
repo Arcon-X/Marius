@@ -678,7 +678,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     </div>
     <div id="edit-geo" class="edit-geo hidden"></div>
     <div class="dlg-footer">
-      <button class="btn-cancel" onclick="editDlg.close()">Abbrechen</button>
       <button class="btn-save" id="edit-save-btn" onclick="editDlg.save()">&#128204; Speichern</button>
     </div>
   </div>
@@ -2639,7 +2638,7 @@ function renderResults(list){
         <div class="addr-num">${idx+1}</div>
         <div class="addr-main">
           <div class="addr-street">${a.strasse} ${a.hnr}</div>
-          ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
+          ${(a.titel||a.name)?`<div class="addr-arzt">${a.sprache==='pa'?'&#128332; ':''}${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
           ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
           <div class="addr-plz">${a.plz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}</div>
         </div>
@@ -2825,6 +2824,7 @@ const editDlg={
     const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de'});
     btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
     toast(pOk?'Adresse gespeichert \u2713':'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
+    this.close();
     // Ansichten aktualisieren
     if(lastResults.length)renderResults(lastResults);
     if(currentTab==='meine')renderMeine();
