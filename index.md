@@ -363,15 +363,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   <div class="login-card">
     <div class="login-logo">NOVUM<span>-ZIV</span></div>
     <div class="login-sub">Unterschriften &middot; Zahnaerztekammerwahl Wien 2026</div>
-    <div class="demo-note">
-      &#128296; <strong>Demo-Modus</strong> &mdash; lokale Testdaten, kein Server.<br>
-      Admin: <strong>admin@demo.at</strong> / <strong>novum26</strong><br>
-      Mitarbeiter: <strong>demo@demo.at</strong> / <strong>demo</strong>
-    </div>
     <label for="inp-email">E-Mail</label>
-    <input id="inp-email" type="email" autocomplete="email" placeholder="name@bnz-wien.at">
+    <input id="inp-email" type="email" autocomplete="email">
     <label for="inp-pw">Passwort</label>
-    <input id="inp-pw" type="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;">
+    <input id="inp-pw" type="password" autocomplete="current-password">
     <button class="btn-primary" onclick="auth.login()">Anmelden</button>
     <div id="login-err" class="login-err"></div>
   </div>
@@ -2198,6 +2193,7 @@ const auth={
       if(!data.token){q('#login-err').textContent='Login fehlgeschlagen.';return;}
       const user={token:data.token,id:data.user_id,name:data.name,email:email,rolle:data.rolle};
       S.setSession(user);
+      localStorage.setItem('nv_last_email',email);
       initApp(user);
     }catch(e){q('#login-err').textContent='Server nicht erreichbar.';console.error(e);}
   },
@@ -2209,6 +2205,8 @@ const auth={
 document.addEventListener('DOMContentLoaded',()=>{
   q('#inp-pw').addEventListener('keydown',e=>{if(e.key==='Enter')auth.login();});
   q('#inp-email').addEventListener('keydown',e=>{if(e.key==='Enter')q('#inp-pw').focus();});
+  const lastEmail=localStorage.getItem('nv_last_email');
+  if(lastEmail){q('#inp-email').value=lastEmail;}
   const ses=auth.current();
   // Alte DEMO_USER-Session (kein token) invalidieren
   if(ses&&!ses.token){S.clearSession();showEl('scr-login');return;}
