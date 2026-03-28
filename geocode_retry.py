@@ -42,7 +42,7 @@ def first_number(hnr: str) -> str | None:
     return m.group(1) if m else None
 
 
-def geocode(plz: str, strasse: str, hnr: str, ort: str = 'Wien') -> tuple[float | None, float | None]:
+def geocode(plz: str, strasse: str, hnr: str, ort: str = 'Wien') -> tuple[float | None, float | None, str | None]:
     query = f'{strasse} {hnr}, {plz} {ort}, Österreich'
     params = urllib.parse.urlencode({
         'q':             query,
@@ -57,10 +57,12 @@ def geocode(plz: str, strasse: str, hnr: str, ort: str = 'Wien') -> tuple[float 
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode())
         if data:
-            return float(data[0]['lat']), float(data[0]['lon'])
+            raw_name = data[0].get('display_name', '').split(',')[0].strip()
+            geo_name = raw_name if raw_name else None
+            return float(data[0]['lat']), float(data[0]['lon']), geo_name
     except Exception as e:
         print(f'  ⚠ Fehler: {e}')
-    return None, None
+    return None, None, None
 
 
 def main():
@@ -106,7 +108,7 @@ def main():
         already_tried.add(key)
 
         print(f'  [{e["id"]}] {e["strasse"]} {e["hnr"]} → vereinfacht zu "{simplified}" ... ', end='', flush=True)
-        lat, lon = geocode(e['plz'], e['strasse'], simplified)
+        lat, lon, geo_name = geocode(e['plz'], e['strasse'], simplified)
 
         if lat is not None:
             print(f'✓ {lat:.5f}, {lon:.5f}')
@@ -118,9 +120,10 @@ def main():
                         first_number(e2['hnr']) == simplified and
                         e2['lat'] is None):
                     idx = id_to_idx[e2['id']]
-                    all_entries[idx]['lat']   = lat
-                    all_entries[idx]['lon']   = lon
-                    all_entries[idx]['notiz'] = f'HNr. vereinfacht: {e2["hnr"]} → {simplified}'
+                    all_entries[idx]['lat']      = lat
+                    all_entries[idx]['lon']      = lon
+                    all_entries[idx]['geo_name'] = geo_name
+                    all_entries[idx]['notiz']    = f'HNr. vereinfacht: {e2["hnr"]} → {simplified}'
                     changed += 1
         else:
             print('✗ immer noch nicht gefunden')

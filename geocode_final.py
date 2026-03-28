@@ -113,7 +113,7 @@ def first_number(hnr: str) -> str | None:
     return m.group(1) if m else None
 
 
-def geocode(query: str) -> tuple[float | None, float | None]:
+def geocode(query: str) -> tuple[float | None, float | None, str | None]:
     params = urllib.parse.urlencode({
         'q':             query,
         'format':        'json',
@@ -127,23 +127,25 @@ def geocode(query: str) -> tuple[float | None, float | None]:
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode())
         if data:
-            return float(data[0]['lat']), float(data[0]['lon'])
+            raw_name = data[0].get('display_name', '').split(',')[0].strip()
+            geo_name = raw_name if raw_name else None
+            return float(data[0]['lat']), float(data[0]['lon']), geo_name
     except Exception as e:
         print(f'    ⚠ Fehler: {e}')
-    return None, None
+    return None, None, None
 
 
-def try_geocode_with_label(attempts: list[tuple[str, str]]) -> tuple[float | None, float | None, str]:
+def try_geocode_with_label(attempts: list[tuple[str, str]]) -> tuple[float | None, float | None, str, str | None]:
     """
     Versucht mehrere Queries nacheinander.
-    Gibt (lat, lon, label) zurück — label beschreibt was gefunden hat.
+    Gibt (lat, lon, label, geo_name) zurück — label beschreibt was gefunden hat.
     """
     for label, query in attempts:
-        lat, lon = geocode(query)
+        lat, lon, geo_name = geocode(query)
         time.sleep(DELAY_S)
         if lat is not None:
-            return lat, lon, label
-    return None, None, ''
+            return lat, lon, label, geo_name
+    return None, None, '', None
 
 
 def main():
@@ -219,7 +221,7 @@ def main():
                 f'{strasse_clean}, {plz} Wien, Österreich'
             ))
 
-        lat, lon, label = try_geocode_with_label(attempts)
+        lat, lon, label, geo_name = try_geocode_with_label(attempts)
 
         if lat is not None:
             notiz = f'Geocoding-Hinweis: {label}'
@@ -228,9 +230,10 @@ def main():
             elif strasse_clean != strasse_raw:
                 notiz += f' (HNr bereinigt aus: {strasse_raw!r} {hnr_raw!r})'
             idx = id_to_idx[e['id']]
-            all_entries[idx]['lat']   = lat
-            all_entries[idx]['lon']   = lon
-            all_entries[idx]['notiz'] = notiz
+            all_entries[idx]['lat']      = lat
+            all_entries[idx]['lon']      = lon
+            all_entries[idx]['geo_name'] = geo_name
+            all_entries[idx]['notiz']    = notiz
             seen_keys[cache_key] = (lat, lon, notiz)
             print(f'✓ {lat:.5f}, {lon:.5f}  [{label}]')
             found_new += 1

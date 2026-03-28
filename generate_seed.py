@@ -69,7 +69,7 @@ def build_sql(entries: list[dict]) -> str:
         "TRUNCATE TABLE adressen CASCADE;",
         "",
         "-- Neue Adressen einfügen",
-        "INSERT INTO adressen (id, plz, ort, strasse, hausnummer, zusatz, lat, lon, titel, arzt_name, import_batch) VALUES",
+        "INSERT INTO adressen (id, plz, ort, strasse, hausnummer, zusatz, lat, lon, titel, arzt_name, geo_name, import_batch) VALUES",
     ]
 
     value_lines = []
@@ -80,6 +80,7 @@ def build_sql(entries: list[dict]) -> str:
         hnr_clean = hnr_parts[0].strip()
         zusatz    = hnr_parts[1].strip() if len(hnr_parts) > 1 else ''
 
+        geo_name = e.get('geo_name') or ''
         val = (
             f"  (uuid_generate_v4(), "
             f"'{q(e['plz'])}', 'Wien', "
@@ -89,6 +90,7 @@ def build_sql(entries: list[dict]) -> str:
             f"{e['lat']}, {e['lon']}, "
             f"{'NULL' if not e['titel'] else chr(39) + q(e['titel']) + chr(39)}, "
             f"'{q(e['name'])}', "
+            f"{'NULL' if not geo_name else chr(39) + q(geo_name) + chr(39)}, "
             f"'import_april_2021')"
         )
         value_lines.append(val)

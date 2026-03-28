@@ -64,10 +64,11 @@ def split_strasse_hnr(full_addr: str) -> tuple[str, str]:
     return addr, ''
 
 
-def geocode(plz: str, full_addr: str, ort: str = 'Wien') -> tuple[float | None, float | None]:
+def geocode(plz: str, full_addr: str, ort: str = 'Wien') -> tuple[float | None, float | None, str | None]:
     """
     Geocodiert eine Adresse via Nominatim.
-    Gibt (lat, lon) zurück oder (None, None) bei Fehler.
+    Gibt (lat, lon, geo_name) zurück oder (None, None, None) bei Fehler.
+    geo_name: erster Teil des display_name (z.B. Gebäudename "Palais Equitable").
     """
     query = f'{full_addr}, {plz} {ort}, Österreich'
     params = urllib.parse.urlencode({
@@ -83,10 +84,12 @@ def geocode(plz: str, full_addr: str, ort: str = 'Wien') -> tuple[float | None, 
         with urllib.request.urlopen(req, timeout=15) as resp:
             data = json.loads(resp.read().decode())
         if data:
-            return float(data[0]['lat']), float(data[0]['lon'])
+            raw_name = data[0].get('display_name', '').split(',')[0].strip()
+            geo_name = raw_name if raw_name else None
+            return float(data[0]['lat']), float(data[0]['lon']), geo_name
     except Exception as e:
         print(f'  ⚠ Fehler: {e}')
-    return None, None
+    return None, None, None
 
 
 def safe_str(val) -> str:
@@ -193,7 +196,7 @@ def main():
         print(f'[{idx + 1:4d}/{total}] {display:40s} | {strasse} {hnr}, {plz} Wien ... ',
               end='', flush=True)
 
-        lat, lon = geocode(plz, f'{strasse} {hnr}'.strip())
+        lat, lon, geo_name = geocode(plz, f'{strasse} {hnr}'.strip())
 
         entry = {
             'id':      entry_id,
@@ -204,6 +207,7 @@ def main():
             'name':    name,
             'lat':     lat,
             'lon':     lon,
+            'geo_name': geo_name,
         }
 
         if lat is not None:
