@@ -12,7 +12,8 @@ layout: null
 <meta name="theme-color" content="#2D2060">
 <meta name="robots" content="noindex,nofollow">
 <title>NOVUM-ZIV Unterschriften</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' https://*.tile.openstreetmap.org data:; connect-src 'self' https://204.168.217.211.nip.io https://nominatim.openstreetmap.org https://router.project-osrm.org; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <style>
 :root{
   --g:#7B6BC4;--g-h:#9A8BE0;--g-l:#EEEAF9;--dark:#2D2060;
@@ -450,7 +451,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
   <header class="app-bar">
     <div class="ab-logo">NOVUM<span>-ZIV</span></div>
-    <div class="ab-badge">DEMO</div>
+
     <div class="ab-user" id="ab-user" onclick="settingsDlg.open()" style="cursor:pointer" title="Einstellungen"></div>
     <button class="ab-logout" onclick="auth.logout()">Abmelden</button>
   </header>
@@ -672,7 +673,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   </div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
 <script>
 'use strict';
 
@@ -2303,28 +2304,55 @@ const S = {
 
 /* ── AUTH ────────────────────────────────────────────── */
 const auth={
+  _fails:0,_lockUntil:0,
   async login(){
+    const now=Date.now();
+    if(now<this._lockUntil){
+      const secs=Math.ceil((this._lockUntil-now)/1000);
+      q('#login-err').textContent=`Zu viele Versuche. Bitte ${secs}s warten.`;
+      return;
+    }
+    const btn=q('#scr-login .btn-primary');
     const email=q('#inp-email').value.trim().toLowerCase();
     const pw=q('#inp-pw').value;
     q('#login-err').textContent='';
+    if(!email||!pw){q('#login-err').textContent='Bitte E-Mail und Passwort eingeben.';return;}
+    btn.disabled=true;btn.textContent='Anmelden …';
     try{
       const res=await fetch(SB_URL+'/rpc/login',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({email,passwort:pw})
       });
-      if(!res.ok){q('#login-err').textContent='E-Mail oder Passwort falsch.';return;}
+      if(!res.ok){
+        this._fails++;
+        if(this._fails>=5){this._lockUntil=Date.now()+60000;this._fails=0;}
+        else if(this._fails>=3){this._lockUntil=Date.now()+15000;}
+        q('#login-err').textContent='E-Mail oder Passwort falsch.';
+        btn.disabled=false;btn.textContent='Anmelden';return;
+      }
       const data=await res.json();
-      if(!data.token){q('#login-err').textContent='Login fehlgeschlagen.';return;}
+      if(!data.token){q('#login-err').textContent='Login fehlgeschlagen.';btn.disabled=false;btn.textContent='Anmelden';return;}
+      this._fails=0;this._lockUntil=0;
       const user={token:data.token,id:data.user_id,name:data.name,email:email,rolle:data.rolle};
       S.setSession(user);
       localStorage.setItem('nv_last_email',email);
       initApp(user);
     }catch(e){q('#login-err').textContent='Server nicht erreichbar.';console.error(e);}
+    btn.disabled=false;btn.textContent='Anmelden';
   },
   logout(){S.clearSession();location.reload();},
-  current(){return S.getSession();},
-  token(){const s=S.getSession();return s?.token||null;}
+  current(){
+    const s=S.getSession();
+    if(!s||!s.token)return null;
+    // JWT-Ablauf prüfen
+    try{
+      const payload=JSON.parse(atob(s.token.split('.')[1]));
+      if(payload.exp&&payload.exp*1000<Date.now()){S.clearSession();return null;}
+    }catch(e){S.clearSession();return null;}
+    return s;
+  },
+  token(){const s=this.current();return s?.token||null;}
 };
 
 /* ── SETTINGS / PASSWORD ─────────────────────────────── */
