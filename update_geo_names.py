@@ -6,7 +6,7 @@ filtert numerische Teile heraus → zeigt Viertel/Bezirk statt Straßenname.
 import requests, time, sys
 
 API = "https://204.168.217.211.nip.io/api"
-EMAIL = "marius.romanin@bnz-wien.at"
+EMAIL = "zahradnik@haselbach.art"
 PASS = "novum2026!"
 
 # ── 1. Login ─────────────────────────────────────────────────────────────────
