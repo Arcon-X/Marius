@@ -133,6 +133,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   color:var(--g);flex-shrink:0;border-radius:6px;transition:background .15s;
 }
 .refresh-btn:active{background:var(--g-l)}
+.lang-filter{display:flex;gap:.4rem;margin-bottom:.55rem;flex-wrap:wrap}
+.lang-chip{flex-shrink:0;padding:.3rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700;border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;color:var(--sub)}
+.lang-chip.active{background:var(--g);border-color:var(--g);color:#fff}
 .loc-display{
   background:var(--g-l);border-radius:8px;padding:.5rem .85rem;
   font-size:.8rem;color:#7B6BC4;font-weight:600;margin-bottom:.55rem;
@@ -511,6 +514,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         &#128205; <span id="loc-text"></span>
         <button class="refresh-btn" onclick="doSearch()" title="Aktualisieren">&#128260;</button>
       </div>
+      <div class="lang-filter">
+        <button class="lang-chip active" onclick="setLang('alle')">&#127760; Alle</button>
+        <button class="lang-chip" onclick="setLang('pa')">&#128332; Persisch &amp; Arabisch</button>
+      </div>
       <div id="results-wrap" style="margin-top:.85rem"></div>
     </div>
 
@@ -657,6 +664,15 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         <div class="edit-field">
           <label>&nbsp;</label>
           <div style="padding:.48rem 0;font-size:.88rem;color:var(--sub)">Wien</div>
+        </div>
+      </div>
+      <div class="edit-row">
+        <div class="edit-field">
+          <label>Sprache</label>
+          <select id="ef-sprache" class="edit-inp">
+            <option value="de">Deutsch / Sonstig</option>
+            <option value="pa">Persisch &amp; Arabisch</option>
+          </select>
         </div>
       </div>
     </div>
@@ -2273,6 +2289,7 @@ const db={
         notiz:r.notiz||null,
         titel:r.titel||null,
         geo_name:r.geo_name||null,
+        sprache:r.sprache||'de',
       }));
       S.saveAdressen(clean);
       const pr=await fetch(SB_URL+'/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
@@ -2509,7 +2526,14 @@ function initApp(user){
 }
 
 /* ── LOCATION ────────────────────────────────────────── */
-let userLoc=null,selectedNum=10;
+let userLoc=null,selectedNum=10,langFilter='alle';
+
+function setLang(v){
+  langFilter=v;
+  qAll('.lang-chip').forEach(b=>b.classList.toggle('active',
+    (v==='alle'&&b.textContent.includes('Alle'))||(v==='pa'&&b.textContent.includes('Persisch'))));
+  doSearch();
+}
 
 const loc={
   getGPS(){
@@ -2557,6 +2581,7 @@ async function doSearch(){
     let available=adressen.filter(a=>
       a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id)
     );
+    if(langFilter==='pa')available=available.filter(a=>a.sprache==='pa');
     if(!available.length){
       q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
       return;
@@ -2751,6 +2776,7 @@ const editDlg={
     document.getElementById('ef-strasse').value=a.strasse||'';
     document.getElementById('ef-hnr').value=a.hnr||'';
     document.getElementById('ef-plz').value=a.plz||'';
+    document.getElementById('ef-sprache').value=a.sprache||'de';
     const geo=document.getElementById('edit-geo');
     geo.className='edit-geo hidden';geo.textContent='';
     const btn=document.getElementById('edit-save-btn');
@@ -2772,6 +2798,7 @@ const editDlg={
     a.strasse=document.getElementById('ef-strasse').value.trim();
     a.hnr=document.getElementById('ef-hnr').value.trim();
     a.plz=document.getElementById('ef-plz').value.trim();
+    a.sprache=document.getElementById('ef-sprache').value;
     // Geocodierung via Nominatim
     try{
       const queryStr=`${a.hnr} ${a.strasse}, ${a.plz} Wien, Austria`;
@@ -2780,7 +2807,8 @@ const editDlg={
       const data=await res.json();
       if(data.length){
         a.lat=parseFloat(data[0].lat);a.lon=parseFloat(data[0].lon);
-        a.geo_name=data[0].display_name.split(',')[0].trim();
+        const parts=data[0].display_name.split(',').map(s=>s.trim());
+        a.geo_name=parts.slice(1,3).join(', ')||parts[0];
         delete a.notiz;
         geo.className='edit-geo geo-ok';
         geo.textContent='\u2705 Koordinaten aktualisiert: '+data[0].display_name.split(',').slice(0,2).join(', ');
@@ -2794,7 +2822,7 @@ const editDlg={
     }
     geo.classList.remove('hidden');
     S.saveAdressen(adressen);
-    const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null});
+    const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de'});
     btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
     toast(pOk?'Adresse gespeichert \u2713':'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
     // Ansichten aktualisieren
