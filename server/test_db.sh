@@ -1,0 +1,1 @@
+sudo -u postgres psql -d novumziv -c "SELECT api.login('marius.romanin@bnz-wien.at', 'novum2026!');"
