@@ -405,6 +405,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   letter-spacing:.3px;line-height:1.5;
 }
 .build-stamp span{display:inline-block;background:#f3f0fc;border-radius:4px;padding:1px 6px;color:#9A8BE0;font-weight:700;font-size:.67rem}
+.pw-wrap{position:relative;display:flex;align-items:center}
+.pw-wrap input{flex:1;padding-right:2.4rem}
+.pw-eye{
+  position:absolute;right:.55rem;background:none;border:none;cursor:pointer;
+  font-size:1.1rem;line-height:1;padding:.2rem;color:var(--sub);-webkit-tap-highlight-color:transparent;
+}
+.pw-eye:hover{color:var(--g)}
 .pw-forgot{
   display:block;text-align:center;margin-top:.6rem;
   font-size:.76rem;color:var(--sub);cursor:pointer;text-decoration:underline;
@@ -459,7 +466,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <label for="inp-email">E-Mail</label>
       <input id="inp-email" type="email" autocomplete="email">
       <label for="inp-pw">Passwort</label>
-      <input id="inp-pw" type="password" autocomplete="current-password">
+      <div class="pw-wrap">
+        <input id="inp-pw" type="password" autocomplete="current-password">
+        <button type="button" class="pw-eye" onclick="togglePw('inp-pw',this)" tabindex="-1" aria-label="Passwort anzeigen">👁</button>
+      </div>
       <button type="submit" class="btn-primary">Anmelden</button>
     </form>
     <div id="login-err" class="login-err"></div>
@@ -682,11 +692,20 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <form onsubmit="event.preventDefault();settingsDlg.savePw()" autocomplete="on">
         <input type="text" id="set-pw-user" autocomplete="username" aria-hidden="true" tabindex="-1" style="position:absolute;opacity:0;pointer-events:none;height:0;width:0;padding:0;border:0">
         <label class="settings-label" for="set-pw-old">Aktuelles Passwort</label>
-        <input id="set-pw-old" class="settings-input" type="password" autocomplete="current-password">
+        <div class="pw-wrap">
+          <input id="set-pw-old" class="settings-input" type="password" autocomplete="current-password">
+          <button type="button" class="pw-eye" onclick="togglePw('set-pw-old',this)" tabindex="-1" aria-label="Passwort anzeigen">👁</button>
+        </div>
         <label class="settings-label" for="set-pw-new">Neues Passwort</label>
-        <input id="set-pw-new" class="settings-input" type="password" autocomplete="new-password">
+        <div class="pw-wrap">
+          <input id="set-pw-new" class="settings-input" type="password" autocomplete="new-password">
+          <button type="button" class="pw-eye" onclick="togglePw('set-pw-new',this)" tabindex="-1" aria-label="Passwort anzeigen">👁</button>
+        </div>
         <label class="settings-label" for="set-pw-confirm">Neues Passwort bestätigen</label>
-        <input id="set-pw-confirm" class="settings-input" type="password" autocomplete="new-password">
+        <div class="pw-wrap">
+          <input id="set-pw-confirm" class="settings-input" type="password" autocomplete="new-password">
+          <button type="button" class="pw-eye" onclick="togglePw('set-pw-confirm',this)" tabindex="-1" aria-label="Passwort anzeigen">👁</button>
+        </div>
         <div id="set-pw-msg" class="settings-msg"></div>
         <button type="submit" class="btn-settings">Passwort ändern</button>
       </form>
@@ -701,6 +720,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
 <script>
 'use strict';
+
+function togglePw(id,btn){
+  const inp=document.getElementById(id);
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  btn.textContent=show?'🙈':'👁';
+}
 
 /* ── DEMO DATA ───────────────────────────────────────── */
 const DEMO_USERS = [
