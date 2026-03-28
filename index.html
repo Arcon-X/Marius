@@ -557,8 +557,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <div id="p-admin" class="panel">
       <div class="section-title">Letzte Ereignisse</div>
       <div class="card" id="admin-log"></div>
-      <div class="section-title">Team (19 Kandidat:innen)</div>
-      <div class="card" id="admin-users"></div>
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleTeam()">
+        <span id="team-arrow">&#9654;</span> Team (19 Kandidat:innen)
+      </div>
+      <div class="card hidden" id="admin-users"></div>
       <div class="section-title">Adressliste</div>
       <div class="karte-toolbar" style="border-radius:var(--r);border-bottom:none;margin-bottom:.4rem;box-shadow:var(--sha)">
         <div class="karte-top-row">
@@ -3019,6 +3021,7 @@ function adminGetFiltered(){
   const user=auth.current();
   return all.filter(a=>{
     if(adminState.status==='__mine__'){if(a.benutzer_id!==user.id)return false;}
+    else if(adminState.status==='__issues__'){if(a.lat&&a.lon&&a.geo_name&&!a.notiz)return false;}
     else if(adminState.status!=='all'&&a.status!==adminState.status)return false;
     if(adminState.plz!=='all'&&a.plz!==adminState.plz)return false;
     return true;
@@ -3032,6 +3035,7 @@ function renderAdminFilter(){
     {val:'in_bearbeitung',label:'🟡 Reserviert',cls:'kfc-bear'},
     {val:'archiviert',label:'✅ Erledigt',cls:'kfc-arch'},
     {val:'__mine__',label:'📌 Meine',cls:''},
+    {val:'__issues__',label:'⚠️ Prüfen',cls:''},
   ];
   const sCont=document.getElementById('af-status');
   if(!sCont)return;
@@ -3078,6 +3082,7 @@ function renderAdminList(){
 }
 function adminSetStatus(val){adminState.status=val;renderAdminFilter();renderAdminList();}
 function adminSetPlz(val){adminState.plz=val;renderAdminFilter();renderAdminList();}
+function toggleTeam(){const el=q('#admin-users');el.classList.toggle('hidden');q('#team-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 
 /* ── MAP ─────────────────────────────────────────────── */
 let leafletMap=null,mapMarkers=[];
