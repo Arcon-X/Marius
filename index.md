@@ -2136,7 +2136,9 @@ const db={
     catch(e){console.warn('API patch:',e.message);}
   },
   async postProtokoll(entry){
-    try{await fetch(SB_URL+'/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(entry)});}
+    // 'adresse' ist nur für lokale Anzeige, existiert nicht als DB-Spalte
+    const {adresse:_a,...dbEntry}=entry;
+    try{await fetch(SB_URL+'/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(dbEntry)});}
     catch(e){console.warn('API log:',e.message);}
   },
   async resetAll(){
