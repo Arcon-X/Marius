@@ -61,6 +61,10 @@ TYPO_FIXES = {
     'Hietzinger Kaie':              'Hietzinger Kai',
     'Marktgemeindegasse':           'Moosbrucker Gasse',  # 1230 fallback
     'Werdetorgasse 2':              'Werdertorgasse',
+    # Tippfehler aus aktuellem Lauf
+    'Wolllzeile':                   'Wollzeile',
+    'Wassergase':                   'Wassergasse',
+    'Garnisonstraße':               'Garnisongasse',
 }
 
 
@@ -69,7 +73,42 @@ def fix_typo(strasse: str) -> str:
     return TYPO_FIXES.get(strasse, strasse)
 
 
+def extract_clean_street_and_hnr(strasse: str, hnr: str) -> tuple[str, str]:
+    """
+    Korrigiert falsch getrennte strasse/hnr-Paare aus dem ersten Geocoding-Lauf.
+    Die ursprüngliche split_strasse_hnr() nimmt immer das letzte Wort mit Ziffer
+    als HNr — bei 'Zschokkegasse 140/OG 2' wird '2' als HNr interpretiert statt '140'.
+
+    Diese Funktion sucht im strasse-Feld nach der ersten Zahl vor einem '/' —
+    das ist die echte Hausnummer.
+
+    Beispiele:
+      strasse='Zschokkegasse 140/OG'       hnr='2'    → ('Zschokkegasse', '140')
+      strasse='Karl-Popper-Straße 8/2. OG' hnr='204'  → ('Karl-Popper-Straße', '8')
+      strasse='Dornbacher Straße 21 / Top' hnr='201'  → ('Dornbacher Straße', '21')
+      strasse='Billrothstraße 58 DG'       hnr=''     → ('Billrothstraße', '58')
+      strasse='Pernerstorfer Gasse'        hnr='5/1/7' → ('Pernerstorfer Gasse', '5')
+    """
+    # Fall 1: Zahl gefolgt von '/' → echte Hausnummer
+    m = re.search(r'(\d+)\s*/', strasse)
+    if m:
+        return strasse[:m.start()].strip(), m.group(1)
+    # Fall 2: Zahl gefolgt von Stock/DG/OG/EG/Top … am Straßenende
+    m2 = re.search(r'(\d+)\s+\(?(?:DG|OG|EG|Stock|Stg\.|Top|Lokal|Hof|Block)\b',
+                   strasse, re.IGNORECASE)
+    if m2:
+        return strasse[:m2.start()].strip(), m2.group(1)
+    # Fall 3: Trailing number
+    m3 = re.search(r'(\d+)\s*$', strasse)
+    if m3:
+        return strasse[:m3.start()].strip(), m3.group(1)
+    # Fall 4: Kein Fund im strasse-Feld → HNr aus hnr extrahieren
+    first = re.match(r'(\d+)', hnr.strip())
+    return strasse.strip(), (first.group(1) if first else hnr)
+
+
 def first_number(hnr: str) -> str | None:
+    """Extrahiert die erste Ziffernfolge aus einer Hausnummer."""
     m = re.match(r'(\d+)', hnr.strip())
     return m.group(1) if m else None
 
@@ -125,13 +164,18 @@ def main():
     seen_keys   = {}  # (plz, strasse_fixed) → (lat, lon, notiz) für Duplikate
 
     for e in missing:
-        strasse_orig  = e['strasse']
-        strasse_fixed = fix_typo(strasse_orig)
+        strasse_raw   = e['strasse']
+        hnr_raw       = e['hnr']
         plz           = e['plz']
-        hnr_orig      = e['hnr']
-        hnr_simple    = first_number(hnr_orig)
 
-        print(f'  [{e["id"]}] {strasse_orig} {hnr_orig}, {plz} → ', end='', flush=True)
+        # Schritt 1: echte Straße + echte HNr aus den (ggf. falsch geparsten) Feldern extrahieren
+        strasse_clean, hnr_clean = extract_clean_street_and_hnr(strasse_raw, hnr_raw)
+        # Schritt 2: bekannte Tippfehler korrigieren
+        strasse_fixed = fix_typo(strasse_clean)
+        hnr_simple    = first_number(hnr_clean)
+        strasse_orig  = strasse_raw  # für Ausgabe/Notiz
+
+        print(f'  [{e["id"]}] {strasse_clean} {hnr_clean}, {plz} → ', end='', flush=True)
 
         # Gleiche (bereinigte) Straße schon erfolgreich geocodiert?
         cache_key = f'{plz}|{strasse_fixed}'
@@ -151,11 +195,11 @@ def main():
         # Versuche in Reihenfolge
         attempts = []
 
-        if strasse_fixed != strasse_orig:
-            # Tippfehler bekannt → zuerst mit korrigierter Straße + einfacher HNr
+        if strasse_fixed != strasse_clean:
+            # Tippfehler bekannt → zuerst mit korrigierter Straße + echter HNr
             if hnr_simple:
                 attempts.append((
-                    f'Straße korrigiert + HNr',
+                    'Straße korrigiert + HNr',
                     f'{strasse_fixed} {hnr_simple}, {plz} Wien, Österreich'
                 ))
             # dann ohne HNr
@@ -164,23 +208,25 @@ def main():
                 f'{strasse_fixed}, {plz} Wien, Österreich'
             ))
         else:
-            # Kein bekannter Tippfehler → nur ohne HNr versuchen
+            # Kein bekannter Tippfehler → mit echter HNr + Fallback ohne HNr
             if hnr_simple:
                 attempts.append((
-                    'Orig. Straße + HNr (nochmal)',
-                    f'{strasse_orig} {hnr_simple}, {plz} Wien, Österreich'
+                    'Bereinigte Straße + HNr',
+                    f'{strasse_clean} {hnr_simple}, {plz} Wien, Österreich'
                 ))
             attempts.append((
                 'Nur Straße + PLZ',
-                f'{strasse_orig}, {plz} Wien, Österreich'
+                f'{strasse_clean}, {plz} Wien, Österreich'
             ))
 
         lat, lon, label = try_geocode_with_label(attempts)
 
         if lat is not None:
             notiz = f'Geocoding-Hinweis: {label}'
-            if strasse_fixed != strasse_orig:
-                notiz += f' (Straße: {strasse_orig!r} → {strasse_fixed!r})'
+            if strasse_fixed != strasse_clean:
+                notiz += f' (Straße korrigiert: {strasse_clean!r} → {strasse_fixed!r})'
+            elif strasse_clean != strasse_raw:
+                notiz += f' (HNr bereinigt aus: {strasse_raw!r} {hnr_raw!r})'
             idx = id_to_idx[e['id']]
             all_entries[idx]['lat']   = lat
             all_entries[idx]['lon']   = lon

@@ -8,7 +8,12 @@ Nominatim (openstreetmap.org) und speichert das Ergebnis als JSON.
 Kann jederzeit unterbrochen und ohne Datenverlust fortgesetzt werden —
 Checkpoint wird nach jeweils 10 Einträgen gespeichert.
 
-Laufzeit: ~45 Minuten (2.692 Adressen × 1 Sekunde Rate-Limit)
+Excel-Format (Zahnarztekammer_260223_211026.xlsx):
+  Sheet: 'Table 1', Zeile 1 = Header, Daten ab Zeile 2
+  Spalte A: Name  — "Nachname Vorname (Titel.)"
+  Spalte B: Kontaktdaten — "Straße HNr,  PLZ Wien [Telefon]"
+
+Laufzeit: ~28 Minuten (1.491 Adressen × 1,1 Sekunden Rate-Limit)
 
 Ausführen:
     python geocode_addresses.py
@@ -20,10 +25,14 @@ Ausgabe:
 import json
 import os
 import re
+import sys
 import time
 import openpyxl
 import urllib.request
 import urllib.parse
+
+# UTF-8 Ausgabe erzwingen (Windows-Terminal gibt sonst cp1252)
+sys.stdout.reconfigure(encoding='utf-8')
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
 BASE_DIR        = r'D:\GIT\Marius'
@@ -88,6 +97,54 @@ def safe_str(val) -> str:
     return '' if s.lower() == 'none' else s
 
 
+def parse_name(raw: str) -> tuple[str, str]:
+    """
+    Parst "Nachname Vorname (Titel.)" → (titel, "Vorname Nachname").
+    Titel werden aus den Klammern extrahiert und dedupliziert.
+    """
+    raw = safe_str(raw)
+    m = re.match(r'^(.+?)\s*\((.+?)\)\s*$', raw)
+    if m:
+        name_part = m.group(1).strip()
+        title_raw = m.group(2).strip()
+        # Titel: Komma-getrennt, dedupliziert
+        seen: list[str] = []
+        for t in title_raw.split(','):
+            t = t.strip()
+            if t and t not in seen:
+                seen.append(t)
+        titel = ' '.join(seen)
+        # Name umdrehen: letztes Wort = Vorname, Rest = Nachname
+        words = name_part.split()
+        if len(words) >= 2:
+            name = words[-1] + ' ' + ' '.join(words[:-1])
+        else:
+            name = name_part
+    else:
+        titel = ''
+        name = raw
+    return titel, name
+
+
+def parse_address(raw: str) -> tuple[str, str, str]:
+    """
+    Parst "Straße HNr,  PLZ Wien [Telefon]" → (strasse, hnr, plz).
+    Zeilenumbrüche (Telefonnummer kann umbrechen) werden normalisiert.
+    """
+    raw = safe_str(raw).replace('\n', ' ').replace('\r', ' ')
+    if ',' in raw:
+        addr_part, right_part = raw.split(',', 1)
+    else:
+        addr_part, right_part = raw, ''
+    addr_part  = addr_part.strip()
+    right_part = right_part.strip()
+    # PLZ: vierstellige Wiener PLZ (10xx–12xx)
+    plz_m = re.search(r'\b(1[0-9]{3})\b', right_part)
+    plz   = plz_m.group(1) if plz_m else ''
+    strasse, hnr = split_strasse_hnr(addr_part)
+    return strasse, hnr, plz
+
+
 # ── Hauptprogramm ─────────────────────────────────────────────────────────────
 def main():
     # Checkpoint laden (falls vorhanden → Fortsetzung)
@@ -113,11 +170,11 @@ def main():
     print(f'▶ Lade Excel: {fnames[0]}')
 
     wb = openpyxl.load_workbook(fpath, read_only=True, data_only=True)
-    ws = wb['Auswertung']
+    ws = wb['Table 1']
 
-    # Alle Datenzeilen (ohne Header), nur wo PLZ vorhanden
-    all_rows = list(ws.iter_rows(values_only=True))
-    data_rows = [r for r in all_rows[1:] if r[3] is not None]
+    # Alle Datenzeilen (ohne Header-Zeile 1), nur wo Name+Kontaktdaten vorhanden
+    all_rows  = list(ws.iter_rows(values_only=True))
+    data_rows = [r for r in all_rows[1:] if r[0] is not None and r[1] is not None]
     total = len(data_rows)
     print(f'▶ {total} Datenzeilen gefunden.\n')
 
@@ -129,27 +186,14 @@ def main():
         if entry_id in done_ids:
             continue  # bereits verarbeitet → überspringen
 
-        titel     = safe_str(row[0])
-        nachname  = safe_str(row[1])
-        vorname   = safe_str(row[2])
-        plz_raw   = row[3]
-        ort       = safe_str(row[4]) or 'Wien'
-        full_addr = safe_str(row[5])
-
-        # PLZ als 4-stelligen String (Excel speichert als int)
-        try:
-            plz = str(int(plz_raw))
-        except (ValueError, TypeError):
-            plz = safe_str(plz_raw)
-
-        strasse, hnr = split_strasse_hnr(full_addr)
-        name = f'{vorname} {nachname}'.strip()
+        titel, name = parse_name(safe_str(row[0]))
+        strasse, hnr, plz = parse_address(safe_str(row[1]))
         display = f'{titel} {name}'.strip() if titel else name
 
-        print(f'[{idx + 1:4d}/{total}] {display:40s} | {full_addr}, {plz} {ort} ... ',
+        print(f'[{idx + 1:4d}/{total}] {display:40s} | {strasse} {hnr}, {plz} Wien ... ',
               end='', flush=True)
 
-        lat, lon = geocode(plz, full_addr, ort)
+        lat, lon = geocode(plz, f'{strasse} {hnr}'.strip())
 
         entry = {
             'id':      entry_id,
