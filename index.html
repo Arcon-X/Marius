@@ -400,6 +400,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   font-size:.78rem;color:var(--g);cursor:pointer;text-decoration:underline;
 }
 .settings-link:hover{color:var(--g-h)}
+.build-stamp{
+  margin-top:1.1rem;text-align:center;font-size:.68rem;color:#c4bfe0;
+  letter-spacing:.3px;line-height:1.5;
+}
+.build-stamp span{display:inline-block;background:#f3f0fc;border-radius:4px;padding:1px 6px;color:#9A8BE0;font-weight:700;font-size:.67rem}
 .pw-forgot{
   display:block;text-align:center;margin-top:.6rem;
   font-size:.76rem;color:var(--sub);cursor:pointer;text-decoration:underline;
@@ -459,6 +464,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     </form>
     <div id="login-err" class="login-err"></div>
     <a class="pw-forgot" onclick="showForgotPw()">Passwort vergessen?</a>
+    <div class="build-stamp">Release <span>{{ site.time | date: "%Y%m%d.%H%M" }}</span> &middot; {{ site.time | date: "%d.%m.%Y %H:%M" }} UTC</div>
   </div>
 </div>
 
