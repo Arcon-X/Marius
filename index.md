@@ -2233,14 +2233,20 @@ const db={
     }catch(e){console.warn('API:',e.message);return null;}
   },
   async patch(id,fields){
-    try{await fetch(SB_URL+'/adressen?id=eq.'+id,{method:'PATCH',headers:this._h(),body:JSON.stringify(fields)});}
-    catch(e){console.warn('API patch:',e.message);}
+    try{
+      const res=await fetch(SB_URL+'/adressen?id=eq.'+id,{method:'PATCH',headers:this._h(),body:JSON.stringify(fields)});
+      if(!res.ok){console.error('API patch fail:',res.status,await res.text().catch(()=>''));return false;}
+      return true;
+    }catch(e){console.error('API patch:',e.message);return false;}
   },
   async postProtokoll(entry){
     // 'adresse' ist nur für lokale Anzeige, existiert nicht als DB-Spalte
     const {adresse:_a,...dbEntry}=entry;
-    try{await fetch(SB_URL+'/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(dbEntry)});}
-    catch(e){console.warn('API log:',e.message);}
+    try{
+      const res=await fetch(SB_URL+'/protokoll',{method:'POST',headers:this._h(),body:JSON.stringify(dbEntry)});
+      if(!res.ok){console.error('API protokoll fail:',res.status,await res.text().catch(()=>''));return false;}
+      return true;
+    }catch(e){console.error('API protokoll:',e.message);return false;}
   },
   // Atomischer Claim: PATCH nur wenn status noch 'verfuegbar' — verhindert Doppelbuchung
   async claim(id,benutzer_id,reserviert_am){
@@ -2568,14 +2574,15 @@ async function uebernehmen(id){
     aktion:'uebernommen',zeitpunkt:now,notiz:'',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
   S.addProtokoll(prot);
-  db.postProtokoll(prot);
+  const pOk=await db.postProtokoll(prot);
+  if(!pOk)toast('⚠️ Protokoll konnte nicht gespeichert werden');
   updateMeineBadge();
   toast(`Übernommen: ${a.strasse} ${a.hnr} ✓`);
   if(lastResults.length)renderResults(lastResults);
 }
 
 /* ── REAKTIVIEREN ───────────────────────────────────── */
-function reaktivieren(id){
+async function reaktivieren(id){
   const user=auth.current();const adressen=S.getAdressen();
   const a=adressen.find(x=>x.id===id);
   if(!a||a.status!=='archiviert'){toast('Adresse nicht archiviert');return;}
@@ -2585,8 +2592,11 @@ function reaktivieren(id){
     aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
   S.addProtokoll(prot);
-  db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null});
-  db.postProtokoll(prot);
+  const [patchOk,protOk]=await Promise.all([
+    db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null}),
+    db.postProtokoll(prot)
+  ]);
+  if(!patchOk||!protOk)toast('⚠️ Serverfehler – bitte Seite neu laden');
   updateMeineBadge();
   toast(`Zurückgesetzt: ${a.strasse} ${a.hnr} ✓`);
   renderArchive();
@@ -2628,7 +2638,7 @@ const dlg={
     qAll('.dlg-opt').forEach(b=>b.classList.remove('selected'));
     btn.classList.add('selected');q('#dlg-save').disabled=false;
   },
-  save(){
+  async save(){
     if(!this.selectedAction)return;
     const user=auth.current();const adressen=S.getAdressen();
     const a=adressen.find(x=>x.id===this.currentId);
@@ -2640,9 +2650,13 @@ const dlg={
       aktion:this.selectedAction,zeitpunkt:now,notiz:q('#dlg-note').value.trim(),
       adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
     S.addProtokoll(prot);
-    db.patch(a.id,{status:'archiviert',erledigt_am:now});
-    db.postProtokoll(prot);
-    updateMeineBadge();toast('Gespeichert ✓');this.close();
+    const [patchOk,protOk]=await Promise.all([
+      db.patch(a.id,{status:'archiviert',erledigt_am:now}),
+      db.postProtokoll(prot)
+    ]);
+    if(!patchOk||!protOk)toast('⚠️ Serverfehler – bitte Seite neu laden');
+    else toast('Gespeichert ✓');
+    updateMeineBadge();this.close();
     if(lastResults.length)renderResults(lastResults);
     if(currentTab==='archive')renderArchive();
     if(currentTab==='meine')renderMeine();
@@ -2704,9 +2718,9 @@ const editDlg={
     }
     geo.classList.remove('hidden');
     S.saveAdressen(adressen);
-    db.patch(a.id,{strasse:a.strasse,hnr:a.hnr,plz:a.plz,titel:a.titel||null,name:a.name||null,lat:a.lat||null,lon:a.lon||null,notiz:a.notiz||null});
+    const pOk=await db.patch(a.id,{strasse:a.strasse,hnr:a.hnr,plz:a.plz,titel:a.titel||null,name:a.name||null,lat:a.lat||null,lon:a.lon||null,notiz:a.notiz||null});
     btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
-    toast('Adresse gespeichert \u2713');
+    toast(pOk?'Adresse gespeichert \u2713':'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
     // Ansichten aktualisieren
     if(lastResults.length)renderResults(lastResults);
     if(currentTab==='meine')renderMeine();
@@ -3106,7 +3120,7 @@ function q(sel){return document.querySelector(sel);}
 function qAll(sel){return document.querySelectorAll(sel);}
 function showEl(el){(typeof el==='string'?q('#'+el):el).classList.remove('hidden');}
 function hideEl(el){(typeof el==='string'?q('#'+el):el).classList.add('hidden');}
-function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36);}
+function uid(){return crypto.randomUUID();}
 let toastT;
 function toast(msg){
   const el=q('#toast');el.textContent=msg;el.classList.add('show');
