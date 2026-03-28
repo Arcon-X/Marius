@@ -436,13 +436,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
     <!-- ARCHIV -->
     <div id="p-archive" class="panel">
+      <div class="section-title">Gesamtstatistik</div>
+      <div class="stats-grid" id="admin-stats"></div>
       <div id="archive-wrap"></div>
     </div>
 
     <!-- ADMIN -->
     <div id="p-admin" class="panel">
-      <div class="section-title">Gesamtstatistik</div>
-      <div class="stats-grid" id="admin-stats"></div>
       <div class="section-title">Letzte Ereignisse</div>
       <div class="card" id="admin-log"></div>
       <div class="section-title">Team (19 Kandidat:innen)</div>
@@ -2590,10 +2590,21 @@ function updateMeineBadge(){
 /* ── ARCHIVE ─────────────────────────────────────────── */
 function renderArchive(){
   const user=auth.current();const isAdmin=user.rolle==='admin';
-  const archived=S.getAdressen()
+  const adressen=S.getAdressen();
+  const log=S.getProtokoll();
+  const total=adressen.length;
+  const verf=adressen.filter(a=>a.status==='verfuegbar').length;
+  const bear=adressen.filter(a=>a.status==='in_bearbeitung').length;
+  const unter=log.filter(l=>l.aktion==='waehlt_uns').length;
+  q('#admin-stats').innerHTML=`
+    <div class="stat-chip chip-b"><span class="sc-icon">🏠</span><span class="sc-label">Gesamt</span><span class="sc-val">${total}</span></div>
+    <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
+    <div class="stat-chip chip-y"><span class="sc-icon">📌</span><span class="sc-label">Reserviert</span><span class="sc-val">${bear}</span></div>
+    <div class="stat-chip chip-r"><span class="sc-icon">🗳️</span><span class="sc-label">Wählt uns</span><span class="sc-val">${unter}</span></div>`;
+  const archived=adressen
     .filter(a=>a.status==='archiviert'&&(isAdmin||a.benutzer_id===user.id))
     .sort((a,b)=>new Date(b.erledigt_am)-new Date(a.erledigt_am));
-  const log=S.getProtokoll();const el=q('#archive-wrap');
+  const el=q('#archive-wrap');
   if(!archived.length){
     el.innerHTML='<div class="empty-state"><div class="big">📦</div>Noch keine abgeschlossenen Adressen.</div>';return;
   }
@@ -2627,15 +2638,6 @@ function renderArchive(){
 /* ── ADMIN ───────────────────────────────────────────── */
 function renderAdmin(){
   const adressen=S.getAdressen();const log=S.getProtokoll();
-  const total=adressen.length;
-  const verf=adressen.filter(a=>a.status==='verfuegbar').length;
-  const bear=adressen.filter(a=>a.status==='in_bearbeitung').length;
-  const unter=log.filter(l=>l.aktion==='waehlt_uns').length;
-  q('#admin-stats').innerHTML=`
-    <div class="stat-chip chip-b"><span class="sc-icon">🏠</span><span class="sc-label">Gesamt</span><span class="sc-val">${total}</span></div>
-    <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
-    <div class="stat-chip chip-y"><span class="sc-icon">📌</span><span class="sc-label">Reserviert</span><span class="sc-val">${bear}</span></div>
-    <div class="stat-chip chip-r"><span class="sc-icon">🗳️</span><span class="sc-label">Wählt uns</span><span class="sc-val">${unter}</span></div>`;
   const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
   const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
   const recent=log.slice(0,15);
