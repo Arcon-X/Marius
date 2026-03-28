@@ -299,6 +299,27 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .chip-y{border-left:4px solid var(--wbdr)}
 .chip-r{border-left:4px solid var(--red)}
 .chip-b{border-left:4px solid #3b82f6}
+
+/* ERGEBNIS-CHART */
+.chart-card{
+  background:var(--card);border-radius:var(--r);box-shadow:var(--sha);
+  padding:.85rem 1rem;margin-bottom:.85rem;
+}
+.chart-title{font-size:.78rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.65rem}
+.chart-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+.chart-row:last-child{margin-bottom:0}
+.chart-icon{font-size:1rem;flex-shrink:0;width:1.4rem;text-align:center}
+.chart-label{font-size:.78rem;font-weight:600;color:var(--txt);width:6.5rem;flex-shrink:0}
+.chart-bar-bg{flex:1;height:22px;background:#f0eef8;border-radius:6px;overflow:hidden;position:relative}
+.chart-bar{height:100%;border-radius:6px;transition:width .4s ease;min-width:2px}
+.chart-bar.cb-waehlt_uns{background:var(--g)}
+.chart-bar.cb-waehlt_nicht{background:var(--red)}
+.chart-bar.cb-ueberlegt{background:#f59e0b}
+.chart-bar.cb-kein_interesse_wahl{background:#6b7280}
+.chart-bar.cb-sonstige{background:#8b5cf6}
+.chart-num{font-size:.88rem;font-weight:800;color:var(--txt);min-width:2rem;text-align:right}
+.chart-pct{font-size:.68rem;color:var(--sub);min-width:2.5rem;text-align:right}
+
 .log-item{
   padding:.6rem 1rem;border-bottom:1px solid #f0f0f0;
   display:flex;align-items:flex-start;gap:.75rem;font-size:.82rem;
@@ -459,6 +480,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <div id="p-archive" class="panel">
       <div class="section-title">Gesamtstatistik</div>
       <div class="stats-grid" id="admin-stats"></div>
+      <div id="ergebnis-chart"></div>
       <div id="archive-wrap"></div>
     </div>
 
@@ -2650,6 +2672,31 @@ function renderArchive(){
     <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
     <div class="stat-chip chip-y"><span class="sc-icon">📌</span><span class="sc-label">Reserviert</span><span class="sc-val">${bear}</span></div>
     <div class="stat-chip chip-r"><span class="sc-icon">🗳️</span><span class="sc-label">Wählt uns</span><span class="sc-val">${unter}</span></div>`;
+  // Ergebnis-Chart
+  const chartData=[
+    {key:'waehlt_uns',icon:'🗳️',label:'Wählt uns',color:'cb-waehlt_uns'},
+    {key:'waehlt_nicht',icon:'❌',label:'Wählt nicht',color:'cb-waehlt_nicht'},
+    {key:'ueberlegt',icon:'🤔',label:'Überlegt',color:'cb-ueberlegt'},
+    {key:'kein_interesse_wahl',icon:'🚫',label:'Kein Interesse',color:'cb-kein_interesse_wahl'},
+    {key:'sonstige',icon:'💬',label:'Sonstige',color:'cb-sonstige'},
+  ];
+  const counts=chartData.map(d=>({...d,n:log.filter(l=>l.aktion===d.key).length}));
+  const maxN=Math.max(...counts.map(c=>c.n),1);
+  const totalErg=counts.reduce((s,c)=>s+c.n,0);
+  q('#ergebnis-chart').innerHTML=totalErg?`<div class="chart-card">
+    <div class="chart-title">Ergebnisse (${totalErg} besucht)</div>
+    ${counts.map(c=>{
+      const pct=totalErg?(c.n/totalErg*100).toFixed(0):0;
+      const barW=(c.n/maxN*100).toFixed(1);
+      return`<div class="chart-row">
+        <div class="chart-icon">${c.icon}</div>
+        <div class="chart-label">${c.label}</div>
+        <div class="chart-bar-bg"><div class="chart-bar ${c.color}" style="width:${barW}%"></div></div>
+        <div class="chart-num">${c.n}</div>
+        <div class="chart-pct">${pct}%</div>
+      </div>`;
+    }).join('')}
+  </div>`:'';
   const archived=adressen
     .filter(a=>a.status==='archiviert'&&(isAdmin||a.benutzer_id===user.id))
     .sort((a,b)=>new Date(b.erledigt_am)-new Date(a.erledigt_am));
