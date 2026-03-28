@@ -392,6 +392,36 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 }
 .btn-reset:hover{background:var(--red);color:#fff}
 
+/* SETTINGS DIALOG */
+.settings-link{
+  display:block;text-align:center;margin-top:.8rem;
+  font-size:.78rem;color:var(--g);cursor:pointer;text-decoration:underline;
+}
+.settings-link:hover{color:var(--g-h)}
+.pw-forgot{
+  display:block;text-align:center;margin-top:.6rem;
+  font-size:.76rem;color:var(--sub);cursor:pointer;text-decoration:underline;
+}
+.pw-forgot:hover{color:var(--g)}
+.settings-section{margin-bottom:1.2rem}
+.settings-section:last-child{margin-bottom:0}
+.settings-label{font-size:.78rem;font-weight:600;color:var(--sub);display:block;margin-bottom:.3rem;margin-top:.7rem}
+.settings-input{
+  width:100%;padding:.6rem .8rem;border:1.5px solid #ddd;border-radius:8px;
+  font-size:.9rem;font-family:inherit;outline:none;transition:border .15s;
+}
+.settings-input:focus{border-color:var(--g)}
+.settings-msg{font-size:.78rem;margin-top:.4rem;min-height:1.1em}
+.settings-ok{color:var(--g)}
+.settings-err{color:var(--red)}
+.btn-settings{
+  width:100%;margin-top:.7rem;padding:.65rem;background:var(--g);color:#fff;
+  border:none;border-radius:8px;font-size:.88rem;font-weight:700;
+  cursor:pointer;font-family:inherit;
+}
+.btn-settings:hover{background:var(--g-h)}
+.btn-settings:disabled{opacity:.5;cursor:not-allowed}
+
 @media(min-width:600px){
   .stats-grid{grid-template-columns:repeat(4,1fr)}
   .panel{padding:1rem 1.5rem}
@@ -411,6 +441,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <input id="inp-pw" type="password" autocomplete="current-password">
     <button class="btn-primary" onclick="auth.login()">Anmelden</button>
     <div id="login-err" class="login-err"></div>
+    <a class="pw-forgot" onclick="showForgotPw()">Passwort vergessen?</a>
   </div>
 </div>
 
@@ -420,7 +451,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   <header class="app-bar">
     <div class="ab-logo">NOVUM<span>-ZIV</span></div>
     <div class="ab-badge">DEMO</div>
-    <div class="ab-user" id="ab-user"></div>
+    <div class="ab-user" id="ab-user" onclick="settingsDlg.open()" style="cursor:pointer" title="Einstellungen"></div>
     <button class="ab-logout" onclick="auth.logout()">Abmelden</button>
   </header>
 
@@ -608,6 +639,38 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- SETTINGS DIALOG -->
+<div id="settings-overlay" class="dlg-overlay hidden"
+     onclick="if(event.target===this)settingsDlg.close()">
+  <div class="dlg-card">
+    <div class="dlg-title">⚙️ Einstellungen</div>
+
+    <div class="settings-section">
+      <div style="font-size:.88rem;font-weight:700;margin-bottom:.3rem">E-Mail ändern</div>
+      <label class="settings-label" for="set-email">Neue E-Mail</label>
+      <input id="set-email" class="settings-input" type="email" autocomplete="email">
+      <div id="set-email-msg" class="settings-msg"></div>
+      <button class="btn-settings" onclick="settingsDlg.saveEmail()">E-Mail ändern</button>
+    </div>
+
+    <div class="settings-section">
+      <div style="font-size:.88rem;font-weight:700;margin-bottom:.3rem">Passwort ändern</div>
+      <label class="settings-label" for="set-pw-old">Aktuelles Passwort</label>
+      <input id="set-pw-old" class="settings-input" type="password" autocomplete="current-password">
+      <label class="settings-label" for="set-pw-new">Neues Passwort</label>
+      <input id="set-pw-new" class="settings-input" type="password" autocomplete="new-password">
+      <label class="settings-label" for="set-pw-confirm">Neues Passwort bestätigen</label>
+      <input id="set-pw-confirm" class="settings-input" type="password" autocomplete="new-password">
+      <div id="set-pw-msg" class="settings-msg"></div>
+      <button class="btn-settings" onclick="settingsDlg.savePw()">Passwort ändern</button>
+    </div>
+
+    <div class="dlg-footer" style="margin-top:1rem">
+      <button class="btn-cancel" onclick="settingsDlg.close()">Schließen</button>
+    </div>
+  </div>
+</div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -2256,6 +2319,57 @@ const auth={
   logout(){S.clearSession();location.reload();},
   current(){return S.getSession();},
   token(){const s=S.getSession();return s?.token||null;}
+};
+
+/* ── SETTINGS / PASSWORD ─────────────────────────────── */
+function showForgotPw(){
+  alert('Bitte kontaktiere den Admin (Dr. Marius Romanin),\num dein Passwort zurücksetzen zu lassen.');
+}
+
+const settingsDlg={
+  open(){
+    const u=auth.current();
+    if(!u)return;
+    q('#set-email').value=u.email||'';
+    q('#set-pw-old').value='';q('#set-pw-new').value='';q('#set-pw-confirm').value='';
+    q('#set-email-msg').textContent='';q('#set-pw-msg').textContent='';
+    q('#settings-overlay').classList.remove('hidden');
+  },
+  close(){q('#settings-overlay').classList.add('hidden');},
+  async saveEmail(){
+    const msg=q('#set-email-msg');msg.textContent='';msg.className='settings-msg';
+    const neue=q('#set-email').value.trim().toLowerCase();
+    if(!neue||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(neue)){
+      msg.textContent='Bitte gültige E-Mail eingeben.';msg.classList.add('settings-err');return;
+    }
+    try{
+      const res=await fetch(SB_URL+'/rpc/change_email',{
+        method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
+        body:JSON.stringify({neue_email:neue})
+      });
+      if(!res.ok){const e=await res.json().catch(()=>({}));msg.textContent=e.message||'Fehler beim Ändern.';msg.classList.add('settings-err');return;}
+      msg.textContent='E-Mail geändert ✓';msg.classList.add('settings-ok');
+      const ses=auth.current();ses.email=neue;S.setSession(ses);
+      localStorage.setItem('nv_last_email',neue);
+      q('#ab-user').textContent=ses.name;
+    }catch(e){msg.textContent='Server nicht erreichbar.';msg.classList.add('settings-err');}
+  },
+  async savePw(){
+    const msg=q('#set-pw-msg');msg.textContent='';msg.className='settings-msg';
+    const alt=q('#set-pw-old').value, neu=q('#set-pw-new').value, conf=q('#set-pw-confirm').value;
+    if(!alt){msg.textContent='Aktuelles Passwort eingeben.';msg.classList.add('settings-err');return;}
+    if(neu.length<6){msg.textContent='Neues Passwort: mind. 6 Zeichen.';msg.classList.add('settings-err');return;}
+    if(neu!==conf){msg.textContent='Passwörter stimmen nicht überein.';msg.classList.add('settings-err');return;}
+    try{
+      const res=await fetch(SB_URL+'/rpc/change_password',{
+        method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
+        body:JSON.stringify({altes_passwort:alt,neues_passwort:neu})
+      });
+      if(!res.ok){const e=await res.json().catch(()=>({}));msg.textContent=e.message||'Fehler beim Ändern.';msg.classList.add('settings-err');return;}
+      msg.textContent='Passwort geändert ✓';msg.classList.add('settings-ok');
+      q('#set-pw-old').value='';q('#set-pw-new').value='';q('#set-pw-confirm').value='';
+    }catch(e){msg.textContent='Server nicht erreichbar.';msg.classList.add('settings-err');}
+  }
 };
 
 document.addEventListener('DOMContentLoaded',()=>{
