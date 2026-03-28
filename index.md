@@ -495,7 +495,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 <div id="dlg-overlay" class="dlg-overlay hidden"
      onclick="if(event.target===this)dlg.close()">
   <div class="dlg-card">
-    <div class="dlg-title">Ergebnis eintragen</div>
+    <div class="dlg-title" id="dlg-title-text">Ergebnis eintragen</div>
     <div class="dlg-addr" id="dlg-addr-text"></div>
     <div class="dlg-options">
       <button class="dlg-opt" data-action="waehlt_uns" onclick="dlg.select(this)">
@@ -2427,6 +2427,8 @@ const dlg={
     qAll('.dlg-opt').forEach(b=>b.classList.remove('selected'));
     // Beim Korrigieren: bestehenden Eintrag vorausfüllen
     if(a&&a.status==='archiviert'){
+      q('#dlg-title-text').textContent='✏️ Ergebnis korrigieren';
+      q('#dlg-save').textContent='Korrektur speichern';
       const log=S.getProtokoll();
       const entry=log.find(l=>l.adressen_id===id&&l.aktion!=='uebernommen'&&l.aktion!=='reaktiviert');
       if(entry){
@@ -2436,6 +2438,9 @@ const dlg={
         const btn=q(`.dlg-opt[data-action="${entry.aktion}"]`);
         if(btn)btn.classList.add('selected');
       }
+    }else{
+      q('#dlg-title-text').textContent='Ergebnis eintragen';
+      q('#dlg-save').textContent='Speichern';
     }
     showEl('dlg-overlay');
   },
