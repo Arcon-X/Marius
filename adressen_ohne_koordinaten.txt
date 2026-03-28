@@ -1,9 +1,0 @@
-Adressen ohne Koordinaten (6 Stück)
-============================================================
-
-[a0155] DDr. Ioana Brana | Pernerstorfer Gasse 5/1/7 1100 Wien
-[a0274] DDr. Gabriela Eisenmenger | Billrothstraße 49a/Top 6 1190 Wien
-[a0568] Prim. Dr. Philip Jesch | Hertha Firnbergstraße 10/1/1 1100 Wien
-[a0599] Dr. Stefanie Karlsböck | Wiedner Gürtel 13 Icon Vienna Turm 24.15 OG 1100 Wien
-[a1058] Dr. Sandra Raunig | Krankenhausstraße 9  Wien
-[a1246] Dr. Karin Slowak-Hajek | Schöllerhofgasse 5/3 1020 Wien
