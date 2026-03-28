@@ -321,10 +321,17 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   background:var(--card);border-radius:var(--r);box-shadow:var(--sha);
   margin-bottom:.6rem;border-left:4px solid #e5e7eb;
 }
-.arch-header{padding:.7rem 1rem;display:flex;align-items:center;gap:.65rem}
+.arch-header{padding:.7rem 1rem .4rem;display:flex;align-items:center;gap:.65rem}
 .arch-icon{font-size:1.2rem;flex-shrink:0}
 .arch-street{font-size:.88rem;font-weight:700}
 .arch-meta{font-size:.72rem;color:var(--sub)}
+.arch-actions{padding:.1rem 1rem .65rem;display:flex;gap:.4rem;align-items:center}
+.btn-reaktiv{
+  flex:0 0 auto;padding:.5rem .8rem;background:#fff;color:#E67E00;
+  border:2px solid #E67E00;border-radius:8px;font-size:.82rem;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;
+}
+.btn-reaktiv:hover{background:#E67E00;color:#fff}
 
 /* TOAST */
 .toast{
@@ -2388,6 +2395,26 @@ function uebernehmen(id){
   if(lastResults.length)renderResults(lastResults);
 }
 
+/* ── REAKTIVIEREN ───────────────────────────────────── */
+function reaktivieren(id){
+  const user=auth.current();const adressen=S.getAdressen();
+  const a=adressen.find(x=>x.id===id);
+  if(!a||a.status!=='archiviert'){toast('Adresse nicht archiviert');return;}
+  a.status='verfuegbar';a.benutzer_id=null;a.reserviert_am=null;a.erledigt_am=null;
+  S.saveAdressen(adressen);
+  const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
+    aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'',
+    adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+  S.addProtokoll(prot);
+  db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null});
+  db.postProtokoll(prot);
+  updateMeineBadge();
+  toast(`Zurückgesetzt: ${a.strasse} ${a.hnr} ✓`);
+  renderArchive();
+  if(lastResults.length)renderResults(lastResults);
+  if(currentTab==='admin')renderAdmin();
+}
+
 /* ── DIALOG ──────────────────────────────────────────── */
 const dlg={
   currentId:null,selectedAction:null,
@@ -2421,6 +2448,8 @@ const dlg={
     db.postProtokoll(prot);
     updateMeineBadge();toast('Gespeichert ✓');this.close();
     if(lastResults.length)renderResults(lastResults);
+    if(currentTab==='archive')renderArchive();
+    if(currentTab==='meine')renderMeine();
   },
   close(){hideEl('dlg-overlay');this.currentId=null;this.selectedAction=null;}
 };
@@ -2570,6 +2599,10 @@ function renderArchive(){
           </div>
           ${canEdit?`<button class="btn-edit-addr" style="align-self:flex-start" onclick="editDlg.open('${a.id}')">⚙️</button>`:''}
         </div>
+        ${canEdit?`<div class="arch-actions">
+          <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis korrigieren</button>
+          <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')">🔄 Zurücksetzen</button>
+        </div>`:''}
       </div>`;
     }).join('');
 }
