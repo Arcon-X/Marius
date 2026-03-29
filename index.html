@@ -546,7 +546,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="section-title">Mein Standort</div>
       <div class="loc-row">
         <input id="loc-input" class="loc-input" type="text"
-               placeholder="Adresse eingeben &hellip;"
+               placeholder="Adresse oder Name eingeben &hellip;"
                onkeydown="if(event.key==='Enter')loc.geocode()">
         <button class="gps-btn" onclick="loc.getGPS()">&#128205; GPS</button>
       </div>
@@ -2703,6 +2703,22 @@ const loc={
   },
   async geocode(){
     const val=q('#loc-input').value.trim();if(!val)return;
+    // ── Name search: check if input matches a doctor name ──
+    const lower=val.toLowerCase();
+    const allAddr=S.getAdressen();
+    const user=auth.current();
+    let nameHits=allAddr.filter(a=>{
+      const n=((a.titel||'')+' '+(a.name||a.arzt_name||'')).toLowerCase();
+      return n.includes(lower);
+    }).filter(a=>a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id));
+    if(langFilter==='pa')nameHits=nameHits.filter(a=>a.sprache==='pa');
+    if(nameHits.length){
+      nameHits.forEach(a=>{a.dauer_s=0;a.meter=0;a._dist=0;});
+      toast(nameHits.length+' Treffer für "'+val+'"');
+      renderResults(nameHits.slice(0,selectedNum));
+      return;
+    }
+    // ── Address geocoding (existing behavior) ──
     toast('Adresse wird gesucht …');
     try{
       const url='https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(val+', Wien')+'&format=json&limit=1&accept-language=de';

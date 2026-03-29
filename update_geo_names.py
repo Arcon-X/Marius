@@ -9,7 +9,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API = "https://204.168.217.211.nip.io/api"
 EMAIL = "zahradnik@haselbach.art"
-PASS = "novum2026!"
+PASS = "Artcecil1975"
 
 # ── 1. Login ─────────────────────────────────────────────────────────────────
 print("Logging in...")
