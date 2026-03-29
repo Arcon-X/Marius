@@ -266,6 +266,26 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .edit-hist-fields{flex:1;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .edit-hist-restore{padding:.12rem .38rem;font-size:.72rem;border:1px solid var(--bdr);border-radius:6px;background:#fff;cursor:pointer;flex-shrink:0;color:var(--sub)}
 .edit-hist-restore:hover{border-color:var(--g);color:var(--g)}
+.team-card{background:#fff;border-radius:var(--r);padding:.65rem .8rem;margin-bottom:.45rem;box-shadow:var(--sha);display:flex;align-items:center;gap:.6rem}
+.team-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.team-info{flex:1;min-width:0}
+.team-name{font-weight:700;font-size:.88rem;color:var(--dark)}
+.team-detail{font-size:.75rem;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.team-tel a{font-size:.75rem;color:var(--g);text-decoration:none;font-weight:600}
+.team-tel a:hover{text-decoration:underline}
+.team-stats{font-size:.72rem;color:var(--sub)}
+.team-actions{display:flex;gap:.3rem;flex-shrink:0}
+.team-btn{padding:.22rem .45rem;font-size:.72rem;border-radius:6px;border:1.5px solid var(--bdr);background:#fff;cursor:pointer;color:var(--sub);transition:all .15s}
+.team-btn:hover{border-color:var(--g);color:var(--g)}
+.team-btn-del:hover{border-color:#ef4444;color:#ef4444}
+.team-add-btn{display:block;width:100%;padding:.55rem;margin-top:.35rem;border-radius:var(--r);border:2px dashed var(--bdr);background:transparent;cursor:pointer;font-size:.82rem;color:var(--sub);font-family:inherit;transition:all .15s}
+.team-add-btn:hover{border-color:var(--g);color:var(--g)}
+.team-edit-form{background:#f9fafb;border-radius:var(--r);padding:.65rem .8rem;margin-bottom:.45rem;box-shadow:var(--sha)}
+.team-edit-form input,.team-edit-form select{width:100%;padding:.4rem .5rem;border:1.5px solid var(--bdr);border-radius:8px;font-size:.82rem;font-family:inherit;box-sizing:border-box;margin-bottom:.35rem}
+.team-edit-form input:focus,.team-edit-form select:focus{outline:none;border-color:var(--g)}
+.team-edit-row{display:flex;gap:.35rem}
+.team-edit-row>*{flex:1}
+.team-edit-actions{display:flex;gap:.35rem;margin-top:.2rem}
 
 /* MAP / KARTE */
 #p-karte{padding:0!important;flex-direction:column;overflow:hidden}
@@ -568,9 +588,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleLog()"><span id="log-arrow">&#9654;</span> Letzte Ereignisse</div>
       <div class="card hidden" id="admin-log"></div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleTeam()">
-        <span id="team-arrow">&#9654;</span> Team (19 Kandidat:innen)
+        <span id="team-arrow">&#9654;</span> Team (<span id="team-count">0</span> Mitglieder)
       </div>
-      <div class="card hidden" id="admin-users"></div>
+      <div class="hidden" id="admin-users"></div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleAddrList()"><span id="addrlist-arrow">&#9654;</span> Adressliste</div>
       <div id="admin-addr-wrap" class="hidden">
       <div class="karte-toolbar" style="border-radius:var(--r);border-bottom:none;margin-bottom:.4rem;box-shadow:var(--sha)">
@@ -3108,19 +3128,27 @@ function renderAdmin(){
       </div>
     </div>`;
   }).join(''):'<div class="log-item" style="color:var(--sub)">Noch keine Einträge.</div>';
-  q('#admin-users').innerHTML=(_dbUsers.length?_dbUsers:DEMO_USERS).map(u=>{
+  const users=_dbUsers.length?_dbUsers:DEMO_USERS;
+  q('#team-count').textContent=users.length;
+  q('#admin-users').innerHTML=users.map(u=>{
     const mine=S.getAdressen().filter(a=>a.benutzer_id===u.id);
     const active=mine.filter(a=>a.status==='in_bearbeitung').length;
     const done=mine.filter(a=>a.status==='archiviert').length;
     const unt=log.filter(l=>l.benutzer_id===u.id&&l.aktion==='waehlt_uns').length;
-    return`<div class="log-item">
-      <div class="log-dot" style="background:${u.rolle==='admin'?'var(--g)':'#3b82f6'}"></div>
-      <div class="log-main">
-        <div class="log-aktion">${u.name}${u.rolle==='admin'?' 👑':''}</div>
-        <div class="log-detail">Aktiv: ${active} · Erledigt: ${done} · Wählt uns: ${unt}</div>
+    return`<div class="team-card" id="team-${u.id}">
+      <div class="team-dot" style="background:${u.rolle==='admin'?'var(--g)':'#3b82f6'}"></div>
+      <div class="team-info">
+        <div class="team-name">${u.name}${u.rolle==='admin'?' 👑':''}</div>
+        <div class="team-detail">📧 ${u.email}</div>
+        ${u.telefon?`<div class="team-tel">📞 <a href="tel:${u.telefon}">${u.telefon}</a></div>`:''}
+        <div class="team-stats">Aktiv: ${active} · Erledigt: ${done} · Wählt uns: ${unt}</div>
+      </div>
+      <div class="team-actions">
+        <button class="team-btn" onclick="teamEdit('${u.id}')">✏️</button>
+        <button class="team-btn team-btn-del" onclick="teamDelete('${u.id}')">🗑️</button>
       </div>
     </div>`;
-  }).join('');
+  }).join('')+`<button class="team-add-btn" onclick="teamAdd()">➕ Neues Mitglied hinzufügen</button>`;
   renderAdminFilter();
   renderAdminList();
 }
@@ -3194,6 +3222,81 @@ function renderAdminList(){
 }
 function adminSetStatus(val){adminState.status=val;renderAdminFilter();renderAdminList();}
 function adminSetPlz(val){adminState.plz=val;renderAdminFilter();renderAdminList();}
+
+/* ── TEAM MANAGEMENT ─────────────────────────────────── */
+function _teamForm(u){
+  const isNew=!u;
+  u=u||{name:'',email:'',rolle:'mitarbeiter',telefon:''};
+  return`<div class="team-edit-form" id="team-form-${u.id||'new'}">
+    <input id="tf-name" placeholder="Name" value="${u.name||''}">
+    <input id="tf-email" placeholder="E-Mail (Login)" type="email" value="${u.email||''}">
+    <div class="team-edit-row">
+      <input id="tf-telefon" placeholder="Telefon" type="tel" value="${u.telefon||''}">
+      <select id="tf-rolle"><option value="mitarbeiter"${u.rolle==='mitarbeiter'?' selected':''}>Mitarbeiter</option><option value="admin"${u.rolle==='admin'?' selected':''}>Admin</option></select>
+    </div>
+    <div class="team-edit-actions">
+      <button class="btn-take" style="flex:1;padding:.4rem" onclick="${isNew?'teamSaveNew()':'teamSaveEdit(\''+u.id+'\')'}">${isNew?'➕ Anlegen':'💾 Speichern'}</button>
+      <button class="team-btn" style="padding:.4rem .8rem" onclick="renderAdmin()">Abbrechen</button>
+    </div>
+  </div>`;
+}
+function teamEdit(id){
+  const u=_dbUsers.find(x=>x.id===id);if(!u)return;
+  const card=document.getElementById('team-'+id);
+  if(!card)return;
+  card.outerHTML=_teamForm(u);
+}
+async function teamSaveEdit(id){
+  const name=document.getElementById('tf-name').value.trim();
+  const email=document.getElementById('tf-email').value.trim();
+  const telefon=document.getElementById('tf-telefon').value.trim();
+  const rolle=document.getElementById('tf-rolle').value;
+  if(!name||!email){toast('Name und E-Mail erforderlich');return;}
+  try{
+    const res=await fetch(SB_URL+'/benutzer?id=eq.'+id,{method:'PATCH',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token(),'Prefer':'return=minimal'},
+      body:JSON.stringify({name,email,telefon:telefon||null,rolle})});
+    if(!res.ok){toast('⚠️ Fehler: '+res.status);return;}
+    const idx=_dbUsers.findIndex(x=>x.id===id);
+    if(idx>=0)Object.assign(_dbUsers[idx],{name,email,telefon:telefon||null,rolle});
+    toast('Mitglied aktualisiert ✓');renderAdmin();
+  }catch(e){toast('⚠️ '+e.message);}
+}
+function teamAdd(){
+  const container=q('#admin-users');
+  const addBtn=container.querySelector('.team-add-btn');
+  if(addBtn)addBtn.outerHTML=_teamForm(null);
+}
+async function teamSaveNew(){
+  const name=document.getElementById('tf-name').value.trim();
+  const email=document.getElementById('tf-email').value.trim();
+  const telefon=document.getElementById('tf-telefon').value.trim();
+  const rolle=document.getElementById('tf-rolle').value;
+  if(!name||!email){toast('Name und E-Mail erforderlich');return;}
+  try{
+    const res=await fetch(SB_URL+'/benutzer',{method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token(),'Prefer':'return=representation'},
+      body:JSON.stringify({name,email,telefon:telefon||null,rolle})});
+    if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t.includes('duplicate')?(' – E-Mail existiert bereits'):''));return;}
+    const created=await res.json();
+    if(Array.isArray(created))_dbUsers.push(...created);else _dbUsers.push(created);
+    toast('Mitglied angelegt ✓ (Passwort = E-Mail-Adresse)');renderAdmin();
+  }catch(e){toast('⚠️ '+e.message);}
+}
+async function teamDelete(id){
+  const u=_dbUsers.find(x=>x.id===id);if(!u)return;
+  const mine=S.getAdressen().filter(a=>a.benutzer_id===id);
+  if(mine.length){toast('⚠️ Kann nicht gelöscht werden – '+mine.length+' Adressen zugewiesen');return;}
+  if(!confirm(`${u.name} wirklich entfernen?`))return;
+  try{
+    const res=await fetch(SB_URL+'/benutzer?id=eq.'+id,{method:'DELETE',
+      headers:{'Authorization':'Bearer '+auth.token(),'Prefer':'return=minimal'}});
+    if(!res.ok){toast('⚠️ Fehler: '+res.status);return;}
+    _dbUsers=_dbUsers.filter(x=>x.id!==id);
+    toast('Mitglied entfernt ✓');renderAdmin();
+  }catch(e){toast('⚠️ '+e.message);}
+}
+
 function toggleTeam(){const el=q('#admin-users');el.classList.toggle('hidden');q('#team-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleLog(){const el=q('#admin-log');el.classList.toggle('hidden');q('#log-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleAddrList(){const el=q('#admin-addr-wrap');el.classList.toggle('hidden');q('#addrlist-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
