@@ -36,10 +36,18 @@ for i, parts in enumerate(rows):
     try:
         with urllib.request.urlopen(req, timeout=12) as resp:
             data = json.loads(resp.read())
+    except urllib.error.HTTPError as e:
+        if e.code == 429:
+            print(f"  429 Rate-Limit bei {strasse} {hnr} — warte 60s ...", flush=True)
+            time.sleep(60)
+        else:
+            errors += 1
+            print(f"  FEHLER {e.code}: {strasse} {hnr}", file=sys.stderr)
+            time.sleep(1.2)
+        continue
     except Exception as e:
         errors += 1
-        if errors <= 5:
-            print(f"  FEHLER curl: {strasse} {hnr}: {e}", file=sys.stderr)
+        print(f"  FEHLER: {strasse} {hnr}: {e}", file=sys.stderr)
         time.sleep(1.2)
         continue
 

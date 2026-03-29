@@ -4,6 +4,8 @@ Liest alle Adressen mit Koordinaten, reverse-geocodet via Nominatim,
 filtert numerische Teile heraus → zeigt Viertel/Bezirk statt Straßenname.
 """
 import requests, time, sys
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API = "https://204.168.217.211.nip.io/api"
 EMAIL = "zahradnik@haselbach.art"
