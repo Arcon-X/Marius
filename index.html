@@ -2620,13 +2620,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 /* ── iOS Safari: Nav bei Tastatur ausblenden ─────────── */
 (function(){
   const nav=document.querySelector('.bottom-nav');
-  if(!nav||!window.visualViewport)return;
-  window.visualViewport.addEventListener('resize',()=>{
-    const ae=document.activeElement;
-    const inputFocused=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
-    const kb=inputFocused&&(window.innerHeight-window.visualViewport.height>150);
-    nav.classList.toggle('kb-open',kb);
-  });
+  if(!nav)return;
+  const isInput=el=>el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA');
+  document.addEventListener('focusin',e=>{if(isInput(e.target))nav.classList.add('kb-open');});
+  document.addEventListener('focusout',e=>{if(isInput(e.target))setTimeout(()=>{if(!isInput(document.activeElement))nav.classList.remove('kb-open');},80);});
 })();
 
 /* ── NAV ─────────────────────────────────────────────── */
