@@ -3165,7 +3165,11 @@ function renderAdmin(){
   const adressen=S.getAdressen();const log=S.getProtokoll();
   const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
   const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
-  const recent=log.slice(0,15);
+  // Nur Einträge NACH der letzten Reaktivierung je Adresse anzeigen
+  const lastReaktA={};
+  log.forEach(l=>{if(l.aktion==='reaktiviert'){const t=new Date(l.zeitpunkt).getTime();if(!lastReaktA[l.adressen_id]||t>lastReaktA[l.adressen_id])lastReaktA[l.adressen_id]=t;}});
+  const activeLogA=log.filter(l=>!lastReaktA[l.adressen_id]||new Date(l.zeitpunkt).getTime()>lastReaktA[l.adressen_id]);
+  const recent=activeLogA.slice(0,15);
   q('#admin-log').innerHTML=recent.length?recent.map(l=>{
   const u=(_dbUsers.find(u=>u.id===l.benutzer_id)||DEMO_USERS.find(u=>u.id===l.benutzer_id));
     const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
@@ -3180,9 +3184,6 @@ function renderAdmin(){
   }).join(''):'<div class="log-item" style="color:var(--sub)">Noch keine Einträge.</div>';
   const users=_dbUsers.length?_dbUsers:DEMO_USERS;
   q('#team-count').textContent=users.length;
-  const lastReaktA={};
-  log.forEach(l=>{if(l.aktion==='reaktiviert'){const t=new Date(l.zeitpunkt).getTime();if(!lastReaktA[l.adressen_id]||t>lastReaktA[l.adressen_id])lastReaktA[l.adressen_id]=t;}});
-  const activeLogA=log.filter(l=>!lastReaktA[l.adressen_id]||new Date(l.zeitpunkt).getTime()>lastReaktA[l.adressen_id]);
   q('#admin-users').innerHTML=users.map(u=>{
     const mine=S.getAdressen().filter(a=>a.benutzer_id===u.id);
     const active=mine.filter(a=>a.status==='in_bearbeitung').length;
