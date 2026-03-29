@@ -617,19 +617,19 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         <div class="team-card"><div style="flex:1"><div class="team-name">🌐 Domain konfigurieren</div><div class="team-detail">DNS-Records, GitHub Pages Custom Domain, CORS &amp; Redirect-Anleitung</div></div><a href="docs/domain" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
-      <div class="hidden" id="admin-issues" style="padding:.5rem">
-        <div class="card" style="margin-bottom:.8rem">
-          <div style="display:flex;gap:.5rem;margin-bottom:.5rem;align-items:end;flex-wrap:wrap">
+      <div class="hidden" id="admin-issues" style="padding:.3rem .1rem">
+        <div class="card" style="margin-bottom:.8rem;padding:1rem">
+          <div style="display:flex;gap:.6rem;margin-bottom:.7rem;align-items:end;flex-wrap:wrap">
             <div style="flex:0 0 auto">
-              <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.2rem">Typ</label>
-              <select id="issue-typ" class="edit-inp" style="width:auto;padding:.4rem .6rem"><option value="bug">🐛 Bug</option><option value="feature">💡 Feature</option></select>
+              <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.25rem">Typ</label>
+              <select id="issue-typ" class="edit-inp" style="width:auto;padding:.45rem .6rem"><option value="bug">🐛 Bug</option><option value="feature">💡 Feature</option></select>
             </div>
-            <div style="flex:1;min-width:200px">
-              <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.2rem">Beschreibung</label>
+            <div style="flex:1;min-width:180px">
+              <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.25rem">Beschreibung</label>
               <input id="issue-beschreibung" class="edit-inp" placeholder="Was ist passiert / was wünschst du dir?" style="width:100%">
             </div>
-            <button class="btn-primary" style="white-space:nowrap;padding:.45rem .9rem" onclick="submitIssue()">Absenden</button>
           </div>
+          <button class="btn-primary" style="width:100%;padding:.5rem .9rem" onclick="submitIssue()">Absenden</button>
         </div>
         <div id="issues-list"></div>
       </div>
