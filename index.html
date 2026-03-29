@@ -2654,7 +2654,7 @@ function renderResults(list){
         <div class="addr-main">
           <div class="addr-street">${a.strasse} ${a.hnr}${cur.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
           ${(a.titel||a.name)?`<div class="addr-arzt">${a.sprache==='pa'?'&#128332; ':''}${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
-          ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+          ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
           ${cur.website?`<div class="addr-website"><a href="${cur.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
           <div class="addr-plz">${a.plz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}</div>
         </div>
@@ -2868,10 +2868,10 @@ const editDlg={
         a.lat=parseFloat(data[0].lat);a.lon=parseFloat(data[0].lon);
         const parts=data[0].display_name.split(',').map(s=>s.trim());
         const meaningful=parts.filter(p=>/[a-zA-ZäöüÄÖÜß]/.test(p));// rein-numerische Teile raus
-        a.geo_name=meaningful.slice(1,3).join(', ')||meaningful[0]||parts[0];
+        a.geo_name=meaningful.slice(0,3).join(', ')||parts[0];
         delete a.notiz;
         geo.className='edit-geo geo-ok';
-        geo.textContent='\u2705 Koordinaten aktualisiert: '+data[0].display_name.split(',').slice(0,2).join(', ');
+        geo.textContent='\u2705 Koordinaten aktualisiert: '+a.geo_name;
       }else{
         geo.className='edit-geo geo-warn';
         geo.textContent='\u26a0\ufe0f Adresse nicht gefunden \u2013 Koordinaten unver\u00e4ndert. Bitte Schreibweise pr\u00fcfen.';
@@ -2972,7 +2972,7 @@ function renderMeine(){
           <div class="mine-info">
             <div class="mine-street">${a.strasse} ${a.hnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
-            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
             ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="mine-plz">${a.plz} Wien</div>
             <div class="mine-since">Reserviert: ${since}</div>
@@ -3074,7 +3074,7 @@ function renderArchive(){
           <div style="flex:1">
             <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
-            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
             ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="arch-meta">${label}${when?' · '+when:''}${entry&&entry.notiz?' · '+entry.notiz:''}</div>
           </div>
@@ -3184,7 +3184,7 @@ function renderAdminList(){
       <div class="kl-main">
         <div class="kl-street">${a.strasse} ${a.hnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
         ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
-        ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+        ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
         ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
         <div class="kl-meta">${a.plz} Wien &nbsp;·&nbsp; ${statusLabel}${ownerName?' &nbsp;·&nbsp; 👤 '+ownerName:''}</div>
       </div>

@@ -60,7 +60,7 @@ for i, parts in enumerate(rows):
     # Filter numeric-only parts, skip street name → show suburb/district
     dp = [p.strip() for p in dn.split(",")]
     meaningful = [p for p in dp if any(c.isalpha() for c in p)]
-    geo_name = ", ".join(meaningful[1:3]) if len(meaningful) > 1 else (meaningful[0] if meaningful else "")
+    geo_name = ", ".join(meaningful[0:3]) if meaningful else ""
 
     if not geo_name:
         skipped += 1

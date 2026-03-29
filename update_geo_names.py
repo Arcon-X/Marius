@@ -52,7 +52,7 @@ for i, a in enumerate(adressen):
         parts = [p.strip() for p in dn.split(",")]
         # Rein-numerische Teile raus, dann Straße überspringen → Viertel/Bezirk
         meaningful = [p for p in parts if any(c.isalpha() for c in p)]
-        geo_name = ", ".join(meaningful[1:3]) if len(meaningful) > 1 else (meaningful[0] if meaningful else "")
+        geo_name = ", ".join(meaningful[0:3]) if meaningful else ""
 
         # Falls erstes Segment == Straßenname der Adresse → weglassen
         gn_parts = [p.strip() for p in geo_name.split(",")]
