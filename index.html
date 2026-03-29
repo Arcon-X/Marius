@@ -2982,10 +2982,14 @@ function renderArchive(){
   const user=auth.current();const isAdmin=user.rolle==='admin';
   const adressen=S.getAdressen();
   const log=S.getProtokoll();
+  // Reaktivierte Einträge ausfiltern: nur Ergebnisse NACH dem letzten "reaktiviert" zählen
+  const lastReakt={};
+  log.forEach(l=>{if(l.aktion==='reaktiviert'){const t=new Date(l.zeitpunkt).getTime();if(!lastReakt[l.adressen_id]||t>lastReakt[l.adressen_id])lastReakt[l.adressen_id]=t;}});
+  const activeLog=log.filter(l=>!lastReakt[l.adressen_id]||new Date(l.zeitpunkt).getTime()>lastReakt[l.adressen_id]);
   const total=adressen.length;
   const verf=adressen.filter(a=>a.status==='verfuegbar').length;
   const bear=adressen.filter(a=>a.status==='in_bearbeitung').length;
-  const unter=log.filter(l=>l.aktion==='waehlt_uns').length;
+  const unter=activeLog.filter(l=>l.aktion==='waehlt_uns').length;
   q('#admin-stats').innerHTML=`
     <div class="stat-chip chip-b"><span class="sc-icon">🏠</span><span class="sc-label">Gesamt</span><span class="sc-val">${total}</span></div>
     <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
@@ -2999,7 +3003,7 @@ function renderArchive(){
     {key:'kein_interesse_wahl',icon:'🚫',label:'Kein Interesse',color:'cb-kein_interesse_wahl'},
     {key:'sonstige',icon:'💬',label:'Sonstige',color:'cb-sonstige'},
   ];
-  const counts=chartData.map(d=>({...d,n:log.filter(l=>l.aktion===d.key).length}));
+  const counts=chartData.map(d=>({...d,n:activeLog.filter(l=>l.aktion===d.key).length}));
   const maxN=Math.max(...counts.map(c=>c.n),1);
   const totalErg=counts.reduce((s,c)=>s+c.n,0);
   q('#ergebnis-chart').innerHTML=totalErg?`<div class="chart-card">
