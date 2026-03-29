@@ -396,9 +396,10 @@ Gesamte DB-Größe: < 50 MB (inkl. PostGIS-Indexe).
 
 ## 14. Ansprechpartner
 
-| Rolle | Name | Kontakt |
-|---|---|---|
-| **Projektleitung & Admin** | Dr. Marius Romanin | zahradnik@haselbach.art |
+| Rolle | Name/Kontakt |
+|---|---|
+| **Projektleitung** | Dr. Marius Romanin |
+| **Design & Entwicklung** | zahradnik@haselbach.art |
 | **Server-Zugang** | SSH-Key | `id_ed25519_novumziv2` |
 | **Repository** | GitHub | github.com/Arcon-X/Marius |
 | **Live-App** | GitHub Pages | arcon-x.github.io/Marius |
