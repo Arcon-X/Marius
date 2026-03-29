@@ -2621,9 +2621,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 (function(){
   const nav=document.querySelector('.bottom-nav');
   if(!nav||!window.visualViewport)return;
-  const full=window.innerHeight;
   window.visualViewport.addEventListener('resize',()=>{
-    const kb=full-window.visualViewport.height>150;
+    const ae=document.activeElement;
+    const inputFocused=ae&&(ae.tagName==='INPUT'||ae.tagName==='TEXTAREA');
+    const kb=inputFocused&&(window.innerHeight-window.visualViewport.height>150);
     nav.classList.toggle('kb-open',kb);
   });
 })();
