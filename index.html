@@ -524,7 +524,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
   <header class="app-bar">
     <div class="ab-logo">NOVUM<span>-ZIV</span></div>
-    <div class="ab-version">v1.5.0 · {{ site.time | date: "%Y%m%d.%H%M" }}</div>
+    <div class="ab-version">v1.6.0 · {{ site.time | date: "%Y%m%d.%H%M" }}</div>
     <div class="ab-user" id="ab-user" onclick="settingsDlg.open()" style="cursor:pointer" title="Einstellungen"></div>
     <button class="ab-logout" onclick="auth.logout()">Abmelden</button>
   </header>
@@ -2348,7 +2348,7 @@ const SEED_ADRESSEN = [
 ];
 
 /* ── SERVER (PostgREST) ──────────────────────────────── */
-const SB_URL='https://204.168.217.211.nip.io/api';
+const SB_URL='/api';
 let _sbLastSync=0;
 let _dbUsers=[];
 const db={
