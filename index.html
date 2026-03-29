@@ -190,6 +190,12 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   border-radius:8px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:inherit;
 }
 .btn-done:hover{background:var(--g-l)}
+.btn-zurueck{
+  flex:0 0 auto;padding:.5rem .8rem;background:#fff;color:var(--g);
+  border:2px solid var(--g);border-radius:8px;font-size:.82rem;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;
+}
+.btn-zurueck:hover{background:var(--g-l)}
 .mine-pill{
   display:inline-block;font-size:.65rem;font-weight:700;border-radius:4px;
   padding:2px 6px;background:#FFFDE0;color:#5A5000;
@@ -257,7 +263,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .edit-geo{font-size:.78rem;padding:.45rem .65rem;border-radius:8px;margin-bottom:.75rem}
 .edit-geo.geo-ok{background:#f0faf4;color:#2C6E49;border:1px solid #a7f3d0}
 .edit-geo.geo-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
-.btn-edit-addr{padding:.28rem .55rem;font-size:.78rem;border-radius:8px;border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-family:inherit;color:var(--sub);transition:all .15s;white-space:nowrap}
+.btn-edit-addr{padding:.28rem .55rem;font-size:.78rem;border-radius:8px;border:2px solid var(--g);background:#fff;cursor:pointer;font-family:inherit;color:var(--g);transition:all .15s;white-space:nowrap}
 .btn-edit-addr:hover{border-color:var(--g);color:var(--g)}
 .verified-badge{display:inline-block;font-size:.82em;margin-left:.25rem;vertical-align:middle;line-height:1;cursor:default}
 .addr-website{margin-top:.18rem}
@@ -2776,7 +2782,7 @@ function renderResults(list){
     const isMine=cur.status==='in_bearbeitung'&&cur.benutzer_id===user.id;
     let actions='';
     const isAdmin=user.rolle==='admin';
-    if(isMine)actions=`<button class="btn-done" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button><button class="btn-reaktiv" onclick="zurueckgeben('${a.id}')" title="Zurückgeben">♻️</button>`;
+    if(isMine)actions=`<button class="btn-zurueck" onclick="zurueckgeben('${a.id}')" title="Zurückgeben">♻️</button><button class="btn-done" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>`;
     else if(cur.status==='verfuegbar')actions=`<button class="btn-take" onclick="uebernehmen('${a.id}')">📌 Übernehmen</button>`;
     if(isAdmin||isMine)actions+=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>`;
     return`<div class="addr-card" id="card-${a.id}">
