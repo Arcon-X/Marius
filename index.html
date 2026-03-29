@@ -2776,7 +2776,7 @@ function renderResults(list){
     const isMine=cur.status==='in_bearbeitung'&&cur.benutzer_id===user.id;
     let actions='';
     const isAdmin=user.rolle==='admin';
-    if(isMine)actions=`<button class="btn-done" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>`;
+    if(isMine)actions=`<button class="btn-done" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button><button class="btn-reaktiv" onclick="zurueckgeben('${a.id}')" title="Zurückgeben">♻️</button>`;
     else if(cur.status==='verfuegbar')actions=`<button class="btn-take" onclick="uebernehmen('${a.id}')">📌 Übernehmen</button>`;
     if(isAdmin||isMine)actions+=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>`;
     return`<div class="addr-card" id="card-${a.id}">
@@ -2825,6 +2825,28 @@ async function uebernehmen(id){
   updateMeineBadge();
   toast(`Übernommen: ${a.strasse} ${a.hnr} ✓`);
   if(lastResults.length)renderResults(lastResults);
+}
+
+/* ── ZURÜCKGEBEN (in_bearbeitung → verfuegbar) ──────── */
+async function zurueckgeben(id){
+  const user=auth.current();const adressen=S.getAdressen();
+  const a=adressen.find(x=>x.id===id);
+  if(!a||a.status!=='in_bearbeitung'||a.benutzer_id!==user.id){toast('Adresse kann nicht zurückgegeben werden');return;}
+  a.status='verfuegbar';a.benutzer_id=null;a.reserviert_am=null;
+  S.saveAdressen(adressen);
+  const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
+    aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'Zurückgegeben',
+    adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+  S.addProtokoll(prot);
+  const [patchOk,protOk]=await Promise.all([
+    db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null}),
+    db.postProtokoll(prot)
+  ]);
+  if(!patchOk||!protOk)toast('⚠️ Serverfehler – bitte Seite neu laden');
+  updateMeineBadge();
+  toast(`Zurückgegeben: ${a.strasse} ${a.hnr} ✓`);
+  if(lastResults.length)renderResults(lastResults);
+  if(currentTab==='meine')renderMeine();
 }
 
 /* ── REAKTIVIEREN ───────────────────────────────────── */
