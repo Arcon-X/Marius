@@ -3134,11 +3134,14 @@ function renderAdmin(){
   }).join(''):'<div class="log-item" style="color:var(--sub)">Noch keine Einträge.</div>';
   const users=_dbUsers.length?_dbUsers:DEMO_USERS;
   q('#team-count').textContent=users.length;
+  const lastReaktA={};
+  log.forEach(l=>{if(l.aktion==='reaktiviert'){const t=new Date(l.zeitpunkt).getTime();if(!lastReaktA[l.adressen_id]||t>lastReaktA[l.adressen_id])lastReaktA[l.adressen_id]=t;}});
+  const activeLogA=log.filter(l=>!lastReaktA[l.adressen_id]||new Date(l.zeitpunkt).getTime()>lastReaktA[l.adressen_id]);
   q('#admin-users').innerHTML=users.map(u=>{
     const mine=S.getAdressen().filter(a=>a.benutzer_id===u.id);
     const active=mine.filter(a=>a.status==='in_bearbeitung').length;
     const done=mine.filter(a=>a.status==='archiviert').length;
-    const unt=log.filter(l=>l.benutzer_id===u.id&&l.aktion==='waehlt_uns').length;
+    const unt=activeLogA.filter(l=>l.benutzer_id===u.id&&l.aktion==='waehlt_uns').length;
     return`<div class="team-card" id="team-${u.id}">
       <div class="team-dot" style="background:${u.rolle==='admin'?'var(--g)':'#3b82f6'}"></div>
       <div class="team-info">
