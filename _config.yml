@@ -5,6 +5,8 @@ author: "BNZ Wien"
 url: "https://arcon-x.github.io"
 baseurl: "/Marius"
 
+timezone: Europe/Vienna
+
 theme: minima
 
 plugins:
