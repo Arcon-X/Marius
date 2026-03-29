@@ -54,6 +54,12 @@ for i, a in enumerate(adressen):
         meaningful = [p for p in parts if any(c.isalpha() for c in p)]
         geo_name = ", ".join(meaningful[1:3]) if len(meaningful) > 1 else (meaningful[0] if meaningful else "")
 
+        # Falls erstes Segment == Straßenname der Adresse → weglassen
+        gn_parts = [p.strip() for p in geo_name.split(",")]
+        if gn_parts and gn_parts[0].lower() == a.get("strasse", "").strip().lower():
+            gn_parts = gn_parts[1:]
+        geo_name = ", ".join(gn_parts).strip()
+
         if not geo_name:
             skipped += 1
             time.sleep(1.1)
@@ -67,7 +73,7 @@ for i, a in enumerate(adressen):
         updated += 1
 
         if updated % 25 == 0 or i < 3:
-            print(f"  [{i+1}/{len(adressen)}] {a['strasse']} {a.get('hausnummer','')} → {geo_name}")
+            print(f"  [{i+1}/{len(adressen)}] {a['strasse']} {a.get('hausnummer','')} -> {geo_name}")
 
     except Exception as e:
         errors += 1

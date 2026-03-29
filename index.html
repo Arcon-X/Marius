@@ -255,6 +255,17 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .edit-geo.geo-warn{background:#fffbeb;color:#92400e;border:1px solid #fde68a}
 .btn-edit-addr{padding:.28rem .55rem;font-size:.78rem;border-radius:8px;border:1.5px solid var(--bdr);background:#fff;cursor:pointer;font-family:inherit;color:var(--sub);transition:all .15s;white-space:nowrap}
 .btn-edit-addr:hover{border-color:var(--g);color:var(--g)}
+.verified-badge{display:inline-block;font-size:.82em;margin-left:.25rem;vertical-align:middle;line-height:1;cursor:default}
+.addr-website{margin-top:.18rem}
+.addr-website a{font-size:.78rem;color:var(--g);text-decoration:none;font-weight:600}
+.addr-website a:hover{text-decoration:underline}
+.edit-history{margin-top:.6rem;border-top:1px solid var(--bdr);padding-top:.5rem}
+.edit-hist-title{font-size:.68rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.35rem}
+.edit-hist-item{display:flex;align-items:center;gap:.4rem;padding:.22rem 0;border-bottom:1px solid #f3f4f6;font-size:.77rem}
+.edit-hist-meta{color:var(--sub);white-space:nowrap;flex-shrink:0}
+.edit-hist-fields{flex:1;color:var(--dark);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.edit-hist-restore{padding:.12rem .38rem;font-size:.72rem;border:1px solid var(--bdr);border-radius:6px;background:#fff;cursor:pointer;flex-shrink:0;color:var(--sub)}
+.edit-hist-restore:hover{border-color:var(--g);color:var(--g)}
 
 /* MAP / KARTE */
 #p-karte{padding:0!important;flex-direction:column;overflow:hidden}
@@ -676,8 +687,21 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
           </select>
         </div>
       </div>
+      <div class="edit-row">
+        <div class="edit-field">
+          <label>Website</label>
+          <input id="ef-website" class="edit-inp" type="url" placeholder="https://…" autocomplete="off">
+        </div>
+      </div>
+      <div class="edit-row" style="align-items:center;padding:.1rem 0">
+        <label style="display:flex;align-items:center;gap:.55rem;font-size:.88rem;cursor:pointer;user-select:none">
+          <input type="checkbox" id="ef-verifiziert" style="width:1.1rem;height:1.1rem;cursor:pointer;accent-color:var(--g)">
+          <span>&#10004;&#65039; Verifiziert</span>
+        </label>
+      </div>
     </div>
     <div id="edit-geo" class="edit-geo hidden"></div>
+    <div id="edit-history" class="edit-history hidden"></div>
     <div class="dlg-footer">
       <button class="btn-save" id="edit-save-btn" onclick="editDlg.save()">&#128204; Speichern</button>
     </div>
@@ -2638,9 +2662,10 @@ function renderResults(list){
       <div class="addr-header">
         <div class="addr-num">${idx+1}</div>
         <div class="addr-main">
-          <div class="addr-street">${a.strasse} ${a.hnr}</div>
+          <div class="addr-street">${a.strasse} ${a.hnr}${cur.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
           ${(a.titel||a.name)?`<div class="addr-arzt">${a.sprache==='pa'?'&#128332; ':''}${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
           ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+          ${cur.website?`<div class="addr-website"><a href="${cur.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
           <div class="addr-plz">${a.plz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}</div>
         </div>
         <div class="addr-time">
@@ -2764,6 +2789,22 @@ const dlg={
   close(){hideEl('dlg-overlay');this.currentId=null;this.selectedAction=null;}
 };
 
+/* ── SNAPSHOT HELPER ────────────────────────────────── */
+async function snapshotAdresse(adressen_id, oldFields, source){
+  const user=auth.current();if(!user)return;
+  const entry={
+    adressen_id,
+    benutzer_id:user.id,
+    aktion:'bearbeitet',
+    notiz:JSON.stringify({old:oldFields,source})
+  };
+  await db.postProtokoll(entry);
+  const pl=S.getProtokoll();
+  pl.unshift({id:uid(),adressen_id,benutzer_id:user.id,aktion:'bearbeitet',
+    zeitpunkt:new Date().toISOString(),notiz:entry.notiz});
+  S.saveProtokoll(pl);
+}
+
 /* ── EDIT DIALOG ─────────────────────────────────────── */
 const editDlg={
   currentId:null,
@@ -2777,6 +2818,30 @@ const editDlg={
     document.getElementById('ef-hnr').value=a.hnr||'';
     document.getElementById('ef-plz').value=a.plz||'';
     document.getElementById('ef-sprache').value=a.sprache||'de';
+    document.getElementById('ef-website').value=a.website||'';
+    document.getElementById('ef-verifiziert').checked=!!a.verifiziert;
+    // Änderungshistorie laden
+    const histEl=document.getElementById('edit-history');
+    const his=S.getProtokoll().filter(l=>l.adressen_id===id&&l.aktion==='bearbeitet')
+      .sort((x,y)=>new Date(y.zeitpunkt)-new Date(x.zeitpunkt)).slice(0,5);
+    if(his.length){
+      const ICONS_SRC={'manual':'\u{1F464} Manuell','verify':'\uD83D\uDD0D Auto'};
+      histEl.innerHTML='<div class="edit-hist-title">\u00c4nderungshistorie</div>'+his.map(l=>{
+        let parsed;try{parsed=JSON.parse(l.notiz||'{}');}catch{parsed={};}
+        const old=parsed.old||{};
+        const src=ICONS_SRC[parsed.source]||parsed.source||'?';
+        const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        const changed=Object.entries(old).filter(([,v])=>v!=null).map(([k,v])=>`${k}: ${v}`).join(', ')||'\u2013';
+        return`<div class="edit-hist-item">
+          <span class="edit-hist-meta">${when} \u00b7 ${src}</span>
+          <span class="edit-hist-fields" title="${changed}">${changed}</span>
+          <button class="edit-hist-restore" onclick="editDlg.restore('${l.id}')" title="Alte Werte laden">\u21a9</button>
+        </div>`;
+      }).join('');
+      histEl.classList.remove('hidden');
+    }else{
+      histEl.classList.add('hidden');
+    }
     const geo=document.getElementById('edit-geo');
     geo.className='edit-geo hidden';geo.textContent='';
     const btn=document.getElementById('edit-save-btn');
@@ -2790,6 +2855,8 @@ const editDlg={
     const adressen=S.getAdressen();
     const a=adressen.find(x=>x.id===this.currentId);
     if(!a){this.close();return;}
+    // Snapshot VOR Änderung sichern
+    const oldSnap={titel:a.titel||null,arzt_name:a.name||null,strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,sprache:a.sprache||'de',lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,website:a.website||null,verifiziert:!!a.verifiziert};
     // Felder aktualisieren
     const titel=document.getElementById('ef-titel').value.trim();
     const name=document.getElementById('ef-name').value.trim();
@@ -2799,6 +2866,8 @@ const editDlg={
     a.hnr=document.getElementById('ef-hnr').value.trim();
     a.plz=document.getElementById('ef-plz').value.trim();
     a.sprache=document.getElementById('ef-sprache').value;
+    a.website=document.getElementById('ef-website').value.trim()||undefined;
+    a.verifiziert=document.getElementById('ef-verifiziert').checked;
     // Geocodierung via Nominatim
     try{
       const queryStr=`${a.hnr} ${a.strasse}, ${a.plz} Wien, Austria`;
@@ -2822,17 +2891,31 @@ const editDlg={
       geo.textContent='\u26a0\ufe0f Geocoding-Fehler \u2013 Koordinaten unver\u00e4ndert.';
     }
     geo.classList.remove('hidden');
+    await snapshotAdresse(a.id,oldSnap,'manual');
     S.saveAdressen(adressen);
-    const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de'});
+    const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de',website:a.website||null,verifiziert:!!a.verifiziert});
     btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
     toast(pOk?'Adresse gespeichert \u2713':'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
-    this.close();
+    setTimeout(()=>this.close(),3000);
     // Ansichten aktualisieren
     if(lastResults.length)renderResults(lastResults);
     if(currentTab==='meine')renderMeine();
     if(currentTab==='archive')renderArchive();
     if(currentTab==='karte'){renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
     if(currentTab==='admin')renderAdmin();
+  },
+  restore(protokollId){
+    const l=S.getProtokoll().find(x=>x.id===protokollId);if(!l)return;
+    let parsed;try{parsed=JSON.parse(l.notiz||'{}');}catch{return;}
+    const old=parsed.old||{};
+    document.getElementById('ef-titel').value=old.titel||'';
+    document.getElementById('ef-name').value=old.arzt_name||'';
+    document.getElementById('ef-strasse').value=old.strasse||'';
+    document.getElementById('ef-hnr').value=old.hausnummer||'';
+    document.getElementById('ef-plz').value=old.plz||'';
+    document.getElementById('ef-website').value=old.website||'';
+    document.getElementById('ef-verifiziert').checked=!!old.verifiziert;
+    toast('Alte Werte geladen \u2013 Speichern zum Wiederherstellen');
   },
   close(){hideEl('edit-dlg-overlay');this.currentId=null;}
 };
@@ -2865,9 +2948,10 @@ function renderMeine(){
         <div class="mine-header">
           <div class="mine-icon">📌</div>
           <div class="mine-info">
-            <div class="mine-street">${a.strasse} ${a.hnr}</div>
+            <div class="mine-street">${a.strasse} ${a.hnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
             ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+            ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="mine-plz">${a.plz} Wien</div>
             <div class="mine-since">Reserviert: ${since}</div>
           </div>
@@ -2962,9 +3046,10 @@ function renderArchive(){
         <div class="arch-header">
           <div class="arch-icon">${icon}</div>
           <div style="flex:1">
-            <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien</div>
+            <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
             ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+            ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="arch-meta">${label}${when?' · '+when:''}${entry&&entry.notiz?' · '+entry.notiz:''}</div>
           </div>
           ${canEdit?`<button class="btn-edit-addr" style="align-self:flex-start" onclick="editDlg.open('${a.id}')">⚙️</button>`:''}
@@ -3071,9 +3156,10 @@ function renderAdminList(){
     return`<div class="kl-card">
       <div class="kl-dot ${dotCls}"></div>
       <div class="kl-main">
-        <div class="kl-street">${a.strasse} ${a.hnr}</div>
+        <div class="kl-street">${a.strasse} ${a.hnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
         ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
         ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name}</div>`:''}
+        ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
         <div class="kl-meta">${a.plz} Wien &nbsp;·&nbsp; ${statusLabel}${ownerName?' &nbsp;·&nbsp; 👤 '+ownerName:''}</div>
       </div>
       <div class="kl-actions">${action}</div>
@@ -3170,8 +3256,9 @@ function renderKarteList(){
       return`<div class="kl-card">
         <div class="kl-dot ${dotCls}"></div>
         <div class="kl-main">
-          <div class="kl-street">${a.strasse} ${a.hnr}</div>
+          <div class="kl-street">${a.strasse} ${a.hnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
           ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
+          ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
           <div class="kl-meta">${a.plz} Wien &nbsp;·&nbsp; ${statusLabel}${isMine?' &nbsp;·&nbsp; 📌 Meine':''}</div>
         </div>
         ${action?`<div class="kl-actions">${action}</div>`:''}
