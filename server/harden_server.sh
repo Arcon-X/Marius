@@ -123,6 +123,14 @@ server {
         proxy_hide_header X-Powered-By;
     }
 
+    # ── Frontend: Statische Dateien ──
+    root /var/www/novumziv;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
     # Verberge Nginx Version
     server_tokens off;
 }
@@ -191,7 +199,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE FUNCTION api.login(email TEXT, passwort TEXT)
 RETURNS JSON AS $$
 DECLARE
-  usr benutzer%ROWTYPE;
+  usr public.benutzer%ROWTYPE;
   token TEXT;
   secret TEXT;
   fail_count INT;
@@ -219,9 +227,9 @@ BEGIN
       USING ERRCODE = '28P01';
   END IF;
 
-  -- Benutzer suchen
-  SELECT * INTO usr FROM benutzer
-  WHERE benutzer.email = lower(login.email) AND aktiv = TRUE;
+  -- Benutzer suchen (explizit public.benutzer, da api.benutzer ein View ohne passwort_hash ist)
+  SELECT * INTO usr FROM public.benutzer
+  WHERE public.benutzer.email = lower(login.email) AND aktiv = TRUE;
 
   IF NOT FOUND THEN
     -- Fehlversuch loggen (auch bei unbekannter E-Mail, gegen Enumeration)
