@@ -611,7 +611,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleDocs()"><span id="docs-arrow">&#9654;</span> Dokumentationen</div>
       <div class="hidden" id="admin-docs">
-        <div class="team-card"><div style="flex:1"><div class="team-name">📄 Adress-Import Report</div><div class="team-detail">Ärztekammerwahl Wien 2026 – Import-Statistiken &amp; Qualitätsprüfung</div></div><a href="ARCHIV/import_report" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
+        <div class="team-card"><div style="flex:1"><div class="team-name">📄 Adress-Import Report</div><div class="team-detail">Ärztekammerwahl Wien 2026 – Import-Statistiken &amp; Qualitätsprüfung</div></div><a href="docs/import_report" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
         <div class="team-card"><div style="flex:1"><div class="team-name">📋 Feature-Dokumentation</div><div class="team-detail">Alle Funktionen der App – Standortsuche, Karten, Admin, Team, Verifizierung …</div></div><a href="docs/features" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
         <div class="team-card"><div style="flex:1"><div class="team-name">⚙️ Technische Dokumentation</div><div class="team-detail">Architektur, Server, Datenbank, API, Sicherheit &amp; Kosten</div></div><a href="docs/technik" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
       </div>
@@ -2844,7 +2844,7 @@ const editDlg={
         let parsed;try{parsed=JSON.parse(l.notiz||'{}');}catch{parsed={};}
         const old=parsed.old||{};
         const src=ICONS_SRC[parsed.source]||parsed.source||'?';
-        const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
         const changed=Object.entries(old).filter(([,v])=>v!=null).map(([k,v])=>`${k}: ${v}`).join(', ')||'\u2013';
         return`<div class="edit-hist-item">
           <span class="edit-hist-meta">${when} \u00b7 ${src}</span>
@@ -2989,7 +2989,7 @@ function renderMeine(){
   }
   el.innerHTML=`<div class="section-title">${mine.length} reservierte Adresse${mine.length!==1?'n':''}</div>`+
     mine.map(a=>{
-      const since=a.reserviert_am?new Date(a.reserviert_am).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+      const since=a.reserviert_am?new Date(a.reserviert_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
       return`<div class="mine-card">
         <div class="mine-header">
           <div class="mine-icon">📌</div>
@@ -3079,7 +3079,7 @@ function renderArchive(){
     archived.map(a=>{
       const entry=log.find(l=>l.adressen_id===a.id&&l.aktion!=='uebernommen'&&l.aktion!=='reaktiviert');
       const icon=entry?ICONS[entry.aktion]||'📋':'📋';
-      const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
+      const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
       const label=entry?LABELS[entry.aktion]||entry.aktion:'';
       const canEdit=isAdmin||a.benutzer_id===user.id;
       // Verlauf aller Protokoll-Einträge für diese Adresse
@@ -3089,7 +3089,7 @@ function renderArchive(){
       const histHtml=history.map(l=>{
         const u=(_dbUsers.find(x=>x.id===l.benutzer_id)||DEMO_USERS.find(x=>x.id===l.benutzer_id));
         const uName=u?u.name:'?';
-        const lWhen=new Date(l.zeitpunkt).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        const lWhen=new Date(l.zeitpunkt).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
         return`<div class="hist-item"><div class="hist-dot"></div><div class="hist-main"><div class="hist-aktion">${ICONS2[l.aktion]||'📋'} ${LABELS2[l.aktion]||l.aktion} · ${uName} · ${lWhen}</div>${l.notiz?`<div class="hist-notiz">„${l.notiz}"</div>`:''}</div></div>`;
       }).join('');
       return`<div class="arch-card">
@@ -3122,7 +3122,7 @@ function renderAdmin(){
   const recent=log.slice(0,15);
   q('#admin-log').innerHTML=recent.length?recent.map(l=>{
   const u=(_dbUsers.find(u=>u.id===l.benutzer_id)||DEMO_USERS.find(u=>u.id===l.benutzer_id));
-    const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const when=new Date(l.zeitpunkt).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
     return`<div class="log-item">
       <div class="log-dot ld-${l.aktion}"></div>
       <div class="log-main">

@@ -399,7 +399,7 @@ Gesamte DB-Größe: < 50 MB (inkl. PostGIS-Indexe).
 | Rolle | Name/Kontakt |
 |---|---|
 | **Projektleitung** | Dr. Marius Romanin |
-| **Design & Entwicklung** | zahradnik@haselbach.art |
+| **Design & Entwicklung** | Cecil Zahradnik |
 | **Server-Zugang** | SSH-Key | `id_ed25519_novumziv2` |
 | **Repository** | GitHub | github.com/Arcon-X/Marius |
 | **Live-App** | GitHub Pages | arcon-x.github.io/Marius |
