@@ -10,6 +10,11 @@ concurrency:
   group: "deploy"
   cancel-in-progress: false
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -40,3 +45,59 @@ jobs:
 
           # Cleanup
           rm -f ~/.ssh/deploy_key
+
+  # GitHub Pages: nur Redirect zum neuen Server
+  disable-github-pages:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Create redirect page
+        run: |
+          mkdir -p _redirect-site
+          cat > _redirect-site/index.html << 'REDIRECT'
+          <!DOCTYPE html>
+          <html lang="de">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0;url=https://204.168.217.211.nip.io">
+            <title>NOVUM-ZIV — Umzug</title>
+            <style>
+              body{font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background:#1a1a2e;color:#e0dff8}
+              .box{text-align:center;padding:2rem}
+              a{color:#9A8BE0}
+            </style>
+          </head>
+          <body>
+            <div class="box">
+              <h2>NOVUM-ZIV ist umgezogen</h2>
+              <p>Die App ist jetzt unter der neuen Adresse erreichbar:</p>
+              <p><a href="https://204.168.217.211.nip.io">https://204.168.217.211.nip.io</a></p>
+              <p>Du wirst automatisch weitergeleitet&hellip;</p>
+            </div>
+          </body>
+          </html>
+          REDIRECT
+          cat > _redirect-site/404.html << 'NOTFOUND'
+          <!DOCTYPE html>
+          <html lang="de">
+          <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="refresh" content="0;url=https://204.168.217.211.nip.io">
+            <title>Weiterleitung</title>
+          </head>
+          <body>
+            <p>Weiterleitung zu <a href="https://204.168.217.211.nip.io">NOVUM-ZIV</a>&hellip;</p>
+          </body>
+          </html>
+          NOTFOUND
+
+      - name: Upload redirect to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _redirect-site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

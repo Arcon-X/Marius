@@ -8,7 +8,7 @@ echo ""
 echo "=== Via Nginx HTTPS ==="
 curl -sk -w "\nHTTP: %{http_code}\n" -X POST https://204.168.217.211.nip.io/api/rpc/login \
   -H 'Content-Type: application/json' \
-  -H 'Origin: https://arcon-x.github.io' \
+  -H 'Origin: https://204.168.217.211.nip.io' \
   -d '{"email":"zahradnik@haselbach.art","passwort":"novum2026!"}'
 
 echo ""

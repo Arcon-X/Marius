@@ -15,7 +15,7 @@
 | **Ziel** | ~2.000 Wiener Wahlberechtigte per Hausbesuch erreichen |
 | **Benutzer** | 19 Kandidat:innen (1 Admin + 18 Mitarbeiter:innen) |
 | **Laufzeit** | ~2 Monate Wahlkampf, danach Daten komplett löschen |
-| **Planung live** | https://arcon-x.github.io/Marius/ |
+| **Planung live** | https://204.168.217.211.nip.io |
 | **Repo** | https://github.com/Arcon-X/Marius (public) |
 
 ### Kernfunktion
@@ -247,7 +247,7 @@ server {
   location /api/ {
     proxy_pass         http://127.0.0.1:3000/;
     proxy_set_header   Host $host;
-    add_header         Access-Control-Allow-Origin "https://arcon-x.github.io" always;
+    add_header         Access-Control-Allow-Origin "https://204.168.217.211.nip.io" always;
     add_header         Access-Control-Allow-Headers "Authorization,Content-Type" always;
   }
 }

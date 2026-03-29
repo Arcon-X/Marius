@@ -324,8 +324,8 @@ server {
         proxy_set_header   Host \$host;
         proxy_set_header   X-Real-IP \$remote_addr;
 
-        # CORS für GitHub Pages
-        add_header Access-Control-Allow-Origin  "https://arcon-x.github.io" always;
+        # CORS nicht nötig (same-origin), aber für Kompatibilität
+        add_header Access-Control-Allow-Origin  "https://204.168.217.211.nip.io" always;
         add_header Access-Control-Allow-Headers "Authorization,Content-Type,Prefer" always;
         add_header Access-Control-Allow-Methods "GET,POST,PATCH,DELETE,OPTIONS" always;
 

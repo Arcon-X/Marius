@@ -35,9 +35,9 @@ server {
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
 
-    # ── CORS: Nur GitHub Pages erlauben ──
+    # ── CORS: Same-origin (kein GitHub Pages mehr) ──
     set $cors_origin "";
-    if ($http_origin = "https://arcon-x.github.io") {
+    if ($http_origin = "https://204.168.217.211.nip.io") {
         set $cors_origin $http_origin;
     }
 
@@ -298,7 +298,7 @@ echo ""
 echo "  Maßnahmen:"
 echo "  • Nginx: Rate Limiting (5/min Login, 30/min API)"
 echo "  • Nginx: HSTS, X-Content-Type-Options, X-Frame-Options"
-echo "  • Nginx: CORS nur für arcon-x.github.io"
+echo "  • Nginx: CORS nur für 204.168.217.211.nip.io (same-origin)"
 echo "  • Nginx: Server-Header verborgen"
 echo "  • PostgREST: OpenAPI-Schema deaktiviert"
 echo "  • PostgREST: Max 2000 Rows pro Request"

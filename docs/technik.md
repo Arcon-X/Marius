@@ -233,7 +233,7 @@ server {
         limit_req zone=api burst=10 nodelay;
         proxy_pass http://127.0.0.1:3000/;
         proxy_hide_header Access-Control-Allow-Origin;
-        add_header Access-Control-Allow-Origin "https://arcon-x.github.io" always;
+        add_header Access-Control-Allow-Origin "https://204.168.217.211.nip.io" always;
         add_header Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS" always;
         add_header Access-Control-Allow-Headers "Authorization, Content-Type, Prefer, Accept" always;
     }
@@ -281,13 +281,13 @@ NOVUM-ZIV/
 
 ## 9. Deployment-Workflow
 
-### Frontend (GitHub Pages)
+### Frontend (Self-Hosted via GitHub Actions)
 ```bash
 git add .
 git commit -m "Feature XYZ"
 git push origin main
-# → GitHub Pages baut automatisch via Jekyll
-# → Live in ~30 Sekunden auf https://arcon-x.github.io/Marius/
+# → GitHub Actions baut via Jekyll und deployt via SSH auf den Server
+# → Live auf https://204.168.217.211.nip.io
 ```
 
 ### Server-Migrationen
@@ -402,4 +402,4 @@ Gesamte DB-Größe: < 50 MB (inkl. PostGIS-Indexe).
 | **Design & Entwicklung** | Cecil Zahradnik |
 | **Server-Zugang** | SSH-Key | `id_ed25519_novumziv2` |
 | **Repository** | GitHub | github.com/Arcon-X/Marius |
-| **Live-App** | GitHub Pages | arcon-x.github.io/Marius |
+| **Live-App** | Self-Hosted (Hetzner) | 204.168.217.211.nip.io |

@@ -29,7 +29,7 @@ server {
     add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
 
     set $cors_origin "";
-    if ($http_origin = "https://arcon-x.github.io") {
+    if ($http_origin = "https://204.168.217.211.nip.io") {
         set $cors_origin $http_origin;
     }
 
