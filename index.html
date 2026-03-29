@@ -583,10 +583,12 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         </div>
       </div>
       <div id="admin-addr-list"></div>
+      <div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
+        <button class="btn-reset" style="background:#1d4ed8;color:#fff;flex:1" onclick="exportAdressen()">&#128229; JSON exportieren</button>
+        <button class="btn-reset" style="background:#059669;color:#fff;flex:1" onclick="document.getElementById('import-file').click()">&#128228; JSON importieren</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importAdressen(this)">
       </div>
-      <div class="section-title">Demo-Daten</div>
-      <button class="btn-reset" onclick="S.reset()">&#128465; Alle Demo-Daten zur&uuml;cksetzen</button>
-      <button class="btn-reset" style="margin-top:.5rem;background:#1d4ed8;color:#fff" onclick="exportAdressen()">&#128229; Adressen als JSON exportieren</button>
+      </div>
     </div>
 
   </main>
@@ -2355,13 +2357,6 @@ const db={
       return data.length>0; // false = bereits von jemand anderem genommen
     }catch(e){console.warn('API claim:',e.message);return true;}
   },
-  async resetAll(){
-    await Promise.all([
-      fetch(SB_URL+'/adressen?id=not.is.null',{method:'PATCH',headers:this._h(),body:JSON.stringify({status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null})}),
-      fetch(SB_URL+'/protokoll?id=not.is.null',{method:'DELETE',headers:this._h()})
-    ]).catch(()=>{});
-    _sbLastSync=0;
-  }
 };
 
 /* ── STORAGE ─────────────────────────────────────────── */
@@ -2385,14 +2380,7 @@ const S = {
   },
   getSession(){return JSON.parse(localStorage.getItem(this.KEY_SES)||'null');},
   setSession(u){localStorage.setItem(this.KEY_SES,JSON.stringify(u));},
-  clearSession(){localStorage.removeItem(this.KEY_SES);},
-  reset(){
-    localStorage.removeItem(this.KEY_ADR);
-    localStorage.removeItem(this.KEY_LOG);
-    db.resetAll();
-    toast('Daten zurückgesetzt ✓');
-    setTimeout(()=>location.reload(),900);
-  }
+  clearSession(){localStorage.removeItem(this.KEY_SES);}
 };
 
 /* ── AUTH ────────────────────────────────────────────── */
@@ -2932,6 +2920,38 @@ function exportAdressen(){
   document.body.appendChild(a);a.click();
   document.body.removeChild(a);URL.revokeObjectURL(url);
   toast('Export gestartet \u2713');
+}
+function importAdressen(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    let data;
+    try{data=JSON.parse(e.target.result);}catch{toast('\u26a0\ufe0f Ung\u00fcltige JSON-Datei');input.value='';return;}
+    if(!Array.isArray(data)||!data.length){toast('\u26a0\ufe0f Leeres oder ung\u00fcltiges Array');input.value='';return;}
+    if(!confirm(`${data.length} Adressen importieren?\nVorhandene Daten werden \u00fcberschrieben.`)){input.value='';return;}
+    S.saveAdressen(data);S.saveProtokoll([]);
+    // Server: alle Adressen per PATCH aktualisieren
+    const h=db._h();
+    try{
+      // Protokoll l\u00f6schen
+      await fetch(SB_URL+'/protokoll?id=not.is.null',{method:'DELETE',headers:h});
+      // Adressen zur\u00fccksetzen und neu schreiben
+      for(const a of data){
+        await fetch(SB_URL+'/adressen?id=eq.'+a.id,{method:'PATCH',headers:h,
+          body:JSON.stringify({status:a.status||'verfuegbar',benutzer_id:a.benutzer_id||null,
+            reserviert_am:a.reserviert_am||null,erledigt_am:a.erledigt_am||null,
+            titel:a.titel||null,arzt_name:a.name||null,
+            strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,
+            lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,
+            sprache:a.sprache||'de',website:a.website||null,verifiziert:!!a.verifiziert})});
+      }
+      toast('Import abgeschlossen \u2713');
+    }catch(err){toast('\u26a0\ufe0f Import-Fehler: '+err.message);}
+    _sbLastSync=0;
+    input.value='';
+    setTimeout(()=>location.reload(),900);
+  };
+  reader.readAsText(file);
 }
 
 /* ── MEINE ───────────────────────────────────────────── */
