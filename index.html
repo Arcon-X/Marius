@@ -627,12 +627,12 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         <div class="team-card"><div style="flex:1"><div class="team-name">🌐 Domain konfigurieren</div><div class="team-detail">DNS-Records, GitHub Pages Custom Domain, CORS &amp; Redirect-Anleitung</div></div><a href="docs/domain" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
-      <div class="hidden" id="admin-issues" style="padding:.3rem .1rem">
+      <div class="hidden" id="admin-issues" style="padding:.3rem 1rem">
         <div class="card" style="margin-bottom:.8rem;padding:1rem">
           <div style="display:flex;gap:.6rem;margin-bottom:.7rem;align-items:end;flex-wrap:wrap">
             <div style="flex:0 0 auto">
               <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.25rem">Typ</label>
-              <select id="issue-typ" class="edit-inp" style="width:auto;padding:.45rem .6rem"><option value="bug">🐛 Bug</option><option value="feature">💡 Feature</option></select>
+              <select id="issue-typ" class="edit-inp" style="width:auto;padding:.45rem .6rem"><option value="bug">🐛 Fehler</option><option value="feature">💡 Wünsche</option></select>
             </div>
             <div style="flex:1;min-width:180px">
               <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.25rem">Beschreibung</label>
@@ -3496,7 +3496,7 @@ async function renderIssues(){
       :'<span style="background:#34d399;color:#000;padding:.1rem .4rem;border-radius:4px;font-size:.7rem;font-weight:600">erledigt</span>';
     return`<div class="team-card" style="align-items:center">
       <div style="flex:1">
-        <div class="team-name">${icon} ${i.typ==='bug'?'Bug':'Feature'} ${badge}</div>
+        <div class="team-name">${icon} ${i.typ==='bug'?'Fehler':'Wunsch'} ${badge}</div>
         <div class="team-detail">${i.beschreibung.replace(/</g,'&lt;')}</div>
         <div class="team-detail" style="font-size:.7rem;color:var(--sub)">${u?u.name:'?'} · ${when}</div>
       </div>
