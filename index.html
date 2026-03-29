@@ -565,13 +565,14 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 
     <!-- ADMIN -->
     <div id="p-admin" class="panel">
-      <div class="section-title">Letzte Ereignisse</div>
-      <div class="card" id="admin-log"></div>
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleLog()"><span id="log-arrow">&#9654;</span> Letzte Ereignisse</div>
+      <div class="card hidden" id="admin-log"></div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleTeam()">
         <span id="team-arrow">&#9654;</span> Team (19 Kandidat:innen)
       </div>
       <div class="card hidden" id="admin-users"></div>
-      <div class="section-title">Adressliste</div>
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleAddrList()"><span id="addrlist-arrow">&#9654;</span> Adressliste</div>
+      <div id="admin-addr-wrap" class="hidden">
       <div class="karte-toolbar" style="border-radius:var(--r);border-bottom:none;margin-bottom:.4rem;box-shadow:var(--sha)">
         <div class="karte-top-row">
           <div class="kf-scroll" id="af-status"></div>
@@ -582,6 +583,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         </div>
       </div>
       <div id="admin-addr-list"></div>
+      </div>
       <div class="section-title">Demo-Daten</div>
       <button class="btn-reset" onclick="S.reset()">&#128465; Alle Demo-Daten zur&uuml;cksetzen</button>
       <button class="btn-reset" style="margin-top:.5rem;background:#1d4ed8;color:#fff" onclick="exportAdressen()">&#128229; Adressen als JSON exportieren</button>
@@ -3173,6 +3175,8 @@ function renderAdminList(){
 function adminSetStatus(val){adminState.status=val;renderAdminFilter();renderAdminList();}
 function adminSetPlz(val){adminState.plz=val;renderAdminFilter();renderAdminList();}
 function toggleTeam(){const el=q('#admin-users');el.classList.toggle('hidden');q('#team-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
+function toggleLog(){const el=q('#admin-log');el.classList.toggle('hidden');q('#log-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
+function toggleAddrList(){const el=q('#admin-addr-wrap');el.classList.toggle('hidden');q('#addrlist-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 
 /* ── MAP ─────────────────────────────────────────────── */
 let leafletMap=null,mapMarkers=[];
