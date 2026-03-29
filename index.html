@@ -615,6 +615,23 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         <div class="team-card"><div style="flex:1"><div class="team-name">📋 Feature-Dokumentation</div><div class="team-detail">Alle Funktionen der App – Standortsuche, Karten, Admin, Team, Verifizierung …</div></div><a href="docs/features" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
         <div class="team-card"><div style="flex:1"><div class="team-name">⚙️ Technische Dokumentation</div><div class="team-detail">Architektur, Server, Datenbank, API, Sicherheit &amp; Kosten</div></div><a href="docs/technik" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
       </div>
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
+      <div class="hidden" id="admin-issues">
+        <div class="card" style="margin-bottom:.8rem">
+          <div style="display:flex;gap:.5rem;margin-bottom:.5rem;align-items:end;flex-wrap:wrap">
+            <div style="flex:0 0 auto">
+              <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.2rem">Typ</label>
+              <select id="issue-typ" class="edit-inp" style="width:auto;padding:.4rem .6rem"><option value="bug">🐛 Bug</option><option value="feature">💡 Feature</option></select>
+            </div>
+            <div style="flex:1;min-width:200px">
+              <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:.2rem">Beschreibung</label>
+              <input id="issue-beschreibung" class="edit-inp" placeholder="Was ist passiert / was wünschst du dir?" style="width:100%">
+            </div>
+            <button class="btn-primary" style="white-space:nowrap;padding:.45rem .9rem" onclick="submitIssue()">Absenden</button>
+          </div>
+        </div>
+        <div id="issues-list"></div>
+      </div>
     </div>
 
   <nav class="bottom-nav">
@@ -2403,6 +2420,34 @@ const db={
       return data.length>0; // false = bereits von jemand anderem genommen
     }catch(e){console.warn('API claim:',e.message);return true;}
   },
+  async loadIssues(){
+    try{
+      const res=await fetch(SB_URL+'/issues?order=erstellt_am.desc',{headers:this._hG()});
+      if(!res.ok)return[];
+      return await res.json();
+    }catch(e){console.warn('API issues:',e.message);return[];}
+  },
+  async postIssue(entry){
+    try{
+      const res=await fetch(SB_URL+'/issues',{method:'POST',headers:this._h(),body:JSON.stringify(entry)});
+      if(!res.ok){console.error('API issue post:',res.status);return false;}
+      return true;
+    }catch(e){console.error('API issue post:',e.message);return false;}
+  },
+  async patchIssue(id,fields){
+    try{
+      const res=await fetch(SB_URL+'/issues?id=eq.'+id,{method:'PATCH',headers:this._h(),body:JSON.stringify(fields)});
+      if(!res.ok){console.error('API issue patch:',res.status);return false;}
+      return true;
+    }catch(e){console.error('API issue patch:',e.message);return false;}
+  },
+  async deleteIssue(id){
+    try{
+      const res=await fetch(SB_URL+'/issues?id=eq.'+id,{method:'DELETE',headers:this._h()});
+      if(!res.ok){console.error('API issue delete:',res.status);return false;}
+      return true;
+    }catch(e){console.error('API issue delete:',e.message);return false;}
+  },
 };
 
 /* ── STORAGE ─────────────────────────────────────────── */
@@ -3205,6 +3250,7 @@ function renderAdmin(){
   }).join('')+`<button class="team-add-btn" onclick="teamAdd()">➕ Neues Mitglied hinzufügen</button>`;
   renderAdminFilter();
   renderAdminList();
+  renderIssues();
 }
 
 /* ── ADMIN FILTER ─────────────────────────────────────── */
@@ -3364,6 +3410,58 @@ function toggleTeam(){const el=q('#admin-users');el.classList.toggle('hidden');q
 function toggleLog(){const el=q('#admin-log');el.classList.toggle('hidden');q('#log-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleAddrList(){const el=q('#admin-addr-wrap');el.classList.toggle('hidden');q('#addrlist-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleDocs(){const el=q('#admin-docs');el.classList.toggle('hidden');q('#docs-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
+function toggleIssues(){const el=q('#admin-issues');el.classList.toggle('hidden');q('#issues-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
+
+async function submitIssue(){
+  const typ=q('#issue-typ').value;
+  const beschreibung=q('#issue-beschreibung').value.trim();
+  if(!beschreibung){toast('⚠️ Bitte Beschreibung eingeben');return;}
+  const user=auth.current();
+  const ok=await db.postIssue({typ,beschreibung,erstellt_von:user.id});
+  if(ok){q('#issue-beschreibung').value='';toast('Gemeldet ✓');renderIssues();}
+  else toast('⚠️ Fehler beim Speichern');
+}
+
+async function toggleIssueStatus(id,current){
+  const neu=current==='offen'?'erledigt':'offen';
+  const fields={status:neu};
+  if(neu==='erledigt')fields.erledigt_am=new Date().toISOString();
+  else fields.erledigt_am=null;
+  const ok=await db.patchIssue(id,fields);
+  if(ok)renderIssues(); else toast('⚠️ Fehler beim Aktualisieren');
+}
+
+async function deleteIssue(id){
+  if(!confirm('Eintrag wirklich löschen?'))return;
+  const ok=await db.deleteIssue(id);
+  if(ok){toast('Gelöscht ✓');renderIssues();} else toast('⚠️ Fehler beim Löschen');
+}
+
+async function renderIssues(){
+  const issues=await db.loadIssues();
+  const users=_dbUsers.length?_dbUsers:[];
+  const list=q('#issues-list');
+  if(!issues.length){list.innerHTML='<div class="card" style="color:var(--sub);font-size:.85rem">Noch keine Einträge.</div>';return;}
+  list.innerHTML=issues.map(i=>{
+    const u=users.find(x=>x.id===i.erstellt_von);
+    const when=new Date(i.erstellt_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const icon=i.typ==='bug'?'🐛':'💡';
+    const badge=i.status==='offen'
+      ?'<span style="background:#fbbf24;color:#000;padding:.1rem .4rem;border-radius:4px;font-size:.7rem;font-weight:600">offen</span>'
+      :'<span style="background:#34d399;color:#000;padding:.1rem .4rem;border-radius:4px;font-size:.7rem;font-weight:600">erledigt</span>';
+    return`<div class="team-card" style="align-items:center">
+      <div style="flex:1">
+        <div class="team-name">${icon} ${i.typ==='bug'?'Bug':'Feature'} ${badge}</div>
+        <div class="team-detail">${i.beschreibung.replace(/</g,'&lt;')}</div>
+        <div class="team-detail" style="font-size:.7rem;color:var(--sub)">${u?u.name:'?'} · ${when}</div>
+      </div>
+      <div style="display:flex;gap:.3rem">
+        <button class="team-btn" onclick="toggleIssueStatus('${i.id}','${i.status}')" title="Status ändern">${i.status==='offen'?'✅':'↩️'}</button>
+        <button class="team-btn team-btn-del" onclick="deleteIssue('${i.id}')" title="Löschen">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
 /* ── MAP ─────────────────────────────────────────────── */
 let leafletMap=null,mapMarkers=[];

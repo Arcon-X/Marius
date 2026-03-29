@@ -191,6 +191,20 @@ CREATE TABLE protokoll (
 CREATE INDEX protokoll_adressen_idx  ON protokoll(adressen_id);
 CREATE INDEX protokoll_benutzer_idx  ON protokoll(benutzer_id);
 CREATE INDEX protokoll_zeitpunkt_idx ON protokoll(zeitpunkt DESC);
+
+-- Issues-Tabelle (Bug/Feature-Tracking im Admin-Bereich)
+CREATE TABLE issues (
+  id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  typ           TEXT NOT NULL CHECK (typ IN ('bug','feature')),
+  beschreibung  TEXT NOT NULL,
+  status        TEXT NOT NULL DEFAULT 'offen' CHECK (status IN ('offen','erledigt')),
+  erstellt_von  UUID REFERENCES benutzer(id),
+  erstellt_am   TIMESTAMPTZ DEFAULT NOW(),
+  erledigt_am   TIMESTAMPTZ
+);
+
+CREATE INDEX issues_status_idx      ON issues(status);
+CREATE INDEX issues_erstellt_am_idx ON issues(erstellt_am DESC);
 ```
 
 ---
