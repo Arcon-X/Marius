@@ -89,7 +89,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   -webkit-transform:translate3d(0,0,0);transform:translate3d(0,0,0);
   -webkit-backface-visibility:hidden;backface-visibility:hidden;
 }
-.bottom-nav.kb-open{display:none!important}
 .nav-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;background:none;border:none;cursor:pointer;padding:.35rem 0 .25rem;
@@ -2617,14 +2616,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(ses)initApp(ses);else showEl('scr-login');
 });
 
-/* ── iOS Safari: Nav bei Tastatur ausblenden ─────────── */
-(function(){
-  const nav=document.querySelector('.bottom-nav');
-  if(!nav)return;
-  const isInput=el=>el&&(el.tagName==='INPUT'||el.tagName==='TEXTAREA');
-  document.addEventListener('focusin',e=>{if(isInput(e.target))nav.classList.add('kb-open');});
-  document.addEventListener('focusout',e=>{if(isInput(e.target))setTimeout(()=>{if(!isInput(document.activeElement))nav.classList.remove('kb-open');},80);});
-})();
+
 
 /* ── NAV ─────────────────────────────────────────────── */
 let currentTab='home',mapInited=false;
