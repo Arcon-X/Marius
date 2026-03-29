@@ -2,9 +2,36 @@
 title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 ---
 
+<style>
+.neu {
+  border-left: 4px solid #2da44e;
+  background: #dafbe1;
+  padding: .6rem 1rem;
+  margin: .8rem 0;
+  border-radius: 4px;
+}
+.changelog { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
+.changelog summary { font-weight: bold; cursor: pointer; }
+.changelog ul { margin: .5rem 0 0 1.2rem; }
+.badge-neu { display: inline-block; background: #2da44e; color: #fff; font-size: .75rem; padding: 1px 6px; border-radius: 3px; vertical-align: middle; margin-left: .4rem; }
+</style>
+
 # NOVUM-ZIV Unterschriften — Technische Dokumentation & Kosten
 
-> **Stand:** März 2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
+> **Stand:** 29.03.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
+
+<div class="changelog">
+<details open>
+<summary>📋 Letzte Änderungen (grün = letzte 7 Tage)</summary>
+
+| Datum | Bereich | Änderung |
+|---|---|---|
+| 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — Architektur, Schema, API, Sicherheit, Kosten dokumentiert |
+
+</details>
+</div>
+
+> 💡 **Lesehinweis:** Abschnitte mit <span class="badge-neu">NEU</span> oder grünem Rand wurden in den letzten 7 Tagen hinzugefügt oder geändert. So erkennst du sofort, was neu ist — ohne alles nochmal lesen zu müssen.
 
 ---
 
