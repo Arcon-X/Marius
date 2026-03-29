@@ -1,13 +1,10 @@
-#!/bin/bash
-# NOVUM-ZIV — Passwort- und E-Mail-Änderungsfunktionen hinzufügen
-# Einmalig auf dem Server ausführen
+#!/usr/bin/env bash
+set -euo pipefail
 
-set -e
+# Fix: use public.benutzer in all settings functions (same bug as triggers)
+sudo -u postgres psql -d novumziv <<'SQL'
 
-echo "► Passwort-Änderungsfunktion anlegen..."
-sudo -u postgres psql -d novumziv << 'EOSQL'
-
--- Passwort ändern (verifiziert altes Passwort)
+-- Fix change_password: public.benutzer instead of benutzer
 CREATE OR REPLACE FUNCTION api.change_password(
   altes_passwort TEXT,
   neues_passwort TEXT
@@ -41,9 +38,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-GRANT EXECUTE ON FUNCTION api.change_password(TEXT, TEXT) TO authenticated;
-
--- E-Mail ändern
+-- Fix change_email: public.benutzer
 CREATE OR REPLACE FUNCTION api.change_email(
   neue_email TEXT
 ) RETURNS JSON AS $$
@@ -72,9 +67,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-GRANT EXECUTE ON FUNCTION api.change_email(TEXT) TO authenticated;
-
--- Passwort-Reset durch Admin
+-- Fix admin_reset_password: public.benutzer
 CREATE OR REPLACE FUNCTION api.admin_reset_password(
   target_email TEXT,
   neues_passwort TEXT
@@ -105,11 +98,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-GRANT EXECUTE ON FUNCTION api.admin_reset_password(TEXT, TEXT) TO authenticated;
-
-EOSQL
-
-echo "✓ Funktionen angelegt: api.change_password, api.change_email, api.admin_reset_password"
-echo "► PostgREST neustarten..."
-systemctl restart postgrest
-echo "✓ Fertig!"
+NOTIFY pgrst, 'reload schema';
+SELECT 'All 3 settings functions fixed with public.benutzer' AS result;
+SQL

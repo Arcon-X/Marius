@@ -740,6 +740,28 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 <div class="toast" id="toast"></div>
 
 <!-- SETTINGS DIALOG -->
+<div id="force-pw-overlay" class="dlg-overlay hidden" style="z-index:9999">
+  <div class="dlg-card">
+    <div class="dlg-title">🔐 Passwort ändern</div>
+    <p style="font-size:.88rem;color:var(--sub);margin:.5rem 0 1rem">Du verwendest noch das Standard-Passwort. Bitte lege jetzt ein persönliches Passwort fest, bevor du die App nutzen kannst.</p>
+    <form onsubmit="event.preventDefault();forcePwChange()" autocomplete="on">
+      <input type="text" id="fpc-user" autocomplete="username" aria-hidden="true" tabindex="-1" style="position:absolute;opacity:0;pointer-events:none;height:0;width:0;padding:0;border:0">
+      <label class="settings-label" for="fpc-new">Neues Passwort (mind. 6 Zeichen)</label>
+      <div class="pw-wrap">
+        <input id="fpc-new" class="settings-input" type="password" autocomplete="new-password" required minlength="6">
+        <button type="button" class="pw-eye" onclick="togglePw('fpc-new',this)" tabindex="-1">👁</button>
+      </div>
+      <label class="settings-label" for="fpc-confirm">Passwort bestätigen</label>
+      <div class="pw-wrap">
+        <input id="fpc-confirm" class="settings-input" type="password" autocomplete="new-password" required minlength="6">
+        <button type="button" class="pw-eye" onclick="togglePw('fpc-confirm',this)" tabindex="-1">👁</button>
+      </div>
+      <div id="fpc-msg" class="settings-msg"></div>
+      <button type="submit" class="btn-settings" style="width:100%;margin-top:.5rem">Passwort festlegen</button>
+    </form>
+  </div>
+</div>
+
 <div id="settings-overlay" class="dlg-overlay hidden"
      onclick="if(event.target===this)settingsDlg.close()">
   <div class="dlg-card">
@@ -2439,7 +2461,7 @@ const auth={
       const data=await res.json();
       if(!data.token){q('#login-err').textContent='Login fehlgeschlagen.';btn.disabled=false;btn.textContent='Anmelden';return;}
       this._fails=0;this._lockUntil=0;
-      const user={token:data.token,id:data.user_id,name:data.name,email:email,rolle:data.rolle};
+      const user={token:data.token,id:data.user_id,name:data.name,email:email,rolle:data.rolle,_pwChange:!!data.passwort_aendern};
       S.setSession(user);
       localStorage.setItem('nv_last_email',email);
       initApp(user);
@@ -2463,6 +2485,24 @@ const auth={
 /* ── SETTINGS / PASSWORD ─────────────────────────────── */
 function showForgotPw(){
   alert('Bitte kontaktiere den Admin (Dr. Marius Romanin),\num dein Passwort zurücksetzen zu lassen.');
+}
+
+async function forcePwChange(){
+  const msg=q('#fpc-msg');msg.textContent='';msg.className='settings-msg';
+  const neu=q('#fpc-new').value, conf=q('#fpc-confirm').value;
+  if(neu.length<6){msg.textContent='Mind. 6 Zeichen.';msg.classList.add('settings-err');return;}
+  if(neu==='novum2026!'){msg.textContent='Bitte wähle ein anderes Passwort.';msg.classList.add('settings-err');return;}
+  if(neu!==conf){msg.textContent='Passwörter stimmen nicht überein.';msg.classList.add('settings-err');return;}
+  try{
+    const res=await fetch(SB_URL+'/rpc/change_password',{
+      method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
+      body:JSON.stringify({altes_passwort:'novum2026!',neues_passwort:neu})
+    });
+    if(!res.ok){const e=await res.json().catch(()=>({}));msg.textContent=e.message||'Fehler';msg.classList.add('settings-err');return;}
+    msg.textContent='Passwort geändert ✓ App wird geladen …';msg.classList.add('settings-ok');
+    const user=auth.current();user._pwChange=false;S.setSession(user);
+    setTimeout(()=>{q('#force-pw-overlay').classList.add('hidden');updateMeineBadge();db.load().then(rows=>{if(rows)updateMeineBadge();});doSearch();},1500);
+  }catch(e){msg.textContent='Server nicht erreichbar.';msg.classList.add('settings-err');}
 }
 
 const settingsDlg={
@@ -2556,10 +2596,16 @@ function initApp(user){
   hideEl('scr-login');showEl('scr-app');
   q('#ab-user').textContent=user.name;
   if(user.rolle==='admin')showEl('nav-admin');
+  // Forced pw change check
+  if(user._pwChange){
+    q('#force-pw-overlay').classList.remove('hidden');
+    q('#fpc-user').value=user.email||'';
+    q('#fpc-new').value='';q('#fpc-confirm').value='';q('#fpc-msg').textContent='';
+    q('#fpc-new').focus();
+    return; // Block app until pw changed
+  }
   updateMeineBadge();
-  // Supabase laden (im Hintergrund, Badge danach aktualisieren)
   db.load().then(rows=>{if(rows)updateMeineBadge();});
-  // Automatisch nächste Adressen ab Standardstandort laden
   doSearch();
 }
 
@@ -3258,15 +3304,24 @@ async function teamSaveEdit(id){
   const email=document.getElementById('tf-email').value.trim();
   const telefon=document.getElementById('tf-telefon').value.trim();
   const rolle=document.getElementById('tf-rolle').value;
+  const pw=document.getElementById('tf-passwort').value;
   if(!name||!email){toast('Name und E-Mail erforderlich');return;}
+  if(pw&&pw.length<6){toast('Passwort: mind. 6 Zeichen');return;}
   try{
     const res=await fetch(SB_URL+'/benutzer?id=eq.'+id,{method:'PATCH',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token(),'Prefer':'return=minimal'},
       body:JSON.stringify({name,email,telefon:telefon||null,rolle})});
     if(!res.ok){toast('⚠️ Fehler: '+res.status);return;}
+    if(pw){
+      const u=_dbUsers.find(x=>x.id===id);
+      const pr=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
+        body:JSON.stringify({target_email:u?u.email:email,neues_passwort:pw})});
+      if(!pr.ok){toast('⚠️ Passwort-Fehler: '+pr.status);}
+    }
     const idx=_dbUsers.findIndex(x=>x.id===id);
     if(idx>=0)Object.assign(_dbUsers[idx],{name,email,telefon:telefon||null,rolle});
-    toast('Mitglied aktualisiert ✓');renderAdmin();
+    toast('Mitglied aktualisiert ✓'+(pw?' (Passwort geändert)':''));renderAdmin();
   }catch(e){toast('⚠️ '+e.message);}
 }
 function teamAdd(){
@@ -3287,7 +3342,7 @@ async function teamSaveNew(){
     if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t.includes('duplicate')?(' – E-Mail existiert bereits'):''));return;}
     const created=await res.json();
     if(Array.isArray(created))_dbUsers.push(...created);else _dbUsers.push(created);
-    toast('Mitglied angelegt ✓ (Passwort = E-Mail-Adresse)');renderAdmin();
+    toast('Mitglied angelegt ✓ (Passwort: novum2026!)');renderAdmin();
   }catch(e){toast('⚠️ '+e.message);}
 }
 async function teamDelete(id){
