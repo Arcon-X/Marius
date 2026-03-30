@@ -125,6 +125,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   font-size:.9rem;font-family:inherit;outline:none;transition:border .15s;
 }
 .loc-input:focus{border-color:var(--g)}
+.loc-input::-webkit-search-cancel-button{cursor:pointer}
 .gps-btn{
   background:var(--g-l);border:1.5px solid var(--g);color:var(--g);
   border-radius:8px;padding:0 .85rem;cursor:pointer;
@@ -391,6 +392,19 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .log-detail{color:var(--sub);font-size:.75rem}
 
 /* ARCHIVE */
+.arch-search{display:flex;gap:.5rem;margin-bottom:.65rem;flex-wrap:wrap}
+.arch-search input{
+  flex:1;min-width:140px;padding:.6rem .8rem;border:1.5px solid #ddd;border-radius:8px;
+  font-size:.85rem;font-family:inherit;outline:none;transition:border .15s;
+}
+.arch-search input:focus{border-color:var(--g)}
+.arch-search input::-webkit-search-cancel-button{cursor:pointer}
+.arch-search select{
+  padding:.6rem .7rem;border:1.5px solid #ddd;border-radius:8px;
+  font-size:.82rem;font-family:inherit;outline:none;background:#fff;
+  color:var(--txt);cursor:pointer;transition:border .15s;min-width:0;
+}
+.arch-search select:focus{border-color:var(--g)}
 .arch-card{
   background:var(--card);border-radius:var(--r);box-shadow:var(--sha);
   margin-bottom:.6rem;border-left:4px solid #e5e7eb;
@@ -581,7 +595,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="loc-row">
         <input id="loc-input" class="loc-input" type="search"
                placeholder="Adresse oder Name eingeben &hellip;"
-               onkeydown="if(event.key==='Enter')loc.geocode()">
+               onkeydown="if(event.key==='Enter')loc.geocode()"
+               oninput="if(!this.value)loc.reset()">
         <button class="gps-btn" onclick="loc.geocode()" title="Suchen">&#128269;</button>
         <button class="gps-btn" onclick="loc.getGPS()">&#128205; GPS</button>
       </div>
@@ -625,6 +640,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="section-title">Gesamtstatistik</div>
       <div class="stats-grid" id="admin-stats"></div>
       <div id="ergebnis-chart"></div>
+      <div class="arch-search">
+        <input id="arch-q" type="search" placeholder="Adresse oder Name suchen &hellip;"
+               oninput="renderArchive()">
+        <select id="arch-user" onchange="renderArchive()">
+          <option value="">Alle Teammitglieder</option>
+        </select>
+      </div>
       <div id="archive-wrap"></div>
     </div>
 
@@ -2708,6 +2730,10 @@ const loc={
       {enableHighAccuracy:true,timeout:10000}
     );
   },
+  reset(){
+    q('#loc-input').value='';
+    doSearch();
+  },
   async geocode(){
     const val=q('#loc-input').value.trim();if(!val)return;
     // ── Name search: check if input matches a doctor name ──
@@ -3225,12 +3251,32 @@ function renderArchive(){
       </div>`;
     }).join('')}
   </div>`:'';
-  const archived=adressen
+  // ── Teammitglieder-Dropdown befüllen ──
+  const selUser=q('#arch-user');
+  const prevVal=selUser.value;
+  const users=_dbUsers.length?_dbUsers:DEMO_USERS;
+  const archivedUsers=[...new Set(adressen.filter(a=>a.status==='archiviert').map(a=>a.benutzer_id).filter(Boolean))];
+  const opts='<option value="">Alle Teammitglieder</option>'+archivedUsers.map(uid=>{
+    const u=users.find(x=>x.id===uid);return u?`<option value="${uid}">${u.name}</option>`:'';
+  }).filter(Boolean).join('');
+  selUser.innerHTML=opts;
+  selUser.value=prevVal;
+  // ── Filter anwenden ──
+  const archQ=(q('#arch-q').value||'').trim().toLowerCase();
+  const archUid=selUser.value;
+  let archived=adressen
     .filter(a=>a.status==='archiviert'&&(isAdmin||a.benutzer_id===user.id))
     .sort((a,b)=>new Date(b.erledigt_am)-new Date(a.erledigt_am));
+  if(archUid)archived=archived.filter(a=>a.benutzer_id===archUid);
+  if(archQ)archived=archived.filter(a=>{
+    const haystack=((a.titel||'')+' '+(a.name||a.arzt_name||'')+' '+a.strasse+' '+(a.hnr||'')+' '+(a.plz||'')).toLowerCase();
+    return haystack.includes(archQ);
+  });
   const el=q('#archive-wrap');
   if(!archived.length){
-    el.innerHTML='<div class="empty-state"><div class="big">📦</div>Noch keine abgeschlossenen Adressen.</div>';return;
+    el.innerHTML=archQ||archUid
+      ?'<div class="empty-state"><div class="big">🔍</div>Keine Treffer für diese Suche.</div>'
+      :'<div class="empty-state"><div class="big">📦</div>Noch keine abgeschlossenen Adressen.</div>';return;
   }
   const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',reaktiviert:'🔄'};
   const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',reaktiviert:'Reaktiviert'};
@@ -3241,6 +3287,8 @@ function renderArchive(){
       const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
       const label=entry?LABELS[entry.aktion]||entry.aktion:'';
       const canEdit=isAdmin||a.benutzer_id===user.id;
+      const ownerU=isAdmin&&a.benutzer_id?(users.find(x=>x.id===a.benutzer_id)):null;
+      const ownerStr=ownerU?(' · 👤 '+ownerU.name):'';
       // Verlauf aller Protokoll-Einträge für diese Adresse
       const ICONS2={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
       const LABELS2={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
@@ -3259,7 +3307,7 @@ function renderArchive(){
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
             ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
             ${a.website?`<div class="addr-website"><a href="${a.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
-            <div class="arch-meta">${label}${when?' · '+when:''}${entry&&entry.notiz?' · '+entry.notiz:''}</div>
+            <div class="arch-meta">${label}${ownerStr}${when?' · '+when:''}${entry&&entry.notiz?' · '+entry.notiz:''}</div>
           </div>
           ${canEdit?`<button class="btn-edit-addr" style="align-self:flex-start" onclick="editDlg.open('${a.id}')">⚙️</button>`:''}
         </div>
