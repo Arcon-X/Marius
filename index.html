@@ -3450,6 +3450,7 @@ function _teamForm(u){
       <input id="tf-telefon" placeholder="Telefon" type="tel" value="${u.telefon||''}">
       <select id="tf-rolle"><option value="mitarbeiter"${u.rolle==='mitarbeiter'?' selected':''}>Mitarbeiter</option><option value="admin"${u.rolle==='admin'?' selected':''}>Admin</option></select>
     </div>
+    ${!isNew?'<input id="tf-passwort" placeholder="Neues Passwort (leer = nicht ändern)" type="password" autocomplete="new-password">':''}
     <div class="team-edit-actions">
       <button class="btn-take" style="flex:1;padding:.4rem" onclick="${isNew?'teamSaveNew()':'teamSaveEdit(\''+u.id+'\')'}">${isNew?'➕ Anlegen':'💾 Speichern'}</button>
       <button class="team-btn" style="padding:.4rem .8rem" onclick="renderAdmin()">Abbrechen</button>
@@ -3467,7 +3468,8 @@ async function teamSaveEdit(id){
   const email=document.getElementById('tf-email').value.trim();
   const telefon=document.getElementById('tf-telefon').value.trim();
   const rolle=document.getElementById('tf-rolle').value;
-  const pw=document.getElementById('tf-passwort').value;
+  const pwEl=document.getElementById('tf-passwort');
+  const pw=pwEl?pwEl.value:'';
   if(!name||!email){toast('Name und E-Mail erforderlich');return;}
   if(pw&&pw.length<6){toast('Passwort: mind. 6 Zeichen');return;}
   try{
