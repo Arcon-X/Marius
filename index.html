@@ -2717,7 +2717,7 @@ const loc={
     let nameHits=allAddr.filter(a=>{
       const n=((a.titel||'')+' '+(a.name||a.arzt_name||'')).toLowerCase();
       return n.includes(lower);
-    }).filter(a=>a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id));
+    });
     if(langFilter==='pa')nameHits=nameHits.filter(a=>a.sprache==='pa');
     if(nameHits.length){
       nameHits.forEach(a=>{a.dauer_s=null;a.meter=null;a._dist=0;a._nameMatch=true;});
@@ -2817,7 +2817,7 @@ function renderResults(list){
           ${(a.titel||a.name)?`<div class="addr-arzt">${a.sprache==='pa'?'&#128332; ':''}${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
           ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
           ${cur.website?`<div class="addr-website"><a href="${cur.website}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
-          <div class="addr-plz">${a.plz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}</div>
+          <div class="addr-plz">${a.plz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}${cur.status==='archiviert'?' &nbsp;<span class="mine-pill" style="background:#d4edda;color:#155724">✅ Erledigt</span>':''}${cur.status==='in_bearbeitung'&&!isMine?' &nbsp;<span class="mine-pill" style="background:#fff3cd;color:#856404">🔒 Reserviert</span>':''}</div>
         </div>
         <div class="addr-time">
           ${isNameMatch?`<div class="addr-min" style="font-size:.82rem">&#128269; Name</div>`:`<div class="addr-min">🚶 ${min} min</div><div class="addr-dist">${mStr}</div>`}
