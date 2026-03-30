@@ -3443,7 +3443,7 @@ function adminSetPlz(val){adminState.plz=val;renderAdminFilter();renderAdminList
 function _teamForm(u){
   const isNew=!u;
   u=u||{name:'',email:'',rolle:'mitarbeiter',telefon:''};
-  return`<div class="team-edit-form" id="team-form-${u.id||'new'}">
+  return`<form class="team-edit-form" id="team-form-${u.id||'new'}" onsubmit="return false" autocomplete="off">
     <input id="tf-name" placeholder="Name" value="${u.name||''}">
     <input id="tf-email" placeholder="E-Mail (Login)" type="email" value="${u.email||''}">
     <div class="team-edit-row">
@@ -3455,7 +3455,7 @@ function _teamForm(u){
       <button class="btn-take" style="flex:1;padding:.4rem" onclick="${isNew?'teamSaveNew()':'teamSaveEdit(\''+u.id+'\')'}">${isNew?'➕ Anlegen':'💾 Speichern'}</button>
       <button class="team-btn" style="padding:.4rem .8rem" onclick="renderAdmin()">Abbrechen</button>
     </div>
-  </div>`;
+  </form>`;
 }
 function teamEdit(id){
   const u=_dbUsers.find(x=>x.id===id);if(!u)return;
@@ -3476,7 +3476,7 @@ async function teamSaveEdit(id){
     const res=await fetch(SB_URL+'/benutzer?id=eq.'+id,{method:'PATCH',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token(),'Prefer':'return=minimal'},
       body:JSON.stringify({name,email,telefon:telefon||null,rolle})});
-    if(!res.ok){toast('⚠️ Fehler: '+res.status);return;}
+    if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t?' – '+t:''));return;}
     if(pw){
       const u=_dbUsers.find(x=>x.id===id);
       const pr=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
