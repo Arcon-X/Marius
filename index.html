@@ -3430,10 +3430,23 @@ function renderMeine(){
         <div class="mine-actions">
           <button class="btn-zurueck" onclick="zurueckgeben('${a.id}')" title="Zurückgeben">♻️</button>
           <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>
+          <button class="btn-edit-addr" onclick="openGoogleSucheMeine('${a.id}')">🔎 Google</button>
           <button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>
         </div>
       </div>`;
     }).join('');
+}
+
+function openGoogleSucheMeine(id){
+  const a=S.getAdressen().find(x=>x.id===id);
+  if(!a)return;
+  const name=[a.titel,a.name||a.arzt_name].filter(Boolean).join(' ').trim();
+  const ort=(a.ort&&a.ort.trim())?a.ort.trim():'Wien';
+  const adresse=[a.strasse,a.hnr,a.plz,ort].filter(Boolean).join(' ').trim();
+  const query=[name,adresse].filter(Boolean).join(' ');
+  if(!query)return;
+  const url='https://www.google.at/search?q='+encodeURIComponent(query);
+  window.open(url,'_blank','noopener,noreferrer');
 }
 
 function updateMeineBadge(){
