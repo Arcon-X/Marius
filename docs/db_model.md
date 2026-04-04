@@ -37,6 +37,11 @@ Dieses Dokument ist aus den aktuellen Setup-/Migrationsskripten abgeleitet:
 
 - server/setup_server.sh
 - server/add_issues_table.sh
+- server/add_geo_name.sh
+- server/add_sprache.sh
+- server/add_verification.sh
+- server/add_protokoll_bearbeitet.sh
+- server/fix_settings_functions.sh
 
 Falls es Abweichungen gibt, gelten die SQL-Definitionen in diesen Skripten.
 
