@@ -595,6 +595,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div class="loc-row">
         <input id="loc-input" class="loc-input" type="search"
                placeholder="Adresse oder Name eingeben &hellip;"
+           autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
                onkeydown="if(event.key==='Enter')loc.geocode()"
                oninput="if(!this.value)loc.reset()">
         <button class="gps-btn" onclick="loc.geocode()" title="Suchen">&#128269;</button>
@@ -673,6 +674,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap">
         <button class="btn-reset" style="background:#1d4ed8;color:#fff;flex:1" onclick="exportAdressen()">&#128229; JSON exportieren</button>
         <button class="btn-reset" style="background:#059669;color:#fff;flex:1" onclick="document.getElementById('import-file').click()">&#128228; JSON importieren</button>
+        <button class="btn-reset" id="btn-admin-full-reset" style="background:#b91c1c;color:#fff;flex:1" onclick="adminFullReset()">&#9888;&#65039; Voll-Reset</button>
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="importAdressen(this)">
       </div>
       </div>
@@ -2706,6 +2708,7 @@ function initApp(user){
 }
 
 /* ── LOCATION ────────────────────────────────────────── */
+const DEFAULT_LOC={lat:48.2082,lon:16.3738,label:'Stephansplatz (Standard)'};
 let userLoc=null,selectedNum=10,langFilter='alle';
 
 function setLang(v){
@@ -2732,10 +2735,13 @@ const loc={
   },
   reset(){
     q('#loc-input').value='';
+    userLoc={...DEFAULT_LOC};
+    setLocDisplay(userLoc.label);
     doSearch();
   },
   async geocode(){
-    const val=q('#loc-input').value.trim();if(!val)return;
+    const val=q('#loc-input').value.trim();
+    if(!val){this.reset();return;}
     // ── Name search: check if input matches a doctor name ──
     const lower=val.toLowerCase();
     const allAddr=S.getAdressen();
@@ -2770,7 +2776,7 @@ function setLocDisplay(text){q('#loc-text').textContent=text;showEl('loc-display
 /* ── SEARCH ──────────────────────────────────────────── */
 async function doSearch(){
   if(!userLoc){
-    userLoc={lat:48.2082,lon:16.3738,label:'Stephansplatz (Standard)'};
+    userLoc={...DEFAULT_LOC};
     setLocDisplay(userLoc.label);
   }
   const refreshBtn=q('.refresh-btn');
@@ -3438,6 +3444,50 @@ function renderAdminList(){
 }
 function adminSetStatus(val){adminState.status=val;renderAdminFilter();renderAdminList();}
 function adminSetPlz(val){adminState.plz=val;renderAdminFilter();renderAdminList();}
+
+async function adminFullReset(){
+  const typed=(prompt('⚠️ Voll-Reset\n\nGib zur Bestätigung exakt RESET ein:')||'').trim();
+  if(typed!=='RESET'){toast('Abgebrochen. Bestätigung muss RESET sein.');return;}
+  if(!confirm('Wirklich ALLE Adressen zurücksetzen und das gesamte Protokoll löschen?'))return;
+  const btn=q('#btn-admin-full-reset');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Voll-Reset läuft ...';}
+  try{
+    const h=db._h();
+    // 1) Audit-Log komplett leeren
+    const del=await fetch(SB_URL+'/protokoll?id=not.is.null',{method:'DELETE',headers:h});
+    if(!del.ok)throw new Error('Protokoll-Reset fehlgeschlagen (HTTP '+del.status+')');
+
+    // 2) Alle Adressen auf Initialzustand setzen
+    const adressen=S.getAdressen();
+    for(const a of adressen){
+      const res=await fetch(SB_URL+'/adressen?id=eq.'+a.id,{method:'PATCH',headers:h,
+        body:JSON.stringify({status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null,verifiziert:false,website:null})});
+      if(!res.ok)throw new Error('Adress-Reset fehlgeschlagen bei '+a.id+' (HTTP '+res.status+')');
+      a.status='verfuegbar';
+      a.benutzer_id=null;
+      a.reserviert_am=null;
+      a.erledigt_am=null;
+      a.verifiziert=false;
+      a.website=null;
+    }
+
+    // 3) Lokalen Cache synchronisieren
+    S.saveAdressen(adressen);
+    S.saveProtokoll([]);
+    _sbLastSync=0;
+
+    toast('Voll-Reset abgeschlossen ✓');
+    renderAdmin();
+    renderArchive();
+    renderMeine();
+    updateMeineBadge();
+    if(currentTab==='karte'){renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
+  }catch(e){
+    toast('⚠️ '+e.message);
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='⚠️ Voll-Reset';}
+  }
+}
 
 /* ── TEAM MANAGEMENT ─────────────────────────────────── */
 function _teamForm(u){
