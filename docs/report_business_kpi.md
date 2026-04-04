@@ -17,6 +17,8 @@ title: "NOVUM-ZIV — Business KPI Report"
 .note { border-left: 4px solid #0969da; background: #ddf4ff; padding: .6rem .8rem; border-radius: 4px; margin: .8rem 0; }
 .warn { border-left: 4px solid #d1242f; background: #ffebe9; padding: .6rem .8rem; border-radius: 4px; margin: .8rem 0; }
 .print-btn { border: 1px solid #1f6feb; color: #1f6feb; background: #fff; border-radius: 999px; padding: .35rem .8rem; font-weight: 700; cursor: pointer; }
+.muted { color: #57606a; font-size: .85rem; }
+.live-pill { display: inline-block; margin-left: .45rem; font-size: .72rem; font-weight: 700; color: #1f6feb; background: #ddf4ff; border: 1px solid #96d0ff; border-radius: 999px; padding: 1px 8px; }
 @media print {
   .doc-nav, .print-wrap { display: none !important; }
   a[href]:after { content: "" !important; }
@@ -47,6 +49,8 @@ title: "NOVUM-ZIV — Business KPI Report"
 **Stand:** 04.04.2026  
 **Fokus:** Bezirksvergleich nach erledigten Adressen und Effizienzbewertung.
 
+<div class="note" id="live-kpi-status">Lade Live-Reportdaten ...</div>
+
 ## 1. KPI-Definitionen
 
 - **Erledigungsquote Bezirk** = $archiviert_{bezirk} / gesamt_{bezirk}$
@@ -68,32 +72,15 @@ Datenbasis: `adressen` + `protokoll` nach der gleichen Korrektur-/Reaktivierungs
 
 ## 3. Bezirksvergleich (Template für Abschlussstichtag)
 
-<div class="table-wrap">
-
-| Bezirk | PLZ-Basis | Gesamt | In Bearbeitung | Erledigt | Erledigungsquote | Wählt-uns | Wählt-uns-Quote | Effizienz* |
-|---|---|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 1010 | - | - | - | - | - | - | - |
-| 2 | 1020 | - | - | - | - | - | - | - |
-| 3 | 1030 | - | - | - | - | - | - | - |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... |
-| 23 | 1230 | - | - | - | - | - | - | - |
-| Unzugeordnet | leer/invalid | - | - | - | - | - | - | - |
-
-</div>
+<div class="table-wrap" id="district-kpi-wrap"></div>
 
 \* Effizienz = erledigt pro aktivem Teammitglied mit Aktivitäten im Bezirk.
 
 ## 4. Team-Event-KPIs (pro Benutzer)
 
-<div class="table-wrap">
+<div class="table-wrap" id="team-kpi-wrap"></div>
 
-| Benutzer | Übernommen | Zurückgegeben | Rückgabequote | Hinweis |
-|---|---:|---:|---:|---|
-| User A | - | - | - | - |
-| User B | - | - | - | - |
-| User C | - | - | - | - |
-
-</div>
+<div class="muted" id="team-kpi-hint"></div>
 
 - Für `Übernommen` zählen nur `protokoll`-Zeilen mit `aktion = uebernommen`.
 - Für `Zurückgegeben` zählen nur `protokoll`-Zeilen mit `aktion = reaktiviert` und Notiz „Zurückgegeben".
@@ -123,3 +110,186 @@ Bei sehr kleinen Fallzahlen (z. B. n &lt; 10) immer mit Vorsicht interpretieren 
 2. KPI-Tabelle final befüllen.
 3. Seite als PDF exportieren (`PDF exportieren`).
 4. PDF im Abschlussprotokoll und Steering-Dossier ablegen.
+
+<script>
+(function(){
+  const SB_URL='/api';
+  const RESULT_ACTIONS=new Set(['waehlt_uns','waehlt_nicht','ueberlegt','kein_interesse_wahl','sonstige']);
+
+  const q=(id)=>document.getElementById(id);
+  const esc=(v)=>String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const pct=(num,den)=>den>0?((num/den)*100).toFixed(1).replace('.',',')+'%':'-';
+  const fmtNum=(n)=>Number(n||0).toLocaleString('de-AT');
+
+  function parseDistrict(plz){
+    const p=String(plz||'').trim();
+    if(!/^\d{4}$/.test(p))return null;
+    const n=Number(p);
+    if(n<1010||n>1230||n%10!==0)return null;
+    const d=(n-1000)/10;
+    if(d<1||d>23)return null;
+    return d;
+  }
+
+  function getSessionToken(){
+    try{
+      const raw=sessionStorage.getItem('nv_session')||localStorage.getItem('nv_session');
+      if(!raw)return null;
+      const s=JSON.parse(raw);
+      return s&&s.token?s.token:null;
+    }catch(_e){return null;}
+  }
+
+  async function fetchJson(url,token){
+    const headers=token?{'Authorization':'Bearer '+token}:{ };
+    const res=await fetch(url,{headers});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    return res.json();
+  }
+
+  async function loadData(){
+    let adressen=[];
+    let log=[];
+    try{adressen=JSON.parse(localStorage.getItem('nv_adressen')||'[]');}catch(_e){adressen=[];}
+    try{log=JSON.parse(localStorage.getItem('nv_protokoll')||'[]');}catch(_e){log=[];}
+
+    const token=getSessionToken();
+    if(!adressen.length){
+      try{adressen=await fetchJson(SB_URL+'/adressen?select=*',token);}catch(_e){}
+    }
+    if(!log.length){
+      try{log=await fetchJson(SB_URL+'/protokoll?select=*',token);}catch(_e){}
+    }
+
+    let users=[];
+    try{users=await fetchJson(SB_URL+'/benutzer?select=id,name',token);}catch(_e){users=[];}
+    return {adressen,log,users};
+  }
+
+  function buildDistrictRows(adressen,log){
+    const addrById=new Map(adressen.map(a=>[a.id,a]));
+    const lastReakt={};
+    log.forEach(l=>{
+      if(l.aktion==='reaktiviert'){
+        const t=new Date(l.zeitpunkt||0).getTime();
+        if(!lastReakt[l.adressen_id]||t>lastReakt[l.adressen_id])lastReakt[l.adressen_id]=t;
+      }
+    });
+
+    const latestResult={};
+    log.forEach(l=>{
+      if(!RESULT_ACTIONS.has(l.aktion))return;
+      const cut=lastReakt[l.adressen_id]||0;
+      const t=new Date(l.zeitpunkt||0).getTime();
+      if(t<=cut)return;
+      if(!latestResult[l.adressen_id]||t>latestResult[l.adressen_id].t)latestResult[l.adressen_id]={a:l.aktion,t};
+    });
+
+    const districts={};
+    for(let d=1;d<=23;d++)districts[d]={total:0,inBearb:0,done:0,waehltUns:0,activeUsers:new Set()};
+    const unknown={total:0,inBearb:0,done:0,waehltUns:0,activeUsers:new Set()};
+
+    adressen.forEach(a=>{
+      const d=parseDistrict(a.plz);
+      const bucket=d?districts[d]:unknown;
+      bucket.total++;
+      if(a.status==='in_bearbeitung')bucket.inBearb++;
+      if(a.status==='archiviert')bucket.done++;
+      const res=latestResult[a.id];
+      if(res&&res.a==='waehlt_uns')bucket.waehltUns++;
+    });
+
+    log.forEach(l=>{
+      if(!l.benutzer_id)return;
+      const a=addrById.get(l.adressen_id);
+      if(!a)return;
+      const d=parseDistrict(a.plz);
+      (d?districts[d]:unknown).activeUsers.add(l.benutzer_id);
+    });
+
+    const rows=[];
+    for(let d=1;d<=23;d++){
+      const x=districts[d];
+      const visited=x.done+x.inBearb;
+      const eff=x.activeUsers.size?x.done/x.activeUsers.size:null;
+      rows.push({
+        name:String(d),
+        plz:String(1000+d*10),
+        total:x.total,
+        inBearb:x.inBearb,
+        done:x.done,
+        donePct:pct(x.done,x.total),
+        waehltUns:x.waehltUns,
+        waehltUnsPct:pct(x.waehltUns,visited),
+        eff:eff==null?'-':eff.toFixed(2).replace('.',',')
+      });
+    }
+    const uVisited=unknown.done+unknown.inBearb;
+    const uEff=unknown.activeUsers.size?unknown.done/unknown.activeUsers.size:null;
+    rows.push({
+      name:'Unzugeordnet',plz:'leer/invalid',total:unknown.total,inBearb:unknown.inBearb,done:unknown.done,
+      donePct:pct(unknown.done,unknown.total),waehltUns:unknown.waehltUns,waehltUnsPct:pct(unknown.waehltUns,uVisited),
+      eff:uEff==null?'-':uEff.toFixed(2).replace('.',',')
+    });
+    return rows;
+  }
+
+  function buildTeamRows(log,users){
+    const names=new Map((users||[]).map(u=>[u.id,u.name||u.id]));
+    const byUser={};
+    log.forEach(l=>{
+      if(!l.benutzer_id)return;
+      if(!byUser[l.benutzer_id])byUser[l.benutzer_id]={taken:0,back:0};
+      if(l.aktion==='uebernommen')byUser[l.benutzer_id].taken++;
+      if(l.aktion==='reaktiviert'&&String(l.notiz||'').trim()==='Zurückgegeben')byUser[l.benutzer_id].back++;
+    });
+    return Object.entries(byUser)
+      .map(([id,v])=>({
+        name:names.get(id)||('User '+id.slice(0,8)),
+        taken:v.taken,
+        back:v.back,
+        ratio:v.taken>0?((v.back/v.taken)*100).toFixed(1).replace('.',',')+'%':'n/a',
+        hint:v.taken>0?'':'keine Übernahmen'
+      }))
+      .sort((a,b)=>b.taken-a.taken||b.back-a.back||a.name.localeCompare(b.name,'de'));
+  }
+
+  function renderDistrict(rows){
+    const html=['<table><thead><tr><th>Bezirk</th><th>PLZ-Basis</th><th>Gesamt</th><th>In Bearbeitung</th><th>Erledigt</th><th>Erledigungsquote</th><th>Wählt-uns</th><th>Wählt-uns-Quote</th><th>Effizienz*</th></tr></thead><tbody>'];
+    rows.forEach(r=>{
+      html.push('<tr><td>'+esc(r.name)+'</td><td>'+esc(r.plz)+'</td><td>'+fmtNum(r.total)+'</td><td>'+fmtNum(r.inBearb)+'</td><td>'+fmtNum(r.done)+'</td><td>'+esc(r.donePct)+'</td><td>'+fmtNum(r.waehltUns)+'</td><td>'+esc(r.waehltUnsPct)+'</td><td>'+esc(r.eff)+'</td></tr>');
+    });
+    html.push('</tbody></table>');
+    q('district-kpi-wrap').innerHTML=html.join('');
+  }
+
+  function renderTeam(rows){
+    if(!rows.length){
+      q('team-kpi-wrap').innerHTML='<table><tbody><tr><td>Keine Team-Events verfügbar.</td></tr></tbody></table>';
+      return;
+    }
+    const html=['<table><thead><tr><th>Benutzer</th><th>Übernommen</th><th>Zurückgegeben</th><th>Rückgabequote</th><th>Hinweis</th></tr></thead><tbody>'];
+    rows.forEach(r=>{
+      html.push('<tr><td>'+esc(r.name)+'</td><td>'+fmtNum(r.taken)+'</td><td>'+fmtNum(r.back)+'</td><td>'+esc(r.ratio)+'</td><td>'+esc(r.hint||'-')+'</td></tr>');
+    });
+    html.push('</tbody></table>');
+    q('team-kpi-wrap').innerHTML=html.join('');
+  }
+
+  (async function init(){
+    try{
+      const {adressen,log,users}=await loadData();
+      if(!adressen.length){
+        q('live-kpi-status').innerHTML='Keine Daten gefunden. Bitte App einmal öffnen und synchronisieren, dann den Report neu laden.';
+        return;
+      }
+      renderDistrict(buildDistrictRows(adressen,log));
+      renderTeam(buildTeamRows(log,users));
+      q('live-kpi-status').innerHTML='Live-Reportdaten geladen <span class="live-pill">LIVE</span>';
+      q('team-kpi-hint').textContent='Quelle: lokaler Cache (nv_adressen/nv_protokoll) mit API-Fallback; Benutzer-Namen werden bei verfügbarer Auth ergänzt.';
+    }catch(err){
+      q('live-kpi-status').textContent='Live-Auswertung fehlgeschlagen: '+(err&&err.message?err.message:'Unbekannter Fehler');
+    }
+  })();
+})();
+</script>
