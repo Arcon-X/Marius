@@ -5,7 +5,7 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 <style>
 .site-header { display: none !important; }
 .doc-nav {
-  position: sticky;
+  position: sticky; 
   top: .5rem;
   z-index: 20;
   background: #ffffff;
@@ -75,6 +75,8 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
     <a href="/docs/index.html" class="active">Hub</a>
+    <a href="/docs/report_executive_summary.html">Exec</a>
+    <a href="/docs/report_business_kpi.html">KPI</a>
     <a href="/docs/import_report.html">Import</a>
     <a href="/docs/features.html">Features</a>
     <a href="/docs/technik.html">Technik</a>
@@ -130,5 +132,15 @@ Alle Projekt-Reports sind hier zentral erreichbar.
     <h3>🧪 Backend-Testdokumentation</h3>
     <p>Setup, Safety-Model und Ausführung der Live-API-Tests.</p>
     <a href="/tests/backend/README.html">Öffnen</a>
+  </div>
+  <div class="hub-card">
+    <h3>🧾 Executive Summary</h3>
+    <p>Management-Readout mit Zielerreichung, KPIs, Risiken und Entscheidungen.</p>
+    <a href="/docs/report_executive_summary.html">Öffnen</a>
+  </div>
+  <div class="hub-card">
+    <h3>📊 Business KPI Report</h3>
+    <p>Bezirksvergleich mit Effizienz, Restlast und Ergebnis-Interpretation.</p>
+    <a href="/docs/report_business_kpi.html">Öffnen</a>
   </div>
 </div>
