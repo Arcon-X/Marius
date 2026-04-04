@@ -2505,8 +2505,16 @@ const db={
         sprache:r.sprache||'de',
       }));
       S.saveAdressen(clean);
-      const pr=await fetch(SB_URL+'/protokoll?select=*&limit=500&order=zeitpunkt.desc',{headers:this._hG()});
-      if(pr.ok){const pl=await pr.json();S.saveProtokoll(pl);}
+      let prot=[];let pOffset=0;
+      while(true){
+        const pr=await fetch(SB_URL+'/protokoll?select=*&order=zeitpunkt.desc&limit='+PAGE+'&offset='+pOffset,{headers:this._hG()});
+        if(!pr.ok)break;
+        const chunk=await pr.json();
+        prot=prot.concat(chunk);
+        if(chunk.length<PAGE)break;
+        pOffset+=PAGE;
+      }
+      if(prot.length)S.saveProtokoll(prot);
       // Benutzerliste laden
       const ur=await fetch(SB_URL+'/benutzer?select=*',{headers:this._hG()});
       if(ur.ok){_dbUsers=await ur.json();}
@@ -2537,10 +2545,10 @@ const db={
         method:'PATCH',headers:h,
         body:JSON.stringify({status:'in_bearbeitung',benutzer_id,reserviert_am})
       });
-      if(!res.ok)return true; // bei API-Fehler lokal weitermachen
+      if(!res.ok)return false;
       const data=await res.json();
       return data.length>0; // false = bereits von jemand anderem genommen
-    }catch(e){console.warn('API claim:',e.message);return true;}
+    }catch(e){console.warn('API claim:',e.message);return false;}
   },
   async loadIssues(){
     try{
@@ -2588,7 +2596,6 @@ const S = {
   getProtokoll(){return JSON.parse(localStorage.getItem(this.KEY_LOG)||'[]');},
   addProtokoll(entry){
     const log=this.getProtokoll();log.unshift(entry);
-    if(log.length>500)log.splice(500);
     localStorage.setItem(this.KEY_LOG,JSON.stringify(log));
   },
   getSession(){
@@ -3014,14 +3021,21 @@ async function uebernehmen(id){
     if(lastResults.length)renderResults(lastResults);
     return;
   }
-  a.status='in_bearbeitung';a.benutzer_id=user.id;a.reserviert_am=now;
-  S.saveAdressen(adressen);
   const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
     aktion:'uebernommen',zeitpunkt:now,notiz:'',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
-  S.addProtokoll(prot);
   const pOk=await db.postProtokoll(prot);
-  if(!pOk)toast('⚠️ Protokoll konnte nicht gespeichert werden');
+  if(!pOk){
+    await db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null});
+    _sbLastSync=0;
+    await db.load();
+    toast('⚠️ Übernahme verworfen: Protokoll konnte nicht gespeichert werden');
+    if(lastResults.length)renderResults(lastResults);
+    return;
+  }
+  a.status='in_bearbeitung';a.benutzer_id=user.id;a.reserviert_am=now;
+  S.saveAdressen(adressen);
+  S.addProtokoll(prot);
   updateMeineBadge();
   toast(`Übernommen: ${a.strasse} ${a.hnr} ✓`);
   if(lastResults.length)renderResults(lastResults);
@@ -3032,17 +3046,25 @@ async function zurueckgeben(id){
   const user=auth.current();const adressen=S.getAdressen();
   const a=adressen.find(x=>x.id===id);
   if(!a||a.status!=='in_bearbeitung'||a.benutzer_id!==user.id){toast('Adresse kann nicht zurückgegeben werden');return;}
-  a.status='verfuegbar';a.benutzer_id=null;a.reserviert_am=null;
-  S.saveAdressen(adressen);
+  const prev={status:a.status,benutzer_id:a.benutzer_id,reserviert_am:a.reserviert_am};
   const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
     aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'Zurückgegeben',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+  const patchOk=await db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null});
+  if(!patchOk){toast('⚠️ Serverfehler – bitte Seite neu laden');return;}
+  const protOk=await db.postProtokoll(prot);
+  if(!protOk){
+    await db.patch(id,prev);
+    _sbLastSync=0;
+    await db.load();
+    toast('⚠️ Änderung verworfen: Protokoll konnte nicht gespeichert werden');
+    if(lastResults.length)renderResults(lastResults);
+    if(currentTab==='meine')renderMeine();
+    return;
+  }
+  a.status='verfuegbar';a.benutzer_id=null;a.reserviert_am=null;
+  S.saveAdressen(adressen);
   S.addProtokoll(prot);
-  const [patchOk,protOk]=await Promise.all([
-    db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null}),
-    db.postProtokoll(prot)
-  ]);
-  if(!patchOk||!protOk)toast('⚠️ Serverfehler – bitte Seite neu laden');
   updateMeineBadge();
   toast(`Zurückgegeben: ${a.strasse} ${a.hnr} ✓`);
   if(lastResults.length)renderResults(lastResults);
@@ -3054,17 +3076,26 @@ async function reaktivieren(id){
   const user=auth.current();const adressen=S.getAdressen();
   const a=adressen.find(x=>x.id===id);
   if(!a||a.status!=='archiviert'){toast('Adresse nicht archiviert');return;}
-  a.status='verfuegbar';a.benutzer_id=null;a.reserviert_am=null;a.erledigt_am=null;
-  S.saveAdressen(adressen);
+  const prev={status:a.status,benutzer_id:a.benutzer_id,reserviert_am:a.reserviert_am,erledigt_am:a.erledigt_am};
   const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
     aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+  const patchOk=await db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null});
+  if(!patchOk){toast('⚠️ Serverfehler – bitte Seite neu laden');return;}
+  const protOk=await db.postProtokoll(prot);
+  if(!protOk){
+    await db.patch(id,prev);
+    _sbLastSync=0;
+    await db.load();
+    toast('⚠️ Änderung verworfen: Protokoll konnte nicht gespeichert werden');
+    renderArchive();
+    if(lastResults.length)renderResults(lastResults);
+    if(currentTab==='admin')renderAdmin();
+    return;
+  }
+  a.status='verfuegbar';a.benutzer_id=null;a.reserviert_am=null;a.erledigt_am=null;
+  S.saveAdressen(adressen);
   S.addProtokoll(prot);
-  const [patchOk,protOk]=await Promise.all([
-    db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null,erledigt_am:null}),
-    db.postProtokoll(prot)
-  ]);
-  if(!patchOk||!protOk)toast('⚠️ Serverfehler – bitte Seite neu laden');
   updateMeineBadge();
   toast(`Zurückgesetzt: ${a.strasse} ${a.hnr} ✓`);
   renderArchive();
@@ -3112,18 +3143,28 @@ const dlg={
     const a=adressen.find(x=>x.id===this.currentId);
     if(!a){this.close();return;}
     const now=new Date().toISOString();
-    a.status='archiviert';a.erledigt_am=now;
-    S.saveAdressen(adressen);
+    const prev={status:a.status,erledigt_am:a.erledigt_am};
     const prot={id:uid(),adressen_id:a.id,benutzer_id:user.id,
       aktion:this.selectedAction,zeitpunkt:now,notiz:q('#dlg-note').value.trim(),
       adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
+    const patchOk=await db.patch(a.id,{status:'archiviert',erledigt_am:now});
+    if(!patchOk){toast('⚠️ Serverfehler – bitte Seite neu laden');return;}
+    const protOk=await db.postProtokoll(prot);
+    if(!protOk){
+      await db.patch(a.id,prev);
+      _sbLastSync=0;
+      await db.load();
+      toast('⚠️ Änderung verworfen: Protokoll konnte nicht gespeichert werden');
+      if(lastResults.length)renderResults(lastResults);
+      if(currentTab==='archive')renderArchive();
+      if(currentTab==='meine')renderMeine();
+      this.close();
+      return;
+    }
+    a.status='archiviert';a.erledigt_am=now;
+    S.saveAdressen(adressen);
     S.addProtokoll(prot);
-    const [patchOk,protOk]=await Promise.all([
-      db.patch(a.id,{status:'archiviert',erledigt_am:now}),
-      db.postProtokoll(prot)
-    ]);
-    if(!patchOk||!protOk)toast('⚠️ Serverfehler – bitte Seite neu laden');
-    else toast('Gespeichert ✓');
+    toast('Gespeichert ✓');
     updateMeineBadge();this.close();
     if(lastResults.length)renderResults(lastResults);
     if(currentTab==='archive')renderArchive();
