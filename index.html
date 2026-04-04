@@ -3819,26 +3819,12 @@ function teamEdit(id){
   card.outerHTML=_teamForm(u);
 }
 let _adminResetRpcMissing=false;
-let _adminResetRpcChecked=false;
-async function hasAdminResetRpc(){
-  if(_adminResetRpcChecked)return !_adminResetRpcMissing;
-  _adminResetRpcChecked=true;
-  try{
-    const res=await fetch(SB_URL+'/',{headers:{'Accept':'application/openapi+json'}});
-    if(!res.ok)return true; // bei unklarer Lage bestehenden Flow behalten
-    const doc=await res.json();
-    const paths=doc&&doc.paths?Object.keys(doc.paths):[];
-    const exists=paths.some(p=>String(p).includes('/rpc/admin_reset_password'));
-    _adminResetRpcMissing=!exists;
-    return exists;
-  }catch(_e){
-    return true;
-  }
-}
+// Endpoint fehlt aktuell auf dem Host; Aufruf wird clientseitig unterdrueckt,
+// bis serverseitig add_settings_functions.sh/fix_settings_functions.sh ausgerollt ist.
+let _adminResetRpcChecked=true;
+_adminResetRpcMissing=true;
 async function adminResetPasswordSafe(targetEmail,newPasswort){
   if(_adminResetRpcMissing)return {ok:false,missing:true,status:404};
-  const available=await hasAdminResetRpc();
-  if(!available)return {ok:false,missing:true,status:404};
   const res=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
     body:JSON.stringify({target_email:targetEmail,neues_passwort:newPasswort})
