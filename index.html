@@ -3118,7 +3118,8 @@ const dlg={
       q('#dlg-title-text').textContent='✏️ Ergebnis korrigieren';
       q('#dlg-save').textContent='Korrektur speichern';
       const log=S.getProtokoll();
-      const entry=log.find(l=>l.adressen_id===id&&l.aktion!=='uebernommen'&&l.aktion!=='reaktiviert');
+      const RESULT_ACTIONS=['waehlt_uns','waehlt_nicht','ueberlegt','kein_interesse_wahl','sonstige'];
+      const entry=log.find(l=>l.adressen_id===id&&RESULT_ACTIONS.includes(l.aktion));
       if(entry){
         this.selectedAction=entry.aktion;
         q('#dlg-note').value=entry.notiz||'';
