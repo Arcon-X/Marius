@@ -30,7 +30,6 @@ title: "NOVUM-ZIV — Business KPI Report"
     <a href="/docs/index.html">Hub</a>
     <a href="/docs/report_executive_summary.html">Exec</a>
     <a href="/docs/report_business_kpi.html" class="active">KPI</a>
-    <a href="/docs/tests_businesscases.html">Tests BC</a>
     <a href="/SPEC.html">SPEC</a>
   </div>
 </div>

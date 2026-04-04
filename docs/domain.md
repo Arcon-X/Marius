@@ -49,8 +49,6 @@ th { background: #f6f8fa; }
     <a href="/docs/db_model.html">DB</a>
     <a href="/SPEC.html">SPEC</a>
     <a href="/docs/domain.html" class="active">Domain</a>
-    <a href="/docs/tests_businesscases.html">Tests BC</a>
-    <a href="/tests/backend/README.html">Tests Backend</a>
   </div>
 </div>
 

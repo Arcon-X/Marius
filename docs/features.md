@@ -34,8 +34,6 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
     <a href="/docs/db_model.html">DB</a>
     <a href="/SPEC.html">SPEC</a>
     <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/tests_businesscases.html">Tests BC</a>
-    <a href="/tests/backend/README.html">Tests Backend</a>
   </div>
 </div>
 

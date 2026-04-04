@@ -83,8 +83,6 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
     <a href="/docs/db_model.html">DB</a>
     <a href="/SPEC.html">SPEC</a>
     <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/tests_businesscases.html">Tests BC</a>
-    <a href="/tests/backend/README.html">Tests Backend</a>
   </div>
 </div>
 
@@ -122,16 +120,6 @@ Alle Projekt-Reports sind hier zentral erreichbar.
     <h3>🌐 Domain konfigurieren</h3>
     <p>DNS/TLS, Migration, Ziel-Domain und Rollback-Strategie.</p>
     <a href="/docs/domain.html">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <h3>🧪 Testreport nach Business-Cases</h3>
-    <p>Ergebnisse nach fachlichen Szenarien inkl. Mobile-Checks.</p>
-    <a href="/docs/tests_businesscases.html">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <h3>🧪 Backend-Testdokumentation</h3>
-    <p>Setup, Safety-Model und Ausführung der Live-API-Tests.</p>
-    <a href="/tests/backend/README.html">Öffnen</a>
   </div>
   <div class="hub-card">
     <h3>🧾 Executive Summary</h3>

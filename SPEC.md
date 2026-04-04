@@ -19,8 +19,6 @@
     <a href="/docs/db_model.html">DB</a>
     <a href="/SPEC.html" class="active">SPEC</a>
     <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/tests_businesscases.html">Tests BC</a>
-    <a href="/tests/backend/README.html">Tests Backend</a>
   </div>
 </div>
 
@@ -194,7 +192,6 @@ KPI-Logik basiert auf:
 - Technik/Betrieb: docs/technik.md
 - Features/Fachlogik: docs/features.md
 - Importhistorie: docs/import_report.md
-- Business-Case Tests: docs/tests_businesscases.md
 - Abschlussreports: docs/report_executive_summary.md, docs/report_business_kpi.md
 
 ---

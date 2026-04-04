@@ -29,7 +29,6 @@ title: "NOVUM-ZIV — Executive Summary Report"
     <a href="/docs/index.html">Hub</a>
     <a href="/docs/report_executive_summary.html" class="active">Exec</a>
     <a href="/docs/report_business_kpi.html">KPI</a>
-    <a href="/docs/tests_businesscases.html">Tests BC</a>
     <a href="/SPEC.html">SPEC</a>
   </div>
 </div>
