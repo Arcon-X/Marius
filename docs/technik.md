@@ -189,6 +189,10 @@ Für Migrationen wird zwischen aktuellem und neuem Zielserver unterschieden. Die
 
 **Erlaubte Aktionen:** `uebernommen`, `waehlt_uns`, `waehlt_nicht`, `ueberlegt`, `kein_interesse_wahl`, `sonstige`, `reaktiviert`, `bearbeitet`
 
+Reporting-Hinweis:
+- Für Team-KPIs gilt: „Übernommen" wird aus `aktion = uebernommen` je Benutzer gezählt.
+- „Zurückgegeben" wird derzeit ohne eigenen Aktionstyp aus `aktion = reaktiviert` + Notiz „Zurückgegeben" je Benutzer abgeleitet.
+
 ### Indexe
 
 - `adressen_standort_idx` — GiST-Index für PostGIS KNN-Suche

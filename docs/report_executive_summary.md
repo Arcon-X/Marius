@@ -58,18 +58,28 @@ Das Projekt ist in einer stabilen Abschlussphase. Sicherheits- und UX-Härtung s
 - Projektweite Dokumentation ist konsolidiert (Hub + Report-Navigation).
 - Abschlussberichte sind im Admin direkt zugänglich.
 
-## 3. Risiken zum Projektende
+## 3. Team-Workflow-KPIs (Abschluss-Sicht)
+
+- **Übernommen gesamt:** Summe aller Protokoll-Einträge mit `aktion = uebernommen`.
+- **Zurückgegeben gesamt:** Summe aller Protokoll-Einträge mit `aktion = reaktiviert` und Notiz „Zurückgegeben".
+- **Management-Nutzen:** Die Werte zeigen Lastverteilung und Rücklaufdynamik im Team.
+
+<div class="note">
+Detailauswertung pro Benutzer (inkl. Rückgabequote) befindet sich im Business KPI Report.
+</div>
+
+## 4. Risiken zum Projektende
 
 - Datenqualität hängt von konsequenter Pflege im Feld ab (Notizen/Statusdisziplin).
 - KPI-Interpretation auf Bezirkslevel benötigt Mindestfallzahlen pro Bezirk.
 - Externe Abhängigkeiten (z. B. Routing/Geocoding-Dienste) bleiben operatives Restrisiko.
 
-## 4. Empfohlene Abschlussentscheidungen
+## 5. Empfohlene Abschlussentscheidungen
 
 1. Stichtag für finalen KPI-Freeze definieren.
 2. Finalen PDF-Report in Steering-Freigabe überführen.
 3. Betriebsmodus nach Wahlkampf entscheiden: Archivierung vs. Weiterbetrieb.
 
-## 5. Methodik-Hinweis
+## 6. Methodik-Hinweis
 
-Für Bezirks- und Effizienzanalysen ist der **Business KPI Report** die führende Quelle, inklusive Formeln, Annahmen und Interpretationsregeln.
+Für Bezirks- und Effizienzanalysen ist der **Business KPI Report** die führende Quelle, inklusive Formeln, Annahmen und Interpretationsregeln. Der Kennwert „Zurückgegeben" wird aktuell aus `reaktiviert` + Notiz „Zurückgegeben" abgeleitet.

@@ -47,9 +47,12 @@ title: "NOVUM-ZIV — Business KPI Report"
 - **Besuchsquote Bezirk** = $(archiviert + in\_bearbeitung)_{bezirk} / gesamt_{bezirk}$
 - **Wählt-uns-Quote Bezirk** = $waehlt\_uns_{bezirk} / besucht_{bezirk}$
 - **Team-Effizienz Bezirk** = $archiviert_{bezirk} / aktive\_mitglieder_{bezirk}$
+- **Übernommen pro Benutzer** = Anzahl Protokoll-Einträge mit `aktion = uebernommen` je `benutzer_id`
+- **Zurückgegeben pro Benutzer** = Anzahl Protokoll-Einträge mit `aktion = reaktiviert` und `notiz = "Zurückgegeben"` je `benutzer_id`
+- **Rückgabequote pro Benutzer** = $zurueckgegeben_{user} / uebernommen_{user}$
 
 <div class="note">
-Datenbasis: `adressen` + `protokoll` nach der gleichen Korrektur-/Reaktivierungslogik wie im Archivbereich der App.
+Datenbasis: `adressen` + `protokoll` nach der gleichen Korrektur-/Reaktivierungslogik wie im Archivbereich der App. Der Kennwert „Zurückgegeben" wird im Reporting bewusst aus `reaktiviert` + Notiz „Zurückgegeben" abgeleitet.
 </div>
 
 ## 2. Bezirksmapping (PLZ → Bezirk)
@@ -74,14 +77,30 @@ Datenbasis: `adressen` + `protokoll` nach der gleichen Korrektur-/Reaktivierungs
 
 \* Effizienz = erledigt pro aktivem Teammitglied mit Aktivitäten im Bezirk.
 
-## 4. Interpretation (Management-Readout)
+## 4. Team-Event-KPIs (pro Benutzer)
+
+<div class="table-wrap">
+
+| Benutzer | Übernommen | Zurückgegeben | Rückgabequote | Hinweis |
+|---|---:|---:|---:|---|
+| User A | - | - | - | - |
+| User B | - | - | - | - |
+| User C | - | - | - | - |
+
+</div>
+
+- Für `Übernommen` zählen nur `protokoll`-Zeilen mit `aktion = uebernommen`.
+- Für `Zurückgegeben` zählen nur `protokoll`-Zeilen mit `aktion = reaktiviert` und Notiz „Zurückgegeben".
+- Bei `Übernommen = 0` wird die Rückgabequote als `n/a` ausgewiesen.
+
+## 5. Interpretation (Management-Readout)
 
 1. Top 3 Bezirke nach Erledigungsquote.
 2. Bezirke mit hoher Aktivität, aber niedriger Wählt-uns-Quote.
 3. Bezirke mit hoher Restlast (Gesamt - Erledigt).
 4. Sofortmaßnahmen pro Cluster (hoch/mittel/niedrig).
 
-## 5. Qualitätsregeln für Vergleichbarkeit
+## 6. Qualitätsregeln für Vergleichbarkeit
 
 <div class="warn">
 Bei sehr kleinen Fallzahlen (z. B. n &lt; 10) immer mit Vorsicht interpretieren und im Report markieren.
@@ -90,8 +109,9 @@ Bei sehr kleinen Fallzahlen (z. B. n &lt; 10) immer mit Vorsicht interpretieren 
 - Nur gültige Ergebnisse nach letzter Reaktivierung zählen.
 - Korrigierte Ergebnisse überschreiben ältere Ergebnisse.
 - Bezirkseffizienz nur aus aktiven Teammitgliedern mit Bezirksaktivität ableiten.
+- Team-Rückgaben im Reporting nur über `reaktiviert` + Notiz „Zurückgegeben" zählen.
 
-## 6. Export-Workflow
+## 7. Export-Workflow
 
 1. Abschlussstichtag fixieren.
 2. KPI-Tabelle final befüllen.

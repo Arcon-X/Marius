@@ -115,6 +115,11 @@ Indizes:
 - protokoll_benutzer_idx
 - protokoll_zeitpunkt_idx (DESC)
 
+Reporting-Hinweis:
+- uebernommen je Benutzer: Filter `aktion = 'uebernommen'`
+- zurueckgegeben je Benutzer: Filter `aktion = 'reaktiviert'` und `notiz = 'Zurückgegeben'`
+- Es existiert derzeit kein separater Aktionstyp `zurueckgegeben`.
+
 ### 3.4 api.issues
 
 Zweck: Admin-Ticketing fuer Bugs/Features.
