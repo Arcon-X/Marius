@@ -3282,14 +3282,27 @@ function renderArchive(){
   const user=auth.current();const isAdmin=user.rolle==='admin';
   const adressen=S.getAdressen();
   const log=S.getProtokoll();
+  const RESULT_ACTIONS=['waehlt_uns','waehlt_nicht','ueberlegt','kein_interesse_wahl','sonstige'];
   // Reaktivierte Einträge ausfiltern: nur Ergebnisse NACH dem letzten "reaktiviert" zählen
   const lastReakt={};
   log.forEach(l=>{if(l.aktion==='reaktiviert'){const t=new Date(l.zeitpunkt).getTime();if(!lastReakt[l.adressen_id]||t>lastReakt[l.adressen_id])lastReakt[l.adressen_id]=t;}});
   const activeLog=log.filter(l=>!lastReakt[l.adressen_id]||new Date(l.zeitpunkt).getTime()>lastReakt[l.adressen_id]);
+  // Für jede Adresse nur das zuletzt gültige Ergebnis zählen (Korrekturen überschreiben alte Ergebnisse)
+  const latestResultByAddress={};
+  activeLog.forEach(l=>{
+    if(!RESULT_ACTIONS.includes(l.aktion))return;
+    const ts=new Date(l.zeitpunkt).getTime()||0;
+    const prev=latestResultByAddress[l.adressen_id];
+    if(!prev||ts>(prev.ts||0))latestResultByAddress[l.adressen_id]={entry:l,ts};
+  });
   const total=adressen.length;
   const verf=adressen.filter(a=>a.status==='verfuegbar').length;
   const bear=adressen.filter(a=>a.status==='in_bearbeitung').length;
-  const unter=activeLog.filter(l=>l.aktion==='waehlt_uns').length;
+  const archivedIds=new Set(adressen.filter(a=>a.status==='archiviert').map(a=>a.id));
+  const activeResults=Object.entries(latestResultByAddress)
+    .filter(([addrId])=>archivedIds.has(addrId))
+    .map(([,v])=>v.entry);
+  const unter=activeResults.filter(l=>l.aktion==='waehlt_uns').length;
   q('#admin-stats').innerHTML=`
     <div class="stat-chip chip-b"><span class="sc-icon">🏠</span><span class="sc-label">Gesamt</span><span class="sc-val">${total}</span></div>
     <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
@@ -3303,7 +3316,7 @@ function renderArchive(){
     {key:'kein_interesse_wahl',icon:'🚫',label:'Kein Interesse',color:'cb-kein_interesse_wahl'},
     {key:'sonstige',icon:'💬',label:'Sonstige',color:'cb-sonstige'},
   ];
-  const counts=chartData.map(d=>({...d,n:activeLog.filter(l=>l.aktion===d.key).length}));
+  const counts=chartData.map(d=>({...d,n:activeResults.filter(l=>l.aktion===d.key).length}));
   const maxN=Math.max(...counts.map(c=>c.n),1);
   const totalErg=counts.reduce((s,c)=>s+c.n,0);
   q('#ergebnis-chart').innerHTML=totalErg?`<div class="chart-card">
@@ -3351,7 +3364,7 @@ function renderArchive(){
   const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',reaktiviert:'Reaktiviert'};
   el.innerHTML=`<div class="section-title">${archived.length} abgeschlossen${isAdmin?' (alle)':''}</div>`+
     archived.map(a=>{
-      const entry=log.find(l=>l.adressen_id===a.id&&l.aktion!=='uebernommen'&&l.aktion!=='reaktiviert');
+      const entry=(latestResultByAddress[a.id]||{}).entry||null;
       const icon=entry?ICONS[entry.aktion]||'📋':'📋';
       const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
       const label=entry?LABELS[entry.aktion]||entry.aktion:'';
