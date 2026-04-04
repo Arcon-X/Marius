@@ -454,9 +454,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .arch-search select{
   padding:.6rem .7rem;border:1.5px solid #ddd;border-radius:8px;
   font-size:.82rem;font-family:inherit;outline:none;background:#fff;
-  color:var(--txt);cursor:pointer;transition:border .15s;min-width:0;
+  color:#9ca3af;cursor:pointer;transition:border .15s;min-width:0;
 }
 .arch-search select:focus{border-color:var(--g)}
+#arch-user option{color:var(--txt)}
+#arch-user option[value=""]{color:#9ca3af}
 .arch-card{
   background:var(--card);border-radius:var(--r);box-shadow:var(--sha);
   margin-bottom:.6rem;border-left:4px solid #e5e7eb;
