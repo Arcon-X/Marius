@@ -2,6 +2,13 @@
 # Full login flow test through Nginx
 SERVER_DOMAIN="${SERVER_DOMAIN:-204.168.217.211.nip.io}"
 BASE_URL="${BASE_URL:-https://${SERVER_DOMAIN}}"
+LOGIN_EMAIL="${LOGIN_EMAIL:-}"
+LOGIN_PASS="${LOGIN_PASS:-}"
+
+if [[ -z "$LOGIN_EMAIL" || -z "$LOGIN_PASS" ]]; then
+  echo "ERROR: LOGIN_EMAIL und LOGIN_PASS muessen gesetzt sein."
+  exit 1
+fi
 
 echo "=== 1. Preflight OPTIONS ==="
 curl -sk -D- -X OPTIONS \
@@ -23,7 +30,7 @@ echo "=== 3. Actual POST (valid user) ==="
 curl -sk -D- -X POST \
   -H "Origin: ${BASE_URL}" \
   -H 'Content-Type: application/json' \
-  -d '{"email":"marius.romanin@bnz-wien.at","passwort":"novum2026!"}' \
+  -d "{\"email\":\"${LOGIN_EMAIL}\",\"passwort\":\"${LOGIN_PASS}\"}" \
   "${BASE_URL}/api/rpc/login" 2>/dev/null | head -20
 
 echo ""

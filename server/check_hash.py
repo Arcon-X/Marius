@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import subprocess, bcrypt
 
 DB = "novumziv"
@@ -11,7 +12,9 @@ r = subprocess.run(
 print(r.stdout)
 
 # Passwort gegen beide Hashes prüfen
-pw = "novum2026!"
+pw = os.getenv("CHECK_PASSWORD")
+if not pw:
+    raise SystemExit("CHECK_PASSWORD muss als Umgebungsvariable gesetzt sein.")
 for line in r.stdout.strip().splitlines():
     parts = [p.strip() for p in line.split("|")]
     if len(parts) == 2:

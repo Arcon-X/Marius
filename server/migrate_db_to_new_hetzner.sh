@@ -28,6 +28,8 @@ DB_NAME="${DB_NAME:-novumziv}"
 DB_PORT="${DB_PORT:-5432}"
 SKIP_RESTORE="${SKIP_RESTORE:-0}"
 DUMP_PATH="${DUMP_PATH:-/tmp/${DB_NAME}_$(date +%Y%m%d_%H%M%S).dump}"
+MIGRATION_LOGIN_EMAIL="${MIGRATION_LOGIN_EMAIL:-}"
+MIGRATION_LOGIN_PASS="${MIGRATION_LOGIN_PASS:-}"
 
 if [[ -z "$NEW_HOST" ]]; then
   echo "ERROR: NEW_HOST is required."
@@ -79,7 +81,11 @@ echo "[5/6] Restoring dump on new host"
 echo ""
 echo "[6/6] Parity checks on new host"
 "${SSH_NEW[@]}" "sudo -u postgres psql -p $DB_PORT -d $DB_NAME -c \"SELECT 'benutzer' AS t, COUNT(*) AS c FROM benutzer UNION ALL SELECT 'adressen', COUNT(*) FROM adressen UNION ALL SELECT 'protokoll', COUNT(*) FROM protokoll ORDER BY t;\""
-"${SSH_NEW[@]}" "curl -sf http://127.0.0.1:3000/rpc/login -H 'Content-Type: application/json' -d '{\"email\":\"zahradnik@haselbach.art\",\"passwort\":\"novum2026!\"}' >/dev/null && echo 'PostgREST login endpoint reachable'"
+if [[ -n "$MIGRATION_LOGIN_EMAIL" && -n "$MIGRATION_LOGIN_PASS" ]]; then
+  "${SSH_NEW[@]}" "curl -sf http://127.0.0.1:3000/rpc/login -H 'Content-Type: application/json' -d '{\"email\":\"$MIGRATION_LOGIN_EMAIL\",\"passwort\":\"$MIGRATION_LOGIN_PASS\"}' >/dev/null && echo 'PostgREST login endpoint reachable'"
+else
+  echo "Skip login check: MIGRATION_LOGIN_EMAIL/MIGRATION_LOGIN_PASS nicht gesetzt"
+fi
 
 echo ""
 echo "Migration complete. Keep old server online for rollback window."

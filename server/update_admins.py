@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import subprocess, sys
 
 DB = "novumziv"
@@ -17,7 +18,9 @@ psql("UPDATE public.benutzer SET email='marius.romanin@aon.at' WHERE email='mari
 
 # 2) Neuen Admin erstellen
 print("=== 2) Neuer Admin ===")
-pw = "novum2026!"
+pw = os.getenv("NOVUMZIV_INITIAL_PASSWORD")
+if not pw:
+    raise SystemExit("NOVUMZIV_INITIAL_PASSWORD muss gesetzt sein.")
 h = bcrypt.hashpw(pw.encode(), bcrypt.gensalt(12)).decode()
 sql = f"INSERT INTO public.benutzer (name, email, passwort_hash, rolle) VALUES ('Zahradnik', 'zahradnik@haselbach.art', '{h}', 'admin') ON CONFLICT (email) DO NOTHING;"
 psql(sql)

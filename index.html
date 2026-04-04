@@ -308,6 +308,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .team-edit-row{display:flex;gap:.35rem}
 .team-edit-row>*{flex:1}
 .team-edit-actions{display:flex;gap:.35rem;margin-top:.2rem}
+.issue-card{align-items:flex-start}
+.issue-main{flex:1;min-width:0}
+.issue-actions{display:flex;gap:.3rem;flex-shrink:0}
 
 /* MAP / KARTE */
 #p-karte{padding:0!important;flex-direction:column;overflow:hidden}
@@ -517,6 +520,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   .panel{padding:1rem 1.5rem}
 }
 
+@media(max-width:520px){
+  .issue-card{flex-direction:column;align-items:stretch}
+  .issue-actions{justify-content:flex-end}
+}
+
 /* ── MOBILE ─────────────────────────────────────────── */
 @media(max-width:374px){
   .ab-version{display:none}
@@ -700,7 +708,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         <div class="team-card"><div style="flex:1"><div class="team-name">📄 Adress-Import Report</div><div class="team-detail">Ärztekammerwahl Wien 2026 – Import-Statistiken &amp; Qualitätsprüfung</div></div><a href="docs/import_report" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
         <div class="team-card"><div style="flex:1"><div class="team-name">📋 Feature-Dokumentation</div><div class="team-detail">Alle Funktionen der App – Standortsuche, Karten, Admin, Team, Verifizierung …</div></div><a href="docs/features" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
         <div class="team-card"><div style="flex:1"><div class="team-name">⚙️ Technische Dokumentation</div><div class="team-detail">Architektur, Server, Datenbank, API, Sicherheit &amp; Kosten</div></div><a href="docs/technik" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
-        <div class="team-card"><div style="flex:1"><div class="team-name">🌐 Domain konfigurieren</div><div class="team-detail">DNS-Records, GitHub Pages Custom Domain, CORS &amp; Redirect-Anleitung</div></div><a href="docs/domain" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
+        <div class="team-card"><div style="flex:1"><div class="team-name">🗄️ Datenbank-Modell</div><div class="team-detail">Kanonisches DB-Schema, Beziehungen, API-Views und RPC-Funktionen</div></div><a href="docs/db_model" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
+        <div class="team-card"><div style="flex:1"><div class="team-name">🌐 Domain konfigurieren</div><div class="team-detail">DNS, TLS/Certbot, Subdomain-Setup und Redirect-Anleitung</div></div><a href="docs/domain" target="_blank" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a></div>
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
       <div class="hidden" id="admin-issues" style="padding:.3rem 1rem">
@@ -831,6 +840,11 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <p style="font-size:.88rem;color:var(--sub);margin:.5rem 0 1rem">Du verwendest noch das Standard-Passwort. Bitte lege jetzt ein persönliches Passwort fest, bevor du die App nutzen kannst.</p>
     <form onsubmit="event.preventDefault();forcePwChange()" autocomplete="on">
       <input type="text" id="fpc-user" autocomplete="username" aria-hidden="true" tabindex="-1" style="position:absolute;opacity:0;pointer-events:none;height:0;width:0;padding:0;border:0">
+      <label class="settings-label" for="fpc-old">Aktuelles Passwort</label>
+      <div class="pw-wrap">
+        <input id="fpc-old" class="settings-input" type="password" autocomplete="current-password" required minlength="6">
+        <button type="button" class="pw-eye" onclick="togglePw('fpc-old',this)" tabindex="-1">👁</button>
+      </div>
       <label class="settings-label" for="fpc-new">Neues Passwort (mind. 6 Zeichen)</label>
       <div class="pw-wrap">
         <input id="fpc-new" class="settings-input" type="password" autocomplete="new-password" required minlength="6">
@@ -902,29 +916,7 @@ function togglePw(id,btn){
 }
 
 /* ── DEMO DATA ───────────────────────────────────────── */
-const DEMO_USERS = [
-  {id:'u01',email:'admin@demo.at',                   pw:'novum26',name:'Dr. Marius Romanin',          rolle:'admin'},
-  {id:'u02',email:'demo@demo.at',                    pw:'demo',   name:'Demo Mitarbeiter:in',          rolle:'mitarbeiter'},
-  {id:'u03',email:'marius.romanin@bnz-wien.at',      pw:'novum26',name:'Dr. Marius Romanin (BNZ)',     rolle:'admin'},
-  {id:'u04',email:'franz.hastermann@bnz-wien.at',    pw:'novum26',name:'OMR Dr. Franz Hastermann',     rolle:'mitarbeiter'},
-  {id:'u05',email:'petra.drabo@bnz-wien.at',         pw:'novum26',name:'Drin Petra Drabo',             rolle:'mitarbeiter'},
-  {id:'u06',email:'andreas.eder@bnz-wien.at',        pw:'novum26',name:'DDr. Andreas Eder',            rolle:'mitarbeiter'},
-  {id:'u07',email:'barbara.thornton@bnz-wien.at',    pw:'novum26',name:'MRin DDrin Barbara Thornton',  rolle:'mitarbeiter'},
-  {id:'u08',email:'eren.eryilmaz@bnz-wien.at',       pw:'novum26',name:'Dr. Eren Eryilmaz',            rolle:'mitarbeiter'},
-  {id:'u09',email:'leon.golestani@bnz-wien.at',      pw:'novum26',name:'Dr. Leon Golestani BSc',       rolle:'mitarbeiter'},
-  {id:'u10',email:'julia.glatz@bnz-wien.at',         pw:'novum26',name:'Drin Julia Stella Glatz',      rolle:'mitarbeiter'},
-  {id:'u11',email:'andrietta.dossenbach@bnz-wien.at',pw:'novum26',name:'Drin Andrietta Dossenbach',    rolle:'mitarbeiter'},
-  {id:'u12',email:'andrea.gamper@bnz-wien.at',       pw:'novum26',name:'Drin Andrea Gamper',           rolle:'mitarbeiter'},
-  {id:'u13',email:'dino.imsirovic@bnz-wien.at',      pw:'novum26',name:'Dr. Dino Imsirovic',           rolle:'mitarbeiter'},
-  {id:'u14',email:'gerhard.schager@bnz-wien.at',     pw:'novum26',name:'MR Dr. Gerhard Schager',       rolle:'mitarbeiter'},
-  {id:'u15',email:'paul.inkofer@bnz-wien.at',        pw:'novum26',name:'Dr. Paul Inkofer',             rolle:'mitarbeiter'},
-  {id:'u16',email:'andrea.bednar-brandt@bnz-wien.at',pw:'novum26',name:'Drin Andrea Bednar-Brandt',    rolle:'mitarbeiter'},
-  {id:'u17',email:'anita.elmauthaler@bnz-wien.at',   pw:'novum26',name:'Drin Anita Elmauthaler',       rolle:'mitarbeiter'},
-  {id:'u18',email:'petra.stuehlinger@bnz-wien.at',   pw:'novum26',name:'Drin Petra Stühlinger',        rolle:'mitarbeiter'},
-  {id:'u19',email:'lama.hamisch@bnz-wien.at',        pw:'novum26',name:'Drin Lama Hamisch MSc',        rolle:'mitarbeiter'},
-  {id:'u20',email:'otis.rezegh@bnz-wien.at',         pw:'novum26',name:'Dr. Otis Rezegh',              rolle:'mitarbeiter'},
-  {id:'u21',email:'selma.husejnovic@bnz-wien.at',    pw:'novum26',name:'Drin Selma Husejnovic',        rolle:'mitarbeiter'},
-];
+const DEMO_USERS = [];
 
 const SEED_ADRESSEN = [
   {id:'a0001',plz:'1050',strasse:'Hamburgerstraße',hnr:'7/14',titel:'Dr.',name:'Sarah Abdel-Hamied',lat:48.19530,lon:16.35533},
@@ -2602,14 +2594,15 @@ function showForgotPw(){
 
 async function forcePwChange(){
   const msg=q('#fpc-msg');msg.textContent='';msg.className='settings-msg';
-  const neu=q('#fpc-new').value, conf=q('#fpc-confirm').value;
+  const alt=q('#fpc-old').value, neu=q('#fpc-new').value, conf=q('#fpc-confirm').value;
+  if(!alt){msg.textContent='Aktuelles Passwort eingeben.';msg.classList.add('settings-err');return;}
   if(neu.length<6){msg.textContent='Mind. 6 Zeichen.';msg.classList.add('settings-err');return;}
-  if(neu==='novum2026!'){msg.textContent='Bitte wähle ein anderes Passwort.';msg.classList.add('settings-err');return;}
+  if(neu===alt){msg.textContent='Neues Passwort darf nicht dem aktuellen entsprechen.';msg.classList.add('settings-err');return;}
   if(neu!==conf){msg.textContent='Passwörter stimmen nicht überein.';msg.classList.add('settings-err');return;}
   try{
     const res=await fetch(SB_URL+'/rpc/change_password',{
       method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
-      body:JSON.stringify({altes_passwort:'novum2026!',neues_passwort:neu})
+      body:JSON.stringify({altes_passwort:alt,neues_passwort:neu})
     });
     if(!res.ok){const e=await res.json().catch(()=>({}));msg.textContent=e.message||'Fehler';msg.classList.add('settings-err');return;}
     msg.textContent='Passwort geändert ✓ App wird geladen …';msg.classList.add('settings-ok');
@@ -2715,8 +2708,8 @@ function initApp(user){
   if(user._pwChange){
     q('#force-pw-overlay').classList.remove('hidden');
     q('#fpc-user').value=user.email||'';
-    q('#fpc-new').value='';q('#fpc-confirm').value='';q('#fpc-msg').textContent='';
-    q('#fpc-new').focus();
+    q('#fpc-old').value='';q('#fpc-new').value='';q('#fpc-confirm').value='';q('#fpc-msg').textContent='';
+    q('#fpc-old').focus();
     return; // Block app until pw changed
   }
   updateMeineBadge();
@@ -3587,7 +3580,7 @@ async function teamSaveNew(){
     if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t.includes('duplicate')?(' – E-Mail existiert bereits'):''));return;}
     const created=await res.json();
     if(Array.isArray(created))_dbUsers.push(...created);else _dbUsers.push(created);
-    toast('Mitglied angelegt ✓ (Passwort: novum2026!)');renderAdmin();
+    toast('Mitglied angelegt ✓ (Initial-Passwort serverseitig gesetzt)');renderAdmin();
   }catch(e){toast('⚠️ '+e.message);}
 }
 async function teamDelete(id){
@@ -3639,6 +3632,9 @@ async function renderIssues(){
   const issues=await db.loadIssues();
   const users=_dbUsers.length?_dbUsers:[];
   const list=q('#issues-list');
+  const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
   if(!issues.length){list.innerHTML='<div class="card" style="color:var(--sub);font-size:.85rem">Noch keine Einträge.</div>';return;}
   list.innerHTML=issues.map(i=>{
     const u=users.find(x=>x.id===i.erstellt_von);
@@ -3647,13 +3643,13 @@ async function renderIssues(){
     const badge=i.status==='offen'
       ?'<span style="background:#fbbf24;color:#000;padding:.1rem .4rem;border-radius:4px;font-size:.7rem;font-weight:600">offen</span>'
       :'<span style="background:#34d399;color:#000;padding:.1rem .4rem;border-radius:4px;font-size:.7rem;font-weight:600">erledigt</span>';
-    return`<div class="team-card" style="align-items:center">
-      <div style="flex:1">
+    return`<div class="team-card issue-card">
+      <div class="issue-main">
         <div class="team-name">${icon} ${i.typ==='bug'?'Fehler':'Wunsch'} ${badge}</div>
-        <div class="team-detail">${i.beschreibung.replace(/</g,'&lt;')}</div>
+        <div class="team-detail">${esc(i.beschreibung)}</div>
         <div class="team-detail" style="font-size:.7rem;color:var(--sub)">${u?u.name:'?'} · ${when}</div>
       </div>
-      <div style="display:flex;gap:.3rem">
+      <div class="issue-actions">
         <button class="team-btn" onclick="toggleIssueStatus('${i.id}','${i.status}')" title="Status ändern">${i.status==='offen'?'✅':'↩️'}</button>
         <button class="team-btn team-btn-del" onclick="deleteIssue('${i.id}')" title="Löschen">🗑️</button>
       </div>

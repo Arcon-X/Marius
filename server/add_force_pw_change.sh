@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Force password change on first login + reset all users to novum2026!
-sudo -u postgres psql -d novumziv <<'SQL'
+# Force password change on first login + reset all users to configured initial password.
+DEFAULT_PW="${DEFAULT_PW:-}"
+if [[ -z "$DEFAULT_PW" ]]; then
+  echo "ERROR: DEFAULT_PW muss gesetzt sein."
+  exit 1
+fi
 
--- 1) Modify login function: return passwort_aendern flag when password = novum2026!
+sudo -u postgres psql -v ON_ERROR_STOP=1 -v default_pw="$DEFAULT_PW" -d novumziv <<'SQL'
+
+-- 1) Modify login function: return passwort_aendern flag when password = configured default.
 CREATE OR REPLACE FUNCTION api.login(email TEXT, passwort TEXT)
 RETURNS JSON AS $$
 DECLARE
@@ -48,8 +54,8 @@ BEGIN
 
   DELETE FROM login_versuche WHERE login_versuche.email = lower(login.email);
 
-  -- Check if password is default "novum2026!"
-  pw_default := crypt('novum2026!', usr.passwort_hash) = usr.passwort_hash;
+  -- Check if password is configured default
+  pw_default := crypt(:'default_pw', usr.passwort_hash) = usr.passwort_hash;
 
   SELECT current_setting('app.jwt_secret') INTO secret;
   SELECT sign(
@@ -78,9 +84,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 GRANT EXECUTE ON FUNCTION api.login(TEXT, TEXT) TO anon;
 GRANT EXECUTE ON FUNCTION api.login(TEXT, TEXT) TO authenticated;
 
--- 2) Reset all users to novum2026!
+-- 2) Reset all users to configured default password
 UPDATE public.benutzer
-SET passwort_hash = crypt('novum2026!', gen_salt('bf'));
+SET passwort_hash = crypt(:'default_pw', gen_salt('bf'));
 
 -- 3) Reload PostgREST schema
 NOTIFY pgrst, 'reload schema';

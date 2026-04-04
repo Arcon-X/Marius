@@ -3,13 +3,17 @@ NOVUM-ZIV — geo_name Massenaktualisierung via PostgREST API
 Liest alle Adressen mit Koordinaten, reverse-geocodet via Nominatim,
 filtert numerische Teile heraus → zeigt Viertel/Bezirk statt Straßenname.
 """
+import os
 import requests, time, sys
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API = "https://204.168.217.211.nip.io/api"
-EMAIL = "zahradnik@haselbach.art"
-PASS = "Artcecil1975"
+EMAIL = os.getenv("NOVUMZIV_EMAIL")
+PASS = os.getenv("NOVUMZIV_PASS")
+
+if not EMAIL or not PASS:
+    raise SystemExit("NOVUMZIV_EMAIL und NOVUMZIV_PASS muessen als Umgebungsvariablen gesetzt sein.")
 
 # ── 1. Login ─────────────────────────────────────────────────────────────────
 print("Logging in...")

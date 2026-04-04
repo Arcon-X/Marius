@@ -80,8 +80,7 @@ BEGIN
 END;
 $$;
 
-\echo '=== Testing login with zahradnik ==='
-SELECT api.login('zahradnik@haselbach.art', 'novum2026!');
+\echo '=== Login-Test kann manuell mit LOGIN_EMAIL/LOGIN_PASS erfolgen ==='
 
 ENDSQL
 

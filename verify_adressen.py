@@ -10,10 +10,13 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
 API          = os.getenv("NOVUMZIV_API", "https://204.168.217.211.nip.io/api")
-EMAIL        = os.getenv("NOVUMZIV_EMAIL", "zahradnik@haselbach.art")
-PASS         = os.getenv("NOVUMZIV_PASS", "novum2026!")
+EMAIL        = os.getenv("NOVUMZIV_EMAIL")
+PASS         = os.getenv("NOVUMZIV_PASS")
 BATCH_SIZE   = 100   # Max. Adressen pro Lauf
 SEARCH_DELAY = 2.5   # Sekunden zwischen Suchanfragen (DDG Rate-Limit vermeiden)
+
+if not EMAIL or not PASS:
+    raise SystemExit("NOVUMZIV_EMAIL und NOVUMZIV_PASS muessen als Umgebungsvariablen gesetzt sein.")
 
 # Domains die NICHT als offizielle Website gelten
 EXCLUDED_DOMAINS = {

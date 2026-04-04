@@ -8,4 +8,6 @@ vendor/
 __pycache__/
 *.py[cod]
 .env
+seva.env
+.seva/
 ARCHIV/
