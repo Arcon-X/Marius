@@ -468,7 +468,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .arch-top-actions{flex:0 0 auto;display:flex;align-items:flex-start}
 .btn-verlauf-arch{
   width:124px;padding:.28rem .55rem;background:#fff;color:var(--g);
-  border:2px solid var(--g);border-radius:8px;font-size:.82rem;font-weight:600;
+  border:2px solid var(--g);border-radius:8px;font-size:.78rem;font-weight:700;
   cursor:pointer;font-family:inherit;white-space:nowrap;
 }
 .btn-verlauf-arch:hover{background:var(--g-l)}
@@ -3603,7 +3603,7 @@ function renderArchive(){
             ${websiteUrl?`<div class="addr-website"><a href="${websiteUrl}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="arch-meta">${label}${ownerStr}${when?' · '+when:''}${safeEntryNotiz}</div>
           </div>
-          ${canEdit&&history.length?`<div class="arch-top-actions"><button class="btn-verlauf-arch" onclick="toggleVerlauf('${a.id}')">📋 Verlauf</button></div>`:''}
+          ${history.length?`<div class="arch-top-actions"><button class="btn-verlauf-arch" onclick="toggleVerlauf('${a.id}')">📋 Verlauf</button></div>`:''}
         </div>
         ${canEdit?`<div class="arch-actions">
           <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')" title="Zurücksetzen">♻️</button>
