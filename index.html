@@ -337,6 +337,21 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 }
 .view-btn.active{background:var(--dark);border-color:var(--dark);color:#fff}
 .kf-count{font-size:.71rem;color:var(--sub);font-weight:600;align-self:center;white-space:nowrap}
+.karte-tracking-row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.1rem 0 .05rem}
+.live-switch-wrap{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--sub);font-weight:700;white-space:nowrap}
+.live-switch-wrap input{display:none}
+.live-switch{width:38px;height:22px;border-radius:999px;background:#d1d5db;position:relative;transition:background .2s;flex-shrink:0}
+.live-switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .2s}
+.live-switch-wrap input:checked + .live-switch{background:var(--g)}
+.live-switch-wrap input:checked + .live-switch::after{left:18px}
+.live-switch-wrap input:disabled + .live-switch{opacity:.5}
+.live-zoom-wrap{display:flex;align-items:center;gap:.35rem}
+.live-zoom-label{font-size:.71rem;color:var(--sub);white-space:nowrap}
+.live-zoom-input{width:120px;accent-color:var(--g)}
+.live-zoom-input:disabled{opacity:.5}
+.live-zoom-value{font-size:.72rem;color:var(--txt);font-weight:700;min-width:1.2rem;text-align:right}
+.live-status{font-size:.71rem;font-weight:700;color:var(--sub);white-space:nowrap}
+.live-status.on{color:var(--g)}
 #map-wrap{position:relative;flex:1;min-height:0}
 #map{height:100%;width:100%}
 .map-loading{
@@ -666,6 +681,19 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
         <div style="display:flex;align-items:center;gap:.5rem">
           <div class="kf-scroll" id="kf-plz"></div>
           <span class="kf-count" id="kf-count"></span>
+        </div>
+        <div class="karte-tracking-row">
+          <label class="live-switch-wrap" title="Live-Tracking">
+            <input id="karte-live-toggle" type="checkbox" onchange="karteSetLiveTracking(this.checked)">
+            <span class="live-switch"></span>
+            <span>Live</span>
+          </label>
+          <div class="live-zoom-wrap">
+            <label for="karte-live-zoom" class="live-zoom-label">Zoom</label>
+            <input id="karte-live-zoom" class="live-zoom-input" type="range" min="12" max="19" step="1" value="14" oninput="karteSetLiveZoom(this.value)">
+            <span id="karte-live-zoom-val" class="live-zoom-value">14</span>
+          </div>
+          <span id="karte-live-status" class="live-status">Live aus</span>
         </div>
       </div>
       <div id="map-wrap">
@@ -2650,7 +2678,7 @@ const auth={
     }catch(e){q('#login-err').textContent='Server nicht erreichbar.';console.error(e);}
     btn.disabled=false;btn.textContent='Anmelden';
   },
-  logout(){S.clearSession();location.reload();},
+  logout(){stopLiveTrackingWatch();S.clearSession();location.reload();},
   current(){
     const s=S.getSession();
     if(!s||!s.token)return null;
@@ -2764,6 +2792,7 @@ function showTab(tab){
     if(karteMode==='map')updateMap();else renderKarteList();
     setTimeout(()=>leafletMap&&leafletMap.invalidateSize(),300);
   }
+  syncLiveTrackingWatch();
   if(tab==='home')doSearch();
   window.scrollTo({top:0,behavior:'instant'});
   // Hintergrund-Sync mit der Server-API
@@ -2774,6 +2803,7 @@ function showTab(tab){
     if(tab==='archive')renderArchive();
     if(tab==='admin')renderAdmin();
     if(tab==='karte'){renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
+    syncLiveTrackingWatch();
     if(tab==='home')doSearch(true);
   });
 }
@@ -3880,6 +3910,107 @@ async function renderIssues(){
 let leafletMap=null,mapMarkers=[];
 const karteState={status:'all',plz:'all'};
 let karteMode='map';
+let liveTrackingEnabled=false;
+let liveTrackingWatchId=null;
+let liveTrackingZoom=14;
+let lastTrackedPoint=null;
+let liveTrackingLastMoveAt=0;
+const LIVE_TRACK_MOVE_M=15;
+const LIVE_TRACK_IDLE_MS=60*60*1000;
+
+function isLiveTrackingContextActive(){
+  return currentTab==='karte'&&karteMode==='map';
+}
+function shouldRunLiveTracking(){
+  return liveTrackingEnabled&&isLiveTrackingContextActive();
+}
+function updateLiveTrackingToolbarUI(){
+  const inMapTab=currentTab==='karte';
+  const inMapContext=isLiveTrackingContextActive();
+  const toggle=document.getElementById('karte-live-toggle');
+  const zoom=document.getElementById('karte-live-zoom');
+  const zoomVal=document.getElementById('karte-live-zoom-val');
+  const status=document.getElementById('karte-live-status');
+  if(toggle){
+    toggle.checked=liveTrackingEnabled;
+    toggle.disabled=!inMapTab;
+  }
+  if(zoom){
+    zoom.value=String(liveTrackingZoom);
+    zoom.disabled=!inMapTab||!liveTrackingEnabled;
+  }
+  if(zoomVal)zoomVal.textContent=String(liveTrackingZoom);
+  if(status){
+    const active=liveTrackingWatchId!==null&&inMapContext;
+    status.textContent=active?'Live aktiv':'Live aus';
+    status.classList.toggle('on',active);
+  }
+}
+function karteSetLiveTracking(enabled){
+  liveTrackingEnabled=!!enabled;
+  if(liveTrackingEnabled){
+    lastTrackedPoint=null;
+    liveTrackingLastMoveAt=Date.now();
+  }
+  syncLiveTrackingWatch();
+}
+function karteSetLiveZoom(v){
+  const n=Math.max(12,Math.min(19,parseInt(v,10)||14));
+  liveTrackingZoom=n;
+  updateLiveTrackingToolbarUI();
+}
+function handleLiveTrackingPosition(pos){
+  const next={lat:pos.coords.latitude,lon:pos.coords.longitude,label:'GPS-Standort'};
+  const now=Date.now();
+  const moved=!lastTrackedPoint||haversine(lastTrackedPoint.lat,lastTrackedPoint.lon,next.lat,next.lon)>=LIVE_TRACK_MOVE_M;
+  userLoc=next;
+  if(moved){
+    lastTrackedPoint={lat:next.lat,lon:next.lon};
+    liveTrackingLastMoveAt=now;
+  }
+  if(isLiveTrackingContextActive()&&leafletMap){
+    updateMap({centerOnUser:false});
+    if(moved){
+      leafletMap.setView([next.lat,next.lon],liveTrackingZoom);
+    }
+  }
+  if(!moved&&liveTrackingEnabled&&liveTrackingLastMoveAt&&now-liveTrackingLastMoveAt>=LIVE_TRACK_IDLE_MS){
+    liveTrackingEnabled=false;
+    stopLiveTrackingWatch();
+    updateLiveTrackingToolbarUI();
+    toast('Live-Tracking nach 60 Min. Stillstand gestoppt');
+    return;
+  }
+  updateLiveTrackingToolbarUI();
+}
+function startLiveTrackingWatch(){
+  if(liveTrackingWatchId!==null)return;
+  if(!navigator.geolocation){
+    liveTrackingEnabled=false;
+    toast('GPS nicht verfügbar');
+    updateLiveTrackingToolbarUI();
+    return;
+  }
+  liveTrackingLastMoveAt=Date.now();
+  liveTrackingWatchId=navigator.geolocation.watchPosition(
+    handleLiveTrackingPosition,
+    ()=>{updateLiveTrackingToolbarUI();},
+    {enableHighAccuracy:true,timeout:10000,maximumAge:2000}
+  );
+  updateLiveTrackingToolbarUI();
+}
+function stopLiveTrackingWatch(){
+  if(liveTrackingWatchId!==null&&navigator.geolocation){
+    navigator.geolocation.clearWatch(liveTrackingWatchId);
+  }
+  liveTrackingWatchId=null;
+  lastTrackedPoint=null;
+  updateLiveTrackingToolbarUI();
+}
+function syncLiveTrackingWatch(){
+  if(shouldRunLiveTracking())startLiveTrackingWatch();
+  else stopLiveTrackingWatch();
+}
 
 function karteGetFiltered(){
   const all=S.getAdressen();
@@ -3915,6 +4046,7 @@ function renderKarteToolbar(){
   // Zähler
   const count=karteGetFiltered().length;
   document.getElementById('kf-count').textContent=count+' Adressen';
+  updateLiveTrackingToolbarUI();
 }
 
 function karteSetStatus(val){
@@ -3936,6 +4068,7 @@ function karteView(mode){
   const listEl=document.getElementById('karte-list');
   if(mode==='map'){mapEl.classList.remove('hidden');listEl.classList.add('hidden');setTimeout(()=>leafletMap&&leafletMap.invalidateSize(),100);}
   else{mapEl.classList.add('hidden');listEl.classList.remove('hidden');renderKarteList();}
+  syncLiveTrackingWatch();
 }
 
 function renderKarteList(){
@@ -3999,7 +4132,7 @@ async function initMap(){
   if(currentTab==='karte'&&karteMode==='map')updateMap();
   setMapLoading(false);
 }
-function updateMap(){
+function updateMap(opts={}){
   if(!leafletMap)return;
   mapMarkers.forEach(m=>m.remove());mapMarkers=[];
   const user=auth.current();
@@ -4035,7 +4168,7 @@ function updateMap(){
     });
     const um=L.marker([userLoc.lat,userLoc.lon],{icon:uI}).addTo(leafletMap);
     um.bindPopup('<strong>Dein Standort</strong>');mapMarkers.push(um);
-    leafletMap.setView([userLoc.lat,userLoc.lon],14);
+    if(opts.centerOnUser!==false)leafletMap.setView([userLoc.lat,userLoc.lon],14);
   }
   setTimeout(()=>leafletMap.invalidateSize(),100);
 }
