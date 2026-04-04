@@ -9,6 +9,7 @@ title: "NOVUM-ZIV - DB Model"
 .doc-nav-links { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .15rem; }
 .doc-nav-links a { text-decoration: none; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; border-radius: 999px; padding: .32rem .72rem; white-space: nowrap; font-size: .82rem; font-weight: 600; }
 .doc-nav-links a.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+.doc-nav-links a:focus-visible { outline: 2px solid #1f6feb; outline-offset: 2px; }
 </style>
 
 # NOVUM-ZIV - DB Model
@@ -17,12 +18,14 @@ title: "NOVUM-ZIV - DB Model"
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
     <a href="/docs/index.html">Hub</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html" class="active">DB</a>
     <a href="/SPEC.html">SPEC</a>
+    <a href="/docs/technik.html">Technik</a>
+    <a href="/docs/db_model.html" class="active" aria-current="page">DB</a>
+    <a href="/docs/features.html">Features</a>
+    <a href="/docs/import_report.html">Import</a>
     <a href="/docs/domain.html">Domain</a>
+    <a href="/docs/report_executive_summary.html">Exec</a>
+    <a href="/docs/report_business_kpi.html">KPI</a>
   </div>
 </div>
 

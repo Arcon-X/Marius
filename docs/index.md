@@ -1,4 +1,4 @@
----
+r---
 title: "NOVUM-ZIV — Dokumentations-Hub"
 ---
 
@@ -51,6 +51,10 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
   background: #1f6feb;
   border-color: #1f6feb;
   color: #fff;
+}
+.doc-nav-links a:focus-visible {
+  outline: 2px solid #1f6feb;
+  outline-offset: 2px;
 }
 .quick-grid {
   display: grid;
@@ -134,7 +138,7 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html" class="active">Hub</a>
+    <a href="/docs/index.html" class="active" aria-current="page">Hub</a>
     <a href="/SPEC.html">SPEC</a>
     <a href="/docs/technik.html">Technik</a>
     <a href="/docs/db_model.html">DB</a>

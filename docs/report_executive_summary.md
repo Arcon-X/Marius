@@ -9,6 +9,7 @@ title: "NOVUM-ZIV — Executive Summary Report"
 .doc-nav-links { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .15rem; }
 .doc-nav-links a { text-decoration: none; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; border-radius: 999px; padding: .32rem .72rem; white-space: nowrap; font-size: .82rem; font-weight: 600; }
 .doc-nav-links a.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+.doc-nav-links a:focus-visible { outline: 2px solid #1f6feb; outline-offset: 2px; }
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .6rem; margin: .7rem 0 1rem; }
 .kpi { border: 1px solid #d0d7de; border-radius: 10px; padding: .7rem .8rem; background: #fff; }
 .kpi h3 { margin: 0 0 .2rem 0; font-size: .8rem; color: #57606a; text-transform: uppercase; letter-spacing: .3px; }
@@ -27,9 +28,14 @@ title: "NOVUM-ZIV — Executive Summary Report"
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
     <a href="/docs/index.html">Hub</a>
-    <a href="/docs/report_executive_summary.html" class="active">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
     <a href="/SPEC.html">SPEC</a>
+    <a href="/docs/technik.html">Technik</a>
+    <a href="/docs/db_model.html">DB</a>
+    <a href="/docs/features.html">Features</a>
+    <a href="/docs/import_report.html">Import</a>
+    <a href="/docs/domain.html">Domain</a>
+    <a href="/docs/report_executive_summary.html" class="active" aria-current="page">Exec</a>
+    <a href="/docs/report_business_kpi.html">KPI</a>
   </div>
 </div>
 
