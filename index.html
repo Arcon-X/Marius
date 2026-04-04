@@ -223,6 +223,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .mine-street{font-size:.9rem;font-weight:700}
 .mine-plz{font-size:.73rem;color:var(--sub);margin-bottom:.2rem}
 .mine-since{font-size:.7rem;color:var(--sub)}
+.mine-top-actions{flex:0 0 auto;display:flex;align-items:flex-start}
+.btn-google-mine{
+  min-width:160px;padding:.9rem 1rem;background:#fff;color:var(--g);
+  border:3px solid var(--g);border-radius:16px;font-size:.9rem;font-weight:700;
+  cursor:pointer;font-family:inherit;white-space:nowrap;
+}
+.btn-google-mine:hover{background:var(--g-l)}
 .mine-actions{padding:.2rem 1rem .75rem;display:flex;gap:.4rem;align-items:stretch}
 
 /* DIALOG */
@@ -3426,12 +3433,14 @@ function renderMeine(){
             <div class="mine-plz">${safePlz} Wien</div>
             <div class="mine-since">Reserviert: ${since}</div>
           </div>
+          <div class="mine-top-actions">
+            <button class="btn-google-mine" onclick="openGoogleSucheMeine('${a.id}')">🔎 Google</button>
+          </div>
         </div>
         <div class="mine-actions">
           <button class="btn-zurueck" onclick="zurueckgeben('${a.id}')" title="Zurückgeben">♻️</button>
           <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>
           <button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>
-          <button class="btn-edit-addr" onclick="openGoogleSucheMeine('${a.id}')">🔎 Google</button>
         </div>
       </div>`;
     }).join('');
