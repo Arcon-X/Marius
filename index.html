@@ -352,6 +352,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .live-zoom-value{font-size:.72rem;color:var(--txt);font-weight:700;min-width:1.2rem;text-align:right}
 .live-status{font-size:.71rem;font-weight:700;color:var(--sub);white-space:nowrap}
 .live-status.on{color:var(--g)}
+.live-lastmove{font-size:.7rem;color:var(--sub);white-space:nowrap}
 #map-wrap{position:relative;flex:1;min-height:0}
 #map{height:100%;width:100%}
 .map-loading{
@@ -694,6 +695,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
             <span id="karte-live-zoom-val" class="live-zoom-value">14</span>
           </div>
           <span id="karte-live-status" class="live-status">Live aus</span>
+          <span id="karte-live-lastmove" class="live-lastmove">Bewegung: -</span>
         </div>
       </div>
       <div id="map-wrap">
@@ -3915,8 +3917,25 @@ let liveTrackingWatchId=null;
 let liveTrackingZoom=14;
 let lastTrackedPoint=null;
 let liveTrackingLastMoveAt=0;
+let liveTrackingUiTimer=null;
 const LIVE_TRACK_MOVE_M=15;
 const LIVE_TRACK_IDLE_MS=60*60*1000;
+
+function formatLastMoveText(){
+  if(!liveTrackingEnabled||!liveTrackingLastMoveAt)return 'Bewegung: -';
+  const diff=Math.max(0,Date.now()-liveTrackingLastMoveAt);
+  const min=Math.floor(diff/60000);
+  if(min<=0)return 'Bewegung: <1 min';
+  return `Bewegung: vor ${min} min`;
+}
+function checkLiveTrackingIdle(){
+  if(!liveTrackingEnabled||!liveTrackingLastMoveAt)return;
+  if(Date.now()-liveTrackingLastMoveAt<LIVE_TRACK_IDLE_MS)return;
+  liveTrackingEnabled=false;
+  stopLiveTrackingWatch();
+  updateLiveTrackingToolbarUI();
+  toast('Live-Tracking nach 60 Min. Stillstand gestoppt');
+}
 
 function isLiveTrackingContextActive(){
   return currentTab==='karte'&&karteMode==='map';
@@ -3931,6 +3950,7 @@ function updateLiveTrackingToolbarUI(){
   const zoom=document.getElementById('karte-live-zoom');
   const zoomVal=document.getElementById('karte-live-zoom-val');
   const status=document.getElementById('karte-live-status');
+  const lastMove=document.getElementById('karte-live-lastmove');
   if(toggle){
     toggle.checked=liveTrackingEnabled;
     toggle.disabled=!inMapTab;
@@ -3945,6 +3965,7 @@ function updateLiveTrackingToolbarUI(){
     status.textContent=active?'Live aktiv':'Live aus';
     status.classList.toggle('on',active);
   }
+  if(lastMove)lastMove.textContent=formatLastMoveText();
 }
 function karteSetLiveTracking(enabled){
   liveTrackingEnabled=!!enabled;
@@ -3975,10 +3996,7 @@ function handleLiveTrackingPosition(pos){
     }
   }
   if(!moved&&liveTrackingEnabled&&liveTrackingLastMoveAt&&now-liveTrackingLastMoveAt>=LIVE_TRACK_IDLE_MS){
-    liveTrackingEnabled=false;
-    stopLiveTrackingWatch();
-    updateLiveTrackingToolbarUI();
-    toast('Live-Tracking nach 60 Min. Stillstand gestoppt');
+    checkLiveTrackingIdle();
     return;
   }
   updateLiveTrackingToolbarUI();
@@ -3992,6 +4010,9 @@ function startLiveTrackingWatch(){
     return;
   }
   liveTrackingLastMoveAt=Date.now();
+  if(liveTrackingUiTimer===null){
+    liveTrackingUiTimer=setInterval(()=>{checkLiveTrackingIdle();updateLiveTrackingToolbarUI();},30000);
+  }
   liveTrackingWatchId=navigator.geolocation.watchPosition(
     handleLiveTrackingPosition,
     ()=>{updateLiveTrackingToolbarUI();},
@@ -4002,6 +4023,10 @@ function startLiveTrackingWatch(){
 function stopLiveTrackingWatch(){
   if(liveTrackingWatchId!==null&&navigator.geolocation){
     navigator.geolocation.clearWatch(liveTrackingWatchId);
+  }
+  if(liveTrackingUiTimer!==null){
+    clearInterval(liveTrackingUiTimer);
+    liveTrackingUiTimer=null;
   }
   liveTrackingWatchId=null;
   lastTrackedPoint=null;
