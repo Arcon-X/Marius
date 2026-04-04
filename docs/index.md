@@ -135,14 +135,14 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
     <a href="/docs/index.html" class="active">Hub</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/features.html">Features</a>
+    <a href="/SPEC.html">SPEC</a>
     <a href="/docs/technik.html">Technik</a>
     <a href="/docs/db_model.html">DB</a>
-    <a href="/SPEC.html">SPEC</a>
+    <a href="/docs/features.html">Features</a>
+    <a href="/docs/import_report.html">Import</a>
     <a href="/docs/domain.html">Domain</a>
+    <a href="/docs/report_executive_summary.html">Exec</a>
+    <a href="/docs/report_business_kpi.html">KPI</a>
   </div>
 </div>
 
@@ -202,16 +202,10 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 
 <div class="hub-grid">
   <div class="hub-card">
-    <span class="meta">Datengrundlage</span>
-    <h3>📄 Adress-Import Report</h3>
-    <p>Importstatistik, Geocoding-Methodik und Datenqualität.</p>
-    <a href="/docs/import_report.html">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Fachlich</span>
-    <h3>📋 Feature-Dokumentation</h3>
-    <p>Funktionale Beschreibung aller Kernmodule und Admin-Funktionen.</p>
-    <a href="/docs/features.html">Öffnen</a>
+    <span class="meta">Systemreferenz</span>
+    <h3>📚 Gesamtspezifikation (SPEC)</h3>
+    <p>Vollständige End-to-End Spezifikation des gesamten Projekts.</p>
+    <a href="/SPEC.html">Öffnen</a>
   </div>
   <div class="hub-card">
     <span class="meta">Betrieb</span>
@@ -226,10 +220,16 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
     <a href="/docs/db_model.html">Öffnen</a>
   </div>
   <div class="hub-card">
-    <span class="meta">Systemreferenz</span>
-    <h3>📚 Gesamtspezifikation (SPEC)</h3>
-    <p>Vollständige End-to-End Spezifikation des gesamten Projekts.</p>
-    <a href="/SPEC.html">Öffnen</a>
+    <span class="meta">Fachlich</span>
+    <h3>📋 Feature-Dokumentation</h3>
+    <p>Funktionale Beschreibung aller Kernmodule und Admin-Funktionen.</p>
+    <a href="/docs/features.html">Öffnen</a>
+  </div>
+  <div class="hub-card">
+    <span class="meta">Datengrundlage</span>
+    <h3>📄 Adress-Import Report</h3>
+    <p>Importstatistik, Geocoding-Methodik und Datenqualität.</p>
+    <a href="/docs/import_report.html">Öffnen</a>
   </div>
   <div class="hub-card">
     <span class="meta">Infrastruktur</span>
