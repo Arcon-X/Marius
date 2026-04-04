@@ -14,9 +14,29 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 .changelog summary { font-weight: bold; cursor: pointer; }
 .changelog ul { margin: .5rem 0 0 1.2rem; }
 .badge-neu { display: inline-block; background: #2da44e; color: #fff; font-size: .75rem; padding: 1px 6px; border-radius: 3px; vertical-align: middle; margin-left: .4rem; }
+.doc-nav { position: sticky; top: .5rem; z-index: 20; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; padding: .7rem; margin: .2rem 0 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
+.doc-nav-title { font-size: .8rem; color: #57606a; font-weight: 700; margin-bottom: .45rem; }
+.doc-nav-links { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .15rem; }
+.doc-nav-links a { text-decoration: none; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; border-radius: 999px; padding: .32rem .72rem; white-space: nowrap; font-size: .82rem; font-weight: 600; }
+.doc-nav-links a.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
 </style>
 
 # NOVUM-ZIV Unterschriften — Technische Dokumentation & Kosten
+
+<div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
+    <div class="doc-nav-title">Dokumentation</div>
+    <div class="doc-nav-links">
+        <a href="/docs/index.html">Hub</a>
+        <a href="/docs/import_report.html">Import</a>
+        <a href="/docs/features.html">Features</a>
+        <a href="/docs/technik.html" class="active">Technik</a>
+        <a href="/docs/db_model.html">DB</a>
+        <a href="/SPEC.html">SPEC</a>
+        <a href="/docs/domain.html">Domain</a>
+        <a href="/docs/tests_businesscases.html">Tests BC</a>
+        <a href="/tests/backend/README.html">Tests Backend</a>
+    </div>
+</div>
 
 > **Stand:** 04.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
 
