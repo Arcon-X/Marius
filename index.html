@@ -2676,7 +2676,7 @@ function showTab(tab){
     setTimeout(()=>leafletMap&&leafletMap.invalidateSize(),300);
   }
   window.scrollTo({top:0,behavior:'instant'});
-  // Hintergrund-Sync mit Supabase
+  // Hintergrund-Sync mit der Server-API
   db.load().then(rows=>{
     if(!rows||currentTab!==tab)return;
     updateMeineBadge();

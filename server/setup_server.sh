@@ -5,7 +5,8 @@
 # ============================================================
 set -e
 
-SERVER_IP="204.168.217.211"
+SERVER_IP="${SERVER_IP:-204.168.217.211}"
+SERVER_DOMAIN="${SERVER_DOMAIN:-${SERVER_IP}.nip.io}"
 DB_NAME="novumziv"
 DB_USER="novumziv_user"
 DB_PASS="$(openssl rand -base64 32 | tr -d '/+=' | head -c 32)"
@@ -17,6 +18,7 @@ POSTGREST_VERSION="12.2.3"
 echo "============================================================"
 echo "  NOVUM-ZIV Server Setup"
 echo "  Server: $SERVER_IP"
+echo "  Domain: $SERVER_DOMAIN"
 echo "============================================================"
 echo ""
 
@@ -317,7 +319,7 @@ echo "► Nginx konfigurieren..."
 cat > /etc/nginx/sites-available/novumziv << EOF
 server {
     listen 80;
-    server_name $SERVER_IP;
+  server_name $SERVER_IP $SERVER_DOMAIN;
 
     location /api/ {
         proxy_pass         http://127.0.0.1:3000/;
@@ -325,7 +327,7 @@ server {
         proxy_set_header   X-Real-IP \$remote_addr;
 
         # CORS nicht nötig (same-origin), aber für Kompatibilität
-        add_header Access-Control-Allow-Origin  "https://204.168.217.211.nip.io" always;
+        add_header Access-Control-Allow-Origin  "https://$SERVER_DOMAIN" always;
         add_header Access-Control-Allow-Headers "Authorization,Content-Type,Prefer" always;
         add_header Access-Control-Allow-Methods "GET,POST,PATCH,DELETE,OPTIONS" always;
 
@@ -353,6 +355,7 @@ echo "  ✅ Setup abgeschlossen!"
 echo "============================================================"
 echo ""
 echo "  API erreichbar unter: http://$SERVER_IP/api/"
+echo "  API erreichbar unter: https://$SERVER_DOMAIN/api/"
 echo "  Health-Check:         http://$SERVER_IP/health"
 echo ""
 echo "  Zugangsdaten: /root/novumziv_credentials.txt"

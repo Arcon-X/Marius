@@ -2,6 +2,7 @@ title: "NOVUM-ZIV Unterschriften"
 description: "Planungsdokument — BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026"
 author: "BNZ Wien"
 
+# Cutover-Ziel beim Serverwechsel hier aktualisieren (z.B. https://<NEW_IP>.nip.io oder finale Domain)
 url: "https://204.168.217.211.nip.io"
 baseurl: ""
 

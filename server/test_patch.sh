@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LOGIN_RESP=$(curl -s -X POST 'http://127.0.0.1:3000/rpc/login' \
+BASE_URL="${BASE_URL:-http://127.0.0.1:3000}"
+
+LOGIN_RESP=$(curl -s -X POST "${BASE_URL}/rpc/login" \
   -H 'Content-Type: application/json' \
   -d '{"email":"zahradnik@haselbach.art","passwort":"novum2026!"}')
 echo "LOGIN RESPONSE: $LOGIN_RESP"
@@ -15,7 +17,7 @@ print(d.get('token', d) if isinstance(d, dict) else d)
 echo "TOKEN obtained: ${TOKEN:0:20}..."
 
 echo "--- Testing PATCH ---"
-curl -s -X PATCH 'http://127.0.0.1:3000/benutzer?id=eq.7d69ec23-6fcc-4476-8305-2f22991015ab' \
+curl -s -X PATCH "${BASE_URL}/benutzer?id=eq.7d69ec23-6fcc-4476-8305-2f22991015ab" \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Prefer: return=representation' \

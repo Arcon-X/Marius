@@ -3,6 +3,8 @@
 # Nginx serves static files + proxies API (same-origin, no CORS needed)
 set -e
 
+SERVER_DOMAIN="${SERVER_DOMAIN:-204.168.217.211.nip.io}"
+
 echo "=== Erstelle Web-Root ==="
 mkdir -p /var/www/novumziv
 chown www-data:www-data /var/www/novumziv
@@ -14,10 +16,10 @@ limit_req_zone $binary_remote_addr zone=api:10m rate=30r/m;
 
 server {
     listen 443 ssl;
-    server_name 204.168.217.211.nip.io;
+    server_name __SERVER_DOMAIN__;
 
-    ssl_certificate /etc/letsencrypt/live/204.168.217.211.nip.io/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/204.168.217.211.nip.io/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/__SERVER_DOMAIN__/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/__SERVER_DOMAIN__/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
@@ -77,10 +79,12 @@ server {
 
 server {
     listen 80;
-    server_name 204.168.217.211.nip.io;
+    server_name __SERVER_DOMAIN__;
     return 301 https://$host$request_uri;
 }
 NGINX
+
+sed -i "s/__SERVER_DOMAIN__/${SERVER_DOMAIN}/g" /etc/nginx/sites-available/novumziv
 
 echo "=== Symlink aktualisieren ==="
 ln -sf /etc/nginx/sites-available/novumziv /etc/nginx/sites-enabled/novumziv

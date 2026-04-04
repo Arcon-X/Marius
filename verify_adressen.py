@@ -9,9 +9,9 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
-API          = "https://204.168.217.211.nip.io/api"
-EMAIL        = "zahradnik@haselbach.art"
-PASS         = "novum2026!"
+API          = os.getenv("NOVUMZIV_API", "https://204.168.217.211.nip.io/api")
+EMAIL        = os.getenv("NOVUMZIV_EMAIL", "zahradnik@haselbach.art")
+PASS         = os.getenv("NOVUMZIV_PASS", "novum2026!")
 BATCH_SIZE   = 100   # Max. Adressen pro Lauf
 SEARCH_DELAY = 2.5   # Sekunden zwischen Suchanfragen (DDG Rate-Limit vermeiden)
 

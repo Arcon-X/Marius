@@ -18,7 +18,7 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 
 # NOVUM-ZIV Unterschriften — Technische Dokumentation & Kosten
 
-> **Stand:** 29.03.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
+> **Stand:** 04.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
 
 <div class="changelog">
 <details open>
@@ -26,6 +26,7 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 
 | Datum | Bereich | Änderung |
 |---|---|---|
+| 04.04.2026 | Server-Details/Deployment | ✏️ Migrationsfähig dokumentiert: aktueller vs. neuer Host, variable Endpunkte in Scripts |
 | 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — Architektur, Schema, API, Sicherheit, Kosten dokumentiert |
 
 </details>
@@ -98,13 +99,19 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 
 ## 3. Server-Details
 
+<div class="neu">
+Für Migrationen wird zwischen aktuellem und neuem Zielserver unterschieden. Die Skripte im Ordner <code>server/</code> unterstützen dafür Umgebungsvariablen (z.B. <code>SERVER_IP</code>, <code>SERVER_DOMAIN</code>, <code>BASE_URL</code>).
+</div>
+
 | Parameter | Wert |
 |---|---|
-| **IP** | 204.168.217.211 |
-| **Domain** | 204.168.217.211.nip.io (nip.io Wildcard DNS) |
+| **Aktuelle IP** | 204.168.217.211 |
+| **Aktuelle Domain** | 204.168.217.211.nip.io (nip.io Wildcard DNS) |
+| **Neue IP (Migration)** | per Variable `SERVER_IP` |
+| **Neue Domain (Migration)** | per Variable `SERVER_DOMAIN` (Default: `<SERVER_IP>.nip.io`) |
 | **SSH-Key** | `id_ed25519_novumziv2` |
 | **SSH-User** | root |
-| **API-Endpunkt** | `https://204.168.217.211.nip.io/api` |
+| **API-Endpunkt** | `https://<SERVER_DOMAIN>/api` |
 | **PostgREST-Port** | 3000 (nur localhost) |
 | **Nginx Rate-Limit** | 30 Requests/Minute (API-Zone) |
 | **Python venv** | `/root/venv_verify` (für Server-Scripts) |
@@ -244,6 +251,8 @@ server {
 
 ## 8. Datei-Struktur
 
+Die aktuelle, kanonische Datenbankbeschreibung steht in [DB Model](db_model.md).
+
 ```
 NOVUM-ZIV/
 ├── index.html              ← Gesamte Frontend-App (~3.500 Zeilen)
@@ -257,7 +266,8 @@ NOVUM-ZIV/
 │
 ├── docs/
 │   ├── features.md         ← Feature-Dokumentation
-│   └── technik.md          ← Technische Dokumentation (diese Datei)
+│   ├── technik.md          ← Technische Dokumentation (diese Datei)
+│   └── db_model.md         ← Kanonisches DB-Modell (Schema, Beziehungen, API)
 │
 ├── ARCHIV/
 │   ├── import_report.md    ← Import-Statistik & Qualitätsprüfung

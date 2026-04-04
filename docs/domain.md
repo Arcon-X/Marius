@@ -35,6 +35,17 @@ th { background: #f6f8fa; }
 
 > **Stand:** 29.03.2026 · **Ziel:** `https://wahl2026.bnz-wien.at` → NOVUM-ZIV Planungstool
 
+<div class="changelog">
+<details open>
+<summary>📋 Letzte Änderungen</summary>
+
+| Datum | Bereich | Änderung |
+|---|---|---|
+| 04.04.2026 | Migration | ✏️ Neuer Abschnitt für Hetzner-Serverwechsel (kurzes Wartungsfenster, nip.io-Phase) |
+
+</details>
+</div>
+
 ---
 
 ## Aktuelle Architektur
@@ -47,7 +58,7 @@ Frontend und API laufen auf **demselben Hetzner-Server** (Self-Hosting). Es gibt
 | **API** (gleicher Server) | `https://204.168.217.211.nip.io/api` | `https://wahl2026.bnz-wien.at/api` |
 
 <div class="info">
-💡 Seit v1.6.0 werden Frontend und API gemeinsam auf dem Hetzner-Server gehostet. Die API wird intern per <code>SB_URL='/api'</code> (relative URL) angesprochen — kein CORS nötig.
+💡 Seit v1.6.0 werden Frontend und API gemeinsam auf dem Hetzner-Server gehostet. Die API wird intern über den relativen Pfad <code>/api</code> angesprochen — kein CORS nötig.
 </div>
 
 | Komponente | Details |
@@ -56,6 +67,52 @@ Frontend und API laufen auf **demselben Hetzner-Server** (Self-Hosting). Es gibt
 | **Webserver** | Nginx (statische Dateien + Reverse Proxy → PostgREST) |
 | **TLS** | Let's Encrypt via Certbot (aktuell für `204.168.217.211.nip.io`) |
 | **Deploy** | GitHub Actions → Jekyll Build → rsync via SSH |
+
+## Migration auf neuen Hetzner-Server (nip.io zuerst)
+
+<div class="neu">
+Empfohlener Ablauf: zuerst auf neue <code>&lt;NEW_IP&gt;.nip.io</code> migrieren, danach optional auf endgültige Domain (z.B. <code>wahl2026.bnz-wien.at</code>) umstellen.
+</div>
+
+### 1. Neuen Server vorbereiten
+
+```bash
+SERVER_IP=<NEW_IP> SERVER_DOMAIN=<NEW_IP>.nip.io bash server/setup_server.sh
+```
+
+### 2. Datenbank migrieren
+
+```bash
+OLD_HOST=204.168.217.211 NEW_HOST=<NEW_IP> bash server/migrate_db_to_new_hetzner.sh
+```
+
+### 3. Frontend-Nginx auf neuem Host aktivieren
+
+```bash
+SERVER_DOMAIN=<NEW_IP>.nip.io bash server/migrate_selfhost.sh
+```
+
+### 4. Smoke Tests gegen neuen Host
+
+```bash
+BASE_URL=https://<NEW_IP>.nip.io bash server/test_login_full.sh
+BASE_URL=http://127.0.0.1:3000 bash server/test_login.sh
+BASE_URL=http://127.0.0.1:3000 bash server/test_patch.sh
+```
+
+### 5. Verifier-Job auf neuen Host deployen
+
+```powershell
+$env:NOVUMZIV_SERVER_IP = "<NEW_IP>"
+$env:NOVUMZIV_SERVER_DOMAIN = "<NEW_IP>.nip.io"
+.\server\deploy_verify.ps1
+```
+
+### 6. Kurzfristiger Rollback
+
+- Alter Host bleibt 24h online.
+- Bei Fehlern im Login/PATCH sofort auf alten Host zurückschalten.
+- Erst danach optional finale Domain umstellen.
 
 ---
 
