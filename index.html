@@ -462,6 +462,13 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .arch-icon{font-size:1.2rem;flex-shrink:0}
 .arch-street{font-size:.88rem;font-weight:700}
 .arch-meta{font-size:.72rem;color:var(--sub)}
+.arch-top-actions{flex:0 0 auto;display:flex;align-items:flex-start}
+.btn-verlauf-arch{
+  width:124px;padding:.28rem .55rem;background:#fff;color:var(--sub);
+  border:2px solid #d1d5db;border-radius:8px;font-size:.82rem;font-weight:600;
+  cursor:pointer;font-family:inherit;white-space:nowrap;
+}
+.btn-verlauf-arch:hover{border-color:var(--g);color:var(--g)}
 .arch-actions{padding:.1rem 1rem .65rem;display:flex;gap:.4rem;align-items:center}
 .btn-reaktiv{
   flex:0 0 auto;padding:.5rem .8rem;background:#fff;color:#E67E00;
@@ -475,6 +482,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
   cursor:pointer;font-family:inherit;transition:all .15s;
 }
 .btn-verlauf:hover{border-color:var(--g);color:var(--g)}
+.arch-actions .btn-edit-addr{width:124px;display:flex;align-items:center;justify-content:center}
 .arch-history{
   border-top:1px solid #f0eef8;padding:.5rem 1rem .7rem;
   display:none;
@@ -3592,12 +3600,12 @@ function renderArchive(){
             ${websiteUrl?`<div class="addr-website"><a href="${websiteUrl}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="arch-meta">${label}${ownerStr}${when?' · '+when:''}${safeEntryNotiz}</div>
           </div>
-          ${canEdit?`<button class="btn-edit-addr" style="align-self:flex-start" onclick="editDlg.open('${a.id}')">⚙️</button>`:''}
+          ${canEdit&&history.length?`<div class="arch-top-actions"><button class="btn-verlauf-arch" onclick="toggleVerlauf('${a.id}')">📋 Verlauf</button></div>`:''}
         </div>
         ${canEdit?`<div class="arch-actions">
-          <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis korrigieren</button>
-          ${history.length?`<button class="btn-verlauf" onclick="toggleVerlauf('${a.id}')">📋 Verlauf</button>`:''}
           <button class="btn-reaktiv" onclick="reaktivieren('${a.id}')" title="Zurücksetzen">♻️</button>
+          <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis korrigieren</button>
+          <button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>
         </div>`:''}
         ${history.length?`<div class="arch-history" id="hist-${a.id}">${histHtml}</div>`:''}
       </div>`;
