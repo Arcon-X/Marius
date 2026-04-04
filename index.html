@@ -622,7 +622,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       </div>
       <div id="loc-display" class="loc-display hidden">
         &#128205; <span id="loc-text"></span>
-        <button class="refresh-btn" onclick="doSearch()" title="Aktualisieren">&#128260;</button>
+        <button class="refresh-btn" onclick="doSearch(true)" title="Aktualisieren">&#128260;</button>
         <div class="loc-limit-wrap">
           <label class="loc-limit-label" for="loc-limit">Anzahl</label>
           <input id="loc-limit" class="loc-limit-input" type="number" min="1" max="99" step="1" value="10"
@@ -2687,6 +2687,7 @@ function showTab(tab){
     if(karteMode==='map')updateMap();else renderKarteList();
     setTimeout(()=>leafletMap&&leafletMap.invalidateSize(),300);
   }
+  if(tab==='home')doSearch();
   window.scrollTo({top:0,behavior:'instant'});
   // Hintergrund-Sync mit der Server-API
   db.load().then(rows=>{
@@ -2696,6 +2697,7 @@ function showTab(tab){
     if(tab==='archive')renderArchive();
     if(tab==='admin')renderAdmin();
     if(tab==='karte'){renderKarteToolbar();if(karteMode==='map')updateMap();else renderKarteList();}
+    if(tab==='home')doSearch(true);
   });
 }
 
@@ -2730,7 +2732,10 @@ function setResultLimit(v){
   if(inp&&String(inp.value)!==String(n))inp.value=n;
   const warn=q('#loc-limit-warn');
   if(warn)warn.classList.toggle('hidden',n<60);
-  doSearch();
+  if(currentTab==='home'){
+    if(lastResults.length)renderResults(lastResults.slice(0,selectedNum));
+    doSearch(true);
+  }
 }
 
 function setLang(v){
@@ -2796,7 +2801,11 @@ const loc={
 function setLocDisplay(text){q('#loc-text').textContent=text;showEl('loc-display');}
 
 /* ── SEARCH ──────────────────────────────────────────── */
-async function doSearch(){
+const OSRM_CACHE_TTL_MS=30000;
+const osrmCache=new Map();
+let lastSearchFingerprint='';
+
+async function doSearch(force=false){
   if(!userLoc){
     userLoc={...DEFAULT_LOC};
     setLocDisplay(userLoc.label);
@@ -2810,11 +2819,23 @@ async function doSearch(){
       a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id)
     );
     if(langFilter==='pa')available=available.filter(a=>a.sprache==='pa');
+    const targetCount=Math.max(1,Math.min(99,selectedNum));
+    const fingerprint=[
+      Math.round(userLoc.lat*1e5),
+      Math.round(userLoc.lon*1e5),
+      langFilter,
+      targetCount,
+      user.id,
+      adressen.length,
+      available.length,
+      _sbLastSync
+    ].join('|');
+    if(!force&&fingerprint===lastSearchFingerprint)return;
     if(!available.length){
       q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
+      lastSearchFingerprint=fingerprint;
       return;
     }
-    const targetCount=Math.max(10,Math.min(99,selectedNum));
     available=available.map(a=>({...a,_dist:haversine(userLoc.lat,userLoc.lon,a.lat,a.lon)}))
       .sort((a,b)=>a._dist-b._dist).slice(0,targetCount);
     let results;
@@ -2822,19 +2843,37 @@ async function doSearch(){
     catch(e){results=available.map(a=>({...a,dauer_s:Math.round(a._dist/83.3*60),meter:Math.round(a._dist)}));}
     results.sort((a,b)=>a.dauer_s-b.dauer_s);
     renderResults(results.slice(0,selectedNum));
+    lastSearchFingerprint=fingerprint;
   }finally{
     if(refreshBtn)refreshBtn.disabled=false;
   }
 }
 
 async function getOSRMTimes(origin,targets){
+  if(!targets.length)return[];
+  const originKey=[Math.round(origin.lat*1e5),Math.round(origin.lon*1e5)].join(',');
+  const targetKey=targets.map(a=>a.id).join(',');
+  const cacheKey=originKey+'|'+targetKey;
+  const now=Date.now();
+  const cached=osrmCache.get(cacheKey);
+  if(cached&&now-cached.ts<OSRM_CACHE_TTL_MS)return cached.data;
   const coords=[[origin.lon,origin.lat],...targets.map(a=>[a.lon,a.lat])];
   const coordStr=coords.map(c=>c[0]+','+c[1]).join(';');
   const url='https://router.project-osrm.org/table/v1/foot/'+coordStr+'?sources=0&annotations=duration,distance';
-  const res=await fetch(url);const data=await res.json();
+  const ctrl=new AbortController();
+  const timeoutId=setTimeout(()=>ctrl.abort(),3500);
+  let data;
+  try{
+    const res=await fetch(url,{signal:ctrl.signal});
+    data=await res.json();
+  }finally{
+    clearTimeout(timeoutId);
+  }
   if(data.code!=='Ok')throw new Error('OSRM error');
   const dur=data.durations[0];const dist=data.distances?data.distances[0]:null;
-  return targets.map((a,i)=>({...a,dauer_s:Math.round(dur[i+1]||0),meter:dist?Math.round(dist[i+1]||a._dist):Math.round(a._dist)}));
+  const mapped=targets.map((a,i)=>({...a,dauer_s:Math.round(dur[i+1]||0),meter:dist?Math.round(dist[i+1]||a._dist):Math.round(a._dist)}));
+  osrmCache.set(cacheKey,{ts:now,data:mapped});
+  return mapped;
 }
 
 function haversine(lat1,lon1,lat2,lon2){
@@ -2849,6 +2888,7 @@ let lastResults=[];
 function renderResults(list){
   lastResults=list;
   const user=auth.current();const adressen=S.getAdressen();
+  const adressenById=new Map(adressen.map(x=>[x.id,x]));
   if(!list.length){
     q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">🔍</div>Keine verfügbaren Adressen in der Nähe.</div>';
     return;
@@ -2857,7 +2897,7 @@ function renderResults(list){
     const isNameMatch=!!a._nameMatch;
     const min=a.dauer_s!=null?Math.round(a.dauer_s/60):null;
     const mStr=a.meter!=null?(a.meter>=1000?(a.meter/1000).toFixed(1)+' km':a.meter+' m'):null;
-    const cur=adressen.find(x=>x.id===a.id)||a;
+    const cur=adressenById.get(a.id)||a;
     const isMine=cur.status==='in_bearbeitung'&&cur.benutzer_id===user.id;
     let actions='';
     const isAdmin=user.rolle==='admin';
