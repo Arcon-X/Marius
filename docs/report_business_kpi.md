@@ -134,9 +134,17 @@ Bei sehr kleinen Fallzahlen (z. B. n &lt; 10) immer mit Vorsicht interpretieren 
   function getSessionToken(){
     try{
       const raw=sessionStorage.getItem('nv_session')||localStorage.getItem('nv_session');
-      if(!raw)return null;
-      const s=JSON.parse(raw);
-      return s&&s.token?s.token:null;
+      if(raw){
+        const s=JSON.parse(raw);
+        if(s&&s.token)return s.token;
+      }
+      const docsRaw=localStorage.getItem('nv_docs_token');
+      if(docsRaw){
+        const d=JSON.parse(docsRaw);
+        if(d&&d.token&&d.exp&&Date.now()<d.exp)return d.token;
+        localStorage.removeItem('nv_docs_token');
+      }
+      return null;
     }catch(_e){return null;}
   }
 
@@ -162,7 +170,14 @@ Bei sehr kleinen Fallzahlen (z. B. n &lt; 10) immer mit Vorsicht interpretieren 
     }
 
     let users=[];
-    try{users=await fetchJson(SB_URL+'/benutzer?select=id,name',token);}catch(_e){users=[];}
+    try{users=JSON.parse(localStorage.getItem('nv_users_cache')||'[]');}catch(_e){users=[];}
+    try{
+      const apiUsers=await fetchJson(SB_URL+'/benutzer?select=id,name',token);
+      if(Array.isArray(apiUsers)&&apiUsers.length){
+        users=apiUsers;
+        try{localStorage.setItem('nv_users_cache',JSON.stringify(apiUsers));}catch(_e){}
+      }
+    }catch(_e){}
     return {adressen,log,users};
   }
 

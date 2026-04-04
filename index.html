@@ -764,14 +764,14 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
             <div class="team-name">📌 Executive Summary</div>
             <div class="team-detail">Management-Überblick zum Projektende: Wirkung, Risiken, Entscheidungen, nächste Schritte.</div>
           </div>
-          <a href="docs/report_executive_summary.html" target="_blank" rel="noopener noreferrer" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a>
+          <button class="team-btn" style="text-decoration:none;padding:.35rem .7rem" onclick="openReportDoc('docs/report_executive_summary.html')">Öffnen ↗</button>
         </div>
         <div class="team-card">
           <div style="flex:1">
             <div class="team-name">📊 Business KPI Report</div>
             <div class="team-detail">Bezirksvergleich (PLZ→Bezirk), Erledigungsquote und Effizienzmetriken mit Export-Hinweisen.</div>
           </div>
-          <a href="docs/report_business_kpi.html" target="_blank" rel="noopener noreferrer" class="team-btn" style="text-decoration:none;padding:.35rem .7rem">Öffnen ↗</a>
+          <button class="team-btn" style="text-decoration:none;padding:.35rem .7rem" onclick="openReportDoc('docs/report_business_kpi.html')">Öffnen ↗</button>
         </div>
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
@@ -2566,7 +2566,10 @@ const db={
       if(prot.length)S.saveProtokoll(prot);
       // Benutzerliste laden
       const ur=await fetch(SB_URL+'/benutzer?select=*',{headers:this._hG()});
-      if(ur.ok){_dbUsers=await ur.json();}
+      if(ur.ok){
+        _dbUsers=await ur.json();
+        try{localStorage.setItem('nv_users_cache',JSON.stringify(_dbUsers.map(u=>({id:u.id,name:u.name||''}))));}catch(_e){}
+      }
       return clean;
     }catch(e){console.warn('API:',e.message);return null;}
   },
@@ -3887,6 +3890,15 @@ function toggleLog(){const el=q('#admin-log');el.classList.toggle('hidden');q('#
 function toggleDocs(){const el=q('#admin-docs');el.classList.toggle('hidden');q('#docs-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleReports(){const el=q('#admin-reports');el.classList.toggle('hidden');q('#reports-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleIssues(){const el=q('#admin-issues');el.classList.toggle('hidden');q('#issues-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
+function openReportDoc(path){
+  try{
+    const t=auth.token();
+    if(t){
+      localStorage.setItem('nv_docs_token',JSON.stringify({token:t,exp:Date.now()+5*60*1000}));
+    }
+  }catch(_e){}
+  window.open(path,'_blank','noopener');
+}
 
 async function submitIssue(){
   const typ=q('#issue-typ').value;
