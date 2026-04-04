@@ -3819,10 +3819,7 @@ function teamEdit(id){
   card.outerHTML=_teamForm(u);
 }
 let _adminResetRpcMissing=false;
-// Endpoint fehlt aktuell auf dem Host; Aufruf wird clientseitig unterdrueckt,
-// bis serverseitig add_settings_functions.sh/fix_settings_functions.sh ausgerollt ist.
 let _adminResetRpcChecked=true;
-_adminResetRpcMissing=true;
 async function adminResetPasswordSafe(targetEmail,newPasswort){
   if(_adminResetRpcMissing)return {ok:false,missing:true,status:404};
   const res=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
@@ -3830,7 +3827,14 @@ async function adminResetPasswordSafe(targetEmail,newPasswort){
     body:JSON.stringify({target_email:targetEmail,neues_passwort:newPasswort})
   });
   if(res.status===404)_adminResetRpcMissing=true;
-  return {ok:res.ok,missing:res.status===404,status:res.status};
+  let message='';
+  try{
+    const txt=await res.text();
+    if(txt){
+      try{const j=JSON.parse(txt);message=j.message||txt;}catch(_e){message=txt;}
+    }
+  }catch(_e){}
+  return {ok:res.ok,missing:res.status===404,status:res.status,message};
 }
 async function teamSaveEdit(id){
   const name=document.getElementById('tf-name').value.trim();
@@ -3846,17 +3850,25 @@ async function teamSaveEdit(id){
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token(),'Prefer':'return=minimal'},
       body:JSON.stringify({name,email,telefon:telefon||null,rolle})});
     if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t?' – '+t:''));return;}
+    let pwChanged=false;
+    let pwFailedReason='';
     if(pw){
-      const u=_dbUsers.find(x=>x.id===id);
-      const pr=await adminResetPasswordSafe(u?u.email:email,pw);
+      const pr=await adminResetPasswordSafe(email,pw);
       if(!pr.ok){
-        if(pr.missing){toast('⚠️ Passwort nicht gesetzt: RPC fehlt (server/add_settings_functions.sh oder server/fix_settings_functions.sh ausführen)');}
-        else toast('⚠️ Passwort-Fehler: '+pr.status);
+        if(pr.missing)pwFailedReason='RPC fehlt';
+        else if(pr.message)pwFailedReason=pr.message;
+        else pwFailedReason='HTTP '+pr.status;
+      }else{
+        pwChanged=true;
       }
     }
     const idx=_dbUsers.findIndex(x=>x.id===id);
     if(idx>=0)Object.assign(_dbUsers[idx],{name,email,telefon:telefon||null,rolle});
-    toast('Mitglied aktualisiert ✓'+(pw?' (Passwort geändert)':''));renderAdmin();
+    let msg='Mitglied aktualisiert ✓';
+    if(pw){
+      msg+=pwChanged?' (Passwort geändert)':' (Passwort NICHT geändert: '+pwFailedReason+')';
+    }
+    toast(msg);renderAdmin();
   }catch(e){toast('⚠️ '+e.message);}
 }
 function teamAdd(){
