@@ -20,7 +20,7 @@ BEGIN
     NEW.name,
     COALESCE(NEW.rolle, 'mitarbeiter'),
     NEW.telefon,
-    crypt(COALESCE(NEW.email, 'changeme'), gen_salt('bf')),
+    crypt(encode(gen_random_bytes(18), 'base64'), gen_salt('bf')),
     COALESCE(NEW.aktiv, TRUE)
   );
   RETURN NEW;

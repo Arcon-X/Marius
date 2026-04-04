@@ -6,14 +6,17 @@ Stoppt sich selbst wenn alle Adressen verifiziert sind.
 """
 import requests, time, sys, json, base64, os, subprocess
 import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
 API          = os.getenv("NOVUMZIV_API", "https://204.168.217.211.nip.io/api")
 EMAIL        = os.getenv("NOVUMZIV_EMAIL")
 PASS         = os.getenv("NOVUMZIV_PASS")
+TLS_VERIFY   = os.getenv("NOVUMZIV_TLS_VERIFY", "1") == "1"
 BATCH_SIZE   = 100   # Max. Adressen pro Lauf
 SEARCH_DELAY = 2.5   # Sekunden zwischen Suchanfragen (DDG Rate-Limit vermeiden)
+
+if not TLS_VERIFY:
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 if not EMAIL or not PASS:
     raise SystemExit("NOVUMZIV_EMAIL und NOVUMZIV_PASS muessen als Umgebungsvariablen gesetzt sein.")
@@ -108,7 +111,7 @@ def find_website(titel: str, name: str, strasse: str, hnr: str) -> str | None:
 print("Logging in...")
 r = requests.post(f"{API}/rpc/login",
     json={"email": EMAIL, "passwort": PASS},
-    verify=False, timeout=15)
+    verify=TLS_VERIFY, timeout=15)
 r.raise_for_status()
 token = r.json()["token"]
 
@@ -130,7 +133,7 @@ r = requests.get(
     f"{API}/adressen?verifiziert=is.false&arzt_name=not.is.null"
     f"&select=id,titel,arzt_name,strasse,hausnummer,plz,sprache,website,verifiziert"
     f"&order=id.asc&limit={BATCH_SIZE}",
-    headers=headers, verify=False, timeout=30)
+    headers=headers, verify=TLS_VERIFY, timeout=30)
 r.raise_for_status()
 adressen = r.json()
 print(f"  {len(adressen)} Adressen geladen")
@@ -184,7 +187,7 @@ for i, a in enumerate(adressen):
                 "notiz":       json.dumps({"old": old_snap, "source": "verify",
                                            "website_found": website_url}),
             },
-            verify=False, timeout=10)
+            verify=TLS_VERIFY, timeout=10)
         if not snap_ok.ok:
             print(f"    Snapshot-Warnung: {snap_ok.status_code}", file=sys.stderr)
 
@@ -193,7 +196,7 @@ for i, a in enumerate(adressen):
             f"{API}/adressen?id=eq.{addr_id}",
             headers=headers,
             json={"website": website_url, "verifiziert": True},
-            verify=False, timeout=10)
+            verify=TLS_VERIFY, timeout=10)
         pr.raise_for_status()
         updated += 1
 
@@ -206,7 +209,7 @@ for i, a in enumerate(adressen):
 # ── Verbleibende zählen ────────────────────────────────────────────────────────
 r2 = requests.get(
     f"{API}/adressen?verifiziert=is.false&arzt_name=not.is.null&select=id&limit=1",
-    headers=headers, verify=False, timeout=15)
+    headers=headers, verify=TLS_VERIFY, timeout=15)
 remaining_any = len(r2.json()) if r2.ok else "?"
 
 print(f"\nFertig! Aktualisiert: {updated}, Nicht gefunden: {skipped}, Fehler: {errors}")

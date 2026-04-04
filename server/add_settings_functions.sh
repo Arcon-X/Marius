@@ -30,8 +30,8 @@ BEGIN
     RAISE EXCEPTION 'Aktuelles Passwort ist falsch' USING ERRCODE = '28P01';
   END IF;
 
-  IF length(neues_passwort) < 6 THEN
-    RAISE EXCEPTION 'Neues Passwort muss mindestens 6 Zeichen haben' USING ERRCODE = 'P0001';
+  IF length(neues_passwort) < 12 THEN
+    RAISE EXCEPTION 'Neue Passphrase muss mindestens 12 Zeichen haben' USING ERRCODE = 'P0001';
   END IF;
 
   UPDATE public.benutzer SET passwort_hash = crypt(neues_passwort, gen_salt('bf'))
@@ -90,8 +90,8 @@ BEGIN
     RAISE EXCEPTION 'Nur Admins können Passwörter zurücksetzen' USING ERRCODE = '42501';
   END IF;
 
-  IF length(neues_passwort) < 6 THEN
-    RAISE EXCEPTION 'Passwort muss mindestens 6 Zeichen haben' USING ERRCODE = 'P0001';
+  IF length(neues_passwort) < 12 THEN
+    RAISE EXCEPTION 'Passphrase muss mindestens 12 Zeichen haben' USING ERRCODE = 'P0001';
   END IF;
 
   UPDATE public.benutzer SET passwort_hash = crypt(neues_passwort, gen_salt('bf'))

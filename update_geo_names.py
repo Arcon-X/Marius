@@ -6,11 +6,14 @@ filtert numerische Teile heraus → zeigt Viertel/Bezirk statt Straßenname.
 import os
 import requests, time, sys
 import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API = "https://204.168.217.211.nip.io/api"
 EMAIL = os.getenv("NOVUMZIV_EMAIL")
 PASS = os.getenv("NOVUMZIV_PASS")
+TLS_VERIFY = os.getenv("NOVUMZIV_TLS_VERIFY", "1") == "1"
+
+if not TLS_VERIFY:
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 if not EMAIL or not PASS:
     raise SystemExit("NOVUMZIV_EMAIL und NOVUMZIV_PASS muessen als Umgebungsvariablen gesetzt sein.")
@@ -19,7 +22,7 @@ if not EMAIL or not PASS:
 print("Logging in...")
 r = requests.post(f"{API}/rpc/login",
     json={"email": EMAIL, "passwort": PASS},
-    verify=False, timeout=15)
+    verify=TLS_VERIFY, timeout=15)
 r.raise_for_status()
 token = r.json()["token"]
 headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json",
@@ -29,7 +32,7 @@ print("Login OK")
 # ── 2. Alle Adressen mit Koordinaten laden ────────────────────────────────────
 print("Lade Adressen...")
 r = requests.get(f"{API}/adressen?lat=not.is.null&select=id,lat,lon,strasse,hausnummer",
-    headers=headers, verify=False, timeout=30)
+    headers=headers, verify=TLS_VERIFY, timeout=30)
 r.raise_for_status()
 adressen = r.json()
 print(f"  {len(adressen)} Adressen mit Koordinaten gefunden")
@@ -72,7 +75,7 @@ for i, a in enumerate(adressen):
         # PATCH via PostgREST
         pr = requests.patch(f"{API}/adressen?id=eq.{a['id']}",
             headers=headers, json={"geo_name": geo_name},
-            verify=False, timeout=10)
+            verify=TLS_VERIFY, timeout=10)
         pr.raise_for_status()
         updated += 1
 
