@@ -3430,8 +3430,8 @@ function renderMeine(){
         <div class="mine-actions">
           <button class="btn-zurueck" onclick="zurueckgeben('${a.id}')" title="Zurückgeben">♻️</button>
           <button class="btn-done" style="flex:1" onclick="dlg.open('${a.id}')">✏️ Ergebnis eintragen</button>
-          <button class="btn-edit-addr" onclick="openGoogleSucheMeine('${a.id}')">🔎 Google</button>
           <button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️ Bearbeiten</button>
+          <button class="btn-edit-addr" onclick="openGoogleSucheMeine('${a.id}')">🔎 Google</button>
         </div>
       </div>`;
     }).join('');
