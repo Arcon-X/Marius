@@ -5,6 +5,7 @@ title: "Adress-Import Report – Ärztekammerwahl Wien 2026"
 # Adress-Import Report
 
 <style>
+.site-header { display: none !important; }
 .doc-nav { position: sticky; top: .5rem; z-index: 20; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; padding: .7rem; margin: .2rem 0 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
 .doc-nav-title { font-size: .8rem; color: #57606a; font-weight: 700; margin-bottom: .45rem; }
 .doc-nav-links { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .15rem; }

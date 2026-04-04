@@ -3,6 +3,7 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 ---
 
 <style>
+.site-header { display: none !important; }
 .doc-nav {
   position: sticky;
   top: .5rem;

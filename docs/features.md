@@ -3,6 +3,7 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 ---
 
 <style>
+.site-header { display: none !important; }
 .neu {
   border-left: 4px solid #2da44e;
   background: #dafbe1;
