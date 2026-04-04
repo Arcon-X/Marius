@@ -3802,7 +3802,7 @@ function _teamForm(u){
     <input id="tf-name" placeholder="Name" value="${escHtml(u.name||'')}">
     <input id="tf-email" placeholder="E-Mail (Login)" type="email" value="${escHtml(u.email||'')}">
     <div class="team-edit-row">
-      <input id="tf-telefon" placeholder="Telefon" type="tel" value="${escHtml(u.telefon||'')}">
+      <input id="tf-telefon" placeholder="Telefon" type="tel" autocomplete="tel" value="${escHtml(u.telefon||'')}">
       <select id="tf-rolle"><option value="mitarbeiter"${u.rolle==='mitarbeiter'?' selected':''}>Mitarbeiter</option><option value="admin"${u.rolle==='admin'?' selected':''}>Admin</option></select>
     </div>
     ${!isNew?'<input id="tf-passwort" placeholder="Neue Passphrase (leer = nicht ändern, mind. 12 Zeichen)" type="password" autocomplete="new-password">':'<input id="tf-initial-passphrase" placeholder="Initiale Passphrase (mind. 12 Zeichen)" type="password" autocomplete="new-password">'}
@@ -3817,6 +3817,16 @@ function teamEdit(id){
   const card=document.getElementById('team-'+id);
   if(!card)return;
   card.outerHTML=_teamForm(u);
+}
+let _adminResetRpcMissing=false;
+async function adminResetPasswordSafe(targetEmail,newPasswort){
+  if(_adminResetRpcMissing)return {ok:false,missing:true,status:404};
+  const res=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
+    body:JSON.stringify({target_email:targetEmail,neues_passwort:newPasswort})
+  });
+  if(res.status===404)_adminResetRpcMissing=true;
+  return {ok:res.ok,missing:res.status===404,status:res.status};
 }
 async function teamSaveEdit(id){
   const name=document.getElementById('tf-name').value.trim();
@@ -3834,10 +3844,11 @@ async function teamSaveEdit(id){
     if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t?' – '+t:''));return;}
     if(pw){
       const u=_dbUsers.find(x=>x.id===id);
-      const pr=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
-        headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
-        body:JSON.stringify({target_email:u?u.email:email,neues_passwort:pw})});
-      if(!pr.ok){toast('⚠️ Passwort-Fehler: '+pr.status);}
+      const pr=await adminResetPasswordSafe(u?u.email:email,pw);
+      if(!pr.ok){
+        if(pr.missing){toast('⚠️ Passwort nicht gesetzt: RPC fehlt (server/add_settings_functions.sh oder server/fix_settings_functions.sh ausführen)');}
+        else toast('⚠️ Passwort-Fehler: '+pr.status);
+      }
     }
     const idx=_dbUsers.findIndex(x=>x.id===id);
     if(idx>=0)Object.assign(_dbUsers[idx],{name,email,telefon:telefon||null,rolle});
@@ -3865,10 +3876,12 @@ async function teamSaveNew(){
     const created=await res.json();
     const createdUser=Array.isArray(created)?created[0]:created;
     const targetEmail=createdUser&&createdUser.email?createdUser.email:email;
-    const pr=await fetch(SB_URL+'/rpc/admin_reset_password',{method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+auth.token()},
-      body:JSON.stringify({target_email:targetEmail,neues_passwort:initialPw})});
-    if(!pr.ok){toast('⚠️ Benutzer angelegt, aber Passphrase setzen fehlgeschlagen ('+pr.status+')');return;}
+    const pr=await adminResetPasswordSafe(targetEmail,initialPw);
+    if(!pr.ok){
+      if(pr.missing)toast('⚠️ Benutzer angelegt, aber Passphrase nicht gesetzt: RPC fehlt (server/add_settings_functions.sh oder server/fix_settings_functions.sh ausführen)');
+      else toast('⚠️ Benutzer angelegt, aber Passphrase setzen fehlgeschlagen ('+pr.status+')');
+      return;
+    }
     if(Array.isArray(created))_dbUsers.push(...created);else _dbUsers.push(created);
     toast('Mitglied angelegt ✓ (Initiale Passphrase gesetzt)');renderAdmin();
   }catch(e){toast('⚠️ '+e.message);}
