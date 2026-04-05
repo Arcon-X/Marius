@@ -10,9 +10,17 @@ title: "NOVUM-ZIV — Business KPI Report"
 .doc-nav-links a { text-decoration: none; border: 1px solid #d0d7de; background: #f6f8fa; color: #24292f; border-radius: 999px; padding: .32rem .72rem; white-space: nowrap; font-size: .82rem; font-weight: 600; }
 .doc-nav-links a.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
 .doc-nav-links a:focus-visible { outline: 2px solid #1f6feb; outline-offset: 2px; }
-.table-wrap { overflow-x: auto; }
-.table-wrap table { width: 100%; border-collapse: collapse; }
-.table-wrap th, .table-wrap td { border: 1px solid #d0d7de; padding: .45rem .55rem; text-align: left; }
+.table-wrap { width: 100%; overflow: hidden; }
+.table-wrap table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.table-wrap th, .table-wrap td {
+  border: 1px solid #d0d7de;
+  padding: .45rem .55rem;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
 .table-wrap th { background: #f6f8fa; }
 .note { border-left: 4px solid #0969da; background: #ddf4ff; padding: .6rem .8rem; border-radius: 4px; margin: .8rem 0; }
 .warn { border-left: 4px solid #d1242f; background: #ffebe9; padding: .6rem .8rem; border-radius: 4px; margin: .8rem 0; }
@@ -22,6 +30,9 @@ title: "NOVUM-ZIV — Business KPI Report"
 @media print {
   .doc-nav, .print-wrap { display: none !important; }
   a[href]:after { content: "" !important; }
+}
+@media (max-width: 980px) {
+  .table-wrap th, .table-wrap td { padding: .35rem .4rem; font-size: .82rem; }
 }
 </style>
 
