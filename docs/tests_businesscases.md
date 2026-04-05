@@ -12,15 +12,13 @@
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
 	<div class="doc-nav-title">Dokumentation</div>
 	<div class="doc-nav-links">
-		<a href="/docs/index.html">Hub</a>
-		<a href="/SPEC.html">SPEC</a>
-		<a href="/docs/technik.html">Technik</a>
-		<a href="/docs/db_model.html">DB</a>
 		<a href="/docs/features.html">Features</a>
-		<a href="/docs/import_report.html">Import</a>
+		<a href="/docs/technik.html">Technik</a>
+		<a href="/docs/db_model.html">DB Model</a>
+		<a href="/docs/import_report.html">Import Report</a>
 		<a href="/docs/domain.html">Domain</a>
-		<a href="/docs/report_executive_summary.html">Exec</a>
-		<a href="/docs/report_business_kpi.html">KPI</a>
+		<a href="/docs/report_executive_summary.html">Executive Summary</a>
+		<a href="/docs/report_business_kpi.html">Business KPI</a>
 		<a href="/docs/tests_businesscases.html" class="active">Tests BC</a>
 		<a href="/tests/backend/README.html">Tests Backend</a>
 	</div>

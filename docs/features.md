@@ -28,15 +28,13 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
-    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
-    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
-    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
     <a href="/docs/features.html" class="active" aria-current="page" title="Produktfunktionen und User-Flow">Features</a>
-    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB Model</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import Report</a>
     <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
-    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
-    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Executive Summary</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">Business KPI</a>
   </div>
 </div>
 
