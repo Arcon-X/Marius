@@ -56,62 +56,6 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
   outline: 2px solid #1f6feb;
   outline-offset: 2px;
 }
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: .65rem;
-  margin-top: .85rem;
-}
-.quick-card {
-  border: 1px solid #d0d7de;
-  border-radius: 10px;
-  background: #fff;
-  padding: .75rem .8rem;
-}
-.quick-card h3 { margin: 0 0 .35rem 0; font-size: .95rem; }
-.quick-card p { margin: 0 0 .5rem 0; color: #57606a; font-size: .86rem; }
-.quick-card a { text-decoration: none; font-weight: 700; color: #0969da; }
-.section-title {
-  margin: 1.05rem 0 .35rem 0;
-  font-size: .86rem;
-  color: #57606a;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-}
-.hub-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: .7rem;
-  margin-top: .9rem;
-}
-.hub-card {
-  border: 1px solid #d0d7de;
-  border-radius: 10px;
-  padding: .8rem .9rem;
-  background: #fff;
-}
-.hub-card h3 { margin: 0 0 .35rem 0; font-size: 1rem; }
-.hub-card p { margin: 0 0 .65rem 0; color: #57606a; font-size: .9rem; }
-.hub-card a {
-  display: inline-block;
-  text-decoration: none;
-  border: 1px solid #1f6feb;
-  color: #1f6feb;
-  border-radius: 999px;
-  padding: .25rem .65rem;
-  font-size: .82rem;
-  font-weight: 700;
-}
-.hub-card .meta {
-  display: inline-block;
-  margin-bottom: .45rem;
-  font-size: .72rem;
-  color: #57606a;
-  border: 1px solid #d0d7de;
-  border-radius: 999px;
-  padding: 1px 7px;
-  background: #f6f8fa;
-}
 .map-wrap {
   border: 1px solid #d0d7de;
   border-radius: 12px;
@@ -160,114 +104,42 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 
 Wenn du stattdessen nur eine schnelle Management-Sicht brauchst, starte direkt mit [Executive Summary](/docs/report_executive_summary.html "Kurzfazit und Abschlussentscheidungen") und gehe danach in [Business KPI](/docs/report_business_kpi.html "Detailmetriken und Interpretationsregeln").
 
-## Schnellzugriff nach Rolle
-
-<div class="quick-grid">
-  <div class="quick-card">
-    <h3>Management-Readout</h3>
-    <p>Projektwirkung und KPI-Status fuer Steering und Abschlussgespraeche.</p>
-    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung mit Abschlussblick">Executive Summary →</a>
-  </div>
-  <div class="quick-card">
-    <h3>Operativer Betrieb</h3>
-    <p>Systembetrieb, Infrastruktur und Sicherheitsrahmen schnell nachlesen.</p>
-    <a href="/docs/technik.html" title="Betriebs- und Architekturgrundlagen">Technik →</a>
-  </div>
-  <div class="quick-card">
-    <h3>Rechte im Team</h3>
-    <p>Kompakte Rollenlogik: Was Admins duerfen und was fuer Mitarbeitende gilt.</p>
-    <a href="/docs/technik.html#rechtemodell" title="Admin-vs-Mitarbeiter Rechteverteilung">Rechtemodell →</a>
-  </div>
-  <div class="quick-card">
-    <h3>Daten- und Logikbasis</h3>
-    <p>Datenmodell, Prozesse und End-to-End Spezifikation fuer technische Arbeit.</p>
-    <a href="/SPEC.html" title="Komplette End-to-End Spezifikation">SPEC →</a>
-  </div>
-</div>
-
 <div class="map-wrap">
   <h3>Dokumentenlandkarte</h3>
-  <p>So greifen die Unterlagen ineinander:</p>
+  <p>Aktuelle Struktur als durchgehender Lesepfad:</p>
   <svg viewBox="0 0 860 245" width="100%" role="img" aria-label="Dokumentenlandkarte">
-    <rect x="10" y="20" width="150" height="46" rx="9" fill="#e7f0ff" stroke="#96b9f2" />
-    <text x="85" y="49" text-anchor="middle" font-size="13" fill="#1f2a44">Import</text>
-    <rect x="190" y="20" width="150" height="46" rx="9" fill="#eafbf0" stroke="#95d5aa" />
-    <text x="265" y="49" text-anchor="middle" font-size="13" fill="#1b4332">Features</text>
-    <rect x="370" y="20" width="150" height="46" rx="9" fill="#fff5e9" stroke="#f2c17d" />
-    <text x="445" y="49" text-anchor="middle" font-size="13" fill="#7f5539">DB Model</text>
-    <rect x="550" y="20" width="140" height="46" rx="9" fill="#f4f0ff" stroke="#b4a7e7" />
-    <text x="620" y="49" text-anchor="middle" font-size="13" fill="#3f356b">Technik</text>
-    <rect x="710" y="20" width="140" height="46" rx="9" fill="#f7f7f7" stroke="#c4c4c4" />
-    <text x="780" y="49" text-anchor="middle" font-size="13" fill="#3f3f3f">Domain</text>
+    <defs>
+      <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#8b949e" />
+      </marker>
+    </defs>
 
-    <line x1="85" y1="72" x2="85" y2="116" stroke="#9aa4b2" stroke-width="1.5" />
-    <line x1="265" y1="72" x2="265" y2="116" stroke="#9aa4b2" stroke-width="1.5" />
-    <line x1="445" y1="72" x2="445" y2="116" stroke="#9aa4b2" stroke-width="1.5" />
-    <line x1="620" y1="72" x2="620" y2="116" stroke="#9aa4b2" stroke-width="1.5" />
-    <line x1="780" y1="72" x2="780" y2="116" stroke="#9aa4b2" stroke-width="1.5" />
+    <rect x="10" y="70" width="110" height="50" rx="10" fill="#eafbf0" stroke="#95d5aa" />
+    <text x="65" y="101" text-anchor="middle" font-size="13" fill="#1b4332">Features</text>
 
-    <rect x="286" y="116" width="288" height="50" rx="10" fill="#ffffff" stroke="#7aa2da" stroke-width="2" />
-    <text x="430" y="147" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4f8c">SPEC (technische Gesamtklammer)</text>
+    <rect x="132" y="70" width="110" height="50" rx="10" fill="#f4f0ff" stroke="#b4a7e7" />
+    <text x="187" y="101" text-anchor="middle" font-size="13" fill="#3f356b">Technik</text>
 
-    <line x1="430" y1="172" x2="430" y2="196" stroke="#9aa4b2" stroke-width="1.5" />
-    <rect x="235" y="196" width="180" height="40" rx="9" fill="#edf6ff" stroke="#a5c8f0" />
-    <text x="325" y="221" text-anchor="middle" font-size="13" fill="#1f4f8c">Executive Summary</text>
-    <rect x="445" y="196" width="180" height="40" rx="9" fill="#eefdf5" stroke="#9edab9" />
-    <text x="535" y="221" text-anchor="middle" font-size="13" fill="#1b6a43">Business KPI Report</text>
+    <rect x="254" y="70" width="110" height="50" rx="10" fill="#fff5e9" stroke="#f2c17d" />
+    <text x="309" y="101" text-anchor="middle" font-size="13" fill="#7f5539">DB Model</text>
+
+    <rect x="376" y="70" width="110" height="50" rx="10" fill="#e7f0ff" stroke="#96b9f2" />
+    <text x="431" y="101" text-anchor="middle" font-size="13" fill="#1f2a44">Import</text>
+
+    <rect x="498" y="70" width="110" height="50" rx="10" fill="#f7f7f7" stroke="#c4c4c4" />
+    <text x="553" y="101" text-anchor="middle" font-size="13" fill="#3f3f3f">Domain</text>
+
+    <rect x="620" y="70" width="110" height="50" rx="10" fill="#edf6ff" stroke="#a5c8f0" />
+    <text x="675" y="101" text-anchor="middle" font-size="12" fill="#1f4f8c">Executive Summary</text>
+
+    <rect x="742" y="70" width="110" height="50" rx="10" fill="#eefdf5" stroke="#9edab9" />
+    <text x="797" y="101" text-anchor="middle" font-size="12" fill="#1b6a43">Business KPI</text>
+
+    <line x1="120" y1="95" x2="129" y2="95" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arrow)" />
+    <line x1="242" y1="95" x2="251" y2="95" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arrow)" />
+    <line x1="364" y1="95" x2="373" y2="95" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arrow)" />
+    <line x1="486" y1="95" x2="495" y2="95" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arrow)" />
+    <line x1="608" y1="95" x2="617" y2="95" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arrow)" />
+    <line x1="730" y1="95" x2="739" y2="95" stroke="#8b949e" stroke-width="1.6" marker-end="url(#arrow)" />
   </svg>
-</div>
-
-<div class="section-title">Kernunterlagen</div>
-
-<div class="hub-grid">
-  <div class="hub-card">
-    <span class="meta">Schritt 1 · Produkt</span>
-    <h3>📋 Feature-Dokumentation</h3>
-    <p>Funktionale Beschreibung aller Kernmodule als Einstieg in den Ablauf.</p>
-    <a href="/docs/features.html" title="Produktablauf und Kernfunktionen">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Schritt 2 · Technik</span>
-    <h3>⚙️ Technische Dokumentation</h3>
-    <p>Architektur, Sicherheit, Rechtemodell und Betriebsrahmen.</p>
-    <a href="/docs/technik.html" title="Technische Vertiefung nach den Features">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Schritt 3 · Daten</span>
-    <h3>🗄️ Datenbank-Modell</h3>
-    <p>Tabellen, Beziehungen, Views, RPCs und Constraints.</p>
-    <a href="/docs/db_model.html" title="Schema und API-Projektionen im Detail">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Schritt 4 · Datenquelle</span>
-    <h3>📄 Adress-Import Report</h3>
-    <p>Importstatistik, Geocoding-Methodik und Datenqualität.</p>
-    <a href="/docs/import_report.html" title="Herkunft und Qualitaet der Adressdaten">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Schritt 5 · Betrieb</span>
-    <h3>🌐 Domain konfigurieren</h3>
-    <p>DNS/TLS, Migration, Ziel-Domain und Rollback-Strategie.</p>
-    <a href="/docs/domain.html" title="Domain- und Migrationsbetrieb im Live-System">Öffnen</a>
-  </div>
-
-  <div class="hub-card">
-    <span class="meta">Schritt 6 · Abschluss</span>
-    <h3>🧾 Executive Summary</h3>
-    <p>Management-Readout mit Zielerreichung, KPIs, Risiken und Entscheidungen.</p>
-    <a href="/docs/report_executive_summary.html" title="Management-Fazit und Abschlussentscheidungen">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Schritt 7 · KPI-Detail</span>
-    <h3>📊 Business KPI Report</h3>
-    <p>Bezirksvergleich mit Effizienz, Restlast und Ergebnis-Interpretation.</p>
-    <a href="/docs/report_business_kpi.html" title="Detailmetriken und Formeln fuer Bezirke und Team">Öffnen</a>
-  </div>
-
-  <div class="hub-card">
-    <span class="meta">Anhang · Vollreferenz</span>
-    <h3>📚 Gesamtspezifikation (SPEC)</h3>
-    <p>Vollständige End-to-End Spezifikation für tiefe Entwicklerdetails.</p>
-    <a href="/SPEC.html" title="Komplette Gesamtspezifikation als Nachschlagewerk">Öffnen</a>
-  </div>
 </div>
