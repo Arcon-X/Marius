@@ -3647,8 +3647,14 @@ function renderAdmin(){
     </div>`;
   }).join(''):'<div class="log-item" style="color:var(--sub)">Noch keine Einträge.</div>';
   const users=_dbUsers.length?_dbUsers:DEMO_USERS;
+  const sortedUsers=[...users].sort((a,b)=>{
+    const aAdmin=a.rolle==='admin'?0:1;
+    const bAdmin=b.rolle==='admin'?0:1;
+    if(aAdmin!==bAdmin)return aAdmin-bAdmin;
+    return String(a.name||'').localeCompare(String(b.name||''),'de',{sensitivity:'base'});
+  });
   q('#team-count').textContent=users.length;
-  q('#admin-users').innerHTML=users.map(u=>{
+  q('#admin-users').innerHTML=sortedUsers.map(u=>{
     const mine=S.getAdressen().filter(a=>a.benutzer_id===u.id);
     const active=mine.filter(a=>a.status==='in_bearbeitung').length;
     const done=mine.filter(a=>a.status==='archiviert').length;
