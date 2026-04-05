@@ -148,9 +148,7 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
   </div>
 </div>
 
-## Start hier: Ein Lesefluss
-
-Die Doku ist auf einen durchgehenden Pfad aufgebaut. Wenn du neu einsteigst, lies in dieser Reihenfolge:
+## Die Doku ist auf einen durchgehenden Pfad aufgebaut. Wenn du neu einsteigst, lies in dieser Reihenfolge:
 
 1. [Features](/docs/features.html "Produktablauf vom Suchen bis zum Archiv")
 2. [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell")
