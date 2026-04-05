@@ -2937,8 +2937,72 @@ function setLocDisplay(text){q('#loc-text').textContent=text;showEl('loc-display
 const OSRM_CACHE_TTL_MS=30000;
 const osrmCache=new Map();
 let lastSearchFingerprint='';
+const SEARCH_MIN_INTERVAL_MS=350;
+let lastSearchRunAt=0;
+let activeSearchId=0;
+let osrmInFlightCtrl=null;
+let osrmFailureCount=0;
+let osrmBackoffUntil=0;
+let osrmCircuitOpenUntil=0;
+const OSRM_METRICS_KEY='nv_osrm_metrics_v1';
+let osrmMetricsDirty=false;
+let osrmMetricsFlushTimer=null;
+const osrmMetrics=(()=>{
+  const base={
+    since:new Date().toISOString(),
+    search_requested:0,
+    search_throttled:0,
+    search_dedup_skipped:0,
+    search_stale_dropped:0,
+    osrm_cache_hit:0,
+    osrm_remote_attempt:0,
+    osrm_remote_success:0,
+    osrm_remote_failure:0,
+    osrm_abort_superseded:0,
+    osrm_backoff_skip:0,
+    osrm_circuit_skip:0,
+    osrm_fallback_used:0
+  };
+  try{
+    const raw=localStorage.getItem(OSRM_METRICS_KEY);
+    if(!raw)return base;
+    const parsed=JSON.parse(raw);
+    return {...base,...parsed};
+  }catch(_e){
+    return base;
+  }
+})();
+function flushOsrmMetrics(){
+  if(!osrmMetricsDirty)return;
+  osrmMetricsDirty=false;
+  try{localStorage.setItem(OSRM_METRICS_KEY,JSON.stringify(osrmMetrics));}catch(_e){}
+}
+function bumpOsrmMetric(key){
+  if(!Object.prototype.hasOwnProperty.call(osrmMetrics,key))return;
+  osrmMetrics[key]=(Number(osrmMetrics[key])||0)+1;
+  osrmMetricsDirty=true;
+  if(!osrmMetricsFlushTimer){
+    osrmMetricsFlushTimer=setTimeout(()=>{
+      osrmMetricsFlushTimer=null;
+      flushOsrmMetrics();
+    },1500);
+  }
+}
+window.addEventListener('beforeunload',flushOsrmMetrics);
+window.nvGetOsrmMetrics=()=>{
+  flushOsrmMetrics();
+  return JSON.parse(JSON.stringify(osrmMetrics));
+};
 
 async function doSearch(force=false){
+  bumpOsrmMetric('search_requested');
+  const now=Date.now();
+  if(!force&&now-lastSearchRunAt<SEARCH_MIN_INTERVAL_MS){
+    bumpOsrmMetric('search_throttled');
+    return;
+  }
+  lastSearchRunAt=now;
+  const searchId=++activeSearchId;
   if(!userLoc){
     userLoc={...DEFAULT_LOC};
     setLocDisplay(userLoc.label);
@@ -2963,7 +3027,10 @@ async function doSearch(force=false){
       available.length,
       _sbLastSync
     ].join('|');
-    if(!force&&fingerprint===lastSearchFingerprint)return;
+    if(!force&&fingerprint===lastSearchFingerprint){
+      bumpOsrmMetric('search_dedup_skipped');
+      return;
+    }
     if(!available.length){
       q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
       lastSearchFingerprint=fingerprint;
@@ -2973,7 +3040,14 @@ async function doSearch(force=false){
       .sort((a,b)=>a._dist-b._dist).slice(0,targetCount);
     let results;
     try{results=await getOSRMTimes(userLoc,available);}
-    catch(e){results=available.map(a=>({...a,dauer_s:Math.round(a._dist/83.3*60),meter:Math.round(a._dist)}));}
+    catch(e){
+      bumpOsrmMetric('osrm_fallback_used');
+      results=available.map(a=>({...a,dauer_s:Math.round(a._dist/83.3*60),meter:Math.round(a._dist)}));
+    }
+    if(searchId!==activeSearchId){
+      bumpOsrmMetric('search_stale_dropped');
+      return;
+    }
     results.sort((a,b)=>a.dauer_s-b.dauer_s);
     renderResults(results.slice(0,selectedNum));
     lastSearchFingerprint=fingerprint;
@@ -2984,29 +3058,62 @@ async function doSearch(force=false){
 
 async function getOSRMTimes(origin,targets){
   if(!targets.length)return[];
+  const now=Date.now();
+  if(now<osrmCircuitOpenUntil){
+    bumpOsrmMetric('osrm_circuit_skip');
+    throw new Error('OSRM circuit open');
+  }
+  if(now<osrmBackoffUntil){
+    bumpOsrmMetric('osrm_backoff_skip');
+    throw new Error('OSRM backoff active');
+  }
   const originKey=[Math.round(origin.lat*1e5),Math.round(origin.lon*1e5)].join(',');
   const targetKey=targets.map(a=>a.id).join(',');
   const cacheKey=originKey+'|'+targetKey;
-  const now=Date.now();
   const cached=osrmCache.get(cacheKey);
-  if(cached&&now-cached.ts<OSRM_CACHE_TTL_MS)return cached.data;
+  if(cached&&now-cached.ts<OSRM_CACHE_TTL_MS){
+    bumpOsrmMetric('osrm_cache_hit');
+    return cached.data;
+  }
   const coords=[[origin.lon,origin.lat],...targets.map(a=>[a.lon,a.lat])];
   const coordStr=coords.map(c=>c[0]+','+c[1]).join(';');
   const url='https://router.project-osrm.org/table/v1/foot/'+coordStr+'?sources=0&annotations=duration,distance';
+  if(osrmInFlightCtrl)osrmInFlightCtrl.abort();
   const ctrl=new AbortController();
+  osrmInFlightCtrl=ctrl;
   const timeoutId=setTimeout(()=>ctrl.abort(),3500);
   let data;
   try{
+    bumpOsrmMetric('osrm_remote_attempt');
     const res=await fetch(url,{signal:ctrl.signal});
+    if(!res.ok)throw new Error('OSRM HTTP '+res.status);
     data=await res.json();
+    if(data.code!=='Ok')throw new Error('OSRM error');
+    const dur=data.durations[0];const dist=data.distances?data.distances[0]:null;
+    const mapped=targets.map((a,i)=>({...a,dauer_s:Math.round(dur[i+1]||0),meter:dist?Math.round(dist[i+1]||a._dist):Math.round(a._dist)}));
+    osrmCache.set(cacheKey,{ts:now,data:mapped});
+    osrmFailureCount=0;
+    osrmBackoffUntil=0;
+    osrmCircuitOpenUntil=0;
+    bumpOsrmMetric('osrm_remote_success');
+    return mapped;
+  }catch(err){
+    const isAbort=err&&err.name==='AbortError';
+    const superseded=isAbort&&osrmInFlightCtrl!==ctrl;
+    if(!superseded){
+      bumpOsrmMetric('osrm_remote_failure');
+      osrmFailureCount=Math.min(osrmFailureCount+1,8);
+      const backoffMs=Math.min(30000,Math.pow(2,Math.min(osrmFailureCount,5))*500);
+      osrmBackoffUntil=Date.now()+backoffMs;
+      if(osrmFailureCount>=5)osrmCircuitOpenUntil=Date.now()+60000;
+    }else{
+      bumpOsrmMetric('osrm_abort_superseded');
+    }
+    throw err;
   }finally{
+    if(osrmInFlightCtrl===ctrl)osrmInFlightCtrl=null;
     clearTimeout(timeoutId);
   }
-  if(data.code!=='Ok')throw new Error('OSRM error');
-  const dur=data.durations[0];const dist=data.distances?data.distances[0]:null;
-  const mapped=targets.map((a,i)=>({...a,dauer_s:Math.round(dur[i+1]||0),meter:dist?Math.round(dist[i+1]||a._dist):Math.round(a._dist)}));
-  osrmCache.set(cacheKey,{ts:now,data:mapped});
-  return mapped;
 }
 
 function haversine(lat1,lon1,lat2,lon2){
