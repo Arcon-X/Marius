@@ -31,13 +31,6 @@ title: "Adress-Import Report – Ärztekammerwahl Wien 2026"
 **Quelle:** `Zahnarztekammer_260223_211026.xlsx` (Tabelle „Table 1")  
 **Erstellt:** 28. März 2026
 
-## Lesefluss-Einordnung
-
-- Diese Seite liefert die **Datenherkunft und Qualitätsbasis** für die Produkt- und KPI-Aussagen.
-- Vorher: [DB Model](/docs/db_model.html "Schema und Datenregeln als technische Grundlage")
-- Danach: [Domain](/docs/domain.html "Operative Umsetzung, Deployment und Migration")
-- Management-Fortsetzung: [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Stakeholder") und [Business KPI](/docs/report_business_kpi.html "Kennzahlen mit Formeln und Bezirksvergleich")
-
 ---
 
 ## Ergebnis auf einen Blick

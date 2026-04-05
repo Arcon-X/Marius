@@ -30,13 +30,6 @@ title: "NOVUM-ZIV - DB Model"
 > Stand: 05.04.2026
 > Scope: Aktuelles produktives Self-Hosting Modell (PostgreSQL + PostGIS + PostgREST)
 
-## Lesefluss-Einordnung
-
-- Du bist hier auf der **Referenzebene**: alle Datenstrukturen und API-Projektionen im Detail.
-- Vorher: [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell als Kontext")
-- Danach: [Import Report](/docs/import_report.html "Herkunft und Qualitaet der eingespielten Daten")
-- Danach im Betrieb: [Domain](/docs/domain.html "Deployment- und Migrationspfad fuer den Live-Betrieb")
-
 ## 1. Source of Truth
 
 Dieses Dokument ist aus den aktuellen Setup-/Migrationsskripten abgeleitet:

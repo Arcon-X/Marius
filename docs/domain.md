@@ -54,18 +54,6 @@ th { background: #f6f8fa; }
 </div>
 
 > **Stand:** 05.04.2026 · **Ziel:** `https://wahl2026.bnz-wien.at` → NOVUM-ZIV Planungstool
-
-<div class="neu">
-
-## Lesefluss-Einordnung
-
-- Diese Seite ist die **Betriebsebene**: Domain, TLS, Migration und Cutover.
-- Vorher: [Import Report](/docs/import_report.html "Datenherkunft und Geocoding-Qualitaet als Input")
-- Danach: [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Steering und Entscheidungen")
-- Kennzahlen danach: [Business KPI](/docs/report_business_kpi.html "Detailmetriken fuer Bezirke und Team")
-
-</div>
-
 ---
 
 ## Aktuelle Architektur

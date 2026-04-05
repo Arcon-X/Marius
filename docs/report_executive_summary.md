@@ -44,13 +44,6 @@ title: "NOVUM-ZIV — Executive Summary Report"
 **Stand:** 05.04.2026  
 **Zweck:** Wirkungsnachweis zum Projektabschluss für Steering/Stakeholder.
 
-## Lesefluss-Einordnung
-
-- Diese Seite ist der **Management-Einstieg** in den Abschluss.
-- Vorher: [Domain](/docs/domain.html "Betriebslage, Domain- und Migrationsstatus")
-- Danach: [Business KPI](/docs/report_business_kpi.html "Detaillierte Kennzahlen und Interpretationsregeln")
-- Produktkontext bei Bedarf: [Features](/docs/features.html "Funktionaler Ablauf aus Produktsicht")
-
 <div class="kpi-grid">
   <div class="kpi"><h3>Scope Adressen</h3><div class="v">1.485</div></div>
   <div class="kpi"><h3>Business-Cases</h3><div class="v">5/5 PASS</div></div>

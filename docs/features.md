@@ -38,19 +38,6 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 
 ---
 
-<div class="neu">
-
-## Lesefluss-Einordnung
-
-- **Du bist hier richtig, wenn** du den Produktablauf von vorne nach hinten verstehen willst.
-- **Vorher:** [Hub](/docs/index.html "Startpunkt mit kompletter Lesereihenfolge")
-- **Danach:** [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell")
-- **Tiefe Details danach:** [DB Model](/docs/db_model.html "Datenstrukturen und API-Projektionen im Detail")
-
-</div>
-
----
-
 ## Überblick
 
 Die App unterstützt 19 Kandidat:innen dabei, rund 1.500 Wiener Zahnarztpraxen per Hausbesuch zu erreichen. Kernprinzip: **Nächste freie Adresse finden → übernehmen → besuchen → Ergebnis eintragen.**

@@ -38,19 +38,6 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 
 ---
 
-<div class="neu">
-
-## Lesefluss-Einordnung
-
-- **Du bist hier richtig, wenn** du nach den Features die technische Umsetzung verstehen willst.
-- **Vorher:** [Features](/docs/features.html "Produktlogik und Nutzerablauf als Einstieg")
-- **Danach:** [DB Model](/docs/db_model.html "Tabellen, Beziehungen, Views und RPC-Funktionen")
-- **Operative Fortsetzung:** [Domain](/docs/domain.html "Deployment, TLS und Migration im Betrieb")
-
-</div>
-
----
-
 ## 1. Architektur
 
 ```

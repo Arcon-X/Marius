@@ -47,13 +47,6 @@ title: "NOVUM-ZIV — Business KPI Report"
 **Stand:** 05.04.2026  
 **Fokus:** Bezirksvergleich nach erledigten Adressen und Effizienzbewertung.
 
-## Lesefluss-Einordnung
-
-- Diese Seite ist die **Detail- und Mess-Ebene** des Abschlussberichts.
-- Vorher: [Executive Summary](/docs/report_executive_summary.html "Management-Fazit und Abschlussentscheidungen")
-- Methodischer Kontext: [Technik](/docs/technik.html "Sicherheits-, API- und Rollenlogik") und [DB Model](/docs/db_model.html "Datenstruktur hinter den KPI-Werten")
-- Zurück zum Einstieg: [Hub](/docs/index.html "Gefuehrter Lesefluss ueber alle Kernseiten")
-
 <div class="note" id="live-kpi-status">Lade Live-Reportdaten ...</div>
 
 ## 1. KPI-Definitionen
