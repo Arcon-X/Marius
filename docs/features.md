@@ -40,7 +40,7 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
   </div>
 </div>
 
-> **Stand:** 29.03.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
+> **Stand:** 05.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
 
 <div class="changelog">
 <details open>
@@ -48,6 +48,7 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 
 | Datum | Bereich | Änderung |
 |---|---|---|
+| 05.04.2026 | Rollenmodell | 🆕 Rechtemodell (Admin vs. Mitarbeiter) als kompakte Feature-Übersicht ergänzt |
 | 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — alle 16 Feature-Abschnitte dokumentiert |
 
 </details>
@@ -234,6 +235,20 @@ Jede Adresse kann über ⚙️ bearbeitet werden:
 - **Passwort-Sichtbarkeit:** Toggle-Button im Login-Formular.
 - **Rollen:** Admin (voller Zugriff) und Mitarbeiter (eigene Adressen + Suche).
 - **Content Security Policy:** Whitelist für Skripte, Bilder, API-Zugriffe.
+
+### 14.1 Rechtemodell (kompakt)
+
+| Funktion | Admin | Mitarbeiter |
+|---|---|---|
+| Suche / Karte / eigene Arbeit | Ja | Ja |
+| Archiv ansehen | Alle Einträge | Nur eigene Einträge |
+| Admin-Tab | Ja | Nein |
+| Team verwalten (Benutzer anlegen/ändern/löschen) | Ja | Nein |
+| Passwort für andere zurücksetzen | Ja | Nein |
+
+Hinweis zur Sicherheit:
+- UI blendet Admin-Funktionen für Mitarbeitende aus.
+- Kritische Team-Aktionen sind zusätzlich serverseitig geschützt (Rollenprüfung in SQL-Funktionen/Triggern).
 
 ---
 

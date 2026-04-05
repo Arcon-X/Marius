@@ -164,6 +164,11 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
     <a href="/docs/technik.html">Technik →</a>
   </div>
   <div class="quick-card">
+    <h3>Rechte im Team</h3>
+    <p>Kompakte Rollenlogik: Was Admins duerfen und was fuer Mitarbeitende gilt.</p>
+    <a href="/docs/technik.html#rechtemodell">Rechtemodell →</a>
+  </div>
+  <div class="quick-card">
     <h3>Daten- und Logikbasis</h3>
     <p>Datenmodell, Prozesse und End-to-End Spezifikation fuer technische Arbeit.</p>
     <a href="/SPEC.html">SPEC →</a>

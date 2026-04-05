@@ -40,7 +40,7 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
     </div>
 </div>
 
-> **Stand:** 04.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
+> **Stand:** 05.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
 
 <div class="changelog">
 <details open>
@@ -48,6 +48,7 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 
 | Datum | Bereich | Änderung |
 |---|---|---|
+| 05.04.2026 | Rechtemodell | 🆕 Rollen- und Rechteverteilung (Admin vs. Mitarbeiter) präzise dokumentiert |
 | 04.04.2026 | Server-Details/Deployment | ✏️ Migrationsfähig dokumentiert: aktueller vs. neuer Host, variable Endpunkte in Scripts |
 | 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — Architektur, Schema, API, Sicherheit, Kosten dokumentiert |
 
@@ -246,6 +247,30 @@ Reporting-Hinweis:
 | **SQL-Injection** | Verhindert durch PostgREST (parametrisierte Queries) |
 | **Admin-Only Triggers** | Team-Management: Server-seitige Rollenprüfung in SECURITY DEFINER Funktionen |
 | **Kein Passwort in View** | `api.benutzer` exponiert nur id, email, name, rolle, telefon, aktiv |
+
+<a id="rechtemodell"></a>
+### Rollen- und Rechtemodell (Admin vs. Mitarbeiter)
+
+Das System nutzt zwei fachliche Rollen in `benutzer.rolle`: `admin` und `mitarbeiter`.
+
+| Bereich | Admin | Mitarbeiter |
+|---|---|---|
+| Login | Ja | Ja |
+| Suche / Kartenansicht | Ja | Ja |
+| Eigene Adressen übernehmen/bearbeiten/abschließen | Ja | Ja |
+| Archivansicht | Alle archivierten Adressen | Nur eigene archivierte Adressen |
+| Admin-Tab im UI | Sichtbar | Nicht sichtbar |
+| Team-Verwaltung (Benutzer anlegen/ändern/löschen) | Ja | Nein |
+| Passwort-Reset für andere Benutzer | Ja | Nein |
+
+Durchsetzungsebenen:
+- **UI-Ebene (Frontend):** Der Admin-Bereich wird nur für `rolle = admin` eingeblendet; in Nutzeransichten werden Ergebnisse und Aktionen für Mitarbeitende auf eigene Datensätze gefiltert.
+- **API-/DB-Ebene:** Team-Verwaltung und Admin-Passwort-Reset sind serverseitig per Rollenprüfung in `SECURITY DEFINER` Funktionen abgesichert. Nicht-Admins erhalten dabei einen Berechtigungsfehler (`42501`).
+
+Wichtig für die Einordnung:
+- Die PostgREST-DB-Rolle ist technisch `authenticated` (JWT-Claim `role`), unabhängig von `benutzer.rolle`.
+- Die fachliche Trennung zwischen Admin und Mitarbeiter wird daher für sensible Team-Aktionen explizit in SQL-Funktionen erzwungen.
+- `api.benutzer` zeigt niemals `passwort_hash` an.
 
 ---
 
