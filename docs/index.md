@@ -138,40 +138,54 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html" class="active" aria-current="page">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html">DB</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
+    <a href="/docs/index.html" class="active" aria-current="page" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
-## Schnellstart
+## Start hier: Ein Lesefluss
+
+Die Doku ist auf einen durchgehenden Pfad aufgebaut. Wenn du neu einsteigst, lies in dieser Reihenfolge:
+
+1. [Features](/docs/features.html "Produktablauf vom Suchen bis zum Archiv")
+2. [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell")
+3. [DB Model](/docs/db_model.html "Tabellen, Beziehungen, Views und RPCs")
+4. [Import Report](/docs/import_report.html "Datenherkunft und Geocoding-Qualitaet")
+5. [Domain](/docs/domain.html "Deployment, Domainwechsel und Servermigration")
+6. [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Steering und Stakeholder")
+7. [Business KPI](/docs/report_business_kpi.html "Kennzahlen, Formeln und Bezirksvergleich")
+
+Wenn du stattdessen nur eine schnelle Management-Sicht brauchst, starte direkt mit [Executive Summary](/docs/report_executive_summary.html "Kurzfazit und Abschlussentscheidungen") und gehe danach in [Business KPI](/docs/report_business_kpi.html "Detailmetriken und Interpretationsregeln").
+
+## Schnellzugriff nach Rolle
 
 <div class="quick-grid">
   <div class="quick-card">
     <h3>Management-Readout</h3>
     <p>Projektwirkung und KPI-Status fuer Steering und Abschlussgespraeche.</p>
-    <a href="/docs/report_executive_summary.html">Executive Summary →</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung mit Abschlussblick">Executive Summary →</a>
   </div>
   <div class="quick-card">
     <h3>Operativer Betrieb</h3>
     <p>Systembetrieb, Infrastruktur und Sicherheitsrahmen schnell nachlesen.</p>
-    <a href="/docs/technik.html">Technik →</a>
+    <a href="/docs/technik.html" title="Betriebs- und Architekturgrundlagen">Technik →</a>
   </div>
   <div class="quick-card">
     <h3>Rechte im Team</h3>
     <p>Kompakte Rollenlogik: Was Admins duerfen und was fuer Mitarbeitende gilt.</p>
-    <a href="/docs/technik.html#rechtemodell">Rechtemodell →</a>
+    <a href="/docs/technik.html#rechtemodell" title="Admin-vs-Mitarbeiter Rechteverteilung">Rechtemodell →</a>
   </div>
   <div class="quick-card">
     <h3>Daten- und Logikbasis</h3>
     <p>Datenmodell, Prozesse und End-to-End Spezifikation fuer technische Arbeit.</p>
-    <a href="/SPEC.html">SPEC →</a>
+    <a href="/SPEC.html" title="Komplette End-to-End Spezifikation">SPEC →</a>
   </div>
 </div>
 
@@ -211,52 +225,53 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 
 <div class="hub-grid">
   <div class="hub-card">
-    <span class="meta">Systemreferenz</span>
-    <h3>📚 Gesamtspezifikation (SPEC)</h3>
-    <p>Vollständige End-to-End Spezifikation des gesamten Projekts.</p>
-    <a href="/SPEC.html">Öffnen</a>
+    <span class="meta">Schritt 1 · Produkt</span>
+    <h3>📋 Feature-Dokumentation</h3>
+    <p>Funktionale Beschreibung aller Kernmodule als Einstieg in den Ablauf.</p>
+    <a href="/docs/features.html" title="Produktablauf und Kernfunktionen">Öffnen</a>
   </div>
   <div class="hub-card">
-    <span class="meta">Betrieb</span>
+    <span class="meta">Schritt 2 · Technik</span>
     <h3>⚙️ Technische Dokumentation</h3>
-    <p>Architektur, Betrieb, Security, Deployment und Kosten.</p>
-    <a href="/docs/technik.html">Öffnen</a>
+    <p>Architektur, Sicherheit, Rechtemodell und Betriebsrahmen.</p>
+    <a href="/docs/technik.html" title="Technische Vertiefung nach den Features">Öffnen</a>
   </div>
   <div class="hub-card">
-    <span class="meta">Daten</span>
+    <span class="meta">Schritt 3 · Daten</span>
     <h3>🗄️ Datenbank-Modell</h3>
     <p>Tabellen, Beziehungen, Views, RPCs und Constraints.</p>
-    <a href="/docs/db_model.html">Öffnen</a>
+    <a href="/docs/db_model.html" title="Schema und API-Projektionen im Detail">Öffnen</a>
   </div>
   <div class="hub-card">
-    <span class="meta">Fachlich</span>
-    <h3>📋 Feature-Dokumentation</h3>
-    <p>Funktionale Beschreibung aller Kernmodule und Admin-Funktionen.</p>
-    <a href="/docs/features.html">Öffnen</a>
-  </div>
-  <div class="hub-card">
-    <span class="meta">Datengrundlage</span>
+    <span class="meta">Schritt 4 · Datenquelle</span>
     <h3>📄 Adress-Import Report</h3>
     <p>Importstatistik, Geocoding-Methodik und Datenqualität.</p>
-    <a href="/docs/import_report.html">Öffnen</a>
+    <a href="/docs/import_report.html" title="Herkunft und Qualitaet der Adressdaten">Öffnen</a>
   </div>
   <div class="hub-card">
-    <span class="meta">Infrastruktur</span>
+    <span class="meta">Schritt 5 · Betrieb</span>
     <h3>🌐 Domain konfigurieren</h3>
     <p>DNS/TLS, Migration, Ziel-Domain und Rollback-Strategie.</p>
-    <a href="/docs/domain.html">Öffnen</a>
+    <a href="/docs/domain.html" title="Domain- und Migrationsbetrieb im Live-System">Öffnen</a>
   </div>
 
   <div class="hub-card">
-    <span class="meta">Abschluss</span>
+    <span class="meta">Schritt 6 · Abschluss</span>
     <h3>🧾 Executive Summary</h3>
     <p>Management-Readout mit Zielerreichung, KPIs, Risiken und Entscheidungen.</p>
-    <a href="/docs/report_executive_summary.html">Öffnen</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Fazit und Abschlussentscheidungen">Öffnen</a>
   </div>
   <div class="hub-card">
-    <span class="meta">Abschluss</span>
+    <span class="meta">Schritt 7 · KPI-Detail</span>
     <h3>📊 Business KPI Report</h3>
     <p>Bezirksvergleich mit Effizienz, Restlast und Ergebnis-Interpretation.</p>
-    <a href="/docs/report_business_kpi.html">Öffnen</a>
+    <a href="/docs/report_business_kpi.html" title="Detailmetriken und Formeln fuer Bezirke und Team">Öffnen</a>
+  </div>
+
+  <div class="hub-card">
+    <span class="meta">Anhang · Vollreferenz</span>
+    <h3>📚 Gesamtspezifikation (SPEC)</h3>
+    <p>Vollständige End-to-End Spezifikation für tiefe Entwicklerdetails.</p>
+    <a href="/SPEC.html" title="Komplette Gesamtspezifikation als Nachschlagewerk">Öffnen</a>
   </div>
 </div>

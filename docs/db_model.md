@@ -17,32 +17,39 @@ title: "NOVUM-ZIV - DB Model"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html" class="active" aria-current="page">DB</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
+    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" class="active" aria-current="page" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
-> Stand: 04.04.2026
+> Stand: 05.04.2026
 > Scope: Aktuelles produktives Self-Hosting Modell (PostgreSQL + PostGIS + PostgREST)
+
+## Lesefluss-Einordnung
+
+- Du bist hier auf der **Referenzebene**: alle Datenstrukturen und API-Projektionen im Detail.
+- Vorher: [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell als Kontext")
+- Danach: [Import Report](/docs/import_report.html "Herkunft und Qualitaet der eingespielten Daten")
+- Danach im Betrieb: [Domain](/docs/domain.html "Deployment- und Migrationspfad fuer den Live-Betrieb")
 
 ## 1. Source of Truth
 
 Dieses Dokument ist aus den aktuellen Setup-/Migrationsskripten abgeleitet:
 
-- server/setup_server.sh
-- server/add_issues_table.sh
-- server/add_geo_name.sh
-- server/add_sprache.sh
-- server/add_verification.sh
-- server/add_protokoll_bearbeitet.sh
-- server/fix_settings_functions.sh
+- [server/setup_server.sh](../server/setup_server.sh "Basis-Setup fuer Rollen, Tabellen, Views und Grants")
+- [server/add_issues_table.sh](../server/add_issues_table.sh "Migration fuer Issues-Tabelle und API-Rechte")
+- [server/add_geo_name.sh](../server/add_geo_name.sh "Migration fuer geo_name Feld und Rechte")
+- [server/add_sprache.sh](../server/add_sprache.sh "Migration fuer Sprachfeld und zugehoerige Rechte")
+- [server/add_verification.sh](../server/add_verification.sh "Migration fuer verifiziert/website Felder")
+- [server/add_protokoll_bearbeitet.sh](../server/add_protokoll_bearbeitet.sh "Erweitert Protokoll-Aktionsmenge um bearbeitet")
+- [server/fix_settings_functions.sh](../server/fix_settings_functions.sh "Korrekturen an Settings- und Admin-Funktionen")
 
 Falls es Abweichungen gibt, gelten die SQL-Definitionen in diesen Skripten.
 

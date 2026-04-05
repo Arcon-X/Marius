@@ -28,15 +28,15 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
     <div class="doc-nav-title">Dokumentation</div>
     <div class="doc-nav-links">
-        <a href="/docs/index.html">Hub</a>
-        <a href="/SPEC.html">SPEC</a>
-        <a href="/docs/technik.html" class="active" aria-current="page">Technik</a>
-        <a href="/docs/db_model.html">DB</a>
-        <a href="/docs/features.html">Features</a>
-        <a href="/docs/import_report.html">Import</a>
-        <a href="/docs/domain.html">Domain</a>
-        <a href="/docs/report_executive_summary.html">Exec</a>
-        <a href="/docs/report_business_kpi.html">KPI</a>
+        <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+        <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+        <a href="/docs/technik.html" class="active" aria-current="page" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+        <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+        <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+        <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+        <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+        <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+        <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
     </div>
 </div>
 
@@ -48,6 +48,7 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 
 | Datum | Bereich | Änderung |
 |---|---|---|
+| 05.04.2026 | Lesefluss | ✏️ Technische Vertiefung in den durchgehenden Dokumentationspfad eingebettet |
 | 05.04.2026 | Rechtemodell | 🆕 Rollen- und Rechteverteilung (Admin vs. Mitarbeiter) präzise dokumentiert |
 | 04.04.2026 | Server-Details/Deployment | ✏️ Migrationsfähig dokumentiert: aktueller vs. neuer Host, variable Endpunkte in Scripts |
 | 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — Architektur, Schema, API, Sicherheit, Kosten dokumentiert |
@@ -56,6 +57,19 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 </div>
 
 > 💡 **Lesehinweis:** Abschnitte mit <span class="badge-neu">NEU</span> oder grünem Rand wurden in den letzten 7 Tagen hinzugefügt oder geändert. So erkennst du sofort, was neu ist — ohne alles nochmal lesen zu müssen.
+
+---
+
+<div class="neu">
+
+## Lesefluss-Einordnung
+
+- **Du bist hier richtig, wenn** du nach den Features die technische Umsetzung verstehen willst.
+- **Vorher:** [Features](/docs/features.html "Produktlogik und Nutzerablauf als Einstieg")
+- **Danach:** [DB Model](/docs/db_model.html "Tabellen, Beziehungen, Views und RPC-Funktionen")
+- **Operative Fortsetzung:** [Domain](/docs/domain.html "Deployment, TLS und Migration im Betrieb")
+
+</div>
 
 ---
 

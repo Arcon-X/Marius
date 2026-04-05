@@ -43,19 +43,19 @@ th { background: #f6f8fa; }
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html">DB</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/domain.html" class="active" aria-current="page">Domain</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
+    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" class="active" aria-current="page" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
-> **Stand:** 29.03.2026 · **Ziel:** `https://wahl2026.bnz-wien.at` → NOVUM-ZIV Planungstool
+> **Stand:** 05.04.2026 · **Ziel:** `https://wahl2026.bnz-wien.at` → NOVUM-ZIV Planungstool
 
 <div class="changelog">
 <details open>
@@ -63,9 +63,21 @@ th { background: #f6f8fa; }
 
 | Datum | Bereich | Änderung |
 |---|---|---|
+| 05.04.2026 | Lesefluss | ✏️ Rolle im Gesamt-Lesepfad ergänzt, Verweise mit Hover-Kurztexten erweitert |
 | 04.04.2026 | Migration | ✏️ Neuer Abschnitt für Hetzner-Serverwechsel (kurzes Wartungsfenster, nip.io-Phase) |
 
 </details>
+</div>
+
+<div class="neu">
+
+## Lesefluss-Einordnung
+
+- Diese Seite ist die **Betriebsebene**: Domain, TLS, Migration und Cutover.
+- Vorher: [Import Report](/docs/import_report.html "Datenherkunft und Geocoding-Qualitaet als Input")
+- Danach: [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Steering und Entscheidungen")
+- Kennzahlen danach: [Business KPI](/docs/report_business_kpi.html "Detailmetriken fuer Bezirke und Team")
+
 </div>
 
 ---

@@ -17,21 +17,28 @@ title: "Adress-Import Report – Ärztekammerwahl Wien 2026"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html">DB</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/import_report.html" class="active" aria-current="page">Import</a>
-    <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
+    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" class="active" aria-current="page" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
 **Projekt:** NOVUM-ZIV Unterschriften – BNZ Bündnis NOVUM–ZIV  
 **Quelle:** `Zahnarztekammer_260223_211026.xlsx` (Tabelle „Table 1")  
 **Erstellt:** 28. März 2026
+
+## Lesefluss-Einordnung
+
+- Diese Seite liefert die **Datenherkunft und Qualitätsbasis** für die Produkt- und KPI-Aussagen.
+- Vorher: [DB Model](/docs/db_model.html "Schema und Datenregeln als technische Grundlage")
+- Danach: [Domain](/docs/domain.html "Operative Umsetzung, Deployment und Migration")
+- Management-Fortsetzung: [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Stakeholder") und [Business KPI](/docs/report_business_kpi.html "Kennzahlen mit Formeln und Bezirksvergleich")
 
 ---
 

@@ -30,15 +30,15 @@ title: "NOVUM-ZIV — Business KPI Report"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html">DB</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html" class="active" aria-current="page">KPI</a>
+    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" class="active" aria-current="page" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
@@ -46,8 +46,15 @@ title: "NOVUM-ZIV — Business KPI Report"
   <button class="print-btn" onclick="window.print()">PDF exportieren</button>
 </div>
 
-**Stand:** 04.04.2026  
+**Stand:** 05.04.2026  
 **Fokus:** Bezirksvergleich nach erledigten Adressen und Effizienzbewertung.
+
+## Lesefluss-Einordnung
+
+- Diese Seite ist die **Detail- und Mess-Ebene** des Abschlussberichts.
+- Vorher: [Executive Summary](/docs/report_executive_summary.html "Management-Fazit und Abschlussentscheidungen")
+- Methodischer Kontext: [Technik](/docs/technik.html "Sicherheits-, API- und Rollenlogik") und [DB Model](/docs/db_model.html "Datenstruktur hinter den KPI-Werten")
+- Zurück zum Einstieg: [Hub](/docs/index.html "Gefuehrter Lesefluss ueber alle Kernseiten")
 
 <div class="note" id="live-kpi-status">Lade Live-Reportdaten ...</div>
 

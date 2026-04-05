@@ -27,15 +27,15 @@ title: "NOVUM-ZIV — Executive Summary Report"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html">DB</a>
-    <a href="/docs/features.html">Features</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/report_executive_summary.html" class="active" aria-current="page">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
+    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" class="active" aria-current="page" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
@@ -43,8 +43,15 @@ title: "NOVUM-ZIV — Executive Summary Report"
   <button class="print-btn" onclick="window.print()">PDF exportieren</button>
 </div>
 
-**Stand:** 04.04.2026  
+**Stand:** 05.04.2026  
 **Zweck:** Wirkungsnachweis zum Projektabschluss für Steering/Stakeholder.
+
+## Lesefluss-Einordnung
+
+- Diese Seite ist der **Management-Einstieg** in den Abschluss.
+- Vorher: [Domain](/docs/domain.html "Betriebslage, Domain- und Migrationsstatus")
+- Danach: [Business KPI](/docs/report_business_kpi.html "Detaillierte Kennzahlen und Interpretationsregeln")
+- Produktkontext bei Bedarf: [Features](/docs/features.html "Funktionaler Ablauf aus Produktsicht")
 
 <div class="kpi-grid">
   <div class="kpi"><h3>Scope Adressen</h3><div class="v">1.485</div></div>

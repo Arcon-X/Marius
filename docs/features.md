@@ -28,15 +28,15 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 <div class="doc-nav" role="navigation" aria-label="Dokumentationsnavigation">
   <div class="doc-nav-title">Dokumentation</div>
   <div class="doc-nav-links">
-    <a href="/docs/index.html">Hub</a>
-    <a href="/SPEC.html">SPEC</a>
-    <a href="/docs/technik.html">Technik</a>
-    <a href="/docs/db_model.html">DB</a>
-    <a href="/docs/features.html" class="active" aria-current="page">Features</a>
-    <a href="/docs/import_report.html">Import</a>
-    <a href="/docs/domain.html">Domain</a>
-    <a href="/docs/report_executive_summary.html">Exec</a>
-    <a href="/docs/report_business_kpi.html">KPI</a>
+    <a href="/docs/index.html" title="Startseite mit gefuehrtem Lesefluss">Hub</a>
+    <a href="/SPEC.html" title="Gesamtspezifikation fuer End-to-End Details">SPEC</a>
+    <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
+    <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB</a>
+    <a href="/docs/features.html" class="active" aria-current="page" title="Produktfunktionen und User-Flow">Features</a>
+    <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import</a>
+    <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
+    <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Exec</a>
+    <a href="/docs/report_business_kpi.html" title="KPI-Vertiefung mit Bezirks- und Teamwerten">KPI</a>
   </div>
 </div>
 
@@ -48,6 +48,8 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 
 | Datum | Bereich | Änderung |
 |---|---|---|
+| 05.04.2026 | Vollständigkeit | ✏️ Capability-Check gegen App-Code ergänzt (Settings, Reports, Issues, Voll-Reset, Passwort-Zwang) |
+| 05.04.2026 | Lesefluss | ✏️ Produkt-first Einstieg ergänzt, Übergänge zu Technik/DB mit Hover-Referenzen vereinheitlicht |
 | 05.04.2026 | Rollenmodell | 🆕 Rechtemodell (Admin vs. Mitarbeiter) als kompakte Feature-Übersicht ergänzt |
 | 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — alle 16 Feature-Abschnitte dokumentiert |
 
@@ -55,6 +57,19 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
 </div>
 
 > 💡 **Lesehinweis:** Abschnitte mit <span class="badge-neu">NEU</span> oder grünem Rand wurden in den letzten 7 Tagen hinzugefügt oder geändert. So erkennst du sofort, was neu ist — ohne alles nochmal lesen zu müssen.
+
+---
+
+<div class="neu">
+
+## Lesefluss-Einordnung
+
+- **Du bist hier richtig, wenn** du den Produktablauf von vorne nach hinten verstehen willst.
+- **Vorher:** [Hub](/docs/index.html "Startpunkt mit kompletter Lesereihenfolge")
+- **Danach:** [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell")
+- **Tiefe Details danach:** [DB Model](/docs/db_model.html "Datenstrukturen und API-Projektionen im Detail")
+
+</div>
 
 ---
 
@@ -268,3 +283,49 @@ Hinweis zur Sicherheit:
 - **Touch-optimiert:** Große Touch-Targets, keine Hover-Abhängigkeiten.
 - **PWA-artig:** Vollbild-Nutzung auf iOS/Android (kein App-Store nötig).
 - **Telefon-Links:** `tel:` Links für direkte Anrufe auf mobilen Geräten.
+
+---
+
+## 17. Einstellungen & Account-Sicherheit
+
+- **Einstellungen-Dialog:** Klick auf den Benutzernamen im Header öffnet Account-Einstellungen.
+- **E-Mail ändern:** Eigene Login-E-Mail kann über RPC serverseitig geändert werden.
+- **Passphrase ändern:** Änderung mit Prüfung des aktuellen Passworts und Mindestlänge (12 Zeichen).
+- **Passwort ein-/ausblenden:** Augen-Button in Login, Zwangswechsel und Settings.
+- **Erstlogin-Zwang:** Nutzer mit Standard-Passwort müssen vor App-Nutzung eine neue Passphrase setzen.
+- **"Passwort vergessen":** Hinweis-Flow über Admin-Kontakt für Reset.
+
+---
+
+## 18. Admin-Reports, Issues & Voll-Reset
+
+### Reports im Admin
+- Eigener Bereich **REPORTS** im Admin mit Direkt-Links zu Executive Summary und Business KPI.
+- Öffnen der Reports mit kurzlebiger Token-Übergabe für geschützte Inhalte.
+
+### Fehler- & Wünsche-Board
+- Admin-Bereich **Fehler & Wünsche** mit Typwahl (`bug`/`feature`) und Beschreibung.
+- Funktionen: erstellen, Status offen/erledigt umschalten, löschen.
+- Zeitstempel- und Benutzerbezug je Eintrag.
+
+### Voll-Reset (Admin)
+- Geführter Sicherheits-Reset mit expliziter Bestätigung (`RESET`).
+- Löscht Protokoll und setzt alle Adressen auf Initialzustand zurück.
+- Setzt zusätzlich Verifizierungs-/Website-Felder zurück und synchronisiert lokalen Cache.
+
+---
+
+## 19. Vollständigkeits-Check (Code vs. Doku)
+
+Geprüft gegen [index.html](../index.html "Single-File App mit gesamter UI- und Feature-Logik") am 05.04.2026.
+
+| Capability-Gruppe | In dieser Doku enthalten | Hinweis |
+|---|---|---|
+| Suche, Übernahme, Archiv, Karte | Ja | Kapitel 1-9 |
+| Admin-Teamverwaltung & Rollenmodell | Ja | Kapitel 10, 14.1 |
+| Verifizierung, Geo-Name, Sprache | Ja | Kapitel 11-13 |
+| Performance, Sync, Mobile | Ja | Kapitel 15-16 |
+| Einstellungen, E-Mail/Passphrase, Zwangswechsel | Ja | Kapitel 17 |
+| Reports, Issues, Voll-Reset | Ja | Kapitel 18 |
+
+Damit sind die aktuell produktiv sichtbaren Kernfunktionen der App in der Feature-Dokumentation abgedeckt.
