@@ -55,18 +55,6 @@ th { background: #f6f8fa; }
 
 > **Stand:** 05.04.2026 · **Ziel:** `https://wahl2026.bnz-wien.at` → NOVUM-ZIV Planungstool
 
-<div class="changelog">
-<details open>
-<summary>📋 Letzte Änderungen</summary>
-
-| Datum | Bereich | Änderung |
-|---|---|---|
-| 05.04.2026 | Lesefluss | ✏️ Rolle im Gesamt-Lesepfad ergänzt, Verweise mit Hover-Kurztexten erweitert |
-| 04.04.2026 | Migration | ✏️ Neuer Abschnitt für Hetzner-Serverwechsel (kurzes Wartungsfenster, nip.io-Phase) |
-
-</details>
-</div>
-
 <div class="neu">
 
 ## Lesefluss-Einordnung

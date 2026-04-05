@@ -11,10 +11,6 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
   margin: .8rem 0;
   border-radius: 4px;
 }
-.changelog { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
-.changelog summary { font-weight: bold; cursor: pointer; }
-.changelog ul { margin: .5rem 0 0 1.2rem; }
-.badge-neu { display: inline-block; background: #2da44e; color: #fff; font-size: .75rem; padding: 1px 6px; border-radius: 3px; vertical-align: middle; margin-left: .4rem; }
 .doc-nav { position: sticky; top: .5rem; z-index: 20; background: #fff; border: 1px solid #d0d7de; border-radius: 10px; padding: .7rem; margin: .2rem 0 1rem 0; box-shadow: 0 2px 8px rgba(0,0,0,.05); }
 .doc-nav-title { font-size: .8rem; color: #57606a; font-weight: 700; margin-bottom: .45rem; }
 .doc-nav-links { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .15rem; }
@@ -39,22 +35,6 @@ title: "NOVUM-ZIV — Technische Dokumentation & Kosten"
 </div>
 
 > **Stand:** 05.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
-
-<div class="changelog">
-<details open>
-<summary>📋 Letzte Änderungen (grün = letzte 7 Tage)</summary>
-
-| Datum | Bereich | Änderung |
-|---|---|---|
-| 05.04.2026 | Lesefluss | ✏️ Technische Vertiefung in den durchgehenden Dokumentationspfad eingebettet |
-| 05.04.2026 | Rechtemodell | 🆕 Rollen- und Rechteverteilung (Admin vs. Mitarbeiter) präzise dokumentiert |
-| 04.04.2026 | Server-Details/Deployment | ✏️ Migrationsfähig dokumentiert: aktueller vs. neuer Host, variable Endpunkte in Scripts |
-| 29.03.2026 | Gesamtes Dokument | 🆕 Erstellt — Architektur, Schema, API, Sicherheit, Kosten dokumentiert |
-
-</details>
-</div>
-
-> 💡 **Lesehinweis:** Abschnitte mit <span class="badge-neu">NEU</span> oder grünem Rand wurden in den letzten 7 Tagen hinzugefügt oder geändert. So erkennst du sofort, was neu ist — ohne alles nochmal lesen zu müssen.
 
 ---
 
