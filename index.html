@@ -3920,7 +3920,7 @@ function _teamForm(u){
     </div>
     ${!isNew?'<input id="tf-passwort" placeholder="Neue Passphrase (leer = nicht ändern, mind. 12 Zeichen)" type="password" autocomplete="new-password">':'<input id="tf-initial-passphrase" placeholder="Initiale Passphrase (mind. 12 Zeichen)" type="password" autocomplete="new-password">'}
     <div class="team-edit-actions">
-      <button class="btn-take" style="flex:1;padding:.4rem" onclick="${isNew?'teamSaveNew()':'teamSaveEdit(\''+u.id+'\')'}">${isNew?'➕ Anlegen':'💾 Speichern'}</button>
+      <button class="btn-take" style="flex:1;padding:.4rem" onclick="${isNew?'teamSaveNew(this.closest(\'form\'))':'teamSaveEdit(\''+u.id+'\',this.closest(\'form\'))'}">${isNew?'➕ Anlegen':'💾 Speichern'}</button>
       <button class="team-btn" style="padding:.4rem .8rem" onclick="renderAdmin()">Abbrechen</button>
     </div>
   </form>`;
@@ -3949,12 +3949,14 @@ async function adminResetPasswordSafe(targetEmail,newPasswort){
   }catch(_e){}
   return {ok:res.ok,missing:res.status===404,status:res.status,message};
 }
-async function teamSaveEdit(id){
-  const name=document.getElementById('tf-name').value.trim();
-  const email=document.getElementById('tf-email').value.trim();
-  const telefon=document.getElementById('tf-telefon').value.trim();
-  const rolle=document.getElementById('tf-rolle').value;
-  const pwEl=document.getElementById('tf-passwort');
+async function teamSaveEdit(id,formEl){
+  const form=(formEl&&formEl.querySelector)?formEl:document.getElementById('team-form-'+id);
+  if(!form){toast('⚠️ Formular nicht gefunden');return;}
+  const name=(form.querySelector('#tf-name')||{}).value?.trim?.()||'';
+  const email=(form.querySelector('#tf-email')||{}).value?.trim?.()||'';
+  const telefon=(form.querySelector('#tf-telefon')||{}).value?.trim?.()||'';
+  const rolle=(form.querySelector('#tf-rolle')||{}).value||'mitarbeiter';
+  const pwEl=form.querySelector('#tf-passwort');
   const pw=pwEl?pwEl.value:'';
   if(!name||!email){toast('Name und E-Mail erforderlich');return;}
   if(pw&&pw.length<12){toast('Passphrase: mindestens 12 Zeichen');return;}
@@ -3989,12 +3991,14 @@ function teamAdd(){
   const addBtn=container.querySelector('.team-add-btn');
   if(addBtn)addBtn.outerHTML=_teamForm(null);
 }
-async function teamSaveNew(){
-  const name=document.getElementById('tf-name').value.trim();
-  const email=document.getElementById('tf-email').value.trim();
-  const telefon=document.getElementById('tf-telefon').value.trim();
-  const rolle=document.getElementById('tf-rolle').value;
-  const initialPw=(document.getElementById('tf-initial-passphrase')||{}).value||'';
+async function teamSaveNew(formEl){
+  const form=(formEl&&formEl.querySelector)?formEl:document.getElementById('team-form-new');
+  if(!form){toast('⚠️ Formular nicht gefunden');return;}
+  const name=(form.querySelector('#tf-name')||{}).value?.trim?.()||'';
+  const email=(form.querySelector('#tf-email')||{}).value?.trim?.()||'';
+  const telefon=(form.querySelector('#tf-telefon')||{}).value?.trim?.()||'';
+  const rolle=(form.querySelector('#tf-rolle')||{}).value||'mitarbeiter';
+  const initialPw=(form.querySelector('#tf-initial-passphrase')||{}).value||'';
   if(!name||!email){toast('Name und E-Mail erforderlich');return;}
   if(initialPw.length<12){toast('Initiale Passphrase: mindestens 12 Zeichen');return;}
   try{
@@ -4003,16 +4007,17 @@ async function teamSaveNew(){
       body:JSON.stringify({name,email,telefon:telefon||null,rolle})});
     if(!res.ok){const t=await res.text().catch(()=>'');toast('⚠️ Fehler: '+res.status+(t.includes('duplicate')?(' – E-Mail existiert bereits'):''));return;}
     const created=await res.json();
+    if(Array.isArray(created))_dbUsers.push(...created);else _dbUsers.push(created);
+    renderAdmin();
     const createdUser=Array.isArray(created)?created[0]:created;
     const targetEmail=createdUser&&createdUser.email?createdUser.email:email;
     const pr=await adminResetPasswordSafe(targetEmail,initialPw);
     if(!pr.ok){
-      if(pr.missing)toast('⚠️ Benutzer angelegt, aber Passphrase nicht gesetzt: RPC fehlt (server/add_settings_functions.sh oder server/fix_settings_functions.sh ausführen)');
-      else toast('⚠️ Benutzer angelegt, aber Passphrase setzen fehlgeschlagen ('+pr.status+')');
-      return;
+      if(pr.missing)toast('⚠️ Mitglied angelegt, aber Passphrase nicht gesetzt: RPC fehlt. Bitte Passwort via ✏️ setzen, bevor Zugangsdaten verteilt werden.');
+      else toast('⚠️ Mitglied angelegt, aber Passphrase setzen fehlgeschlagen ('+pr.status+'). Bitte Passwort via ✏️ setzen, bevor Zugangsdaten verteilt werden.');
+    }else{
+      toast('Mitglied angelegt ✓ (Initiale Passphrase gesetzt)');
     }
-    if(Array.isArray(created))_dbUsers.push(...created);else _dbUsers.push(created);
-    toast('Mitglied angelegt ✓ (Initiale Passphrase gesetzt)');renderAdmin();
   }catch(e){toast('⚠️ '+e.message);}
 }
 async function teamDelete(id){
