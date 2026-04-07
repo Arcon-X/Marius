@@ -3918,7 +3918,7 @@ async function adminFullReset(){
 
 /* ── TEAM MANAGEMENT ─────────────────────────────────── */
 function _teamPwHintText(){
-  return 'Passwort-Regeln: mindestens 12 Zeichen. Bitte keine kurzen oder leicht erratbaren Passwörter verwenden. Nach der ersten Anmeldung muss die Person das Passwort sofort auf ein persönliches Passwort ändern.';
+  return 'Verwenden Sie eine persönliche Passphrase mit mindestens 12 Zeichen. Ein ganzer Satz mit Leerzeichen ist ausdrücklich erlaubt und oft leichter zu merken, zum Beispiel mehrere Wörter in natürlicher Sprache. Bitte keine leicht erratbaren Angaben wie Namen, Geburtsdaten oder sehr einfache Muster verwenden. Nach der ersten Anmeldung muss das Passwort sofort auf ein eigenes Passwort geändert werden.';
 }
 function _teamPwHintEl(ctx){
   const form=(ctx&&ctx.closest)?ctx.closest('form'):ctx;
