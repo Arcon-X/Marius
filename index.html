@@ -2867,17 +2867,21 @@ const DEFAULT_LOC={lat:48.2082,lon:16.3738,label:'Stephansplatz (Standard)'};
 let userLoc=null,selectedNum=10,langFilter='alle';
 const HOME_RESULT_ACTIONS=['waehlt_uns','waehlt_nicht','ueberlegt','kein_interesse_wahl','sonstige'];
 
-function getResultNoteAddressSet(){
-  const set=new Set();
+function getLatestLogEntryByAddress(){
   const log=S.getProtokoll()||[];
   const latestByAddress={};
-  // Nur der letzte Protokoll-Eintrag je Adresse zählt (aktionsunabhängig).
   log.forEach(l=>{
     if(!l||!l.adressen_id)return;
     const ts=new Date(l.zeitpunkt||0).getTime()||0;
     const prev=latestByAddress[l.adressen_id];
     if(!prev||ts>(prev.ts||0))latestByAddress[l.adressen_id]={entry:l,ts};
   });
+  return latestByAddress;
+}
+
+function getResultNoteAddressSet(){
+  const set=new Set();
+  const latestByAddress=getLatestLogEntryByAddress();
   Object.entries(latestByAddress).forEach(([addrId,v])=>{
     const entry=v&&v.entry?v.entry:null;
     if(!entry)return;
@@ -3253,6 +3257,7 @@ function renderResults(list){
   const user=auth.current();const adressen=S.getAdressen();
   const users=_dbUsers.length?_dbUsers:DEMO_USERS;
   const log=S.getProtokoll();
+  const latestLogByAddress=getLatestLogEntryByAddress();
   const {latestResultByAddress}=getArchiveLogState(log);
   const adressenById=new Map(adressen.map(x=>[x.id,x]));
   if(!list.length){
@@ -3270,6 +3275,9 @@ function renderResults(list){
     const safeGeoName=escHtml((a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
     const safeWebsite=safeHttpUrl(cur.website||'');
     const safePlz=escHtml(a.plz||'');
+    const latestLogEntry=(latestLogByAddress[cur.id]||{}).entry||null;
+    const latestNoteText=latestLogEntry?formatProtokollNotiz(latestLogEntry.aktion,latestLogEntry.notiz||''):'';
+    const safeLatestNote=escHtml(latestNoteText);
     const isMine=cur.status==='in_bearbeitung'&&cur.benutzer_id===user.id;
     if(cur.status==='archiviert'){
       const entry=(latestResultByAddress[cur.id]||{}).entry||null;
@@ -3289,6 +3297,7 @@ function renderResults(list){
           ${a.geo_name?`<div class="addr-geoname">🏛️ ${safeGeoName}</div>`:''}
           ${safeWebsite?`<div class="addr-website"><a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
           <div class="addr-plz">${safePlz} Wien${isMine?' &nbsp;<span class="mine-pill">Meine</span>':''}${cur.status==='archiviert'?' &nbsp;<span class="mine-pill" style="background:#d4edda;color:#155724">✅ Erledigt</span>':''}${cur.status==='in_bearbeitung'&&!isMine?' &nbsp;<span class="mine-pill" style="background:#fff3cd;color:#856404">🔒 Reserviert</span>':''}</div>
+          ${latestNoteText?`<div class="arch-meta">📝 ${safeLatestNote}</div>`:''}
         </div>
         <div class="addr-time">
           ${isNameMatch?`<div class="addr-min" style="font-size:.82rem">&#128269; Name</div>`:`<div class="addr-min">🚶 ${min} min</div><div class="addr-dist">${mStr}</div>`}
