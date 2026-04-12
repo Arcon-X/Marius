@@ -843,7 +843,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 <div id="edit-dlg-overlay" class="dlg-overlay hidden"
      onclick="if(event.target===this)editDlg.close()">
   <div class="dlg-card">
-    <div class="dlg-title">&#9998; Adresse bearbeiten</div>
+    <div class="dlg-title" id="edit-dlg-title">&#9998; Adresse bearbeiten</div>
     <div class="edit-form">
       <div class="edit-row">
         <div class="edit-field shrink">
@@ -2592,6 +2592,15 @@ const db={
       return true;
     }catch(e){console.error('API patch:',e.message);return false;}
   },
+  async createAddress(fields){
+    try{
+      const h={...this._h(),'Prefer':'return=representation'};
+      const res=await fetch(SB_URL+'/adressen',{method:'POST',headers:h,body:JSON.stringify(fields)});
+      if(!res.ok){console.error('API create fail:',res.status,await res.text().catch(()=>''));return null;}
+      const data=await res.json().catch(()=>null);
+      return Array.isArray(data)&&data.length?data[0]:data;
+    }catch(e){console.error('API create:',e.message);return null;}
+  },
   async postProtokoll(entry){
     // 'adresse' ist nur für lokale Anzeige, existiert nicht als DB-Spalte
     const {adresse:_a,...dbEntry}=entry;
@@ -3132,9 +3141,7 @@ async function doSearch(force=false){
       return;
     }
     if(!available.length){
-      q('#results-wrap').innerHTML=(langFilter==='with_notes')
-        ?'<div class="empty-state"><div class="big">📝</div>Keine Adresse mit Ergebnis-Notiz im aktuellen Datenstand.<br><small>Mit Ergebnis-Notiz gesamt: '+noteCountAll+'</small></div>'
-        :'<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
+      renderSearchEmptyState(langFilter==='with_notes'?'with_notes':'all_done',noteCountAll);
       lastSearchFingerprint=fingerprint;
       return;
     }
@@ -3291,6 +3298,18 @@ function buildArchiveStyleCard(a,{entry,isAdmin,currentUserId,users,log}){
 /* ── RENDER RESULTS ──────────────────────────────────── */
 let lastResults=[];
 
+function renderSearchEmptyState(kind,noteCountAll=0){
+  if(kind==='with_notes'){
+    q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">📝</div>Keine Adresse mit Ergebnis-Notiz im aktuellen Datenstand.<br><small>Mit Ergebnis-Notiz gesamt: '+noteCountAll+'</small></div>';
+    return;
+  }
+  const msg=(kind==='all_done')
+    ?'<div class="big">🎉</div>Alle Adressen sind bereits erledigt!'
+    :'<div class="big">🔍</div>Keine verfügbaren Adressen in der Nähe.';
+  q('#results-wrap').innerHTML='<div class="empty-state">'+msg+
+    '<div style="margin-top:.75rem"><button class="btn-save" onclick="editDlg.openCreate()">➕ Neue Adresse anlegen</button></div></div>';
+}
+
 function renderResults(list){
   lastResults=list;
   const user=auth.current();const adressen=S.getAdressen();
@@ -3300,7 +3319,7 @@ function renderResults(list){
   const {latestResultByAddress}=getArchiveLogState(log);
   const adressenById=new Map(adressen.map(x=>[x.id,x]));
   if(!list.length){
-    q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">🔍</div>Keine verfügbaren Adressen in der Nähe.</div>';
+    renderSearchEmptyState('no_results');
     return;
   }
   q('#results-wrap').innerHTML=list.map((a,idx)=>{
@@ -3545,10 +3564,18 @@ async function snapshotAdresse(adressen_id, oldFields, newFields, source){
 /* ── EDIT DIALOG ─────────────────────────────────────── */
 const editDlg={
   currentId:null,
+  mode:'edit',
+  _setModeUi(){
+    document.getElementById('edit-dlg-title').innerHTML=this.mode==='create'?'&#10133; Neue Adresse anlegen':'&#9998; Adresse bearbeiten';
+    const btn=document.getElementById('edit-save-btn');
+    btn.textContent=this.mode==='create'?'\ud83d\udccc Anlegen':'\ud83d\udccc Speichern';
+  },
   open(id){
+    this.mode='edit';
     this.currentId=id;
     const a=S.getAdressen().find(x=>x.id===id);
     if(!a)return;
+    this._setModeUi();
     document.getElementById('ef-titel').value=a.titel||'';
     document.getElementById('ef-name').value=a.name||'';
     document.getElementById('ef-strasse').value=a.strasse||'';
@@ -3584,29 +3611,85 @@ const editDlg={
     const geo=document.getElementById('edit-geo');
     geo.className='edit-geo hidden';geo.textContent='';
     const btn=document.getElementById('edit-save-btn');
-    btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
+    btn.disabled=false;
+    showEl('edit-dlg-overlay');
+  },
+  openCreate(){
+    this.mode='create';
+    this.currentId=null;
+    this._setModeUi();
+    document.getElementById('ef-titel').value='';
+    document.getElementById('ef-name').value='';
+    document.getElementById('ef-strasse').value='';
+    document.getElementById('ef-hnr').value='';
+    document.getElementById('ef-plz').value='';
+    document.getElementById('ef-sprache').value='de';
+    document.getElementById('ef-website').value='';
+    document.getElementById('ef-verifiziert').checked=false;
+    const histEl=document.getElementById('edit-history');
+    histEl.classList.add('hidden');
+    const geo=document.getElementById('edit-geo');
+    geo.className='edit-geo hidden';geo.textContent='';
+    const btn=document.getElementById('edit-save-btn');
+    btn.disabled=false;
     showEl('edit-dlg-overlay');
   },
   async save(){
+    const mode=this.mode;
     const btn=document.getElementById('edit-save-btn');
     btn.disabled=true;btn.textContent='\u23f3 Geocodierung \u2026';
     const geo=document.getElementById('edit-geo');
     const adressen=S.getAdressen();
-    const a=adressen.find(x=>x.id===this.currentId);
-    if(!a){this.close();return;}
-    // Snapshot VOR Änderung sichern
-    const oldSnap={titel:a.titel||null,arzt_name:a.name||null,strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,sprache:a.sprache||'de',lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,website:a.website||null,verifiziert:!!a.verifiziert};
-    // Felder aktualisieren
     const titel=document.getElementById('ef-titel').value.trim();
     const name=document.getElementById('ef-name').value.trim();
+    const strasse=document.getElementById('ef-strasse').value.trim();
+    const hnr=document.getElementById('ef-hnr').value.trim();
+    const plz=document.getElementById('ef-plz').value.trim();
+    const sprache=document.getElementById('ef-sprache').value;
+    const website=document.getElementById('ef-website').value.trim();
+    const verifiziert=document.getElementById('ef-verifiziert').checked;
+    if(!strasse||!hnr||!plz){
+      geo.className='edit-geo geo-warn';
+      geo.textContent='⚠️ Straße, Hausnummer und PLZ sind Pflichtfelder.';
+      geo.classList.remove('hidden');
+      btn.disabled=false;
+      this._setModeUi();
+      return;
+    }
+    let a=(mode==='create')?{
+      id:uid(),
+      titel:titel||undefined,
+      name:name||undefined,
+      strasse,
+      hnr,
+      plz,
+      sprache,
+      website:website||undefined,
+      verifiziert,
+      status:'verfuegbar',
+      ort:'Wien'
+    }:adressen.find(x=>x.id===this.currentId);
+    if(!a){this.close();return;}
+    const oldSnap=(mode==='create')
+      ?{titel:null,arzt_name:null,strasse:null,hausnummer:null,plz:null,sprache:'de',lat:null,lon:null,geo_name:null,website:null,verifiziert:false}
+      :{titel:a.titel||null,arzt_name:a.name||null,strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,sprache:a.sprache||'de',lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,website:a.website||null,verifiziert:!!a.verifiziert};
     a.titel=titel||undefined;
     a.name=name||undefined;
-    a.strasse=document.getElementById('ef-strasse').value.trim();
-    a.hnr=document.getElementById('ef-hnr').value.trim();
-    a.plz=document.getElementById('ef-plz').value.trim();
-    a.sprache=document.getElementById('ef-sprache').value;
-    a.website=document.getElementById('ef-website').value.trim()||undefined;
-    a.verifiziert=document.getElementById('ef-verifiziert').checked;
+    a.strasse=strasse;
+    a.hnr=hnr;
+    a.plz=plz;
+    a.sprache=sprache;
+    a.website=website||undefined;
+    a.verifiziert=verifiziert;
+    if(mode==='create'){
+      const norm=v=>String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+      const dupe=adressen.find(x=>norm(x.strasse)===norm(a.strasse)&&norm(x.hnr)===norm(a.hnr)&&norm(x.plz)===norm(a.plz));
+      if(dupe&&!confirm('Möglicher Duplikat-Eintrag gefunden:\n'+dupe.strasse+' '+dupe.hnr+', '+dupe.plz+' Wien\n\nTrotzdem anlegen?')){
+        btn.disabled=false;
+        this._setModeUi();
+        return;
+      }
+    }
     // Geocodierung via Nominatim
     try{
       const queryStr=`${a.hnr} ${a.strasse}, ${a.plz} Wien, Austria`;
@@ -3629,13 +3712,54 @@ const editDlg={
       geo.className='edit-geo geo-warn';
       geo.textContent='\u26a0\ufe0f Geocoding-Fehler \u2013 Koordinaten unver\u00e4ndert.';
     }
+    if(mode==='create'&&(!Number.isFinite(a.lat)||!Number.isFinite(a.lon))){
+      geo.className='edit-geo geo-warn';
+      geo.textContent='⚠️ Neue Adresse konnte nicht geocodiert werden und wurde nicht gespeichert.';
+      geo.classList.remove('hidden');
+      btn.disabled=false;
+      this._setModeUi();
+      return;
+    }
     geo.classList.remove('hidden');
     const newSnap={titel:a.titel||null,arzt_name:a.name||null,strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,sprache:a.sprache||'de',lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,website:a.website||null,verifiziert:!!a.verifiziert};
-    await snapshotAdresse(a.id,oldSnap,newSnap,'manual');
-    S.saveAdressen(adressen);
-    const pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de',website:a.website||null,verifiziert:!!a.verifiziert});
-    btn.disabled=false;btn.textContent='\ud83d\udccc Speichern';
-    toast(pOk?'Adresse gespeichert \u2713':'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
+    let pOk=false;
+    if(mode==='create'){
+      const created=await db.createAddress({
+        id:a.id,
+        strasse:a.strasse,
+        hausnummer:a.hnr,
+        plz:a.plz,
+        ort:'Wien',
+        lat:a.lat,
+        lon:a.lon,
+        geo_name:a.geo_name||null,
+        status:'verfuegbar',
+        benutzer_id:null,
+        reserviert_am:null,
+        erledigt_am:null,
+        titel:a.titel||null,
+        arzt_name:a.name||null,
+        sprache:a.sprache||'de',
+        website:a.website||null,
+        verifiziert:!!a.verifiziert,
+        import_batch:'manual_'+new Date().toISOString().slice(0,10)
+      });
+      pOk=!!created;
+      if(pOk){
+        if(created&&created.id)a.id=created.id;
+        adressen.unshift({...a});
+        S.saveAdressen(adressen);
+        await snapshotAdresse(a.id,oldSnap,newSnap,'manual');
+      }
+    }else{
+      await snapshotAdresse(a.id,oldSnap,newSnap,'manual');
+      S.saveAdressen(adressen);
+      pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de',website:a.website||null,verifiziert:!!a.verifiziert});
+    }
+    btn.disabled=false;
+    this._setModeUi();
+    toast(pOk?(mode==='create'?'Adresse angelegt \u2713':'Adresse gespeichert \u2713'):'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
+    if(pOk&&mode==='create')await doSearch(true);
     setTimeout(()=>this.close(),3000);
     // Ansichten aktualisieren
     if(lastResults.length)renderResults(lastResults);
@@ -3656,11 +3780,12 @@ const editDlg={
     document.getElementById('ef-strasse').value=old.strasse||'';
     document.getElementById('ef-hnr').value=old.hausnummer||'';
     document.getElementById('ef-plz').value=old.plz||'';
+    document.getElementById('ef-sprache').value=old.sprache||'de';
     document.getElementById('ef-website').value=old.website||'';
     document.getElementById('ef-verifiziert').checked=!!old.verifiziert;
     toast('Alte Werte geladen \u2013 Speichern zum Wiederherstellen');
   },
-  close(){hideEl('edit-dlg-overlay');this.currentId=null;}
+  close(){hideEl('edit-dlg-overlay');this.currentId=null;this.mode='edit';this._setModeUi();}
 };
 
 function exportAdressen(){
