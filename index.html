@@ -2870,6 +2870,16 @@ function hasAddressNote(a){
   return String(a?.notiz??'').trim().length>0;
 }
 
+function countAddressesWithNote(rows){
+  return (rows||[]).filter(hasAddressNote).length;
+}
+
+window.nvNoteStats=()=>{
+  const adressen=S.getAdressen();
+  const withNote=countAddressesWithNote(adressen);
+  return {total:adressen.length,withNote,withoutNote:Math.max(0,adressen.length-withNote)};
+};
+
 function applyHomeChipFilters(rows){
   let filtered=rows;
   if(langFilter==='pa')filtered=filtered.filter(a=>a.sprache==='pa');
@@ -2898,6 +2908,10 @@ function setLang(v){
     (v==='alle'&&b.textContent.includes('Alle'))
     ||(v==='with_notes'&&b.textContent.includes('Mit Notiz'))
     ||(v==='pa'&&b.textContent.includes('Persisch'))));
+  if(v==='with_notes'){
+    const stats=window.nvNoteStats();
+    toast('Mit Notiz: '+stats.withNote+' von '+stats.total+' Adressen im aktuellen Datenstand');
+  }
   doSearch();
 }
 
@@ -3034,6 +3048,7 @@ async function doSearch(force=false){
   if(refreshBtn)refreshBtn.disabled=true;
   try{
     const adressen=S.getAdressen();
+    const noteCountAll=countAddressesWithNote(adressen);
     const user=auth.current();
     let available=(langFilter==='with_notes')
       ?adressen.slice()
@@ -3055,7 +3070,9 @@ async function doSearch(force=false){
       return;
     }
     if(!available.length){
-      q('#results-wrap').innerHTML='<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
+      q('#results-wrap').innerHTML=(langFilter==='with_notes')
+        ?'<div class="empty-state"><div class="big">📝</div>Keine Adresse mit Notiz im aktuellen Datenstand.<br><small>Mit Notiz gesamt: '+noteCountAll+'</small></div>'
+        :'<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
       lastSearchFingerprint=fingerprint;
       return;
     }
