@@ -2652,6 +2652,23 @@ function normalizeProtokollEntries(list){
       changed=true;
       return {...entry,notiz:''};
     }
+    if(entry.aktion==='bearbeitet'&&String(entry.notiz??'').trim()){
+      try{
+        const parsed=JSON.parse(entry.notiz);
+        if(Array.isArray(parsed.changes)){
+          const nonGeoChanges=parsed.changes.filter(c=>c&&c.field!=='geo_name');
+          if(nonGeoChanges.length!==parsed.changes.length){
+            changed=true;
+            if(!nonGeoChanges.length)return {...entry,notiz:''};
+            const old={};
+            nonGeoChanges.forEach(c=>{old[c.field]=c.old;});
+            return {...entry,notiz:JSON.stringify({old,changes:nonGeoChanges,source:parsed.source})};
+          }
+        }
+      }catch(_e){
+        // Ignore malformed legacy JSON notes
+      }
+    }
     return entry;
   });
   return {list:normalized,changed};
@@ -3508,14 +3525,15 @@ async function snapshotAdresse(adressen_id, oldFields, newFields, source){
     const newV=(newFields&&newFields[k]!==undefined)?newFields[k]:null;
     if(String(oldV)!==String(newV))changes.push({field:k,old:oldV,new:newV});
   });
-  if(!changes.length)return;
+  const noteChanges=changes.filter(c=>c.field!=='geo_name');
+  if(!noteChanges.length)return;
   const old={};
-  changes.forEach(c=>{old[c.field]=c.old;});
+  noteChanges.forEach(c=>{old[c.field]=c.old;});
   const entry={
     adressen_id,
     benutzer_id:user.id,
     aktion:'bearbeitet',
-    notiz:JSON.stringify({old,changes,source})
+    notiz:JSON.stringify({old,changes:noteChanges,source})
   };
   await db.postProtokoll(entry);
   const pl=S.getProtokoll();
