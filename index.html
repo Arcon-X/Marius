@@ -3030,11 +3030,11 @@ const loc={
       const url='https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(val+', Wien')+'&format=json&limit=1&accept-language=de';
       const res=await fetch(url,{headers:{'User-Agent':'NOVUM-ZIV-Demo/1.0'}});
       const data=await res.json();
-      if(!data.length){toast('Adresse nicht gefunden');return;}
+      if(!data.length){renderResults([]);toast('Adresse nicht gefunden');return;}
       userLoc={lat:parseFloat(data[0].lat),lon:parseFloat(data[0].lon),label:data[0].display_name.split(',')[0]};
       setLocDisplay(userLoc.label);toast('Adresse gefunden ✓');
       doSearch();
-    }catch(e){toast('Geocoding-Fehler');}
+    }catch(e){renderResults([]);toast('Geocoding-Fehler');}
   }
 };
 
