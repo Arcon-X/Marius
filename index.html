@@ -2869,10 +2869,20 @@ const HOME_RESULT_ACTIONS=['waehlt_uns','waehlt_nicht','ueberlegt','kein_interes
 
 function getResultNoteAddressSet(){
   const set=new Set();
-  (S.getProtokoll()||[]).forEach(l=>{
-    if(!HOME_RESULT_ACTIONS.includes(l.aktion))return;
-    if(!String(l.notiz??'').trim())return;
-    if(l.adressen_id)set.add(l.adressen_id);
+  const log=S.getProtokoll()||[];
+  const latestByAddress={};
+  // Nur der letzte Protokoll-Eintrag je Adresse zählt (aktionsunabhängig).
+  log.forEach(l=>{
+    if(!l||!l.adressen_id)return;
+    const ts=new Date(l.zeitpunkt||0).getTime()||0;
+    const prev=latestByAddress[l.adressen_id];
+    if(!prev||ts>(prev.ts||0))latestByAddress[l.adressen_id]={entry:l,ts};
+  });
+  Object.entries(latestByAddress).forEach(([addrId,v])=>{
+    const entry=v&&v.entry?v.entry:null;
+    if(!entry)return;
+    if(!String(entry.notiz??'').trim())return;
+    set.add(addrId);
   });
   return set;
 }
