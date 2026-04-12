@@ -2865,25 +2865,33 @@ function initApp(user){
 /* ── LOCATION ────────────────────────────────────────── */
 const DEFAULT_LOC={lat:48.2082,lon:16.3738,label:'Stephansplatz (Standard)'};
 let userLoc=null,selectedNum=10,langFilter='alle';
+const HOME_RESULT_ACTIONS=['waehlt_uns','waehlt_nicht','ueberlegt','kein_interesse_wahl','sonstige'];
 
-function hasAddressNote(a){
-  return String(a?.notiz??'').trim().length>0;
+function getResultNoteAddressSet(){
+  const set=new Set();
+  (S.getProtokoll()||[]).forEach(l=>{
+    if(!HOME_RESULT_ACTIONS.includes(l.aktion))return;
+    if(!String(l.notiz??'').trim())return;
+    if(l.adressen_id)set.add(l.adressen_id);
+  });
+  return set;
 }
 
-function countAddressesWithNote(rows){
-  return (rows||[]).filter(hasAddressNote).length;
+function countAddressesWithResultNote(rows,noteAddressSet){
+  return (rows||[]).filter(a=>noteAddressSet.has(a.id)).length;
 }
 
 window.nvNoteStats=()=>{
   const adressen=S.getAdressen();
-  const withNote=countAddressesWithNote(adressen);
+  const noteAddressSet=getResultNoteAddressSet();
+  const withNote=countAddressesWithResultNote(adressen,noteAddressSet);
   return {total:adressen.length,withNote,withoutNote:Math.max(0,adressen.length-withNote)};
 };
 
-function applyHomeChipFilters(rows){
+function applyHomeChipFilters(rows,noteAddressSet){
   let filtered=rows;
   if(langFilter==='pa')filtered=filtered.filter(a=>a.sprache==='pa');
-  if(langFilter==='with_notes')filtered=filtered.filter(hasAddressNote);
+  if(langFilter==='with_notes')filtered=filtered.filter(a=>noteAddressSet.has(a.id));
   return filtered;
 }
 
@@ -2942,12 +2950,12 @@ const loc={
     // ── Name search: check if input matches a doctor name ──
     const lower=val.toLowerCase();
     const allAddr=S.getAdressen();
-    const user=auth.current();
+    const noteAddressSet=getResultNoteAddressSet();
     let nameHits=allAddr.filter(a=>{
       const n=((a.titel||'')+' '+(a.name||a.arzt_name||'')).toLowerCase();
       return n.includes(lower);
     });
-    nameHits=applyHomeChipFilters(nameHits);
+    nameHits=applyHomeChipFilters(nameHits,noteAddressSet);
     if(nameHits.length){
       nameHits.forEach(a=>{a.dauer_s=null;a.meter=null;a._dist=0;a._nameMatch=true;});
       toast(nameHits.length+' Treffer für "'+val+'"');
@@ -3048,12 +3056,13 @@ async function doSearch(force=false){
   if(refreshBtn)refreshBtn.disabled=true;
   try{
     const adressen=S.getAdressen();
-    const noteCountAll=countAddressesWithNote(adressen);
+    const noteAddressSet=getResultNoteAddressSet();
+    const noteCountAll=countAddressesWithResultNote(adressen,noteAddressSet);
     const user=auth.current();
     let available=(langFilter==='with_notes')
       ?adressen.slice()
       :adressen.filter(a=>a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id));
-    available=applyHomeChipFilters(available);
+    available=applyHomeChipFilters(available,noteAddressSet);
     const targetCount=Math.max(1,Math.min(99,selectedNum));
     const fingerprint=[
       Math.round(userLoc.lat*1e5),
@@ -3071,7 +3080,7 @@ async function doSearch(force=false){
     }
     if(!available.length){
       q('#results-wrap').innerHTML=(langFilter==='with_notes')
-        ?'<div class="empty-state"><div class="big">📝</div>Keine Adresse mit Notiz im aktuellen Datenstand.<br><small>Mit Notiz gesamt: '+noteCountAll+'</small></div>'
+        ?'<div class="empty-state"><div class="big">📝</div>Keine Adresse mit Ergebnis-Notiz im aktuellen Datenstand.<br><small>Mit Ergebnis-Notiz gesamt: '+noteCountAll+'</small></div>'
         :'<div class="empty-state"><div class="big">🎉</div>Alle Adressen sind bereits erledigt!</div>';
       lastSearchFingerprint=fingerprint;
       return;
