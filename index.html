@@ -2644,6 +2644,19 @@ const db={
   },
 };
 
+function normalizeProtokollEntries(list){
+  let changed=false;
+  const normalized=(list||[]).map(entry=>{
+    if(!entry)return entry;
+    if(entry.aktion==='reaktiviert'&&String(entry.notiz??'').trim()==='Zurückgegeben'){
+      changed=true;
+      return {...entry,notiz:''};
+    }
+    return entry;
+  });
+  return {list:normalized,changed};
+}
+
 /* ── STORAGE ─────────────────────────────────────────── */
 const S = {
   KEY_ADR:'nv_adressen',KEY_LOG:'nv_protokoll',KEY_SES:'nv_session',
@@ -2656,10 +2669,19 @@ const S = {
     return JSON.parse(raw);
   },
   saveAdressen(list){localStorage.setItem(this.KEY_ADR,JSON.stringify(list));},
-  saveProtokoll(list){localStorage.setItem(this.KEY_LOG,JSON.stringify(list));},
-  getProtokoll(){return JSON.parse(localStorage.getItem(this.KEY_LOG)||'[]');},
+  saveProtokoll(list){
+    const normalized=normalizeProtokollEntries(list).list;
+    localStorage.setItem(this.KEY_LOG,JSON.stringify(normalized));
+  },
+  getProtokoll(){
+    const list=JSON.parse(localStorage.getItem(this.KEY_LOG)||'[]');
+    const {list:normalized,changed}=normalizeProtokollEntries(list);
+    if(changed)localStorage.setItem(this.KEY_LOG,JSON.stringify(normalized));
+    return normalized;
+  },
   addProtokoll(entry){
-    const log=this.getProtokoll();log.unshift(entry);
+    const cleanEntry=normalizeProtokollEntries([entry]).list[0];
+    const log=this.getProtokoll();log.unshift(cleanEntry);
     localStorage.setItem(this.KEY_LOG,JSON.stringify(log));
   },
   getSession(){
