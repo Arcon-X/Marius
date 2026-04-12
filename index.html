@@ -3307,7 +3307,7 @@ function renderSearchEmptyState(kind,noteCountAll=0){
     ?'<div class="big">🎉</div>Alle Adressen sind bereits erledigt!'
     :'<div class="big">🔍</div>Keine verfügbaren Adressen in der Nähe.';
   q('#results-wrap').innerHTML='<div class="empty-state">'+msg+
-    '<div style="margin-top:.75rem"><button class="btn-save" onclick="editDlg.openCreate()">➕ Neue Adresse anlegen</button></div></div>';
+    '<div style="margin-top:.75rem"><button class="btn-save" onclick="editDlg.openCreate()">+ Neue Adresse anlegen</button></div></div>';
 }
 
 function renderResults(list){
@@ -3690,6 +3690,7 @@ const editDlg={
         return;
       }
     }
+    let pendingGeoReview=false;
     // Geocodierung via Nominatim
     try{
       const queryStr=`${a.hnr} ${a.strasse}, ${a.plz} Wien, Austria`;
@@ -3705,26 +3706,31 @@ const editDlg={
         geo.className='edit-geo geo-ok';
         geo.textContent='\u2705 Koordinaten aktualisiert: '+a.geo_name;
       }else{
+        pendingGeoReview=true;
         geo.className='edit-geo geo-warn';
-        geo.textContent='\u26a0\ufe0f Adresse nicht gefunden \u2013 Koordinaten unver\u00e4ndert. Bitte Schreibweise pr\u00fcfen.';
+        geo.textContent='\u26a0\ufe0f Adresse nicht gefunden \u2013 es werden Default-Koordinaten gesetzt und als zu pr\u00fcfen markiert.';
       }
     }catch(e){
+      pendingGeoReview=true;
       geo.className='edit-geo geo-warn';
-      geo.textContent='\u26a0\ufe0f Geocoding-Fehler \u2013 Koordinaten unver\u00e4ndert.';
+      geo.textContent='\u26a0\ufe0f Geocoding-Fehler \u2013 es werden Default-Koordinaten gesetzt und als zu pr\u00fcfen markiert.';
     }
     if(mode==='create'&&(!Number.isFinite(a.lat)||!Number.isFinite(a.lon))){
+      pendingGeoReview=true;
+      const fbLat=Number.isFinite(userLoc?.lat)?userLoc.lat:DEFAULT_LOC.lat;
+      const fbLon=Number.isFinite(userLoc?.lon)?userLoc.lon:DEFAULT_LOC.lon;
+      a.lat=fbLat;
+      a.lon=fbLon;
+      a.geo_name='ZU PRUEFEN - Geocoding fehlgeschlagen';
       geo.className='edit-geo geo-warn';
-      geo.textContent='⚠️ Neue Adresse konnte nicht geocodiert werden und wurde nicht gespeichert.';
-      geo.classList.remove('hidden');
-      btn.disabled=false;
-      this._setModeUi();
-      return;
+      geo.textContent='⚠️ Geocoding fehlgeschlagen - mit Default-Koordinaten gespeichert (zu prüfen).';
     }
     geo.classList.remove('hidden');
     const newSnap={titel:a.titel||null,arzt_name:a.name||null,strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,sprache:a.sprache||'de',lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,website:a.website||null,verifiziert:!!a.verifiziert};
     let pOk=false;
     if(mode==='create'){
-      const created=await db.createAddress({
+      const desiredStatus=pendingGeoReview?'zu_pruefen':'verfuegbar';
+      let created=await db.createAddress({
         id:a.id,
         strasse:a.strasse,
         hausnummer:a.hnr,
@@ -3733,17 +3739,42 @@ const editDlg={
         lat:a.lat,
         lon:a.lon,
         geo_name:a.geo_name||null,
-        status:'verfuegbar',
+        status:desiredStatus,
         benutzer_id:null,
         reserviert_am:null,
         erledigt_am:null,
+        zusatz:pendingGeoReview?'ZU_PRUEFEN':null,
         titel:a.titel||null,
         arzt_name:a.name||null,
         sprache:a.sprache||'de',
         website:a.website||null,
         verifiziert:!!a.verifiziert,
-        import_batch:'manual_'+new Date().toISOString().slice(0,10)
+        import_batch:(pendingGeoReview?'manual_pending_geocode_':'manual_')+new Date().toISOString().slice(0,10)
       });
+      // Fallback, falls DB-Constraint den Status 'zu_pruefen' nicht erlaubt.
+      if(!created&&desiredStatus==='zu_pruefen'){
+        created=await db.createAddress({
+          id:a.id,
+          strasse:a.strasse,
+          hausnummer:a.hnr,
+          plz:a.plz,
+          ort:'Wien',
+          lat:a.lat,
+          lon:a.lon,
+          geo_name:a.geo_name||null,
+          status:'verfuegbar',
+          benutzer_id:null,
+          reserviert_am:null,
+          erledigt_am:null,
+          zusatz:'ZU_PRUEFEN',
+          titel:a.titel||null,
+          arzt_name:a.name||null,
+          sprache:a.sprache||'de',
+          website:a.website||null,
+          verifiziert:!!a.verifiziert,
+          import_batch:'manual_pending_geocode_'+new Date().toISOString().slice(0,10)
+        });
+      }
       pOk=!!created;
       if(pOk){
         if(created&&created.id)a.id=created.id;
