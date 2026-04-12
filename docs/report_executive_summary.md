@@ -48,7 +48,7 @@ title: "NOVUM-ZIV — Executive Summary Report"
   <div class="kpi"><h3>Scope Adressen</h3><div class="v">1.485</div></div>
   <div class="kpi"><h3>Business-Cases</h3><div class="v">5/5 PASS</div></div>
   <div class="kpi"><h3>Mobile Scan</h3><div class="v">OK</div></div>
-  <div class="kpi"><h3>Release Stand</h3><div class="v">v0.9.4-beta</div></div>
+  <div class="kpi"><h3>Release Stand</h3><div class="v">v1.0.0</div></div>
 </div>
 
 ## 1. Executive Fazit
