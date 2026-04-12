@@ -3729,8 +3729,7 @@ const editDlg={
     const newSnap={titel:a.titel||null,arzt_name:a.name||null,strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,sprache:a.sprache||'de',lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,website:a.website||null,verifiziert:!!a.verifiziert};
     let pOk=false;
     if(mode==='create'){
-      const desiredStatus=pendingGeoReview?'zu_pruefen':'verfuegbar';
-      let created=await db.createAddress({
+      const created=await db.createAddress({
         id:a.id,
         strasse:a.strasse,
         hausnummer:a.hnr,
@@ -3739,7 +3738,6 @@ const editDlg={
         lat:a.lat,
         lon:a.lon,
         geo_name:a.geo_name||null,
-        status:desiredStatus,
         benutzer_id:null,
         reserviert_am:null,
         erledigt_am:null,
@@ -3751,30 +3749,6 @@ const editDlg={
         verifiziert:!!a.verifiziert,
         import_batch:(pendingGeoReview?'manual_pending_geocode_':'manual_')+new Date().toISOString().slice(0,10)
       });
-      // Fallback, falls DB-Constraint den Status 'zu_pruefen' nicht erlaubt.
-      if(!created&&desiredStatus==='zu_pruefen'){
-        created=await db.createAddress({
-          id:a.id,
-          strasse:a.strasse,
-          hausnummer:a.hnr,
-          plz:a.plz,
-          ort:'Wien',
-          lat:a.lat,
-          lon:a.lon,
-          geo_name:a.geo_name||null,
-          status:'verfuegbar',
-          benutzer_id:null,
-          reserviert_am:null,
-          erledigt_am:null,
-          zusatz:'ZU_PRUEFEN',
-          titel:a.titel||null,
-          arzt_name:a.name||null,
-          sprache:a.sprache||'de',
-          website:a.website||null,
-          verifiziert:!!a.verifiziert,
-          import_batch:'manual_pending_geocode_'+new Date().toISOString().slice(0,10)
-        });
-      }
       pOk=!!created;
       if(pOk){
         if(created&&created.id)a.id=created.id;
