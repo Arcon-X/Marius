@@ -689,6 +689,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
       <div id="loc-limit-warn" class="loc-limit-warn hidden">⚠️ Hinweis: Bei 60+ Adressen kann die Suche spürbar langsamer werden.</div>
       <div class="lang-filter">
         <button class="lang-chip active" onclick="setLang('alle')">&#127760; Alle</button>
+        <button class="lang-chip" onclick="setLang('with_notes')">&#128221; Mit Notiz</button>
         <button class="lang-chip" onclick="setLang('pa')">&#128332; Persisch &amp; Arabisch</button>
       </div>
       <div id="results-wrap" style="margin-top:.85rem"></div>
@@ -2865,6 +2866,17 @@ function initApp(user){
 const DEFAULT_LOC={lat:48.2082,lon:16.3738,label:'Stephansplatz (Standard)'};
 let userLoc=null,selectedNum=10,langFilter='alle';
 
+function hasAddressNote(a){
+  return String(a?.notiz??'').trim().length>0;
+}
+
+function applyHomeChipFilters(rows){
+  let filtered=rows;
+  if(langFilter==='pa')filtered=filtered.filter(a=>a.sprache==='pa');
+  if(langFilter==='with_notes')filtered=filtered.filter(hasAddressNote);
+  return filtered;
+}
+
 function setResultLimit(v){
   let n=parseInt(v,10);
   if(Number.isNaN(n))n=10;
@@ -2883,7 +2895,9 @@ function setResultLimit(v){
 function setLang(v){
   langFilter=v;
   qAll('.lang-chip').forEach(b=>b.classList.toggle('active',
-    (v==='alle'&&b.textContent.includes('Alle'))||(v==='pa'&&b.textContent.includes('Persisch'))));
+    (v==='alle'&&b.textContent.includes('Alle'))
+    ||(v==='with_notes'&&b.textContent.includes('Mit Notiz'))
+    ||(v==='pa'&&b.textContent.includes('Persisch'))));
   doSearch();
 }
 
@@ -2919,7 +2933,7 @@ const loc={
       const n=((a.titel||'')+' '+(a.name||a.arzt_name||'')).toLowerCase();
       return n.includes(lower);
     });
-    if(langFilter==='pa')nameHits=nameHits.filter(a=>a.sprache==='pa');
+    nameHits=applyHomeChipFilters(nameHits);
     if(nameHits.length){
       nameHits.forEach(a=>{a.dauer_s=null;a.meter=null;a._dist=0;a._nameMatch=true;});
       toast(nameHits.length+' Treffer für "'+val+'"');
@@ -3021,10 +3035,10 @@ async function doSearch(force=false){
   try{
     const adressen=S.getAdressen();
     const user=auth.current();
-    let available=adressen.filter(a=>
-      a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id)
-    );
-    if(langFilter==='pa')available=available.filter(a=>a.sprache==='pa');
+    let available=(langFilter==='with_notes')
+      ?adressen.slice()
+      :adressen.filter(a=>a.status==='verfuegbar'||(a.status==='in_bearbeitung'&&a.benutzer_id===user.id));
+    available=applyHomeChipFilters(available);
     const targetCount=Math.max(1,Math.min(99,selectedNum));
     const fingerprint=[
       Math.round(userLoc.lat*1e5),
