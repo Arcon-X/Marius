@@ -3350,7 +3350,7 @@ async function zurueckgeben(id){
   if(!a||a.status!=='in_bearbeitung'||a.benutzer_id!==user.id){toast('Adresse kann nicht zurückgegeben werden');return;}
   const prev={status:a.status,benutzer_id:a.benutzer_id,reserviert_am:a.reserviert_am};
   const prot={id:uid(),adressen_id:id,benutzer_id:user.id,
-    aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'Zurückgegeben',
+    aktion:'reaktiviert',zeitpunkt:new Date().toISOString(),notiz:'',
     adresse:`${a.strasse} ${a.hnr}, ${a.plz}`};
   const patchOk=await db.patch(id,{status:'verfuegbar',benutzer_id:null,reserviert_am:null});
   if(!patchOk){toast('⚠️ Serverfehler – bitte Seite neu laden');return;}
