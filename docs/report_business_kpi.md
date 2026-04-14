@@ -55,7 +55,7 @@ title: "NOVUM-ZIV — Business KPI Report"
   <button class="print-btn" onclick="window.print()">PDF exportieren</button>
 </div>
 
-**Stand:** 05.04.2026  
+**Stand:** 14.04.2026  
 **Fokus:** Bezirksvergleich nach erledigten Adressen und Effizienzbewertung.
 
 <div class="note" id="live-kpi-status">Lade Live-Reportdaten ...</div>
@@ -64,7 +64,7 @@ title: "NOVUM-ZIV — Business KPI Report"
 
 - **Erledigungsquote Bezirk** = $archiviert_{bezirk} / gesamt_{bezirk}$
 - **Besuchsquote Bezirk** = $(archiviert + in\_bearbeitung)_{bezirk} / gesamt_{bezirk}$
-- **Wählt-uns-Quote Bezirk** = $waehlt\_uns_{bezirk} / besucht_{bezirk}$
+- **Positiv-Quote Bezirk** = $waehlt\_uns_{bezirk} / besucht_{bezirk}$
 - **Team-Effizienz Bezirk** = $archiviert_{bezirk} / aktive\_mitglieder_{bezirk}$
 - **Übernommen pro Benutzer** = Anzahl Protokoll-Einträge mit `aktion = uebernommen` je `benutzer_id`
 - **Zurückgegeben pro Benutzer** = Anzahl Protokoll-Einträge mit `aktion = reaktiviert` und `notiz = "Zurückgegeben"` je `benutzer_id`
@@ -98,7 +98,7 @@ Datenbasis: `adressen` + `protokoll` nach der gleichen Korrektur-/Reaktivierungs
 ## 5. Interpretation (Management-Readout)
 
 1. Top 3 Bezirke nach Erledigungsquote.
-2. Bezirke mit hoher Aktivität, aber niedriger Wählt-uns-Quote.
+2. Bezirke mit hoher Aktivität, aber niedriger Positiv-Quote.
 3. Bezirke mit hoher Restlast (Gesamt - Erledigt).
 4. Sofortmaßnahmen pro Cluster (hoch/mittel/niedrig).
 
@@ -279,7 +279,7 @@ Bei sehr kleinen Fallzahlen (z. B. n &lt; 10) immer mit Vorsicht interpretieren 
   }
 
   function renderDistrict(rows){
-    const html=['<table><thead><tr><th>Bezirk</th><th>PLZ-Basis</th><th>Gesamt</th><th>In Bearbeitung</th><th>Erledigt</th><th>Erledigungsquote</th><th>Wählt-uns</th><th>Wählt-uns-Quote</th><th>Effizienz*</th></tr></thead><tbody>'];
+    const html=['<table><thead><tr><th>Bezirk</th><th>PLZ-Basis</th><th>Gesamt</th><th>In Bearbeitung</th><th>Erledigt</th><th>Erledigungsquote</th><th>Positiv</th><th>Positiv-Quote</th><th>Effizienz*</th></tr></thead><tbody>'];
     rows.forEach(r=>{
       html.push('<tr><td>'+esc(r.name)+'</td><td>'+esc(r.plz)+'</td><td>'+fmtNum(r.total)+'</td><td>'+fmtNum(r.inBearb)+'</td><td>'+fmtNum(r.done)+'</td><td>'+esc(r.donePct)+'</td><td>'+fmtNum(r.waehltUns)+'</td><td>'+esc(r.waehltUnsPct)+'</td><td>'+esc(r.eff)+'</td></tr>');
     });

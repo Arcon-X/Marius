@@ -815,10 +815,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
     <div class="dlg-addr" id="dlg-addr-text"></div>
     <div class="dlg-options">
       <button class="dlg-opt" data-action="waehlt_uns" onclick="dlg.select(this)">
-        &#128314; Wählt uns
+        &#128314; Positiv
       </button>
       <button class="dlg-opt" data-action="waehlt_nicht" onclick="dlg.select(this)">
-        &#10060; Wählt uns nicht
+        &#10060; Negativ
       </button>
       <button class="dlg-opt" data-action="ueberlegt" onclick="dlg.select(this)">
         &#129300; Überlegt noch
@@ -3252,7 +3252,7 @@ function getArchiveLogState(log){
 
 function buildArchiveStyleCard(a,{entry,isAdmin,currentUserId,users,log}){
   const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',reaktiviert:'🔄'};
-  const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',reaktiviert:'Reaktiviert'};
+  const LABELS={waehlt_uns:'Positiv',waehlt_nicht:'Negativ',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',reaktiviert:'Reaktiviert'};
   const icon=entry?ICONS[entry.aktion]||'📋':'📋';
   const when=a.erledigt_am?new Date(a.erledigt_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'';
   const label=entry?LABELS[entry.aktion]||entry.aktion:'';
@@ -3261,7 +3261,7 @@ function buildArchiveStyleCard(a,{entry,isAdmin,currentUserId,users,log}){
   const ownerU=isAdmin&&ownerId?(users.find(x=>x.id===ownerId)):null;
   const ownerStr=ownerU?(' · 👤 '+escHtml(ownerU.name||'')):'';
   const ICONS2={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
-  const LABELS2={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
+  const LABELS2={waehlt_uns:'Positiv',waehlt_nicht:'Negativ',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
   const history=(log||[]).filter(l=>l.adressen_id===a.id).sort((x,y)=>new Date(y.zeitpunkt)-new Date(x.zeitpunkt));
   const histHtml=history.map(l=>{
     const u=(_dbUsers.find(x=>x.id===l.benutzer_id)||DEMO_USERS.find(x=>x.id===l.benutzer_id));
@@ -3933,11 +3933,11 @@ function renderArchive(){
     <div class="stat-chip chip-b"><span class="sc-icon">🏠</span><span class="sc-label">Gesamt</span><span class="sc-val">${total}</span></div>
     <div class="stat-chip chip-g"><span class="sc-icon">✅</span><span class="sc-label">Verfügbar</span><span class="sc-val">${verf}</span></div>
     <div class="stat-chip chip-y"><span class="sc-icon">📌</span><span class="sc-label">Reserviert</span><span class="sc-val">${bear}</span></div>
-    <div class="stat-chip chip-r"><span class="sc-icon">🗳️</span><span class="sc-label">Wählt uns</span><span class="sc-val">${unter}</span></div>`;
+    <div class="stat-chip chip-r"><span class="sc-icon">🗳️</span><span class="sc-label">Positiv</span><span class="sc-val">${unter}</span></div>`;
   // Ergebnis-Chart
   const chartData=[
-    {key:'waehlt_uns',icon:'🗳️',label:'Wählt uns',color:'cb-waehlt_uns'},
-    {key:'waehlt_nicht',icon:'❌',label:'Wählt nicht',color:'cb-waehlt_nicht'},
+    {key:'waehlt_uns',icon:'🗳️',label:'Positiv',color:'cb-waehlt_uns'},
+    {key:'waehlt_nicht',icon:'❌',label:'Negativ',color:'cb-waehlt_nicht'},
     {key:'ueberlegt',icon:'🤔',label:'Überlegt',color:'cb-ueberlegt'},
     {key:'kein_interesse_wahl',icon:'🚫',label:'Kein Interesse',color:'cb-kein_interesse_wahl'},
     {key:'sonstige',icon:'💬',label:'Sonstige',color:'cb-sonstige'},
@@ -3997,7 +3997,7 @@ function renderArchive(){
 function renderAdmin(){
   const adressen=S.getAdressen();const log=S.getProtokoll();
   const ICONS={waehlt_uns:'🗳️',waehlt_nicht:'❌',ueberlegt:'🤔',kein_interesse_wahl:'🚫',sonstige:'💬',uebernommen:'📌',reaktiviert:'🔄'};
-  const LABELS={waehlt_uns:'Wählt uns',waehlt_nicht:'Wählt uns nicht',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
+  const LABELS={waehlt_uns:'Positiv',waehlt_nicht:'Negativ',ueberlegt:'Überlegt noch',kein_interesse_wahl:'Kein Interesse an der Wahl',sonstige:'Sonstige Angaben',uebernommen:'Übernommen',reaktiviert:'Reaktiviert'};
   // Nur Einträge NACH der letzten Reaktivierung je Adresse anzeigen
   const lastReaktA={};
   log.forEach(l=>{if(l.aktion==='reaktiviert'){const t=new Date(l.zeitpunkt).getTime();if(!lastReaktA[l.adressen_id]||t>lastReaktA[l.adressen_id])lastReaktA[l.adressen_id]=t;}});
@@ -4042,7 +4042,7 @@ function renderAdmin(){
         <div class="team-name">${safeName}${u.rolle==='admin'?' 👑':''}</div>
         <div class="team-detail">📧 ${safeEmail}</div>
         ${u.telefon&&telHref?`<div class="team-tel">📞 <a href="tel:${telHref}">${safeTelefon}</a></div>`:''}
-        <div class="team-stats">Aktiv: ${active} · Erledigt: ${done} · Wählt uns: ${unt}</div>
+        <div class="team-stats">Aktiv: ${active} · Erledigt: ${done} · Positiv: ${unt}</div>
       </div>
       <div class="team-actions">
         <button class="team-btn" onclick="teamEdit('${u.id}')">✏️</button>

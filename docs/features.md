@@ -34,7 +34,7 @@ title: "NOVUM-ZIV — Feature-Dokumentation"
   </div>
 </div>
 
-> **Stand:** 05.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
+> **Stand:** 14.04.2026 · **Projekt:** BNZ Bündnis NOVUM–ZIV · Zahnärztekammerwahl Wien 2026
 
 ---
 
@@ -88,8 +88,8 @@ Nach dem Besuch wählt der/die Kandidat:in eines von fünf Ergebnissen:
 
 | Ergebnis | Icon | Beschreibung |
 |---|---|---|
-| **Wählt uns** | 🗳️ | Unterschrift erhalten |
-| **Wählt uns nicht** | ❌ | Abgelehnt |
+| **Positiv** | 🗳️ | Unterschrift erhalten |
+| **Negativ** | ❌ | Abgelehnt |
 | **Überlegt noch** | 🤔 | Noch unentschieden |
 | **Kein Interesse an der Wahl** | 🚫 | Will nicht wählen |
 | **Sonstige** | 💬 | Freitextnotiz möglich |
@@ -134,7 +134,7 @@ Jede Adresse kann über ⚙️ bearbeitet werden:
 | 🏠 Gesamt | Gesamtzahl aller Adressen |
 | ✅ Verfügbar | Noch freie Adressen |
 | 📌 Reserviert | Aktuell in Bearbeitung |
-| 🗳️ Wählt uns | Unterschriften gesammelt |
+| 🗳️ Positiv | Unterschriften gesammelt |
 
 ### Ergebnis-Chart
 - Horizontales Balkendiagramm mit allen 5 Ergebnis-Kategorien.
