@@ -1,0 +1,274 @@
+[
+  {
+    "parsed": {
+      "row_num": 40,
+      "titel": "Dr.med.dent.",
+      "vorname": "Melania",
+      "nachname": "Albert",
+      "arzt_name": "Melania Albert",
+      "raw_adresse": "Polgarstraße 13E/21 RH",
+      "strasse": "Polgarstraße 13E/21",
+      "hausnummer": "RH",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "polgarstraße 13e/21",
+    "retry_hausnummer": "RH",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 191,
+      "titel": "DDr.",
+      "vorname": "Ioana",
+      "nachname": "Brana",
+      "arzt_name": "Ioana Brana",
+      "raw_adresse": "Pernerstorfer Gasse 5/1/7",
+      "strasse": "Pernerstorfer Gasse",
+      "hausnummer": "5",
+      "zusatz": "1/7",
+      "plz": ""
+    },
+    "retry_street": "pernerstorfer gasse",
+    "retry_hausnummer": "5",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 257,
+      "titel": "DDr.",
+      "vorname": "Cornelia",
+      "nachname": "Czembirek",
+      "arzt_name": "Cornelia Czembirek",
+      "raw_adresse": "Eduard-Kittenberger-Gasse 34 Haus1",
+      "strasse": "Eduard-Kittenberger-Gasse 34",
+      "hausnummer": "Haus1",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "eduard-kittenberger-gasse 34",
+    "retry_hausnummer": "Haus1",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 631,
+      "titel": "ZÄ",
+      "vorname": "Emina",
+      "nachname": "Huskic",
+      "arzt_name": "Emina Huskic",
+      "raw_adresse": "Siebeneichngasse 2/24",
+      "strasse": "Siebeneichngasse",
+      "hausnummer": "2",
+      "zusatz": "24",
+      "plz": ""
+    },
+    "retry_street": "siebeneichngasse",
+    "retry_hausnummer": "2",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 667,
+      "titel": "Prim. Dr.",
+      "vorname": "Philip",
+      "nachname": "Jesch",
+      "arzt_name": "Philip Jesch",
+      "raw_adresse": "Hertha Firnbergstraße 10/1/1",
+      "strasse": "Hertha Firnbergstraße",
+      "hausnummer": "10",
+      "zusatz": "1/1",
+      "plz": ""
+    },
+    "retry_street": "hertha firnbergstraße",
+    "retry_hausnummer": "10",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 677,
+      "titel": "Dr.-medic stom",
+      "vorname": "Mihai",
+      "nachname": "Josan",
+      "arzt_name": "Mihai Josan",
+      "raw_adresse": "Rennweg 54/1/ Top 17",
+      "strasse": "Rennweg 54/1/ Top",
+      "hausnummer": "17",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "rennweg 54/1",
+    "retry_hausnummer": "17",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 773,
+      "titel": "Dr.",
+      "vorname": "Margit",
+      "nachname": "Kosma",
+      "arzt_name": "Margit Kosma",
+      "raw_adresse": "Schaumburger Gasse 16/10",
+      "strasse": "Schaumburger Gasse",
+      "hausnummer": "16",
+      "zusatz": "10",
+      "plz": ""
+    },
+    "retry_street": "schaumburger gasse",
+    "retry_hausnummer": "16",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 811,
+      "titel": "MR Dr.",
+      "vorname": "Stephan",
+      "nachname": "Kucsko",
+      "arzt_name": "Stephan Kucsko",
+      "raw_adresse": "Nothargasse 8",
+      "strasse": "Nothargasse",
+      "hausnummer": "8",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "nothargasse",
+    "retry_hausnummer": "8",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1045,
+      "titel": "Dr.med.dent.",
+      "vorname": "Letizia",
+      "nachname": "Nemeth BSc",
+      "arzt_name": "Letizia Nemeth BSc",
+      "raw_adresse": "Gaswerstraße 5/64",
+      "strasse": "Gaswerstraße",
+      "hausnummer": "5",
+      "zusatz": "64",
+      "plz": ""
+    },
+    "retry_street": "gaswerstraße",
+    "retry_hausnummer": "5",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1058,
+      "titel": "Dr.med.dent.",
+      "vorname": "Lena",
+      "nachname": "Niebauer",
+      "arzt_name": "Lena Niebauer",
+      "raw_adresse": "Gobersgasse 11/2",
+      "strasse": "Gobersgasse",
+      "hausnummer": "11",
+      "zusatz": "2",
+      "plz": ""
+    },
+    "retry_street": "gobersgasse",
+    "retry_hausnummer": "11",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1163,
+      "titel": "Dr.",
+      "vorname": "Raziye Sibel",
+      "nachname": "Polat",
+      "arzt_name": "Raziye Sibel Polat",
+      "raw_adresse": "Stadlauer Straße 62/5/17 MED 22",
+      "strasse": "Stadlauer Straße 62/5/17 MED",
+      "hausnummer": "22",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "stadlauer straße 62/5/17",
+    "retry_hausnummer": "22",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1328,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maximilian",
+      "nachname": "Schalberger BScMed",
+      "arzt_name": "Maximilian Schalberger BScMed",
+      "raw_adresse": "Lasallestraße 40/6/26",
+      "strasse": "Lasallestraße",
+      "hausnummer": "40",
+      "zusatz": "6/26",
+      "plz": ""
+    },
+    "retry_street": "lasallestraße",
+    "retry_hausnummer": "40",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1457,
+      "titel": "Dr.",
+      "vorname": "Karin",
+      "nachname": "Slowak-Hajek",
+      "arzt_name": "Karin Slowak-Hajek",
+      "raw_adresse": "Schöllerhofgasse 5/3",
+      "strasse": "Schöllerhofgasse",
+      "hausnummer": "5",
+      "zusatz": "3",
+      "plz": ""
+    },
+    "retry_street": "schöllerhofgasse",
+    "retry_hausnummer": "5",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1460,
+      "titel": "Dr.med.dent.",
+      "vorname": "Veronika",
+      "nachname": "Smarik Krendl",
+      "arzt_name": "Veronika Smarik Krendl",
+      "raw_adresse": "Wehlegasse 5/1",
+      "strasse": "Wehlegasse",
+      "hausnummer": "5",
+      "zusatz": "1",
+      "plz": ""
+    },
+    "retry_street": "wehlegasse",
+    "retry_hausnummer": "5",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1660,
+      "titel": "DDr.",
+      "vorname": "Stephen",
+      "nachname": "Weinländer",
+      "arzt_name": "Stephen Weinländer",
+      "raw_adresse": "Trauttmannsdorffgasse 52/3-4",
+      "strasse": "Trauttmannsdorffgasse",
+      "hausnummer": "52",
+      "zusatz": "3-4",
+      "plz": ""
+    },
+    "retry_street": "trauttmannsdorffgasse",
+    "retry_hausnummer": "52",
+    "geocode_error": "not_found"
+  },
+  {
+    "parsed": {
+      "row_num": 1677,
+      "titel": "Dr.med.dent.",
+      "vorname": "Olivia",
+      "nachname": "Winkler",
+      "arzt_name": "Olivia Winkler",
+      "raw_adresse": "Widerhofgasse 5/11",
+      "strasse": "Widerhofgasse",
+      "hausnummer": "5",
+      "zusatz": "11",
+      "plz": ""
+    },
+    "retry_street": "widerhofgasse",
+    "retry_hausnummer": "5",
+    "geocode_error": "not_found"
+  }
+]

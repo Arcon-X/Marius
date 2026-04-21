@@ -40,6 +40,7 @@ Dieses Dokument ist aus den aktuellen Setup-/Migrationsskripten abgeleitet:
 - [server/add_sprache.sh](../server/add_sprache.sh "Migration fuer Sprachfeld und zugehoerige Rechte")
 - [server/add_verification.sh](../server/add_verification.sh "Migration fuer verifiziert/website Felder")
 - [server/add_protokoll_bearbeitet.sh](../server/add_protokoll_bearbeitet.sh "Erweitert Protokoll-Aktionsmenge um bearbeitet")
+- [server/add_duplicate_markierungen.sh](../server/add_duplicate_markierungen.sh "Migration fuer Duplikat-Markierungen mit sicheren RPCs")
 - [server/fix_settings_functions.sh](../server/fix_settings_functions.sh "Korrekturen an Settings- und Admin-Funktionen")
 
 Falls es Abweichungen gibt, gelten die SQL-Definitionen in diesen Skripten.
@@ -138,12 +139,45 @@ Indizes:
 - issues_status_idx
 - issues_erstellt_am_idx (DESC)
 
+### 3.5 duplicate_markierungen
+
+Zweck: Revisionssichere Ablage von als Duplikat markierten Adressen inklusive Snapshot und Ruecksetz-Historie.
+
+Spalten:
+- id UUID PRIMARY KEY DEFAULT uuid_generate_v4()
+- adressen_id UUID NOT NULL REFERENCES adressen(id) ON DELETE CASCADE
+- duplicate_group TEXT
+- grund TEXT
+- status_beim_markieren TEXT NOT NULL
+- plz TEXT
+- ort TEXT
+- strasse TEXT
+- hausnummer TEXT
+- zusatz TEXT
+- lat FLOAT
+- lon FLOAT
+- titel TEXT
+- arzt_name TEXT
+- import_batch TEXT
+- snapshot JSONB NOT NULL DEFAULT '{}'::jsonb
+- markiert_von UUID REFERENCES benutzer(id)
+- markiert_am TIMESTAMPTZ NOT NULL DEFAULT NOW()
+- restored_von UUID REFERENCES benutzer(id)
+- restored_at TIMESTAMPTZ
+
+Indizes:
+- duplicate_markierungen_adresse_idx
+- duplicate_markierungen_markiert_idx (DESC)
+- duplicate_markierungen_active_uniq (UNIQUE PARTIAL auf aktive Markierungen)
+
 ## 4. Relationships
 
 - benutzer (1) -> (N) adressen ueber adressen.benutzer_id
 - benutzer (1) -> (N) protokoll ueber protokoll.benutzer_id
 - adressen (1) -> (N) protokoll ueber protokoll.adressen_id
 - benutzer (1) -> (N) api.issues ueber api.issues.erstellt_von
+- adressen (1) -> (N) duplicate_markierungen ueber duplicate_markierungen.adressen_id
+- benutzer (1) -> (N) duplicate_markierungen ueber markiert_von/restored_von
 
 ## 5. API Projection (PostgREST)
 
@@ -161,6 +195,10 @@ Indizes:
   - Projektion aus benutzer ohne passwort_hash
   - Grants: SELECT fuer authenticated
 
+- api.duplicate_markierungen
+  - Projektion aus duplicate_markierungen
+  - Grants: SELECT fuer authenticated
+
 ### 5.2 RPCs
 
 - api.login(email TEXT, passwort TEXT) RETURNS JSON
@@ -171,6 +209,19 @@ Indizes:
 - api.naechste_adressen(user_lat FLOAT, user_lon FLOAT, anzahl INT DEFAULT 50)
   - PostGIS KNN auf freie Adressen (status='verfuegbar')
   - liefert Distanz (luftlinie_m)
+  - Grant EXECUTE fuer authenticated
+
+- api.mark_duplicate_adresse(p_adressen_id UUID, p_markiert_von UUID, p_duplicate_group TEXT, p_grund TEXT)
+  - markiert nur sichere Kandidaten als Duplikat
+  - Sicherheitsregeln: nie reserviert, nie mit Ergebnis im Protokoll
+  - kopiert Datensatz-Snapshot nach duplicate_markierungen
+  - setzt Originaladresse auf status='archiviert'
+  - Grant EXECUTE fuer authenticated
+
+- api.restore_duplicate_adresse(p_markierung_id UUID, p_restored_von UUID)
+  - setzt aktive Duplikat-Markierung zurueck
+  - setzt Originaladresse auf status='verfuegbar'
+  - Sicherheitsregeln: kein Ruecksetzen bei reservierten oder bereits ergebnisbehafteten Adressen
   - Grant EXECUTE fuer authenticated
 
 ## 6. Security Notes

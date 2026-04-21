@@ -85,6 +85,7 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
     <a href="/docs/features.html" title="Produktfunktionen und User-Flow">Features</a>
     <a href="/docs/technik.html" title="Technische Architektur, Betrieb und Sicherheit">Technik</a>
     <a href="/docs/db_model.html" title="Datenmodell, Views, RPCs und Constraints">DB Model</a>
+    <a href="/docs/duplicate_markierungen.html" title="Live-Tabelle aller Duplikat-Markierungen mit Status">Duplicate Marks</a>
     <a href="/docs/import_report.html" title="Datenherkunft, Geocoding und Qualitaet">Import Report</a>
     <a href="/docs/domain.html" title="Domain, TLS und Migrationsbetrieb">Domain</a>
     <a href="/docs/report_executive_summary.html" title="Management-Zusammenfassung fuer Abschluss">Executive Summary</a>
@@ -97,10 +98,11 @@ title: "NOVUM-ZIV — Dokumentations-Hub"
 1. [Features](/docs/features.html "Produktablauf vom Suchen bis zum Archiv")
 2. [Technik](/docs/technik.html "Architektur, Sicherheit und Rechtemodell")
 3. [DB Model](/docs/db_model.html "Tabellen, Beziehungen, Views und RPCs")
-4. [Import Report](/docs/import_report.html "Datenherkunft und Geocoding-Qualitaet")
-5. [Domain](/docs/domain.html "Deployment, Domainwechsel und Servermigration")
-6. [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Steering und Stakeholder")
-7. [Business KPI](/docs/report_business_kpi.html "Kennzahlen, Formeln und Bezirksvergleich")
+4. [Duplicate Marks](/docs/duplicate_markierungen.html "Live-Tabelle fuer markierte und zurueckgesetzte Duplikate")
+5. [Import Report](/docs/import_report.html "Datenherkunft und Geocoding-Qualitaet")
+6. [Domain](/docs/domain.html "Deployment, Domainwechsel und Servermigration")
+7. [Executive Summary](/docs/report_executive_summary.html "Abschlusssicht fuer Steering und Stakeholder")
+8. [Business KPI](/docs/report_business_kpi.html "Kennzahlen, Formeln und Bezirksvergleich")
 
 Wenn du stattdessen nur eine schnelle Management-Sicht brauchst, starte direkt mit [Executive Summary](/docs/report_executive_summary.html "Kurzfazit und Abschlussentscheidungen") und gehe danach in [Business KPI](/docs/report_business_kpi.html "Detailmetriken und Interpretationsregeln").
 

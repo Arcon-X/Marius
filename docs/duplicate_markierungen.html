@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Duplikat-Markierungen</title>
+  <style>
+    body{font-family:Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#1f2937;margin:0;padding:1rem}
+    .wrap{max-width:1100px;margin:0 auto}
+    .head{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap}
+    .title{font-size:1.4rem;font-weight:700}
+    .sub{color:#6b7280;font-size:.9rem}
+    .btn{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:.45rem .7rem;cursor:pointer}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:.8rem;margin-top:.8rem}
+    table{width:100%;border-collapse:collapse;font-size:.88rem}
+    th,td{padding:.48rem .45rem;border-bottom:1px solid #eef2f7;text-align:left;vertical-align:top}
+    th{background:#f8fafc;font-weight:700;position:sticky;top:0}
+    .pill{display:inline-block;border-radius:999px;padding:.1rem .5rem;font-size:.72rem;font-weight:700}
+    .pill-active{background:#fee2e2;color:#991b1b}
+    .pill-restored{background:#dcfce7;color:#166534}
+    .muted{color:#6b7280}
+    .error{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:8px;padding:.55rem;margin-top:.6rem}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="title">Duplikat-Markierungen</div>
+        <div class="sub">Live-Ansicht aus /api/duplicate_markierungen</div>
+      </div>
+      <button class="btn" onclick="loadData()">Neu laden</button>
+    </div>
+    <div id="meta" class="sub" style="margin-top:.6rem"></div>
+    <div id="err"></div>
+    <div class="card">
+      <div style="overflow:auto;max-height:75vh">
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Adresse</th>
+              <th>Name</th>
+              <th>Markiert von</th>
+              <th>Markiert am</th>
+              <th>Zurückgesetzt von</th>
+              <th>Zurückgesetzt am</th>
+              <th>Grund</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+    function fmt(ts){
+      if(!ts)return '';
+      const d=new Date(ts);
+      if(Number.isNaN(d.getTime()))return String(ts);
+      return d.toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    }
+    function authHeader(){
+      try{
+        const raw=localStorage.getItem('nv_docs_token');
+        if(!raw)return {};
+        const parsed=JSON.parse(raw);
+        if(!parsed||!parsed.token)return {};
+        if(parsed.exp&&Date.now()>parsed.exp)return {};
+        return {Authorization:'Bearer '+parsed.token};
+      }catch(_e){return {};}
+    }
+    async function loadData(){
+      const err=document.getElementById('err');
+      const rowsEl=document.getElementById('rows');
+      const meta=document.getElementById('meta');
+      err.innerHTML='';
+      rowsEl.innerHTML='<tr><td colspan="8" class="muted">Lade ...</td></tr>';
+      try{
+        const h=authHeader();
+        const [mr,ur]=await Promise.all([
+          fetch('/api/duplicate_markierungen?select=*', {headers:h}),
+          fetch('/api/benutzer?select=id,name', {headers:h})
+        ]);
+        if(!mr.ok)throw new Error('HTTP '+mr.status+' beim Laden der Duplikat-Tabelle');
+        const marks=await mr.json();
+        const users=ur.ok?await ur.json():[];
+        const nameById={};
+        users.forEach(u=>{nameById[u.id]=u.name;});
+        meta.textContent=`Einträge: ${marks.length}`;
+        if(!marks.length){
+          rowsEl.innerHTML='<tr><td colspan="8" class="muted">Keine Markierungen vorhanden.</td></tr>';
+          return;
+        }
+        rowsEl.innerHTML=marks.map(m=>{
+          const active=!m.restored_at;
+          const addr=esc(`${m.strasse||''} ${m.hausnummer||''}, ${m.plz||''} ${m.ort||'Wien'}`.trim());
+          const name=esc([m.titel,m.arzt_name].filter(Boolean).join(' '));
+          const markedBy=esc(nameById[m.markiert_von]||m.markiert_von||'');
+          const restoredBy=esc(nameById[m.restored_von]||m.restored_von||'');
+          return `<tr>
+            <td><span class="pill ${active?'pill-active':'pill-restored'}">${active?'aktiv':'zurueckgesetzt'}</span></td>
+            <td>${addr}</td>
+            <td>${name}</td>
+            <td>${markedBy}</td>
+            <td>${esc(fmt(m.markiert_am))}</td>
+            <td>${restoredBy}</td>
+            <td>${esc(fmt(m.restored_at))}</td>
+            <td>${esc(m.grund||'')}</td>
+          </tr>`;
+        }).join('');
+      }catch(e){
+        rowsEl.innerHTML='';
+        err.innerHTML='<div class="error">'+esc(e.message||e)+'</div>';
+      }
+    }
+    loadData();
+  </script>
+</body>
+</html>

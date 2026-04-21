@@ -1,0 +1,6557 @@
+[
+  {
+    "parsed": {
+      "row_num": 66,
+      "titel": "Dr.med.dent.",
+      "vorname": "Sarra",
+      "nachname": "Altner",
+      "arzt_name": "Sarra Altner",
+      "raw_adresse": "Rosinagsse 8/13",
+      "strasse": "Rosinagsse",
+      "hausnummer": "8",
+      "zusatz": "13",
+      "plz": ""
+    },
+    "retry_street": "rosinagasse",
+    "retry_hausnummer": "8",
+    "lat": 48.194533,
+    "lon": 16.3321756,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 119,
+      "titel": "Dr.med.dent.",
+      "vorname": "Szauszan Natalia",
+      "nachname": "Barrak",
+      "arzt_name": "Szauszan Natalia Barrak",
+      "raw_adresse": "Weimarar Straße 51/2/10",
+      "strasse": "Weimarar Straße",
+      "hausnummer": "51",
+      "zusatz": "2/10",
+      "plz": ""
+    },
+    "retry_street": "weimarer straße",
+    "retry_hausnummer": "51",
+    "lat": 48.23154,
+    "lon": 16.3431292,
+    "geo_name": "51"
+  },
+  {
+    "parsed": {
+      "row_num": 270,
+      "titel": "DI medic dent.",
+      "vorname": "Robert",
+      "nachname": "Deak M.Sc.",
+      "arzt_name": "Robert Deak M.Sc.",
+      "raw_adresse": "Karl-Popper-Straße 8/2. OG/Top 204",
+      "strasse": "Karl-Popper-Straße 8/2. OG/Top",
+      "hausnummer": "204",
+      "zusatz": "",
+      "plz": "1100"
+    },
+    "retry_street": "karl-popper-straße 8/2.",
+    "retry_hausnummer": "204",
+    "lat": 48.1857758,
+    "lon": 16.3801861,
+    "geo_name": "Dr. Robert Deak | Zahn-Implantat-Zentrum Wien"
+  },
+  {
+    "parsed": {
+      "row_num": 325,
+      "titel": "DDr.",
+      "vorname": "Christina",
+      "nachname": "Eder-Czembirek",
+      "arzt_name": "Christina Eder-Czembirek",
+      "raw_adresse": "Eduard-Kittenberger-Gasse 34 Haus 28",
+      "strasse": "Eduard-Kittenberger-Gasse 34 Haus",
+      "hausnummer": "28",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "eduard-kittenberger-gasse 34",
+    "retry_hausnummer": "28",
+    "lat": 48.1470992,
+    "lon": 16.3038123,
+    "geo_name": "Eduard-Kittenberger-Gasse"
+  },
+  {
+    "parsed": {
+      "row_num": 330,
+      "titel": "DDr.",
+      "vorname": "Gabriela",
+      "nachname": "Eisenmenger",
+      "arzt_name": "Gabriela Eisenmenger",
+      "raw_adresse": "Billrothstraße 49a/Top 6",
+      "strasse": "Billrothstraße 49a/Top",
+      "hausnummer": "6",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "billrothstraße 49a",
+    "retry_hausnummer": "6",
+    "lat": 48.2391918,
+    "lon": 16.3492617,
+    "geo_name": "Billrothstraße"
+  },
+  {
+    "parsed": {
+      "row_num": 377,
+      "titel": "Dr.",
+      "vorname": "Theresa",
+      "nachname": "Feldbacher BScMed",
+      "arzt_name": "Theresa Feldbacher BScMed",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 411,
+      "titel": "Dr.me.dent.",
+      "vorname": "Nikolaus",
+      "nachname": "Fuchs",
+      "arzt_name": "Nikolaus Fuchs",
+      "raw_adresse": "Fred-Zinnemannplatz 4/Shop 3.03",
+      "strasse": "Fred-Zinnemannplatz 4/Shop",
+      "hausnummer": "3.03",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "fred-zinnemannplatz 4",
+    "retry_hausnummer": "3",
+    "lat": 48.1890909,
+    "lon": 16.3985077,
+    "geo_name": "dm"
+  },
+  {
+    "parsed": {
+      "row_num": 459,
+      "titel": "MR Dr.",
+      "vorname": "Walter",
+      "nachname": "Geyer",
+      "arzt_name": "Walter Geyer",
+      "raw_adresse": "Costenblegasse 7",
+      "strasse": "Costenblegasse",
+      "hausnummer": "7",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "costenoblegasse",
+    "retry_hausnummer": "7",
+    "lat": 48.1874196,
+    "lon": 16.2712766,
+    "geo_name": "7"
+  },
+  {
+    "parsed": {
+      "row_num": 622,
+      "titel": "Dr.",
+      "vorname": "Klemen",
+      "nachname": "Horvat Menih",
+      "arzt_name": "Klemen Horvat Menih",
+      "raw_adresse": "Schottenfeldgasse 59/OG 4",
+      "strasse": "Schottenfeldgasse 59/OG",
+      "hausnummer": "4",
+      "zusatz": "",
+      "plz": "1070"
+    },
+    "retry_street": "schottenfeldgasse 59",
+    "retry_hausnummer": "4",
+    "lat": 48.1986408,
+    "lon": 16.3433785,
+    "geo_name": "Schottenfeldgasse"
+  },
+  {
+    "parsed": {
+      "row_num": 714,
+      "titel": "Dr.med.dent.",
+      "vorname": "Nikolai",
+      "nachname": "Keilmann",
+      "arzt_name": "Nikolai Keilmann",
+      "raw_adresse": "Rechte Wienzeile 227/36",
+      "strasse": "Rechte Wienzeile",
+      "hausnummer": "227",
+      "zusatz": "36",
+      "plz": ""
+    },
+    "retry_street": "rechte wienzeile",
+    "retry_hausnummer": "227",
+    "lat": 48.1839598,
+    "lon": 16.3252218,
+    "geo_name": "227"
+  },
+  {
+    "parsed": {
+      "row_num": 716,
+      "titel": "Dr.med.dent.",
+      "vorname": "Kurt",
+      "nachname": "Kernstock",
+      "arzt_name": "Kurt Kernstock",
+      "raw_adresse": "Großbauerstraße 32",
+      "strasse": "Großbauerstraße",
+      "hausnummer": "32",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "großbauerstraße",
+    "retry_hausnummer": "32",
+    "lat": 48.2811834,
+    "lon": 16.4161578,
+    "geo_name": "32"
+  },
+  {
+    "parsed": {
+      "row_num": 717,
+      "titel": "DDr.",
+      "vorname": "David-Darius",
+      "nachname": "Kerschbaumer",
+      "arzt_name": "David-Darius Kerschbaumer",
+      "raw_adresse": "Hahngasse 11/2/19",
+      "strasse": "Hahngasse",
+      "hausnummer": "11",
+      "zusatz": "2/19",
+      "plz": ""
+    },
+    "retry_street": "hahngasse",
+    "retry_hausnummer": "11",
+    "lat": 48.2200466,
+    "lon": 16.3654573,
+    "geo_name": "11"
+  },
+  {
+    "parsed": {
+      "row_num": 720,
+      "titel": "Dr.",
+      "vorname": "Sarah",
+      "nachname": "Khater MSc",
+      "arzt_name": "Sarah Khater MSc",
+      "raw_adresse": "Max-Winter-Platz 21/8",
+      "strasse": "Max-Winter-Platz",
+      "hausnummer": "21",
+      "zusatz": "8",
+      "plz": "1020"
+    },
+    "retry_street": "max-winter-platz",
+    "retry_hausnummer": "21",
+    "lat": 48.2193137,
+    "lon": 16.3997317,
+    "geo_name": "21"
+  },
+  {
+    "parsed": {
+      "row_num": 721,
+      "titel": "Dr.",
+      "vorname": "Elke Verena",
+      "nachname": "Kilbertus",
+      "arzt_name": "Elke Verena Kilbertus",
+      "raw_adresse": "Wurzbachgasse 20/3/6",
+      "strasse": "Wurzbachgasse",
+      "hausnummer": "20",
+      "zusatz": "3/6",
+      "plz": "1150"
+    },
+    "retry_street": "wurzbachgasse",
+    "retry_hausnummer": "20",
+    "lat": 48.2035779,
+    "lon": 16.335942,
+    "geo_name": "20"
+  },
+  {
+    "parsed": {
+      "row_num": 723,
+      "titel": "DDr.",
+      "vorname": "Nicole",
+      "nachname": "Kinastberger",
+      "arzt_name": "Nicole Kinastberger",
+      "raw_adresse": "Pius-Parsch-Platz 1/76",
+      "strasse": "Pius-Parsch-Platz",
+      "hausnummer": "1",
+      "zusatz": "76",
+      "plz": "1210"
+    },
+    "retry_street": "pius-parsch-platz",
+    "retry_hausnummer": "1",
+    "lat": 48.2583075,
+    "lon": 16.3990152,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 724,
+      "titel": "dr. med. dent.",
+      "vorname": "Zoltan",
+      "nachname": "Kincses M.Sc.",
+      "arzt_name": "Zoltan Kincses M.Sc.",
+      "raw_adresse": "Aßmayergasse 54",
+      "strasse": "Aßmayergasse",
+      "hausnummer": "54",
+      "zusatz": "",
+      "plz": "1120"
+    },
+    "retry_street": "aßmayergasse",
+    "retry_hausnummer": "54",
+    "lat": 48.1783701,
+    "lon": 16.3377085,
+    "geo_name": "54"
+  },
+  {
+    "parsed": {
+      "row_num": 726,
+      "titel": "Dr.med.dent.",
+      "vorname": "Johannes",
+      "nachname": "Kirchner",
+      "arzt_name": "Johannes Kirchner",
+      "raw_adresse": "Gschwandnergasse 4-6/23",
+      "strasse": "Gschwandnergasse",
+      "hausnummer": "4-6",
+      "zusatz": "23",
+      "plz": ""
+    },
+    "retry_street": "gschwandnergasse",
+    "retry_hausnummer": "4",
+    "lat": 48.2156551,
+    "lon": 16.3243358,
+    "geo_name": "4-6"
+  },
+  {
+    "parsed": {
+      "row_num": 727,
+      "titel": "Dr.",
+      "vorname": "Maria Theresia",
+      "nachname": "Kirschner MSc",
+      "arzt_name": "Maria Theresia Kirschner MSc",
+      "raw_adresse": "Lazarettgasse 3",
+      "strasse": "Lazarettgasse",
+      "hausnummer": "3",
+      "zusatz": "",
+      "plz": "1090"
+    },
+    "retry_street": "lazarettgasse",
+    "retry_hausnummer": "3",
+    "lat": 48.2182376,
+    "lon": 16.350947,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 730,
+      "titel": "Dr.",
+      "vorname": "Elena Teresa",
+      "nachname": "Kittl-Stampfer",
+      "arzt_name": "Elena Teresa Kittl-Stampfer",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 734,
+      "titel": "MR Dr.",
+      "vorname": "Rainer",
+      "nachname": "Klaus",
+      "arzt_name": "Rainer Klaus",
+      "raw_adresse": "Pfeilgasse 18/24",
+      "strasse": "Pfeilgasse",
+      "hausnummer": "18",
+      "zusatz": "24",
+      "plz": ""
+    },
+    "retry_street": "pfeilgasse",
+    "retry_hausnummer": "18",
+    "lat": 48.2087677,
+    "lon": 16.3459263,
+    "geo_name": "18"
+  },
+  {
+    "parsed": {
+      "row_num": 739,
+      "titel": "Dr.med.dent.",
+      "vorname": "Andrej",
+      "nachname": "Klimscha",
+      "arzt_name": "Andrej Klimscha",
+      "raw_adresse": "Thurngasse 15A 14",
+      "strasse": "Thurngasse 15A",
+      "hausnummer": "14",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "thurngasse 15a",
+    "retry_hausnummer": "14",
+    "lat": 48.218897,
+    "lon": 16.3603076,
+    "geo_name": "Thurngasse"
+  },
+  {
+    "parsed": {
+      "row_num": 740,
+      "titel": "DDr.",
+      "vorname": "Johannes",
+      "nachname": "Klimscha M.Sc.",
+      "arzt_name": "Johannes Klimscha M.Sc.",
+      "raw_adresse": "Dorotheergasse 12/15",
+      "strasse": "Dorotheergasse",
+      "hausnummer": "12",
+      "zusatz": "15",
+      "plz": "1010"
+    },
+    "retry_street": "dorotheergasse",
+    "retry_hausnummer": "12",
+    "lat": 48.2073755,
+    "lon": 16.3690686,
+    "geo_name": "Palais Gatterburg"
+  },
+  {
+    "parsed": {
+      "row_num": 742,
+      "titel": "Dr.",
+      "vorname": "Philipp",
+      "nachname": "Klose BScMed",
+      "arzt_name": "Philipp Klose BScMed",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 746,
+      "titel": "DDr.",
+      "vorname": "Wolf Dietrich",
+      "nachname": "Kluger",
+      "arzt_name": "Wolf Dietrich Kluger",
+      "raw_adresse": "Pötzleinsdorfer Straße 83",
+      "strasse": "Pötzleinsdorfer Straße",
+      "hausnummer": "83",
+      "zusatz": "",
+      "plz": "1180"
+    },
+    "retry_street": "pötzleinsdorfer straße",
+    "retry_hausnummer": "83",
+    "lat": 48.2425903,
+    "lon": 16.3085104,
+    "geo_name": "83"
+  },
+  {
+    "parsed": {
+      "row_num": 750,
+      "titel": "Dr.med.dent.",
+      "vorname": "Jacqueline",
+      "nachname": "Knoll",
+      "arzt_name": "Jacqueline Knoll",
+      "raw_adresse": "Schweidlgasse 14/1/11",
+      "strasse": "Schweidlgasse",
+      "hausnummer": "14",
+      "zusatz": "1/11",
+      "plz": ""
+    },
+    "retry_street": "schweidlgasse",
+    "retry_hausnummer": "14",
+    "lat": 48.2257924,
+    "lon": 16.3878596,
+    "geo_name": "14-16"
+  },
+  {
+    "parsed": {
+      "row_num": 751,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maximilian",
+      "nachname": "Knoll",
+      "arzt_name": "Maximilian Knoll",
+      "raw_adresse": "Daungasse 1/19",
+      "strasse": "Daungasse",
+      "hausnummer": "1",
+      "zusatz": "19",
+      "plz": ""
+    },
+    "retry_street": "daungasse",
+    "retry_hausnummer": "1",
+    "lat": 48.2133511,
+    "lon": 16.3471605,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 755,
+      "titel": "Dr.",
+      "vorname": "Luca",
+      "nachname": "Kobisch BScMed",
+      "arzt_name": "Luca Kobisch BScMed",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 756,
+      "titel": "Dr.med.dent.",
+      "vorname": "Dorothea",
+      "nachname": "Koblischek",
+      "arzt_name": "Dorothea Koblischek",
+      "raw_adresse": "Gerasdorfer Straße 61/43/8",
+      "strasse": "Gerasdorfer Straße",
+      "hausnummer": "61",
+      "zusatz": "43/8",
+      "plz": ""
+    },
+    "retry_street": "gerasdorfer straße",
+    "retry_hausnummer": "61",
+    "lat": 48.2881517,
+    "lon": 16.4230005,
+    "geo_name": "61"
+  },
+  {
+    "parsed": {
+      "row_num": 759,
+      "titel": "DDr.",
+      "vorname": "Alexander",
+      "nachname": "Köffler",
+      "arzt_name": "Alexander Köffler",
+      "raw_adresse": "Am Kaisermühlendamm 87/3/5",
+      "strasse": "Am Kaisermühlendamm",
+      "hausnummer": "87",
+      "zusatz": "3/5",
+      "plz": ""
+    },
+    "retry_street": "am kaisermühlendamm",
+    "retry_hausnummer": "87",
+    "lat": 48.2237577,
+    "lon": 16.4234555,
+    "geo_name": "87"
+  },
+  {
+    "parsed": {
+      "row_num": 760,
+      "titel": "Dr.",
+      "vorname": "Sophie Livia",
+      "nachname": "Kogelnik",
+      "arzt_name": "Sophie Livia Kogelnik",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 813,
+      "titel": "Dr.",
+      "vorname": "Nejra",
+      "nachname": "Kulovic Redzic",
+      "arzt_name": "Nejra Kulovic Redzic",
+      "raw_adresse": "Barmherzigengasse 17/L1",
+      "strasse": "Barmherzigengasse",
+      "hausnummer": "17",
+      "zusatz": "L1",
+      "plz": "1030"
+    },
+    "retry_street": "barmherzigengasse",
+    "retry_hausnummer": "17",
+    "lat": 48.1960907,
+    "lon": 16.3948213,
+    "geo_name": "17"
+  },
+  {
+    "parsed": {
+      "row_num": 815,
+      "titel": "Dr.",
+      "vorname": "Florian",
+      "nachname": "Kunz MDSc",
+      "arzt_name": "Florian Kunz MDSc",
+      "raw_adresse": "Lange Gasse 63/14",
+      "strasse": "Lange Gasse",
+      "hausnummer": "63",
+      "zusatz": "14",
+      "plz": "1080"
+    },
+    "retry_street": "lange gasse",
+    "retry_hausnummer": "63",
+    "lat": 48.2141057,
+    "lon": 16.3508655,
+    "geo_name": "Kleinstein"
+  },
+  {
+    "parsed": {
+      "row_num": 819,
+      "titel": "Dr.",
+      "vorname": "Milana",
+      "nachname": "Kutic Vukovic",
+      "arzt_name": "Milana Kutic Vukovic",
+      "raw_adresse": "Wienerbergstraße 13",
+      "strasse": "Wienerbergstraße",
+      "hausnummer": "13",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "wienerbergstraße",
+    "retry_hausnummer": "13",
+    "lat": 48.1691949,
+    "lon": 16.3452722,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 821,
+      "titel": "Dr.med.dent.",
+      "vorname": "Viktoria",
+      "nachname": "Kutschera",
+      "arzt_name": "Viktoria Kutschera",
+      "raw_adresse": "Krottenbachstraße 122/22/1",
+      "strasse": "Krottenbachstraße",
+      "hausnummer": "122",
+      "zusatz": "22/1",
+      "plz": "1190"
+    },
+    "retry_street": "krottenbachstraße",
+    "retry_hausnummer": "122",
+    "lat": 48.2449151,
+    "lon": 16.3196373,
+    "geo_name": "122"
+  },
+  {
+    "parsed": {
+      "row_num": 822,
+      "titel": "Dr.",
+      "vorname": "Benjamin Jakob",
+      "nachname": "Kux",
+      "arzt_name": "Benjamin Jakob Kux",
+      "raw_adresse": "Rooseveltplatz 12/4",
+      "strasse": "Rooseveltplatz",
+      "hausnummer": "12",
+      "zusatz": "4",
+      "plz": "1090"
+    },
+    "retry_street": "rooseveltplatz",
+    "retry_hausnummer": "12",
+    "lat": 48.2164547,
+    "lon": 16.3586422,
+    "geo_name": "12"
+  },
+  {
+    "parsed": {
+      "row_num": 826,
+      "titel": "Dr.",
+      "vorname": "Julia",
+      "nachname": "Lachner-Zenker MSc, MLS",
+      "arzt_name": "Julia Lachner-Zenker MSc, MLS",
+      "raw_adresse": "Ungargasse 71/2/8",
+      "strasse": "Ungargasse",
+      "hausnummer": "71",
+      "zusatz": "2/8",
+      "plz": "1030"
+    },
+    "retry_street": "ungargasse",
+    "retry_hausnummer": "71",
+    "lat": 48.195144,
+    "lon": 16.3873349,
+    "geo_name": "71"
+  },
+  {
+    "parsed": {
+      "row_num": 829,
+      "titel": "Priv.-Doz. DDr.",
+      "vorname": "Markus",
+      "nachname": "Laky MSc",
+      "arzt_name": "Markus Laky MSc",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 830,
+      "titel": "ZÄ",
+      "vorname": "Hannah Katharina",
+      "nachname": "Lamberty",
+      "arzt_name": "Hannah Katharina Lamberty",
+      "raw_adresse": "Rhigasgasse 8",
+      "strasse": "Rhigasgasse",
+      "hausnummer": "8",
+      "zusatz": "",
+      "plz": "1170"
+    },
+    "retry_street": "rhigasgasse",
+    "retry_hausnummer": "8",
+    "lat": 48.223009,
+    "lon": 16.3231087,
+    "geo_name": "Zahngesundheitszentrum Wien 17"
+  },
+  {
+    "parsed": {
+      "row_num": 837,
+      "titel": "Doctor-Medic",
+      "vorname": "Angela",
+      "nachname": "Lazau",
+      "arzt_name": "Angela Lazau",
+      "raw_adresse": "Mautner-Markhof-Gasse 13-15/6/9",
+      "strasse": "Mautner-Markhof-Gasse",
+      "hausnummer": "13-15",
+      "zusatz": "6/9",
+      "plz": ""
+    },
+    "retry_street": "mautner-markhof-gasse",
+    "retry_hausnummer": "13",
+    "lat": 48.1784881,
+    "lon": 16.4219342,
+    "geo_name": "13-15/5"
+  },
+  {
+    "parsed": {
+      "row_num": 839,
+      "titel": "Dr.",
+      "vorname": "Johann",
+      "nachname": "Lederer",
+      "arzt_name": "Johann Lederer",
+      "raw_adresse": "Nästlbergergasse 6",
+      "strasse": "Nästlbergergasse",
+      "hausnummer": "6",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "nästlbergergasse",
+    "retry_hausnummer": "6",
+    "lat": 48.1606296,
+    "lon": 16.2606481,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 841,
+      "titel": "Dr.",
+      "vorname": "Jakob Piotr",
+      "nachname": "Ledwon",
+      "arzt_name": "Jakob Piotr Ledwon",
+      "raw_adresse": "Treustraße 90-92/3/7",
+      "strasse": "Treustraße",
+      "hausnummer": "90-92",
+      "zusatz": "3/7",
+      "plz": "1200"
+    },
+    "retry_street": "treustraße",
+    "retry_hausnummer": "90",
+    "lat": 48.2271961,
+    "lon": 16.3684128,
+    "geo_name": "Treustraße"
+  },
+  {
+    "parsed": {
+      "row_num": 842,
+      "titel": "ZÄ",
+      "vorname": "Katrin Amelie Henriette",
+      "nachname": "Leesch",
+      "arzt_name": "Katrin Amelie Henriette Leesch",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 843,
+      "titel": "Dr.",
+      "vorname": "Anna Katharina",
+      "nachname": "Lehner",
+      "arzt_name": "Anna Katharina Lehner",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 849,
+      "titel": "PhDr.",
+      "vorname": "Natalie",
+      "nachname": "Lemberg MSc",
+      "arzt_name": "Natalie Lemberg MSc",
+      "raw_adresse": "Gersthofer Straße 8/1/9",
+      "strasse": "Gersthofer Straße",
+      "hausnummer": "8",
+      "zusatz": "1/9",
+      "plz": "1180"
+    },
+    "retry_street": "gersthofer straße",
+    "retry_hausnummer": "8",
+    "lat": 48.2326298,
+    "lon": 16.3284506,
+    "geo_name": "Hansaton Hörgeräte"
+  },
+  {
+    "parsed": {
+      "row_num": 850,
+      "titel": "Dr.med.dent.",
+      "vorname": "Laurence",
+      "nachname": "Lemmer",
+      "arzt_name": "Laurence Lemmer",
+      "raw_adresse": "Sobieskigasse 20/11",
+      "strasse": "Sobieskigasse",
+      "hausnummer": "20",
+      "zusatz": "11",
+      "plz": "1090"
+    },
+    "retry_street": "sobieskigasse",
+    "retry_hausnummer": "20",
+    "lat": 48.2283159,
+    "lon": 16.3539237,
+    "geo_name": "20"
+  },
+  {
+    "parsed": {
+      "row_num": 851,
+      "titel": "Dr.",
+      "vorname": "Barbara",
+      "nachname": "Lengger",
+      "arzt_name": "Barbara Lengger",
+      "raw_adresse": "Linzer Straße 435/2/7",
+      "strasse": "Linzer Straße",
+      "hausnummer": "435",
+      "zusatz": "2/7",
+      "plz": "1140"
+    },
+    "retry_street": "linzer straße",
+    "retry_hausnummer": "435",
+    "lat": 48.2035432,
+    "lon": 16.2490603,
+    "geo_name": "435/3"
+  },
+  {
+    "parsed": {
+      "row_num": 854,
+      "titel": "Dr.",
+      "vorname": "Maria Andreyna",
+      "nachname": "Leon Manrique",
+      "arzt_name": "Maria Andreyna Leon Manrique",
+      "raw_adresse": "Hockegasse 17/B01",
+      "strasse": "Hockegasse",
+      "hausnummer": "17",
+      "zusatz": "B01",
+      "plz": "1180"
+    },
+    "retry_street": "hockegasse",
+    "retry_hausnummer": "17",
+    "lat": 48.2354395,
+    "lon": 16.3248952,
+    "geo_name": "17"
+  },
+  {
+    "parsed": {
+      "row_num": 857,
+      "titel": "Dr.",
+      "vorname": "Daniela",
+      "nachname": "Lettner MSc",
+      "arzt_name": "Daniela Lettner MSc",
+      "raw_adresse": "Gersthofer Straße 119/2/2",
+      "strasse": "Gersthofer Straße",
+      "hausnummer": "119",
+      "zusatz": "2/2",
+      "plz": "1180"
+    },
+    "retry_street": "gersthofer straße",
+    "retry_hausnummer": "119",
+    "lat": 48.2373384,
+    "lon": 16.321262,
+    "geo_name": "119"
+  },
+  {
+    "parsed": {
+      "row_num": 858,
+      "titel": "Dr.",
+      "vorname": "Michael",
+      "nachname": "Lettner MSc",
+      "arzt_name": "Michael Lettner MSc",
+      "raw_adresse": "Wollzeile 3/3/Top 1.2",
+      "strasse": "Wollzeile 3/3/Top",
+      "hausnummer": "1.2",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "wollzeile 3/3",
+    "retry_hausnummer": "1",
+    "lat": 48.2088897,
+    "lon": 16.3749935,
+    "geo_name": "Wollzeile"
+  },
+  {
+    "parsed": {
+      "row_num": 867,
+      "titel": "DDr.",
+      "vorname": "Bledar",
+      "nachname": "Lilaj M.Sc.",
+      "arzt_name": "Bledar Lilaj M.Sc.",
+      "raw_adresse": "Getreidemarkt 18/14",
+      "strasse": "Getreidemarkt",
+      "hausnummer": "18",
+      "zusatz": "14",
+      "plz": ""
+    },
+    "retry_street": "getreidemarkt",
+    "retry_hausnummer": "18",
+    "lat": 48.2022776,
+    "lon": 16.3622526,
+    "geo_name": "HERZ1 Dr Derntl"
+  },
+  {
+    "parsed": {
+      "row_num": 868,
+      "titel": "Dr.med.dent.",
+      "vorname": "Elisabeth",
+      "nachname": "Lill",
+      "arzt_name": "Elisabeth Lill",
+      "raw_adresse": "Nottebohmstraße 63",
+      "strasse": "Nottebohmstraße",
+      "hausnummer": "63",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "nottebohmstraße",
+    "retry_hausnummer": "63",
+    "lat": 48.2496575,
+    "lon": 16.3198472,
+    "geo_name": "63"
+  },
+  {
+    "parsed": {
+      "row_num": 873,
+      "titel": "Dr.med.dent.",
+      "vorname": "Laura",
+      "nachname": "Lingg",
+      "arzt_name": "Laura Lingg",
+      "raw_adresse": "Salzgries 15/32",
+      "strasse": "Salzgries",
+      "hausnummer": "15",
+      "zusatz": "32",
+      "plz": ""
+    },
+    "retry_street": "salzgries",
+    "retry_hausnummer": "15",
+    "lat": 48.213235,
+    "lon": 16.3711353,
+    "geo_name": "Fladerei Salzgries"
+  },
+  {
+    "parsed": {
+      "row_num": 874,
+      "titel": "Dr.med.dent.",
+      "vorname": "Benedikt",
+      "nachname": "Linhartsberger",
+      "arzt_name": "Benedikt Linhartsberger",
+      "raw_adresse": "Singerstraße 13/2/7",
+      "strasse": "Singerstraße",
+      "hausnummer": "13",
+      "zusatz": "2/7",
+      "plz": ""
+    },
+    "retry_street": "singerstraße",
+    "retry_hausnummer": "13",
+    "lat": 48.2071364,
+    "lon": 16.3743508,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 877,
+      "titel": "Mag. Dr.",
+      "vorname": "Susanne",
+      "nachname": "Linner",
+      "arzt_name": "Susanne Linner",
+      "raw_adresse": "Piaristengasse 16/10",
+      "strasse": "Piaristengasse",
+      "hausnummer": "16",
+      "zusatz": "10",
+      "plz": "1080"
+    },
+    "retry_street": "piaristengasse",
+    "retry_hausnummer": "16",
+    "lat": 48.2070555,
+    "lon": 16.3512773,
+    "geo_name": "16"
+  },
+  {
+    "parsed": {
+      "row_num": 883,
+      "titel": "Dr.med.dent.",
+      "vorname": "Tiziana",
+      "nachname": "Loacker",
+      "arzt_name": "Tiziana Loacker",
+      "raw_adresse": "Hans-Sachs-Gasse 17/33",
+      "strasse": "Hans-Sachs-Gasse",
+      "hausnummer": "17",
+      "zusatz": "33",
+      "plz": ""
+    },
+    "retry_street": "hans-sachs-gasse",
+    "retry_hausnummer": "17",
+    "lat": 48.2243265,
+    "lon": 16.3453041,
+    "geo_name": "17"
+  },
+  {
+    "parsed": {
+      "row_num": 887,
+      "titel": "Dr.med.dent.",
+      "vorname": "Bettina",
+      "nachname": "Lohmann-Lehner",
+      "arzt_name": "Bettina Lohmann-Lehner",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 888,
+      "titel": "Dr.med.dent.",
+      "vorname": "Verena",
+      "nachname": "Lohr",
+      "arzt_name": "Verena Lohr",
+      "raw_adresse": "Schumanngasse 86/1/2",
+      "strasse": "Schumanngasse",
+      "hausnummer": "86",
+      "zusatz": "1/2",
+      "plz": ""
+    },
+    "retry_street": "schumanngasse",
+    "retry_hausnummer": "86",
+    "lat": 48.2238517,
+    "lon": 16.3323429,
+    "geo_name": "86"
+  },
+  {
+    "parsed": {
+      "row_num": 889,
+      "titel": "Dr.med.dent.",
+      "vorname": "Elisa-Clara",
+      "nachname": "Loidl BSCMed",
+      "arzt_name": "Elisa-Clara Loidl BSCMed",
+      "raw_adresse": "Cobenzlgasse 10/2",
+      "strasse": "Cobenzlgasse",
+      "hausnummer": "10",
+      "zusatz": "2",
+      "plz": ""
+    },
+    "retry_street": "cobenzlgasse",
+    "retry_hausnummer": "10",
+    "lat": 48.2562038,
+    "lon": 16.341757,
+    "geo_name": "10"
+  },
+  {
+    "parsed": {
+      "row_num": 890,
+      "titel": "Dr.",
+      "vorname": "Larissa",
+      "nachname": "Loser BScMed",
+      "arzt_name": "Larissa Loser BScMed",
+      "raw_adresse": "Renngasse 15",
+      "strasse": "Renngasse",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "renngasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2137159,
+    "lon": 16.368246,
+    "geo_name": "Zahngesundheitszentrum der WGKK"
+  },
+  {
+    "parsed": {
+      "row_num": 891,
+      "titel": "Dr.",
+      "vorname": "Lucas",
+      "nachname": "Loser BScMed",
+      "arzt_name": "Lucas Loser BScMed",
+      "raw_adresse": "Karl-Aschenbrenner-Gasse 3",
+      "strasse": "Karl-Aschenbrenner-Gasse",
+      "hausnummer": "3",
+      "zusatz": "",
+      "plz": "1210"
+    },
+    "retry_street": "karl-aschenbrenner-gasse",
+    "retry_hausnummer": "3",
+    "lat": 48.2535148,
+    "lon": 16.3973598,
+    "geo_name": "Karl-Aschenbrenner-Gasse"
+  },
+  {
+    "parsed": {
+      "row_num": 893,
+      "titel": "Dr.",
+      "vorname": "Maria-Anna",
+      "nachname": "Lothaller-Watzak",
+      "arzt_name": "Maria-Anna Lothaller-Watzak",
+      "raw_adresse": "Zehenthofgasse 28",
+      "strasse": "Zehenthofgasse",
+      "hausnummer": "28",
+      "zusatz": "",
+      "plz": "1190"
+    },
+    "retry_street": "zehenthofgasse",
+    "retry_hausnummer": "28",
+    "lat": 48.2477993,
+    "lon": 16.3461244,
+    "geo_name": "28"
+  },
+  {
+    "parsed": {
+      "row_num": 899,
+      "titel": "Dr.",
+      "vorname": "Manuel",
+      "nachname": "Lutz BSc",
+      "arzt_name": "Manuel Lutz BSc",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 901,
+      "titel": "DDr.",
+      "vorname": "Aleksandra",
+      "nachname": "Lux",
+      "arzt_name": "Aleksandra Lux",
+      "raw_adresse": "Leystraße 168/2/8",
+      "strasse": "Leystraße",
+      "hausnummer": "168",
+      "zusatz": "2/8",
+      "plz": "1200"
+    },
+    "retry_street": "leystraße",
+    "retry_hausnummer": "168",
+    "lat": 48.2270696,
+    "lon": 16.3953483,
+    "geo_name": "168"
+  },
+  {
+    "parsed": {
+      "row_num": 905,
+      "titel": "Dr.med.dent.",
+      "vorname": "Stefan",
+      "nachname": "Machal",
+      "arzt_name": "Stefan Machal",
+      "raw_adresse": "Weimarer Straße 93/15",
+      "strasse": "Weimarer Straße",
+      "hausnummer": "93",
+      "zusatz": "15",
+      "plz": ""
+    },
+    "retry_street": "weimarer straße",
+    "retry_hausnummer": "93",
+    "lat": 48.2373965,
+    "lon": 16.3449575,
+    "geo_name": "93"
+  },
+  {
+    "parsed": {
+      "row_num": 906,
+      "titel": "Dr.",
+      "vorname": "Evelyn Marietta",
+      "nachname": "Maculan-Lanschützer",
+      "arzt_name": "Evelyn Marietta Maculan-Lanschützer",
+      "raw_adresse": "Zelinkagasse 10/12",
+      "strasse": "Zelinkagasse",
+      "hausnummer": "10",
+      "zusatz": "12",
+      "plz": "1010"
+    },
+    "retry_street": "zelinkagasse",
+    "retry_hausnummer": "10",
+    "lat": 48.21653,
+    "lon": 16.3704351,
+    "geo_name": "ÖJHV - Österr. Jugendherbergsverband"
+  },
+  {
+    "parsed": {
+      "row_num": 911,
+      "titel": "DDr.",
+      "vorname": "Julia",
+      "nachname": "Mailath-Pokorny",
+      "arzt_name": "Julia Mailath-Pokorny",
+      "raw_adresse": "Lazarettgasse 19 (DG)",
+      "strasse": "Lazarettgasse",
+      "hausnummer": "19",
+      "zusatz": "",
+      "plz": "1090"
+    },
+    "retry_street": "lazarettgasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2172841,
+    "lon": 16.348357,
+    "geo_name": "19"
+  },
+  {
+    "parsed": {
+      "row_num": 914,
+      "titel": "lek. dent.",
+      "vorname": "Jennifer Helena",
+      "nachname": "Majer",
+      "arzt_name": "Jennifer Helena Majer",
+      "raw_adresse": "Dorotheergasse 7/5",
+      "strasse": "Dorotheergasse",
+      "hausnummer": "7",
+      "zusatz": "5",
+      "plz": "1010"
+    },
+    "retry_street": "dorotheergasse",
+    "retry_hausnummer": "7",
+    "lat": 48.2075011,
+    "lon": 16.3695956,
+    "geo_name": "Sindbads Reisen"
+  },
+  {
+    "parsed": {
+      "row_num": 915,
+      "titel": "DDr.",
+      "vorname": "Dominik",
+      "nachname": "Majewski",
+      "arzt_name": "Dominik Majewski",
+      "raw_adresse": "Geylinggasse 27/16",
+      "strasse": "Geylinggasse",
+      "hausnummer": "27",
+      "zusatz": "16",
+      "plz": ""
+    },
+    "retry_street": "geylinggasse",
+    "retry_hausnummer": "27",
+    "lat": 48.1875951,
+    "lon": 16.2748739,
+    "geo_name": "Geylinggasse"
+  },
+  {
+    "parsed": {
+      "row_num": 916,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alborz",
+      "nachname": "Malekpour",
+      "arzt_name": "Alborz Malekpour",
+      "raw_adresse": "Dr.-Neumann-Gasse 9",
+      "strasse": "Dr.-Neumann-Gasse",
+      "hausnummer": "9",
+      "zusatz": "",
+      "plz": "1230"
+    },
+    "retry_street": "dr.-neumann-gasse",
+    "retry_hausnummer": "9",
+    "lat": 48.138312,
+    "lon": 16.2864188,
+    "geo_name": "9"
+  },
+  {
+    "parsed": {
+      "row_num": 920,
+      "titel": "Dr.",
+      "vorname": "Achim",
+      "nachname": "Mamut",
+      "arzt_name": "Achim Mamut",
+      "raw_adresse": "Lindgrabengasse 36",
+      "strasse": "Lindgrabengasse",
+      "hausnummer": "36",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "lindgrabengasse",
+    "retry_hausnummer": "36",
+    "lat": 48.1540798,
+    "lon": 16.2557994,
+    "geo_name": "36"
+  },
+  {
+    "parsed": {
+      "row_num": 923,
+      "titel": "d-r",
+      "vorname": "Marijana",
+      "nachname": "Manasieva Mitrevski",
+      "arzt_name": "Marijana Manasieva Mitrevski",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 925,
+      "titel": "Dr.med.dent.",
+      "vorname": "Bettina",
+      "nachname": "Männer",
+      "arzt_name": "Bettina Männer",
+      "raw_adresse": "Wallrißstraße 124/2",
+      "strasse": "Wallrißstraße",
+      "hausnummer": "124",
+      "zusatz": "2",
+      "plz": ""
+    },
+    "retry_street": "wallrißstraße",
+    "retry_hausnummer": "124",
+    "lat": 48.2339779,
+    "lon": 16.3138899,
+    "geo_name": "124"
+  },
+  {
+    "parsed": {
+      "row_num": 930,
+      "titel": "Medic dent.",
+      "vorname": "Teodora Olivinia",
+      "nachname": "Marian",
+      "arzt_name": "Teodora Olivinia Marian",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 932,
+      "titel": "Dr.med.dent.",
+      "vorname": "Marion",
+      "nachname": "Markones BScMed",
+      "arzt_name": "Marion Markones BScMed",
+      "raw_adresse": "Görgengasse 26/1/8",
+      "strasse": "Görgengasse",
+      "hausnummer": "26",
+      "zusatz": "1/8",
+      "plz": ""
+    },
+    "retry_street": "görgengasse",
+    "retry_hausnummer": "26",
+    "lat": 48.2445924,
+    "lon": 16.3348577,
+    "geo_name": "26"
+  },
+  {
+    "parsed": {
+      "row_num": 933,
+      "titel": "Dr.",
+      "vorname": "Peter",
+      "nachname": "Markotanyos MSc",
+      "arzt_name": "Peter Markotanyos MSc",
+      "raw_adresse": "Leopoldauer Straße 68",
+      "strasse": "Leopoldauer Straße",
+      "hausnummer": "68",
+      "zusatz": "",
+      "plz": "1210"
+    },
+    "retry_street": "leopoldauer straße",
+    "retry_hausnummer": "68",
+    "lat": 48.2602306,
+    "lon": 16.4159557,
+    "geo_name": "Dr. Grastyan"
+  },
+  {
+    "parsed": {
+      "row_num": 934,
+      "titel": "ZÄ",
+      "vorname": "Silvia",
+      "nachname": "Markova PhD, MSc",
+      "arzt_name": "Silvia Markova PhD, MSc",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 935,
+      "titel": "Dr.",
+      "vorname": "Noemi-Katalin",
+      "nachname": "Markovic MSc",
+      "arzt_name": "Noemi-Katalin Markovic MSc",
+      "raw_adresse": "Burggasse 126/5",
+      "strasse": "Burggasse",
+      "hausnummer": "126",
+      "zusatz": "5",
+      "plz": "1070"
+    },
+    "retry_street": "burggasse",
+    "retry_hausnummer": "126",
+    "lat": 48.204375,
+    "lon": 16.3387644,
+    "geo_name": "126"
+  },
+  {
+    "parsed": {
+      "row_num": 936,
+      "titel": "Dr.",
+      "vorname": "MPH",
+      "nachname": "Markovic MPH",
+      "arzt_name": "MPH Markovic MPH",
+      "raw_adresse": "Burggasse 126/5",
+      "strasse": "Burggasse",
+      "hausnummer": "126",
+      "zusatz": "5",
+      "plz": "1070"
+    },
+    "retry_street": "burggasse",
+    "retry_hausnummer": "126",
+    "lat": 48.204375,
+    "lon": 16.3387644,
+    "geo_name": "126"
+  },
+  {
+    "parsed": {
+      "row_num": 937,
+      "titel": "Dr.",
+      "vorname": "Georgeta-Maria",
+      "nachname": "Marton",
+      "arzt_name": "Georgeta-Maria Marton",
+      "raw_adresse": "Jurekgasse  25/31",
+      "strasse": "Jurekgasse",
+      "hausnummer": "25",
+      "zusatz": "31",
+      "plz": ""
+    },
+    "retry_street": "jurekgasse",
+    "retry_hausnummer": "25",
+    "lat": 48.1916627,
+    "lon": 16.3252353,
+    "geo_name": "25"
+  },
+  {
+    "parsed": {
+      "row_num": 941,
+      "titel": "Dr.",
+      "vorname": "Bastian Oliver",
+      "nachname": "Mastnak",
+      "arzt_name": "Bastian Oliver Mastnak",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 943,
+      "titel": "DDr.",
+      "vorname": "Michael Herbert",
+      "nachname": "Matejka",
+      "arzt_name": "Michael Herbert Matejka",
+      "raw_adresse": "Mariahilfer Straße 47/5/7",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "47",
+      "zusatz": "5/7",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "47",
+    "lat": 48.199558,
+    "lon": 16.3553314,
+    "geo_name": "Zum grünen Kranz"
+  },
+  {
+    "parsed": {
+      "row_num": 944,
+      "titel": "Dr.med.dent.",
+      "vorname": "Miriam",
+      "nachname": "Matejka",
+      "arzt_name": "Miriam Matejka",
+      "raw_adresse": "Ausstellungsstraße 50/5/519",
+      "strasse": "Ausstellungsstraße",
+      "hausnummer": "50",
+      "zusatz": "5/519",
+      "plz": "1020"
+    },
+    "retry_street": "ausstellungsstraße",
+    "retry_hausnummer": "50",
+    "lat": 48.2176916,
+    "lon": 16.4098044,
+    "geo_name": "50"
+  },
+  {
+    "parsed": {
+      "row_num": 945,
+      "titel": "Dr.",
+      "vorname": "Renate",
+      "nachname": "Matejka MDSc",
+      "arzt_name": "Renate Matejka MDSc",
+      "raw_adresse": "Mariahilfer Straße 47/5/7",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "47",
+      "zusatz": "5/7",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "47",
+    "lat": 48.199558,
+    "lon": 16.3553314,
+    "geo_name": "Zum grünen Kranz"
+  },
+  {
+    "parsed": {
+      "row_num": 947,
+      "titel": "Dr.med.dent.",
+      "vorname": "Dominik",
+      "nachname": "Matt",
+      "arzt_name": "Dominik Matt",
+      "raw_adresse": "Schweglerstraße 37/24",
+      "strasse": "Schweglerstraße",
+      "hausnummer": "37",
+      "zusatz": "24",
+      "plz": ""
+    },
+    "retry_street": "schweglerstraße",
+    "retry_hausnummer": "37",
+    "lat": 48.1996585,
+    "lon": 16.3271537,
+    "geo_name": "Consent Markt- und Sozialforschung"
+  },
+  {
+    "parsed": {
+      "row_num": 948,
+      "titel": "Dr.med.dent.",
+      "vorname": "Baraa",
+      "nachname": "Matta",
+      "arzt_name": "Baraa Matta",
+      "raw_adresse": "Landstraßer Hauptstraße 86/2/12",
+      "strasse": "Landstraßer Hauptstraße",
+      "hausnummer": "86",
+      "zusatz": "2/12",
+      "plz": "1030"
+    },
+    "retry_street": "landstraßer hauptstraße",
+    "retry_hausnummer": "86",
+    "lat": 48.2001247,
+    "lon": 16.393151,
+    "geo_name": "86"
+  },
+  {
+    "parsed": {
+      "row_num": 949,
+      "titel": "Dr.med.dent.",
+      "vorname": "Sabrina",
+      "nachname": "Mattar",
+      "arzt_name": "Sabrina Mattar",
+      "raw_adresse": "Ulanenweg 51/4/5",
+      "strasse": "Ulanenweg",
+      "hausnummer": "51",
+      "zusatz": "4/5",
+      "plz": ""
+    },
+    "retry_street": "ulanenweg",
+    "retry_hausnummer": "51",
+    "lat": 48.2030654,
+    "lon": 16.4726033,
+    "geo_name": "51/4"
+  },
+  {
+    "parsed": {
+      "row_num": 950,
+      "titel": "Dr.",
+      "vorname": "Marc Julian",
+      "nachname": "Matula",
+      "arzt_name": "Marc Julian Matula",
+      "raw_adresse": "Lazarettgasse 19/DG",
+      "strasse": "Lazarettgasse",
+      "hausnummer": "19",
+      "zusatz": "DG",
+      "plz": "1090"
+    },
+    "retry_street": "lazarettgasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2172841,
+    "lon": 16.348357,
+    "geo_name": "19"
+  },
+  {
+    "parsed": {
+      "row_num": 951,
+      "titel": "Dr.med.dent.",
+      "vorname": "Hana",
+      "nachname": "Matusek",
+      "arzt_name": "Hana Matusek",
+      "raw_adresse": "Bandgasse 2/30",
+      "strasse": "Bandgasse",
+      "hausnummer": "2",
+      "zusatz": "30",
+      "plz": ""
+    },
+    "retry_street": "bandgasse",
+    "retry_hausnummer": "2",
+    "lat": 48.2006102,
+    "lon": 16.3460772,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 952,
+      "titel": "Dr.",
+      "vorname": "Irmtraud",
+      "nachname": "Maurer",
+      "arzt_name": "Irmtraud Maurer",
+      "raw_adresse": "Auhofstraße 164/2/8",
+      "strasse": "Auhofstraße",
+      "hausnummer": "164",
+      "zusatz": "2/8",
+      "plz": ""
+    },
+    "retry_street": "auhofstraße",
+    "retry_hausnummer": "164",
+    "lat": 48.1925477,
+    "lon": 16.2673094,
+    "geo_name": "164"
+  },
+  {
+    "parsed": {
+      "row_num": 954,
+      "titel": "Dr.med.dent.",
+      "vorname": "Stephanie",
+      "nachname": "Maurer",
+      "arzt_name": "Stephanie Maurer",
+      "raw_adresse": "Wipplingerstraße 18/5a",
+      "strasse": "Wipplingerstraße",
+      "hausnummer": "18",
+      "zusatz": "5a",
+      "plz": "1010"
+    },
+    "retry_street": "wipplingerstraße",
+    "retry_hausnummer": "18",
+    "lat": 48.2125776,
+    "lon": 16.3693368,
+    "geo_name": "ICS Immo Complete Solutions"
+  },
+  {
+    "parsed": {
+      "row_num": 958,
+      "titel": "Dr.",
+      "vorname": "Anna Elisabeth",
+      "nachname": "Mayr",
+      "arzt_name": "Anna Elisabeth Mayr",
+      "raw_adresse": "Wienerbergstraße 13",
+      "strasse": "Wienerbergstraße",
+      "hausnummer": "13",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "wienerbergstraße",
+    "retry_hausnummer": "13",
+    "lat": 48.1691949,
+    "lon": 16.3452722,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 962,
+      "titel": "Dr.",
+      "vorname": "Peter",
+      "nachname": "Mazevski",
+      "arzt_name": "Peter Mazevski",
+      "raw_adresse": "Weimarer Straße 12/4",
+      "strasse": "Weimarer Straße",
+      "hausnummer": "12",
+      "zusatz": "4",
+      "plz": ""
+    },
+    "retry_street": "weimarer straße",
+    "retry_hausnummer": "12",
+    "lat": 48.2264767,
+    "lon": 16.3406447,
+    "geo_name": "12"
+  },
+  {
+    "parsed": {
+      "row_num": 964,
+      "titel": "Dr.med.dent.",
+      "vorname": "Miriam Alisa",
+      "nachname": "Meilinger",
+      "arzt_name": "Miriam Alisa Meilinger",
+      "raw_adresse": "Obermüllnerstraße 15/18",
+      "strasse": "Obermüllnerstraße",
+      "hausnummer": "15",
+      "zusatz": "18",
+      "plz": ""
+    },
+    "retry_street": "obermüllnerstraße",
+    "retry_hausnummer": "15",
+    "lat": 48.2197377,
+    "lon": 16.4040171,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 966,
+      "titel": "",
+      "vorname": "Amira",
+      "nachname": "Meisnitzer BDS MClinDent",
+      "arzt_name": "Amira Meisnitzer BDS MClinDent",
+      "raw_adresse": "Lazarettgasse 3/6-7",
+      "strasse": "Lazarettgasse",
+      "hausnummer": "3",
+      "zusatz": "6-7",
+      "plz": "1090"
+    },
+    "retry_street": "lazarettgasse",
+    "retry_hausnummer": "3",
+    "lat": 48.2182376,
+    "lon": 16.350947,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 969,
+      "titel": "Dr.med.dent.",
+      "vorname": "Florian",
+      "nachname": "Menhofer",
+      "arzt_name": "Florian Menhofer",
+      "raw_adresse": "Bloch-Bauer-Promenade 16/5/48",
+      "strasse": "Bloch-Bauer-Promenade",
+      "hausnummer": "16",
+      "zusatz": "5/48",
+      "plz": ""
+    },
+    "retry_street": "bloch-bauer-promenade",
+    "retry_hausnummer": "16",
+    "lat": 48.180175,
+    "lon": 16.3850548,
+    "geo_name": "Adele"
+  },
+  {
+    "parsed": {
+      "row_num": 971,
+      "titel": "Dr.",
+      "vorname": "Thomas",
+      "nachname": "Merhaut MSc",
+      "arzt_name": "Thomas Merhaut MSc",
+      "raw_adresse": "Freyung 4/1/17",
+      "strasse": "Freyung",
+      "hausnummer": "4",
+      "zusatz": "1/17",
+      "plz": "1010"
+    },
+    "retry_street": "freyung",
+    "retry_hausnummer": "4",
+    "lat": 48.2117013,
+    "lon": 16.3643634,
+    "geo_name": "4"
+  },
+  {
+    "parsed": {
+      "row_num": 972,
+      "titel": "dr. med. dent.",
+      "vorname": "Agnes Szilvia",
+      "nachname": "Meszaros",
+      "arzt_name": "Agnes Szilvia Meszaros",
+      "raw_adresse": "Weihburggasse 11/5",
+      "strasse": "Weihburggasse",
+      "hausnummer": "11",
+      "zusatz": "5",
+      "plz": "1010"
+    },
+    "retry_street": "weihburggasse",
+    "retry_hausnummer": "11",
+    "lat": 48.2069025,
+    "lon": 16.3732985,
+    "geo_name": "Tony Subal"
+  },
+  {
+    "parsed": {
+      "row_num": 973,
+      "titel": "Dr.med.dent.",
+      "vorname": "Marco",
+      "nachname": "Meythaler",
+      "arzt_name": "Marco Meythaler",
+      "raw_adresse": "Währinger Straße 160/26",
+      "strasse": "Währinger Straße",
+      "hausnummer": "160",
+      "zusatz": "26",
+      "plz": ""
+    },
+    "retry_street": "währinger straße",
+    "retry_hausnummer": "160",
+    "lat": 48.2279088,
+    "lon": 16.3372422,
+    "geo_name": "Bäckerei & Cafe Kosterei"
+  },
+  {
+    "parsed": {
+      "row_num": 974,
+      "titel": "Dr.",
+      "vorname": "Agnes",
+      "nachname": "Mezei MSc",
+      "arzt_name": "Agnes Mezei MSc",
+      "raw_adresse": "Opernring 8/St.2/9",
+      "strasse": "Opernring",
+      "hausnummer": "8",
+      "zusatz": "St.2/9",
+      "plz": "1010"
+    },
+    "retry_street": "opernring",
+    "retry_hausnummer": "8",
+    "lat": 48.2033217,
+    "lon": 16.3669349,
+    "geo_name": "Palais Zinner"
+  },
+  {
+    "parsed": {
+      "row_num": 976,
+      "titel": "Dr.med.dent.",
+      "vorname": "René-Bernard",
+      "nachname": "Mick",
+      "arzt_name": "René-Bernard Mick",
+      "raw_adresse": "Schottenring 33/16",
+      "strasse": "Schottenring",
+      "hausnummer": "33",
+      "zusatz": "16",
+      "plz": ""
+    },
+    "retry_street": "schottenring",
+    "retry_hausnummer": "33",
+    "lat": 48.2174537,
+    "lon": 16.36925,
+    "geo_name": "33"
+  },
+  {
+    "parsed": {
+      "row_num": 980,
+      "titel": "dr. dent.",
+      "vorname": "Laszlo",
+      "nachname": "Millei",
+      "arzt_name": "Laszlo Millei",
+      "raw_adresse": "Graben 31 Top 11",
+      "strasse": "Graben 31 Top",
+      "hausnummer": "11",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "graben 31",
+    "retry_hausnummer": "11",
+    "lat": 48.2083656,
+    "lon": 16.3702037,
+    "geo_name": "Graben"
+  },
+  {
+    "parsed": {
+      "row_num": 983,
+      "titel": "Dr.med.dent.",
+      "vorname": "Ivan",
+      "nachname": "Milutinovic",
+      "arzt_name": "Ivan Milutinovic",
+      "raw_adresse": "Anton-Anderer-Platz 3/5",
+      "strasse": "Anton-Anderer-Platz",
+      "hausnummer": "3",
+      "zusatz": "5",
+      "plz": ""
+    },
+    "retry_street": "anton-anderer-platz",
+    "retry_hausnummer": "3",
+    "lat": 48.267828,
+    "lon": 16.3910127,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 985,
+      "titel": "Dr.",
+      "vorname": "Emanuel",
+      "nachname": "Mirea",
+      "arzt_name": "Emanuel Mirea",
+      "raw_adresse": "Striagasse 22",
+      "strasse": "Striagasse",
+      "hausnummer": "22",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "striagasse",
+    "retry_hausnummer": "22",
+    "lat": 48.2018947,
+    "lon": 16.2899527,
+    "geo_name": "22"
+  },
+  {
+    "parsed": {
+      "row_num": 986,
+      "titel": "Dr.",
+      "vorname": "Ilnaz",
+      "nachname": "Miri Soleiman M.Sc.",
+      "arzt_name": "Ilnaz Miri Soleiman M.Sc.",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 990,
+      "titel": "Dr.med.dent.",
+      "vorname": "Smiljana",
+      "nachname": "Mitic",
+      "arzt_name": "Smiljana Mitic",
+      "raw_adresse": "Rennweg 70/4/17",
+      "strasse": "Rennweg",
+      "hausnummer": "70",
+      "zusatz": "4/17",
+      "plz": "1030"
+    },
+    "retry_street": "rennweg",
+    "retry_hausnummer": "70",
+    "lat": 48.1917112,
+    "lon": 16.3943531,
+    "geo_name": "70"
+  },
+  {
+    "parsed": {
+      "row_num": 991,
+      "titel": "Dr.med.dent.",
+      "vorname": "Isabella",
+      "nachname": "Mittag",
+      "arzt_name": "Isabella Mittag",
+      "raw_adresse": "Eduardgasse 6/21",
+      "strasse": "Eduardgasse",
+      "hausnummer": "6",
+      "zusatz": "21",
+      "plz": ""
+    },
+    "retry_street": "eduardgasse",
+    "retry_hausnummer": "6",
+    "lat": 48.2220911,
+    "lon": 16.3397366,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 993,
+      "titel": "Dr.",
+      "vorname": "Elisabeth",
+      "nachname": "Mitterlechner",
+      "arzt_name": "Elisabeth Mitterlechner",
+      "raw_adresse": "Fuhrmannsgasse 7/12",
+      "strasse": "Fuhrmannsgasse",
+      "hausnummer": "7",
+      "zusatz": "12",
+      "plz": ""
+    },
+    "retry_street": "fuhrmannsgasse",
+    "retry_hausnummer": "7",
+    "lat": 48.2106111,
+    "lon": 16.3477571,
+    "geo_name": "7"
+  },
+  {
+    "parsed": {
+      "row_num": 994,
+      "titel": "Dr.",
+      "vorname": "Peter",
+      "nachname": "Mladek",
+      "arzt_name": "Peter Mladek",
+      "raw_adresse": "Gustav-Pick-Gasse 15/1/6",
+      "strasse": "Gustav-Pick-Gasse",
+      "hausnummer": "15",
+      "zusatz": "1/6",
+      "plz": ""
+    },
+    "retry_street": "gustav-pick-gasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2450229,
+    "lon": 16.3268952,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 999,
+      "titel": "MR Dr.",
+      "vorname": "Nosratollah",
+      "nachname": "Momeni-Hosseini",
+      "arzt_name": "Nosratollah Momeni-Hosseini",
+      "raw_adresse": "Schlüsselgasse 8/17",
+      "strasse": "Schlüsselgasse",
+      "hausnummer": "8",
+      "zusatz": "17",
+      "plz": "1040"
+    },
+    "retry_street": "schlüsselgasse",
+    "retry_hausnummer": "8",
+    "lat": 48.1927027,
+    "lon": 16.3681482,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 1003,
+      "titel": "Dr.",
+      "vorname": "Andreas",
+      "nachname": "Moravetz",
+      "arzt_name": "Andreas Moravetz",
+      "raw_adresse": "Dollinergasse 1/5",
+      "strasse": "Dollinergasse",
+      "hausnummer": "1",
+      "zusatz": "5",
+      "plz": ""
+    },
+    "retry_street": "dollinergasse",
+    "retry_hausnummer": "1",
+    "lat": 48.239864,
+    "lon": 16.3533749,
+    "geo_name": "Dollinergasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1006,
+      "titel": "Dr.",
+      "vorname": "Adelina",
+      "nachname": "Morina MSc",
+      "arzt_name": "Adelina Morina MSc",
+      "raw_adresse": "Wienerbergstraße 13",
+      "strasse": "Wienerbergstraße",
+      "hausnummer": "13",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "wienerbergstraße",
+    "retry_hausnummer": "13",
+    "lat": 48.1691949,
+    "lon": 16.3452722,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 1009,
+      "titel": "Dr.med.dent.",
+      "vorname": "Emilia",
+      "nachname": "Mory",
+      "arzt_name": "Emilia Mory",
+      "raw_adresse": "Bastiengasse 85",
+      "strasse": "Bastiengasse",
+      "hausnummer": "85",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "bastiengasse",
+    "retry_hausnummer": "85",
+    "lat": 48.2343473,
+    "lon": 16.3222609,
+    "geo_name": "Bastiengasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1011,
+      "titel": "Dr.med.dent.",
+      "vorname": "Reinhard",
+      "nachname": "Moser",
+      "arzt_name": "Reinhard Moser",
+      "raw_adresse": "Bleichergasse 13/11",
+      "strasse": "Bleichergasse",
+      "hausnummer": "13",
+      "zusatz": "11",
+      "plz": "1090"
+    },
+    "retry_street": "bleichergasse",
+    "retry_hausnummer": "13",
+    "lat": 48.224085,
+    "lon": 16.3514618,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 1012,
+      "titel": "Dr.med.dent.",
+      "vorname": "Parmida",
+      "nachname": "Mostaghelchi",
+      "arzt_name": "Parmida Mostaghelchi",
+      "raw_adresse": "Ährengrubenweg 23",
+      "strasse": "Ährengrubenweg",
+      "hausnummer": "23",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "ährengrubenweg",
+    "retry_hausnummer": "23",
+    "lat": 48.2502708,
+    "lon": 16.3172552,
+    "geo_name": "23"
+  },
+  {
+    "parsed": {
+      "row_num": 1013,
+      "titel": "Dr.med.dent.",
+      "vorname": "Florian",
+      "nachname": "Mostbeck",
+      "arzt_name": "Florian Mostbeck",
+      "raw_adresse": "Märzstraße 135/14",
+      "strasse": "Märzstraße",
+      "hausnummer": "135",
+      "zusatz": "14",
+      "plz": ""
+    },
+    "retry_street": "märzstraße",
+    "retry_hausnummer": "135",
+    "lat": 48.1967454,
+    "lon": 16.3089426,
+    "geo_name": "135"
+  },
+  {
+    "parsed": {
+      "row_num": 1019,
+      "titel": "DDr.",
+      "vorname": "Svätopluk",
+      "nachname": "Mraz",
+      "arzt_name": "Svätopluk Mraz",
+      "raw_adresse": "Draschestraße 19/316",
+      "strasse": "Draschestraße",
+      "hausnummer": "19",
+      "zusatz": "316",
+      "plz": ""
+    },
+    "retry_street": "draschestraße",
+    "retry_hausnummer": "19",
+    "lat": 48.1462915,
+    "lon": 16.3586683,
+    "geo_name": "19"
+  },
+  {
+    "parsed": {
+      "row_num": 1021,
+      "titel": "Dr.",
+      "vorname": "Anna",
+      "nachname": "Mulik-Kargol",
+      "arzt_name": "Anna Mulik-Kargol",
+      "raw_adresse": "Wurmbrandgasse 19/3",
+      "strasse": "Wurmbrandgasse",
+      "hausnummer": "19",
+      "zusatz": "3",
+      "plz": ""
+    },
+    "retry_street": "wurmbrandgasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2259987,
+    "lon": 16.4558858,
+    "geo_name": "Dr. Anna Mulik-Kargol"
+  },
+  {
+    "parsed": {
+      "row_num": 1024,
+      "titel": "Dr.",
+      "vorname": "Ulrike",
+      "nachname": "Müller-Hofbauer MDSc",
+      "arzt_name": "Ulrike Müller-Hofbauer MDSc",
+      "raw_adresse": "An der Oberen Alten Donau 187",
+      "strasse": "An der Oberen Alten Donau",
+      "hausnummer": "187",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "an der oberen alten donau",
+    "retry_hausnummer": "187",
+    "lat": 48.2411277,
+    "lon": 16.4266445,
+    "geo_name": "Dr. Ulrike Müller-Hofbauer MDSc"
+  },
+  {
+    "parsed": {
+      "row_num": 1028,
+      "titel": "Dr.",
+      "vorname": "Norbert",
+      "nachname": "Müller",
+      "arzt_name": "Norbert Müller",
+      "raw_adresse": "Pilgramgasse 1/2/8",
+      "strasse": "Pilgramgasse",
+      "hausnummer": "1",
+      "zusatz": "2/8",
+      "plz": "1050"
+    },
+    "retry_street": "pilgramgasse",
+    "retry_hausnummer": "1",
+    "lat": 48.1915544,
+    "lon": 16.3576847,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 1029,
+      "titel": "Prim.a.D. OMR Dr.",
+      "vorname": "Rainer",
+      "nachname": "Müller",
+      "arzt_name": "Rainer Müller",
+      "raw_adresse": "Reimersgasse 3/26/4",
+      "strasse": "Reimersgasse",
+      "hausnummer": "3",
+      "zusatz": "26/4",
+      "plz": "1190"
+    },
+    "retry_street": "reimersgasse",
+    "retry_hausnummer": "3",
+    "lat": 48.2519312,
+    "lon": 16.3540964,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 1034,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alexa",
+      "nachname": "Muth",
+      "arzt_name": "Alexa Muth",
+      "raw_adresse": "Kreuzgasse 29/2/10",
+      "strasse": "Kreuzgasse",
+      "hausnummer": "29",
+      "zusatz": "2/10",
+      "plz": "1180"
+    },
+    "retry_street": "kreuzgasse",
+    "retry_hausnummer": "29",
+    "lat": 48.2226954,
+    "lon": 16.3392079,
+    "geo_name": "29"
+  },
+  {
+    "parsed": {
+      "row_num": 1035,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alaa",
+      "nachname": "Nadar",
+      "arzt_name": "Alaa Nadar",
+      "raw_adresse": "Wagramer Straße 151/12",
+      "strasse": "Wagramer Straße",
+      "hausnummer": "151",
+      "zusatz": "12",
+      "plz": "1220"
+    },
+    "retry_street": "wagramer straße",
+    "retry_hausnummer": "151",
+    "lat": 48.2544654,
+    "lon": 16.446517,
+    "geo_name": "151-155"
+  },
+  {
+    "parsed": {
+      "row_num": 1038,
+      "titel": "Dr.",
+      "vorname": "Sabine",
+      "nachname": "Nahler MSc",
+      "arzt_name": "Sabine Nahler MSc",
+      "raw_adresse": "Wipplingerstraße 29/3",
+      "strasse": "Wipplingerstraße",
+      "hausnummer": "29",
+      "zusatz": "3",
+      "plz": "1010"
+    },
+    "retry_street": "wipplingerstraße",
+    "retry_hausnummer": "29",
+    "lat": 48.2134508,
+    "lon": 16.367077,
+    "geo_name": "Habibi & Hawara"
+  },
+  {
+    "parsed": {
+      "row_num": 1039,
+      "titel": "Dr.med.dent.",
+      "vorname": "Antonela",
+      "nachname": "Naisar",
+      "arzt_name": "Antonela Naisar",
+      "raw_adresse": "Hüttelbergstraße 159",
+      "strasse": "Hüttelbergstraße",
+      "hausnummer": "159",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "hüttelbergstraße",
+    "retry_hausnummer": "159",
+    "lat": 48.2179659,
+    "lon": 16.2485005,
+    "geo_name": "159"
+  },
+  {
+    "parsed": {
+      "row_num": 1041,
+      "titel": "Dr.med.dent.",
+      "vorname": "Philipp Luciano",
+      "nachname": "Necsea",
+      "arzt_name": "Philipp Luciano Necsea",
+      "raw_adresse": "Remystraße 34/5",
+      "strasse": "Remystraße",
+      "hausnummer": "34",
+      "zusatz": "5",
+      "plz": ""
+    },
+    "retry_street": "remystraße",
+    "retry_hausnummer": "34",
+    "lat": 48.1417189,
+    "lon": 16.3814169,
+    "geo_name": "34"
+  },
+  {
+    "parsed": {
+      "row_num": 1042,
+      "titel": "MR Dr.",
+      "vorname": "Wolfgang",
+      "nachname": "Negrin",
+      "arzt_name": "Wolfgang Negrin",
+      "raw_adresse": "Bahnsteggasse 22/16",
+      "strasse": "Bahnsteggasse",
+      "hausnummer": "22",
+      "zusatz": "16",
+      "plz": ""
+    },
+    "retry_street": "bahnsteggasse",
+    "retry_hausnummer": "22",
+    "lat": 48.2642735,
+    "lon": 16.4005967,
+    "geo_name": "22"
+  },
+  {
+    "parsed": {
+      "row_num": 1047,
+      "titel": "DDr.",
+      "vorname": "Johanna",
+      "nachname": "Netzer",
+      "arzt_name": "Johanna Netzer",
+      "raw_adresse": "Theresianumgasse 17/4",
+      "strasse": "Theresianumgasse",
+      "hausnummer": "17",
+      "zusatz": "4",
+      "plz": ""
+    },
+    "retry_street": "theresianumgasse",
+    "retry_hausnummer": "17",
+    "lat": 48.1919713,
+    "lon": 16.375417,
+    "geo_name": "17"
+  },
+  {
+    "parsed": {
+      "row_num": 1049,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alexander Remus",
+      "nachname": "Neumann",
+      "arzt_name": "Alexander Remus Neumann",
+      "raw_adresse": "Mollardgasse 30-32/3/3",
+      "strasse": "Mollardgasse",
+      "hausnummer": "30-32",
+      "zusatz": "3/3",
+      "plz": "1060"
+    },
+    "retry_street": "mollardgasse",
+    "retry_hausnummer": "30",
+    "lat": 48.1906563,
+    "lon": 16.35021,
+    "geo_name": "Einsteinhof"
+  },
+  {
+    "parsed": {
+      "row_num": 1050,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maximilian",
+      "nachname": "Neumayer",
+      "arzt_name": "Maximilian Neumayer",
+      "raw_adresse": "Franz-Hochedlinger-Gasse 4/2/13",
+      "strasse": "Franz-Hochedlinger-Gasse",
+      "hausnummer": "4",
+      "zusatz": "2/13",
+      "plz": "1020"
+    },
+    "retry_street": "franz-hochedlinger-gasse",
+    "retry_hausnummer": "4",
+    "lat": 48.2196868,
+    "lon": 16.372458,
+    "geo_name": "4"
+  },
+  {
+    "parsed": {
+      "row_num": 1052,
+      "titel": "Dr.med.dent.",
+      "vorname": "Thuy-Y",
+      "nachname": "Nguyen",
+      "arzt_name": "Thuy-Y Nguyen",
+      "raw_adresse": "Glockengasse 14/21",
+      "strasse": "Glockengasse",
+      "hausnummer": "14",
+      "zusatz": "21",
+      "plz": ""
+    },
+    "retry_street": "glockengasse",
+    "retry_hausnummer": "14",
+    "lat": 48.2185284,
+    "lon": 16.3822772,
+    "geo_name": "14"
+  },
+  {
+    "parsed": {
+      "row_num": 1053,
+      "titel": "Dr.",
+      "vorname": "Raluca-Elena",
+      "nachname": "Nicolae MSc",
+      "arzt_name": "Raluca-Elena Nicolae MSc",
+      "raw_adresse": "Schloßhofer Straße 13-15/2",
+      "strasse": "Schloßhofer Straße",
+      "hausnummer": "13-15",
+      "zusatz": "2",
+      "plz": "1210"
+    },
+    "retry_street": "schloßhofer straße",
+    "retry_hausnummer": "13",
+    "lat": 48.2580253,
+    "lon": 16.4010158,
+    "geo_name": "Penny"
+  },
+  {
+    "parsed": {
+      "row_num": 1059,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maximilian",
+      "nachname": "Niebauer",
+      "arzt_name": "Maximilian Niebauer",
+      "raw_adresse": "Sechskrügelgasse 8/3/1",
+      "strasse": "Sechskrügelgasse",
+      "hausnummer": "8",
+      "zusatz": "3/1",
+      "plz": ""
+    },
+    "retry_street": "sechskrügelgasse",
+    "retry_hausnummer": "8",
+    "lat": 48.2018289,
+    "lon": 16.3890833,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 1063,
+      "titel": "Dr.",
+      "vorname": "Martin",
+      "nachname": "Nierscher MA",
+      "arzt_name": "Martin Nierscher MA",
+      "raw_adresse": "Porschestraße 29/2/15",
+      "strasse": "Porschestraße",
+      "hausnummer": "29",
+      "zusatz": "2/15",
+      "plz": "1230"
+    },
+    "retry_street": "porschestraße",
+    "retry_hausnummer": "29",
+    "lat": 48.1281914,
+    "lon": 16.3101168,
+    "geo_name": "Ärztezentrum Siebenhirten"
+  },
+  {
+    "parsed": {
+      "row_num": 1066,
+      "titel": "Dr.",
+      "vorname": "Oksana",
+      "nachname": "Nirk MDSc",
+      "arzt_name": "Oksana Nirk MDSc",
+      "raw_adresse": "Fasangasse 44/3",
+      "strasse": "Fasangasse",
+      "hausnummer": "44",
+      "zusatz": "3",
+      "plz": "1030"
+    },
+    "retry_street": "fasangasse",
+    "retry_hausnummer": "44",
+    "lat": 48.1894448,
+    "lon": 16.3850703,
+    "geo_name": "44"
+  },
+  {
+    "parsed": {
+      "row_num": 1068,
+      "titel": "Dr.med.dent.",
+      "vorname": "Elisabeth",
+      "nachname": "Nöbauer",
+      "arzt_name": "Elisabeth Nöbauer",
+      "raw_adresse": "Herbststraße 17/18",
+      "strasse": "Herbststraße",
+      "hausnummer": "17",
+      "zusatz": "18",
+      "plz": "1160"
+    },
+    "retry_street": "herbststraße",
+    "retry_hausnummer": "17",
+    "lat": 48.2054324,
+    "lon": 16.3322483,
+    "geo_name": "17"
+  },
+  {
+    "parsed": {
+      "row_num": 1069,
+      "titel": "Dr.",
+      "vorname": "Nazanin",
+      "nachname": "Noroozkhan MSc",
+      "arzt_name": "Nazanin Noroozkhan MSc",
+      "raw_adresse": "Wienerbergstraße 13",
+      "strasse": "Wienerbergstraße",
+      "hausnummer": "13",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "wienerbergstraße",
+    "retry_hausnummer": "13",
+    "lat": 48.1691949,
+    "lon": 16.3452722,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 1074,
+      "titel": "Dr.med.dent.",
+      "vorname": "Livia",
+      "nachname": "Ofner",
+      "arzt_name": "Livia Ofner",
+      "raw_adresse": "Kollburggasse 2/7",
+      "strasse": "Kollburggasse",
+      "hausnummer": "2",
+      "zusatz": "7",
+      "plz": ""
+    },
+    "retry_street": "kollburggasse",
+    "retry_hausnummer": "2",
+    "lat": 48.2158782,
+    "lon": 16.3011084,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1078,
+      "titel": "Dr.med.dent.",
+      "vorname": "Borys",
+      "nachname": "Oharenko",
+      "arzt_name": "Borys Oharenko",
+      "raw_adresse": "Wagramer Straße 2A/713",
+      "strasse": "Wagramer Straße",
+      "hausnummer": "2A",
+      "zusatz": "713",
+      "plz": "1220"
+    },
+    "retry_street": "wagramer straße",
+    "retry_hausnummer": "2A",
+    "lat": 48.2301917,
+    "lon": 16.4150899,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 1080,
+      "titel": "Dr.med.dent.",
+      "vorname": "Isabelle",
+      "nachname": "Olivia",
+      "arzt_name": "Isabelle Olivia",
+      "raw_adresse": "Alszeile 78/19",
+      "strasse": "Alszeile",
+      "hausnummer": "78",
+      "zusatz": "19",
+      "plz": ""
+    },
+    "retry_street": "alszeile",
+    "retry_hausnummer": "78",
+    "lat": 48.2310056,
+    "lon": 16.3047002,
+    "geo_name": "78"
+  },
+  {
+    "parsed": {
+      "row_num": 1082,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maisa",
+      "nachname": "Omara PhD",
+      "arzt_name": "Maisa Omara PhD",
+      "raw_adresse": "Hellmesbergergasse 16/4",
+      "strasse": "Hellmesbergergasse",
+      "hausnummer": "16",
+      "zusatz": "4",
+      "plz": ""
+    },
+    "retry_street": "hellmesbergergasse",
+    "retry_hausnummer": "16",
+    "lat": 48.1950723,
+    "lon": 16.2729321,
+    "geo_name": "16"
+  },
+  {
+    "parsed": {
+      "row_num": 1083,
+      "titel": "Dr.-medic stom",
+      "vorname": "Andrada",
+      "nachname": "Onofrei",
+      "arzt_name": "Andrada Onofrei",
+      "raw_adresse": "Remystraße 34/5",
+      "strasse": "Remystraße",
+      "hausnummer": "34",
+      "zusatz": "5",
+      "plz": ""
+    },
+    "retry_street": "remystraße",
+    "retry_hausnummer": "34",
+    "lat": 48.1417189,
+    "lon": 16.3814169,
+    "geo_name": "34"
+  },
+  {
+    "parsed": {
+      "row_num": 1087,
+      "titel": "Dr.med.dent.",
+      "vorname": "Joshua",
+      "nachname": "Orman",
+      "arzt_name": "Joshua Orman",
+      "raw_adresse": "Waldmeistergasse 15",
+      "strasse": "Waldmeistergasse",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "waldmeistergasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2190456,
+    "lon": 16.2518122,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 1088,
+      "titel": "Dr.med.dent.",
+      "vorname": "Esra",
+      "nachname": "Orun",
+      "arzt_name": "Esra Orun",
+      "raw_adresse": "Gentzgasse 14-20/7/10",
+      "strasse": "Gentzgasse",
+      "hausnummer": "14-20",
+      "zusatz": "7/10",
+      "plz": "1180"
+    },
+    "retry_street": "gentzgasse",
+    "retry_hausnummer": "14",
+    "lat": 48.2267788,
+    "lon": 16.3457646,
+    "geo_name": "La Valentina"
+  },
+  {
+    "parsed": {
+      "row_num": 1089,
+      "titel": "Dr.med.dent.",
+      "vorname": "Achmed",
+      "nachname": "Osman Fathy Osman MSc",
+      "arzt_name": "Achmed Osman Fathy Osman MSc",
+      "raw_adresse": "Humboldtplatz 10/45",
+      "strasse": "Humboldtplatz",
+      "hausnummer": "10",
+      "zusatz": "45",
+      "plz": ""
+    },
+    "retry_street": "humboldtplatz",
+    "retry_hausnummer": "10",
+    "lat": 48.1794976,
+    "lon": 16.3788667,
+    "geo_name": "10"
+  },
+  {
+    "parsed": {
+      "row_num": 1090,
+      "titel": "Dr.med.dent.",
+      "vorname": "Victor",
+      "nachname": "Ossmann",
+      "arzt_name": "Victor Ossmann",
+      "raw_adresse": "Sollingergasse 3/10",
+      "strasse": "Sollingergasse",
+      "hausnummer": "3",
+      "zusatz": "10",
+      "plz": "1190"
+    },
+    "retry_street": "sollingergasse",
+    "retry_hausnummer": "3",
+    "lat": 48.2410711,
+    "lon": 16.3351065,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 1093,
+      "titel": "OA Ass.-Prof. Dr.",
+      "vorname": "Ahmed",
+      "nachname": "Othman MSc, PhD",
+      "arzt_name": "Ahmed Othman MSc, PhD",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1094,
+      "titel": "Dr.",
+      "vorname": "Nicole Maria",
+      "nachname": "Ottenbacher",
+      "arzt_name": "Nicole Maria Ottenbacher",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 1095,
+      "titel": "Dr.med.dent.",
+      "vorname": "Carolin",
+      "nachname": "Otterbein",
+      "arzt_name": "Carolin Otterbein",
+      "raw_adresse": "Anatourgasse 58",
+      "strasse": "Anatourgasse",
+      "hausnummer": "58",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "anatourgasse",
+    "retry_hausnummer": "58",
+    "lat": 48.1614462,
+    "lon": 16.2710906,
+    "geo_name": "58"
+  },
+  {
+    "parsed": {
+      "row_num": 1100,
+      "titel": "Dr.-medic stom",
+      "vorname": "Horia-Ionut",
+      "nachname": "Pantea",
+      "arzt_name": "Horia-Ionut Pantea",
+      "raw_adresse": "Schanzstraße 15-17/36",
+      "strasse": "Schanzstraße",
+      "hausnummer": "15-17",
+      "zusatz": "36",
+      "plz": ""
+    },
+    "retry_street": "schanzstraße",
+    "retry_hausnummer": "15",
+    "lat": 48.2002121,
+    "lon": 16.3161086,
+    "geo_name": "15-17"
+  },
+  {
+    "parsed": {
+      "row_num": 1102,
+      "titel": "Dr.",
+      "vorname": "Sophia Anna",
+      "nachname": "Panwinkler",
+      "arzt_name": "Sophia Anna Panwinkler",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 1103,
+      "titel": "d-r",
+      "vorname": "Reneta Ivova",
+      "nachname": "Parashkevova",
+      "arzt_name": "Reneta Ivova Parashkevova",
+      "raw_adresse": "Mariahilfer Straße 32/3",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "32",
+      "zusatz": "3",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "32",
+    "lat": 48.2002896,
+    "lon": 16.3547193,
+    "geo_name": "32"
+  },
+  {
+    "parsed": {
+      "row_num": 1104,
+      "titel": "Dr.",
+      "vorname": "Alfred",
+      "nachname": "Partik",
+      "arzt_name": "Alfred Partik",
+      "raw_adresse": "Stubenring 14/13-14",
+      "strasse": "Stubenring",
+      "hausnummer": "14",
+      "zusatz": "13-14",
+      "plz": "1010"
+    },
+    "retry_street": "stubenring",
+    "retry_hausnummer": "14",
+    "lat": 48.2087829,
+    "lon": 16.3816088,
+    "geo_name": "14"
+  },
+  {
+    "parsed": {
+      "row_num": 1106,
+      "titel": "DDr.",
+      "vorname": "Sanda-Ileana",
+      "nachname": "Patruta",
+      "arzt_name": "Sanda-Ileana Patruta",
+      "raw_adresse": "Esterhazygasse 30A/6",
+      "strasse": "Esterhazygasse",
+      "hausnummer": "30A",
+      "zusatz": "6",
+      "plz": ""
+    },
+    "retry_street": "esterhazygasse",
+    "retry_hausnummer": "30A",
+    "lat": 48.1970736,
+    "lon": 16.3491575,
+    "geo_name": "Esterházygasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1107,
+      "titel": "Dr.",
+      "vorname": "Melanie Traute",
+      "nachname": "Paulmayer",
+      "arzt_name": "Melanie Traute Paulmayer",
+      "raw_adresse": "Kirchstetterngasse 49",
+      "strasse": "Kirchstetterngasse",
+      "hausnummer": "49",
+      "zusatz": "",
+      "plz": "1160"
+    },
+    "retry_street": "kirchstetterngasse",
+    "retry_hausnummer": "49",
+    "lat": 48.2099411,
+    "lon": 16.3330592,
+    "geo_name": "49"
+  },
+  {
+    "parsed": {
+      "row_num": 1112,
+      "titel": "Dr.med.dent.",
+      "vorname": "Adrian Patrick",
+      "nachname": "Pecher BScMed",
+      "arzt_name": "Adrian Patrick Pecher BScMed",
+      "raw_adresse": "Herrengasse 6/8/3",
+      "strasse": "Herrengasse",
+      "hausnummer": "6",
+      "zusatz": "8/3",
+      "plz": "1010"
+    },
+    "retry_street": "herrengasse",
+    "retry_hausnummer": "6",
+    "lat": 48.2088652,
+    "lon": 16.3663842,
+    "geo_name": "Miss Saigon"
+  },
+  {
+    "parsed": {
+      "row_num": 1113,
+      "titel": "DDr.",
+      "vorname": "Alkuin Anton",
+      "nachname": "Pecher",
+      "arzt_name": "Alkuin Anton Pecher",
+      "raw_adresse": "Herrengasse 6/8/3",
+      "strasse": "Herrengasse",
+      "hausnummer": "6",
+      "zusatz": "8/3",
+      "plz": "1010"
+    },
+    "retry_street": "herrengasse",
+    "retry_hausnummer": "6",
+    "lat": 48.2088652,
+    "lon": 16.3663842,
+    "geo_name": "Miss Saigon"
+  },
+  {
+    "parsed": {
+      "row_num": 1118,
+      "titel": "Dr.",
+      "vorname": "Tania",
+      "nachname": "Pekez MSc",
+      "arzt_name": "Tania Pekez MSc",
+      "raw_adresse": "Renngasse 15",
+      "strasse": "Renngasse",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "renngasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2137159,
+    "lon": 16.368246,
+    "geo_name": "Zahngesundheitszentrum der WGKK"
+  },
+  {
+    "parsed": {
+      "row_num": 1120,
+      "titel": "lkr.dent.",
+      "vorname": "Thomas",
+      "nachname": "Pellech",
+      "arzt_name": "Thomas Pellech",
+      "raw_adresse": "Heuberggasse 11",
+      "strasse": "Heuberggasse",
+      "hausnummer": "11",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "heuberggasse",
+    "retry_hausnummer": "11",
+    "lat": 48.2284108,
+    "lon": 16.2927992,
+    "geo_name": "11"
+  },
+  {
+    "parsed": {
+      "row_num": 1122,
+      "titel": "DDr.",
+      "vorname": "Sebastian",
+      "nachname": "Pelster",
+      "arzt_name": "Sebastian Pelster",
+      "raw_adresse": "Diefenbachgasse 44/18",
+      "strasse": "Diefenbachgasse",
+      "hausnummer": "44",
+      "zusatz": "18",
+      "plz": ""
+    },
+    "retry_street": "diefenbachgasse",
+    "retry_hausnummer": "44",
+    "lat": 48.184822,
+    "lon": 16.3304652,
+    "geo_name": "44"
+  },
+  {
+    "parsed": {
+      "row_num": 1123,
+      "titel": "Dr.",
+      "vorname": "Brigitte",
+      "nachname": "Penkner",
+      "arzt_name": "Brigitte Penkner",
+      "raw_adresse": "Hackenberggasse 42",
+      "strasse": "Hackenberggasse",
+      "hausnummer": "42",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "hackenberggasse",
+    "retry_hausnummer": "42",
+    "lat": 48.2471672,
+    "lon": 16.3237546,
+    "geo_name": "42"
+  },
+  {
+    "parsed": {
+      "row_num": 1127,
+      "titel": "Dr.med.dent.",
+      "vorname": "Gabriela",
+      "nachname": "Peschek",
+      "arzt_name": "Gabriela Peschek",
+      "raw_adresse": "Hutweidengasse 69/1/11",
+      "strasse": "Hutweidengasse",
+      "hausnummer": "69",
+      "zusatz": "1/11",
+      "plz": ""
+    },
+    "retry_street": "hutweidengasse",
+    "retry_hausnummer": "69",
+    "lat": 48.2427743,
+    "lon": 16.3295474,
+    "geo_name": "69/1"
+  },
+  {
+    "parsed": {
+      "row_num": 1130,
+      "titel": "Dr.med.dent.",
+      "vorname": "Jennifer",
+      "nachname": "Petrides",
+      "arzt_name": "Jennifer Petrides",
+      "raw_adresse": "Albertgasse 19/17",
+      "strasse": "Albertgasse",
+      "hausnummer": "19",
+      "zusatz": "17",
+      "plz": "1080"
+    },
+    "retry_street": "albertgasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2099572,
+    "lon": 16.3437997,
+    "geo_name": "In's Albert - Die Vinothek"
+  },
+  {
+    "parsed": {
+      "row_num": 1135,
+      "titel": "ZÄ",
+      "vorname": "Lisa Sophie",
+      "nachname": "Pichler",
+      "arzt_name": "Lisa Sophie Pichler",
+      "raw_adresse": "Schumanngasse 86/1/2",
+      "strasse": "Schumanngasse",
+      "hausnummer": "86",
+      "zusatz": "1/2",
+      "plz": ""
+    },
+    "retry_street": "schumanngasse",
+    "retry_hausnummer": "86",
+    "lat": 48.2238517,
+    "lon": 16.3323429,
+    "geo_name": "86"
+  },
+  {
+    "parsed": {
+      "row_num": 1140,
+      "titel": "DDr.",
+      "vorname": "Robert",
+      "nachname": "Pillerstorff",
+      "arzt_name": "Robert Pillerstorff",
+      "raw_adresse": "Schönbrunner Schloßstraße 47/3/38",
+      "strasse": "Schönbrunner Schloßstraße",
+      "hausnummer": "47",
+      "zusatz": "3/38",
+      "plz": "1120"
+    },
+    "retry_street": "schönbrunner schloßstraße",
+    "retry_hausnummer": "47",
+    "lat": 48.1848664,
+    "lon": 16.3128721,
+    "geo_name": "Schlosskapelle Schönbrunn"
+  },
+  {
+    "parsed": {
+      "row_num": 1141,
+      "titel": "Dr.med.dent.",
+      "vorname": "Nathalie",
+      "nachname": "Pillmann",
+      "arzt_name": "Nathalie Pillmann",
+      "raw_adresse": "Rittergasse 6/17",
+      "strasse": "Rittergasse",
+      "hausnummer": "6",
+      "zusatz": "17",
+      "plz": ""
+    },
+    "retry_street": "rittergasse",
+    "retry_hausnummer": "6",
+    "lat": 48.1930929,
+    "lon": 16.363385,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1142,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alexander",
+      "nachname": "Pilus",
+      "arzt_name": "Alexander Pilus",
+      "raw_adresse": "Obere Weißgerberstraße 8/15",
+      "strasse": "Obere Weißgerberstraße",
+      "hausnummer": "8",
+      "zusatz": "15",
+      "plz": ""
+    },
+    "retry_street": "obere weißgerberstraße",
+    "retry_hausnummer": "8",
+    "lat": 48.2121377,
+    "lon": 16.3881469,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 1144,
+      "titel": "Dr.",
+      "vorname": "Tomasz",
+      "nachname": "Pilus M.Sc.",
+      "arzt_name": "Tomasz Pilus M.Sc.",
+      "raw_adresse": "Kolonitzgasse 6/5",
+      "strasse": "Kolonitzgasse",
+      "hausnummer": "6",
+      "zusatz": "5",
+      "plz": "1030"
+    },
+    "retry_street": "kolonitzgasse",
+    "retry_hausnummer": "6",
+    "lat": 48.2102676,
+    "lon": 16.3886559,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1155,
+      "titel": "Dr.-medic stom",
+      "vorname": "Bahar",
+      "nachname": "Pishan MClinDent",
+      "arzt_name": "Bahar Pishan MClinDent",
+      "raw_adresse": "Adalbert-Stifter-Straße 35/6/1",
+      "strasse": "Adalbert-Stifter-Straße",
+      "hausnummer": "35",
+      "zusatz": "6/1",
+      "plz": "1200"
+    },
+    "retry_street": "adalbert-stifter-straße",
+    "retry_hausnummer": "35",
+    "lat": 48.2408727,
+    "lon": 16.3700467,
+    "geo_name": "35"
+  },
+  {
+    "parsed": {
+      "row_num": 1157,
+      "titel": "Dr.med.dent.",
+      "vorname": "Tobias",
+      "nachname": "Pletz",
+      "arzt_name": "Tobias Pletz",
+      "raw_adresse": "Arakawastraße 6/2/4",
+      "strasse": "Arakawastraße",
+      "hausnummer": "6",
+      "zusatz": "2/4",
+      "plz": ""
+    },
+    "retry_street": "arakawastraße",
+    "retry_hausnummer": "6",
+    "lat": 48.2483929,
+    "lon": 16.4288484,
+    "geo_name": "Arakawastraße"
+  },
+  {
+    "parsed": {
+      "row_num": 1159,
+      "titel": "Dr.",
+      "vorname": "Sophie Katharina",
+      "nachname": "Pock BScMed",
+      "arzt_name": "Sophie Katharina Pock BScMed",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 1164,
+      "titel": "Dr.med.dent.",
+      "vorname": "Anida",
+      "nachname": "Poljak Campara",
+      "arzt_name": "Anida Poljak Campara",
+      "raw_adresse": "Felbigergasse 3/3/14",
+      "strasse": "Felbigergasse",
+      "hausnummer": "3",
+      "zusatz": "3/14",
+      "plz": ""
+    },
+    "retry_street": "felbigergasse",
+    "retry_hausnummer": "3",
+    "lat": 48.1958539,
+    "lon": 16.2996942,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 1170,
+      "titel": "Dr.-medic stom",
+      "vorname": "Madalina Ioana",
+      "nachname": "Popa-Tuns",
+      "arzt_name": "Madalina Ioana Popa-Tuns",
+      "raw_adresse": "Julius-Tandler-Platz 8/2/VII",
+      "strasse": "Julius-Tandler-Platz",
+      "hausnummer": "8",
+      "zusatz": "2/VII",
+      "plz": "1090"
+    },
+    "retry_street": "julius-tandler-platz",
+    "retry_hausnummer": "8",
+    "lat": 48.2254198,
+    "lon": 16.3615656,
+    "geo_name": "dm"
+  },
+  {
+    "parsed": {
+      "row_num": 1171,
+      "titel": "Dr.-medic stom",
+      "vorname": "Diana Nicoleta",
+      "nachname": "Popescu",
+      "arzt_name": "Diana Nicoleta Popescu",
+      "raw_adresse": "Mariahilferstraße 81/1/9",
+      "strasse": "Mariahilferstraße",
+      "hausnummer": "81",
+      "zusatz": "1/9",
+      "plz": "1060"
+    },
+    "retry_street": "mariahilferstraße",
+    "retry_hausnummer": "81",
+    "lat": 48.1973071,
+    "lon": 16.3495057,
+    "geo_name": "Stadtsaal"
+  },
+  {
+    "parsed": {
+      "row_num": 1178,
+      "titel": "Dr.",
+      "vorname": "Wolfgang",
+      "nachname": "Pöschl",
+      "arzt_name": "Wolfgang Pöschl",
+      "raw_adresse": "Novalisgasse 7",
+      "strasse": "Novalisgasse",
+      "hausnummer": "7",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "novalisgasse",
+    "retry_hausnummer": "7",
+    "lat": 48.1777084,
+    "lon": 16.2657848,
+    "geo_name": "7"
+  },
+  {
+    "parsed": {
+      "row_num": 1183,
+      "titel": "Dr.",
+      "vorname": "Azadeh",
+      "nachname": "Pour M.Sc.",
+      "arzt_name": "Azadeh Pour M.Sc.",
+      "raw_adresse": "Speisinger Straße 46-48/4/1",
+      "strasse": "Speisinger Straße",
+      "hausnummer": "46-48",
+      "zusatz": "4/1",
+      "plz": ""
+    },
+    "retry_street": "speisinger straße",
+    "retry_hausnummer": "46",
+    "lat": 48.1694872,
+    "lon": 16.2848882,
+    "geo_name": "46-48"
+  },
+  {
+    "parsed": {
+      "row_num": 1184,
+      "titel": "Dr.med.dent.",
+      "vorname": "Niloufar",
+      "nachname": "Pour Sadeghian MSc",
+      "arzt_name": "Niloufar Pour Sadeghian MSc",
+      "raw_adresse": "Zieglergasse 51/2/14",
+      "strasse": "Zieglergasse",
+      "hausnummer": "51",
+      "zusatz": "2/14",
+      "plz": "1070"
+    },
+    "retry_street": "zieglergasse",
+    "retry_hausnummer": "51",
+    "lat": 48.2036112,
+    "lon": 16.3443709,
+    "geo_name": "51"
+  },
+  {
+    "parsed": {
+      "row_num": 1185,
+      "titel": "DDr.",
+      "vorname": "Marion",
+      "nachname": "Pourebrahim",
+      "arzt_name": "Marion Pourebrahim",
+      "raw_adresse": "Klimschgasse 22/24",
+      "strasse": "Klimschgasse",
+      "hausnummer": "22",
+      "zusatz": "24",
+      "plz": ""
+    },
+    "retry_street": "klimschgasse",
+    "retry_hausnummer": "22",
+    "lat": 48.1941845,
+    "lon": 16.3924948,
+    "geo_name": "22"
+  },
+  {
+    "parsed": {
+      "row_num": 1186,
+      "titel": "Dr.med.dent.",
+      "vorname": "Tara",
+      "nachname": "Pouresmaeil",
+      "arzt_name": "Tara Pouresmaeil",
+      "raw_adresse": "Faulmanngasse 5/3",
+      "strasse": "Faulmanngasse",
+      "hausnummer": "5",
+      "zusatz": "3",
+      "plz": ""
+    },
+    "retry_street": "faulmanngasse",
+    "retry_hausnummer": "5",
+    "lat": 48.1986749,
+    "lon": 16.3653395,
+    "geo_name": "Nippon-Ya 日本屋"
+  },
+  {
+    "parsed": {
+      "row_num": 1188,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maria",
+      "nachname": "Preissnecker",
+      "arzt_name": "Maria Preissnecker",
+      "raw_adresse": "Buchfeldgasse 7/1/9",
+      "strasse": "Buchfeldgasse",
+      "hausnummer": "7",
+      "zusatz": "1/9",
+      "plz": ""
+    },
+    "retry_street": "buchfeldgasse",
+    "retry_hausnummer": "7",
+    "lat": 48.2101362,
+    "lon": 16.3533583,
+    "geo_name": "Tür 7"
+  },
+  {
+    "parsed": {
+      "row_num": 1189,
+      "titel": "Dr.med.dent.",
+      "vorname": "Christina Anna",
+      "nachname": "Pribanova",
+      "arzt_name": "Christina Anna Pribanova",
+      "raw_adresse": "Baumgasse 48/1/16",
+      "strasse": "Baumgasse",
+      "hausnummer": "48",
+      "zusatz": "1/16",
+      "plz": ""
+    },
+    "retry_street": "baumgasse",
+    "retry_hausnummer": "48",
+    "lat": 48.1936245,
+    "lon": 16.4034453,
+    "geo_name": "48"
+  },
+  {
+    "parsed": {
+      "row_num": 1190,
+      "titel": "Dr.med.dent.",
+      "vorname": "Patrick",
+      "nachname": "Priedl",
+      "arzt_name": "Patrick Priedl",
+      "raw_adresse": "Neuwaldegger Straße 23/1/13",
+      "strasse": "Neuwaldegger Straße",
+      "hausnummer": "23",
+      "zusatz": "1/13",
+      "plz": ""
+    },
+    "retry_street": "neuwaldegger straße",
+    "retry_hausnummer": "23",
+    "lat": 48.2366299,
+    "lon": 16.2879505,
+    "geo_name": "23"
+  },
+  {
+    "parsed": {
+      "row_num": 1191,
+      "titel": "Dr.-medic stom",
+      "vorname": "Diana",
+      "nachname": "Prisecariu",
+      "arzt_name": "Diana Prisecariu",
+      "raw_adresse": "Rosasgasse 38/1/104",
+      "strasse": "Rosasgasse",
+      "hausnummer": "38",
+      "zusatz": "1/104",
+      "plz": ""
+    },
+    "retry_street": "rosasgasse",
+    "retry_hausnummer": "38",
+    "lat": 48.182837,
+    "lon": 16.320179,
+    "geo_name": "38"
+  },
+  {
+    "parsed": {
+      "row_num": 1195,
+      "titel": "Dr.",
+      "vorname": "Leszek",
+      "nachname": "Ptaszynska",
+      "arzt_name": "Leszek Ptaszynska",
+      "raw_adresse": "Hintschiggasse 7/2/18",
+      "strasse": "Hintschiggasse",
+      "hausnummer": "7",
+      "zusatz": "2/18",
+      "plz": "1100"
+    },
+    "retry_street": "hintschiggasse",
+    "retry_hausnummer": "7",
+    "lat": 48.1578583,
+    "lon": 16.3452542,
+    "geo_name": "7"
+  },
+  {
+    "parsed": {
+      "row_num": 1196,
+      "titel": "Dr.",
+      "vorname": "Ewa",
+      "nachname": "Ptaszynska M.Sc., M.Sc.",
+      "arzt_name": "Ewa Ptaszynska M.Sc., M.Sc.",
+      "raw_adresse": "Laxenburger Straße 12",
+      "strasse": "Laxenburger Straße",
+      "hausnummer": "12",
+      "zusatz": "",
+      "plz": "1100"
+    },
+    "retry_street": "laxenburger straße",
+    "retry_hausnummer": "12",
+    "lat": 48.1805177,
+    "lon": 16.3735554,
+    "geo_name": "Dr. Leszek Ptaszinski"
+  },
+  {
+    "parsed": {
+      "row_num": 1197,
+      "titel": "dr. med. dent.",
+      "vorname": "Monika Eszter",
+      "nachname": "Pulai",
+      "arzt_name": "Monika Eszter Pulai",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1199,
+      "titel": "Dr.med.dent.",
+      "vorname": "Lena",
+      "nachname": "Punzenberger",
+      "arzt_name": "Lena Punzenberger",
+      "raw_adresse": "Neubaugasse 36/3/51",
+      "strasse": "Neubaugasse",
+      "hausnummer": "36",
+      "zusatz": "3/51",
+      "plz": "1070"
+    },
+    "retry_street": "neubaugasse",
+    "retry_hausnummer": "36",
+    "lat": 48.201372,
+    "lon": 16.3492138,
+    "geo_name": "Renaissancetheater"
+  },
+  {
+    "parsed": {
+      "row_num": 1201,
+      "titel": "Dr.",
+      "vorname": "Werner",
+      "nachname": "Püringer",
+      "arzt_name": "Werner Püringer",
+      "raw_adresse": "Kranzgasse 6/4",
+      "strasse": "Kranzgasse",
+      "hausnummer": "6",
+      "zusatz": "4",
+      "plz": ""
+    },
+    "retry_street": "kranzgasse",
+    "retry_hausnummer": "6",
+    "lat": 48.1888736,
+    "lon": 16.3338879,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1206,
+      "titel": "Dr.",
+      "vorname": "Andreas",
+      "nachname": "Quidenus MSc",
+      "arzt_name": "Andreas Quidenus MSc",
+      "raw_adresse": "Werdertorgasse 15",
+      "strasse": "Werdertorgasse",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "werdertorgasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2155444,
+    "lon": 16.3709545,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 1210,
+      "titel": "lek.dent.",
+      "vorname": "Maciej Jan",
+      "nachname": "Radosz",
+      "arzt_name": "Maciej Jan Radosz",
+      "raw_adresse": "Rudolf-Simon-Gasse 5/46",
+      "strasse": "Rudolf-Simon-Gasse",
+      "hausnummer": "5",
+      "zusatz": "46",
+      "plz": ""
+    },
+    "retry_street": "rudolf-simon-gasse",
+    "retry_hausnummer": "5",
+    "lat": 48.1521269,
+    "lon": 16.4697291,
+    "geo_name": "5"
+  },
+  {
+    "parsed": {
+      "row_num": 1211,
+      "titel": "Dr.med.dent.",
+      "vorname": "Reyhaneh",
+      "nachname": "Rahimpour",
+      "arzt_name": "Reyhaneh Rahimpour",
+      "raw_adresse": "Große Sperlgasse 4/16",
+      "strasse": "Große Sperlgasse",
+      "hausnummer": "4",
+      "zusatz": "16",
+      "plz": ""
+    },
+    "retry_street": "große sperlgasse",
+    "retry_hausnummer": "4",
+    "lat": 48.2165205,
+    "lon": 16.3782359,
+    "geo_name": "Radservicestation"
+  },
+  {
+    "parsed": {
+      "row_num": 1213,
+      "titel": "Dr.med.dent.",
+      "vorname": "Valentina",
+      "nachname": "Rainer",
+      "arzt_name": "Valentina Rainer",
+      "raw_adresse": "Turmburggasse 2/5/26",
+      "strasse": "Turmburggasse",
+      "hausnummer": "2",
+      "zusatz": "5/26",
+      "plz": ""
+    },
+    "retry_street": "turmburggasse",
+    "retry_hausnummer": "2",
+    "lat": 48.1921823,
+    "lon": 16.3533659,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1215,
+      "titel": "Dr.",
+      "vorname": "Gabriele",
+      "nachname": "Rameis",
+      "arzt_name": "Gabriele Rameis",
+      "raw_adresse": "Franzensgasse 22/8",
+      "strasse": "Franzensgasse",
+      "hausnummer": "22",
+      "zusatz": "8",
+      "plz": "1050"
+    },
+    "retry_street": "franzensgasse",
+    "retry_hausnummer": "22",
+    "lat": 48.1957973,
+    "lon": 16.359021,
+    "geo_name": "22"
+  },
+  {
+    "parsed": {
+      "row_num": 1216,
+      "titel": "Dr.",
+      "vorname": "Andrea",
+      "nachname": "Ramisch-Breinössl",
+      "arzt_name": "Andrea Ramisch-Breinössl",
+      "raw_adresse": "Oberwiedenstraße 15",
+      "strasse": "Oberwiedenstraße",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "oberwiedenstraße",
+    "retry_hausnummer": "15",
+    "lat": 48.2262555,
+    "lon": 16.2990469,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 1224,
+      "titel": "Dr.",
+      "vorname": "Marco Aoqi",
+      "nachname": "Rausch",
+      "arzt_name": "Marco Aoqi Rausch",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 1225,
+      "titel": "Dr.",
+      "vorname": "Nicola Valentina",
+      "nachname": "Rausch",
+      "arzt_name": "Nicola Valentina Rausch",
+      "raw_adresse": "Breitenfurterstraße 360-368/1/R1",
+      "strasse": "Breitenfurterstraße",
+      "hausnummer": "360-368",
+      "zusatz": "1/R1",
+      "plz": "1230"
+    },
+    "retry_street": "breitenfurterstraße",
+    "retry_hausnummer": "360",
+    "lat": 48.1359082,
+    "lon": 16.2817851,
+    "geo_name": "Juwelier Stürzl"
+  },
+  {
+    "parsed": {
+      "row_num": 1228,
+      "titel": "Dr.",
+      "vorname": "Kerstin",
+      "nachname": "Rech",
+      "arzt_name": "Kerstin Rech",
+      "raw_adresse": "Günthergasse 2 Top 3",
+      "strasse": "Günthergasse 2 Top",
+      "hausnummer": "3",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "günthergasse 2",
+    "retry_hausnummer": "3",
+    "lat": 48.2165725,
+    "lon": 16.3583288,
+    "geo_name": "Günthergasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1231,
+      "titel": "Dr.med.dent.",
+      "vorname": "Julia",
+      "nachname": "Reibach",
+      "arzt_name": "Julia Reibach",
+      "raw_adresse": "Haslingergasse 20-22/31",
+      "strasse": "Haslingergasse",
+      "hausnummer": "20-22",
+      "zusatz": "31",
+      "plz": ""
+    },
+    "retry_street": "haslingergasse",
+    "retry_hausnummer": "20",
+    "lat": 48.2152072,
+    "lon": 16.3297744,
+    "geo_name": "20"
+  },
+  {
+    "parsed": {
+      "row_num": 1235,
+      "titel": "MR Dr.",
+      "vorname": "Peter",
+      "nachname": "Reichenbach",
+      "arzt_name": "Peter Reichenbach",
+      "raw_adresse": "Liechtensteinstraße 83/23",
+      "strasse": "Liechtensteinstraße",
+      "hausnummer": "83",
+      "zusatz": "23",
+      "plz": "1090"
+    },
+    "retry_street": "liechtensteinstraße",
+    "retry_hausnummer": "83",
+    "lat": 48.2260301,
+    "lon": 16.3565943,
+    "geo_name": "83"
+  },
+  {
+    "parsed": {
+      "row_num": 1238,
+      "titel": "Dr.med.dent.",
+      "vorname": "Ferdinand",
+      "nachname": "Reichsthaler",
+      "arzt_name": "Ferdinand Reichsthaler",
+      "raw_adresse": "Boltzmanngasse 15/5",
+      "strasse": "Boltzmanngasse",
+      "hausnummer": "15",
+      "zusatz": "5",
+      "plz": "1090"
+    },
+    "retry_street": "boltzmanngasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2242519,
+    "lon": 16.3564229,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 1240,
+      "titel": "Dr.med.dent.",
+      "vorname": "Theresa",
+      "nachname": "Reichsthaler",
+      "arzt_name": "Theresa Reichsthaler",
+      "raw_adresse": "Witthauergasse 28/12",
+      "strasse": "Witthauergasse",
+      "hausnummer": "28",
+      "zusatz": "12",
+      "plz": ""
+    },
+    "retry_street": "witthauergasse",
+    "retry_hausnummer": "28",
+    "lat": 48.2349786,
+    "lon": 16.3244466,
+    "geo_name": "28"
+  },
+  {
+    "parsed": {
+      "row_num": 1242,
+      "titel": "ZÄ",
+      "vorname": "Linda",
+      "nachname": "Reimers",
+      "arzt_name": "Linda Reimers",
+      "raw_adresse": "Naaffgasse 10/1",
+      "strasse": "Naaffgasse",
+      "hausnummer": "10",
+      "zusatz": "1",
+      "plz": ""
+    },
+    "retry_street": "naaffgasse",
+    "retry_hausnummer": "10",
+    "lat": 48.2331775,
+    "lon": 16.3134005,
+    "geo_name": "10-12"
+  },
+  {
+    "parsed": {
+      "row_num": 1243,
+      "titel": "ZÄ",
+      "vorname": "Eun Sol",
+      "nachname": "Reindl",
+      "arzt_name": "Eun Sol Reindl",
+      "raw_adresse": "Fuchsröhrenstraße 15/1",
+      "strasse": "Fuchsröhrenstraße",
+      "hausnummer": "15",
+      "zusatz": "1",
+      "plz": "1110"
+    },
+    "retry_street": "fuchsröhrenstraße",
+    "retry_hausnummer": "15",
+    "lat": 48.1812651,
+    "lon": 16.4146472,
+    "geo_name": "Fuchsröhrenstraße"
+  },
+  {
+    "parsed": {
+      "row_num": 1246,
+      "titel": "Dr.med.dent.",
+      "vorname": "Ines Elisabeth",
+      "nachname": "Reisinger-Witzmann",
+      "arzt_name": "Ines Elisabeth Reisinger-Witzmann",
+      "raw_adresse": "Fuchsthallergasse 8/9",
+      "strasse": "Fuchsthallergasse",
+      "hausnummer": "8",
+      "zusatz": "9",
+      "plz": "1090"
+    },
+    "retry_street": "fuchsthallergasse",
+    "retry_hausnummer": "8",
+    "lat": 48.2248169,
+    "lon": 16.352348,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 1250,
+      "titel": "Dr.",
+      "vorname": "Franziska",
+      "nachname": "Reiterlechner BScMed",
+      "arzt_name": "Franziska Reiterlechner BScMed",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1252,
+      "titel": "Dr.-medic stom",
+      "vorname": "Claudia-Luminita",
+      "nachname": "Revnic",
+      "arzt_name": "Claudia-Luminita Revnic",
+      "raw_adresse": "Pawlikgasse 20 Haus 3",
+      "strasse": "Pawlikgasse 20 Haus",
+      "hausnummer": "3",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "pawlikgasse 20",
+    "retry_hausnummer": "3",
+    "lat": 48.2461119,
+    "lon": 16.487052,
+    "geo_name": "Pawlikgasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1254,
+      "titel": "Dr.med.dent.",
+      "vorname": "Otis",
+      "nachname": "Rezegh",
+      "arzt_name": "Otis Rezegh",
+      "raw_adresse": "Werdertorgasse 2/2/10",
+      "strasse": "Werdertorgasse",
+      "hausnummer": "2",
+      "zusatz": "2/10",
+      "plz": "1010"
+    },
+    "retry_street": "werdertorgasse",
+    "retry_hausnummer": "2",
+    "lat": 48.2145242,
+    "lon": 16.3696778,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1257,
+      "titel": "MR Dr.",
+      "vorname": "Marion",
+      "nachname": "Riemer",
+      "arzt_name": "Marion Riemer",
+      "raw_adresse": "Castellezgasse 25/3/4/8",
+      "strasse": "Castellezgasse",
+      "hausnummer": "25",
+      "zusatz": "3/4/8",
+      "plz": "1020"
+    },
+    "retry_street": "castellezgasse",
+    "retry_hausnummer": "25",
+    "lat": 48.2224305,
+    "lon": 16.3810337,
+    "geo_name": "23-25"
+  },
+  {
+    "parsed": {
+      "row_num": 1258,
+      "titel": "Dr.",
+      "vorname": "Anna",
+      "nachname": "Riener BScMed",
+      "arzt_name": "Anna Riener BScMed",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 1260,
+      "titel": "Dr.med.dent.",
+      "vorname": "Jaqueline",
+      "nachname": "Roch MSc",
+      "arzt_name": "Jaqueline Roch MSc",
+      "raw_adresse": "Prinzgasse 19",
+      "strasse": "Prinzgasse",
+      "hausnummer": "19",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "prinzgasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2398196,
+    "lon": 16.4810219,
+    "geo_name": "Prinzgasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1261,
+      "titel": "Dr.med.dent.",
+      "vorname": "Roland",
+      "nachname": "Röcker",
+      "arzt_name": "Roland Röcker",
+      "raw_adresse": "Ausstellungsstraße 50/2/251",
+      "strasse": "Ausstellungsstraße",
+      "hausnummer": "50",
+      "zusatz": "2/251",
+      "plz": "1020"
+    },
+    "retry_street": "ausstellungsstraße",
+    "retry_hausnummer": "50",
+    "lat": 48.2176916,
+    "lon": 16.4098044,
+    "geo_name": "50"
+  },
+  {
+    "parsed": {
+      "row_num": 1265,
+      "titel": "Dr.med.dent.",
+      "vorname": "Fianna",
+      "nachname": "Roitman",
+      "arzt_name": "Fianna Roitman",
+      "raw_adresse": "Stuwerstraße 35/38",
+      "strasse": "Stuwerstraße",
+      "hausnummer": "35",
+      "zusatz": "38",
+      "plz": ""
+    },
+    "retry_street": "stuwerstraße",
+    "retry_hausnummer": "35",
+    "lat": 48.2189254,
+    "lon": 16.4047142,
+    "geo_name": "35"
+  },
+  {
+    "parsed": {
+      "row_num": 1270,
+      "titel": "Dr.",
+      "vorname": "Franz Carl",
+      "nachname": "Ronay M.Eng.",
+      "arzt_name": "Franz Carl Ronay M.Eng.",
+      "raw_adresse": "Rudolfsplatz 14",
+      "strasse": "Rudolfsplatz",
+      "hausnummer": "14",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "rudolfsplatz",
+    "retry_hausnummer": "14",
+    "lat": 48.2144216,
+    "lon": 16.3709247,
+    "geo_name": "Dr. Valerie Steiger-Ronay"
+  },
+  {
+    "parsed": {
+      "row_num": 1278,
+      "titel": "Dr.",
+      "vorname": "Leticia Helena",
+      "nachname": "Rossi Matte",
+      "arzt_name": "Leticia Helena Rossi Matte",
+      "raw_adresse": "Mariahilfer Straße 111/1/2",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "111",
+      "zusatz": "1/2",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "111",
+    "lat": 48.1962274,
+    "lon": 16.3441111,
+    "geo_name": "111"
+  },
+  {
+    "parsed": {
+      "row_num": 1279,
+      "titel": "Dr.",
+      "vorname": "Charlotte",
+      "nachname": "Rothensteiner-Richter",
+      "arzt_name": "Charlotte Rothensteiner-Richter",
+      "raw_adresse": "Biberstraße 10/11",
+      "strasse": "Biberstraße",
+      "hausnummer": "10",
+      "zusatz": "11",
+      "plz": ""
+    },
+    "retry_street": "biberstraße",
+    "retry_hausnummer": "10",
+    "lat": 48.2088339,
+    "lon": 16.3810266,
+    "geo_name": "10"
+  },
+  {
+    "parsed": {
+      "row_num": 1281,
+      "titel": "dr.med.dent.",
+      "vorname": "Rebekka Rifka",
+      "nachname": "Rubin",
+      "arzt_name": "Rebekka Rifka Rubin",
+      "raw_adresse": "Rudolfsplatz 10/11",
+      "strasse": "Rudolfsplatz",
+      "hausnummer": "10",
+      "zusatz": "11",
+      "plz": "1010"
+    },
+    "retry_street": "rudolfsplatz",
+    "retry_hausnummer": "10",
+    "lat": 48.213646,
+    "lon": 16.3716679,
+    "geo_name": "10"
+  },
+  {
+    "parsed": {
+      "row_num": 1282,
+      "titel": "Dr.",
+      "vorname": "Alwina",
+      "nachname": "Ruckelshausen MSc",
+      "arzt_name": "Alwina Ruckelshausen MSc",
+      "raw_adresse": "Waidhausenstraße 11",
+      "strasse": "Waidhausenstraße",
+      "hausnummer": "11",
+      "zusatz": "",
+      "plz": "1140"
+    },
+    "retry_street": "waidhausenstraße",
+    "retry_hausnummer": "11",
+    "lat": 48.1967843,
+    "lon": 16.2805489,
+    "geo_name": "11"
+  },
+  {
+    "parsed": {
+      "row_num": 1283,
+      "titel": "Dr.",
+      "vorname": "Ingo",
+      "nachname": "Ruckelshausen",
+      "arzt_name": "Ingo Ruckelshausen",
+      "raw_adresse": "Anton-Baumgartner-Straße 44",
+      "strasse": "Anton-Baumgartner-Straße",
+      "hausnummer": "44",
+      "zusatz": "",
+      "plz": "1230"
+    },
+    "retry_street": "anton-baumgartner-straße",
+    "retry_hausnummer": "44",
+    "lat": 48.1513716,
+    "lon": 16.3153009,
+    "geo_name": "Kaufpark Alt-Erlaa"
+  },
+  {
+    "parsed": {
+      "row_num": 1287,
+      "titel": "Dr.",
+      "vorname": "Britta Elisabeth",
+      "nachname": "Rüscher",
+      "arzt_name": "Britta Elisabeth Rüscher",
+      "raw_adresse": "Schwedenplatz 2/2/17",
+      "strasse": "Schwedenplatz",
+      "hausnummer": "2",
+      "zusatz": "2/17",
+      "plz": "1010"
+    },
+    "retry_street": "schwedenplatz",
+    "retry_hausnummer": "2",
+    "lat": 48.2112396,
+    "lon": 16.3781772,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1291,
+      "titel": "Graduada",
+      "vorname": "Carla",
+      "nachname": "Sabate Goldstein MSc",
+      "arzt_name": "Carla Sabate Goldstein MSc",
+      "raw_adresse": "Märzstraße 106/5",
+      "strasse": "Märzstraße",
+      "hausnummer": "106",
+      "zusatz": "5",
+      "plz": ""
+    },
+    "retry_street": "märzstraße",
+    "retry_hausnummer": "106",
+    "lat": 48.1964341,
+    "lon": 16.3166414,
+    "geo_name": "106"
+  },
+  {
+    "parsed": {
+      "row_num": 1292,
+      "titel": "Dr.",
+      "vorname": "Manish",
+      "nachname": "Sablania MSc",
+      "arzt_name": "Manish Sablania MSc",
+      "raw_adresse": "Forsthausgasse 16-20/3/EG",
+      "strasse": "Forsthausgasse",
+      "hausnummer": "16-20",
+      "zusatz": "3/EG",
+      "plz": "1200"
+    },
+    "retry_street": "forsthausgasse",
+    "retry_hausnummer": "16",
+    "lat": 48.244732,
+    "lon": 16.3729233,
+    "geo_name": "16-20"
+  },
+  {
+    "parsed": {
+      "row_num": 1293,
+      "titel": "Dr.med.dent.",
+      "vorname": "Abbas",
+      "nachname": "Sadri Alaei",
+      "arzt_name": "Abbas Sadri Alaei",
+      "raw_adresse": "Burgkmairgasse 33 Haus 3",
+      "strasse": "Burgkmairgasse 33 Haus",
+      "hausnummer": "3",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "burgkmairgasse 33",
+    "retry_hausnummer": "3",
+    "lat": 48.2326309,
+    "lon": 16.5198945,
+    "geo_name": "Burgkmairgasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1294,
+      "titel": "Dr.med.dent.",
+      "vorname": "Edward",
+      "nachname": "Sagh Bazarian",
+      "arzt_name": "Edward Sagh Bazarian",
+      "raw_adresse": "Geiselbergstraße 27-31/8/20",
+      "strasse": "Geiselbergstraße",
+      "hausnummer": "27-31",
+      "zusatz": "8/20",
+      "plz": "1110"
+    },
+    "retry_street": "geiselbergstraße",
+    "retry_hausnummer": "27",
+    "lat": 48.1752618,
+    "lon": 16.4035994,
+    "geo_name": "27-31"
+  },
+  {
+    "parsed": {
+      "row_num": 1296,
+      "titel": "Dr.med.dent.",
+      "vorname": "Nelly",
+      "nachname": "Sakr BScMed",
+      "arzt_name": "Nelly Sakr BScMed",
+      "raw_adresse": "Violaweg 24",
+      "strasse": "Violaweg",
+      "hausnummer": "24",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "violaweg",
+    "retry_hausnummer": "24",
+    "lat": 48.2567409,
+    "lon": 16.4592496,
+    "geo_name": "24"
+  },
+  {
+    "parsed": {
+      "row_num": 1297,
+      "titel": "Dr.",
+      "vorname": "Carlotta Rachele",
+      "nachname": "Sala",
+      "arzt_name": "Carlotta Rachele Sala",
+      "raw_adresse": "Zschokkegasse 140/OG 2",
+      "strasse": "Zschokkegasse 140/OG",
+      "hausnummer": "2",
+      "zusatz": "",
+      "plz": "1220"
+    },
+    "retry_street": "zschokkegasse 140",
+    "retry_hausnummer": "2",
+    "lat": 48.2243869,
+    "lon": 16.4694775,
+    "geo_name": "Zschokkegasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1298,
+      "titel": "dr. med. dent.",
+      "vorname": "Agnes Gabriella",
+      "nachname": "Salamon",
+      "arzt_name": "Agnes Gabriella Salamon",
+      "raw_adresse": "Jakov-Lind-Straße 2/1",
+      "strasse": "Jakov-Lind-Straße",
+      "hausnummer": "2",
+      "zusatz": "1",
+      "plz": "1020"
+    },
+    "retry_street": "jakov-lind-straße",
+    "retry_hausnummer": "2",
+    "lat": 48.2246152,
+    "lon": 16.3977363,
+    "geo_name": "24/2"
+  },
+  {
+    "parsed": {
+      "row_num": 1304,
+      "titel": "Dr.med.dent.",
+      "vorname": "Fatin",
+      "nachname": "Salman",
+      "arzt_name": "Fatin Salman",
+      "raw_adresse": "Karl-Bednarik-Gasse 49",
+      "strasse": "Karl-Bednarik-Gasse",
+      "hausnummer": "49",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "karl-bednarik-gasse",
+    "retry_hausnummer": "49",
+    "lat": 48.2440662,
+    "lon": 16.4874474,
+    "geo_name": "49"
+  },
+  {
+    "parsed": {
+      "row_num": 1306,
+      "titel": "Dr.med.dent.",
+      "vorname": "Tammam",
+      "nachname": "Salti",
+      "arzt_name": "Tammam Salti",
+      "raw_adresse": "Portnergasse 13/2/31",
+      "strasse": "Portnergasse",
+      "hausnummer": "13",
+      "zusatz": "2/31",
+      "plz": "1220"
+    },
+    "retry_street": "portnergasse",
+    "retry_hausnummer": "13",
+    "lat": 48.2425019,
+    "lon": 16.441998,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 1310,
+      "titel": "DDr.",
+      "vorname": "Robert Daniel",
+      "nachname": "Santi",
+      "arzt_name": "Robert Daniel Santi",
+      "raw_adresse": "Währinger Straße 140/5",
+      "strasse": "Währinger Straße",
+      "hausnummer": "140",
+      "zusatz": "5",
+      "plz": ""
+    },
+    "retry_street": "währinger straße",
+    "retry_hausnummer": "140",
+    "lat": 48.2273281,
+    "lon": 16.3397046,
+    "geo_name": "140"
+  },
+  {
+    "parsed": {
+      "row_num": 1312,
+      "titel": "Dr.med.dent.",
+      "vorname": "Oleksii",
+      "nachname": "Sarakutsa",
+      "arzt_name": "Oleksii Sarakutsa",
+      "raw_adresse": "Spengergasse 27/2/603",
+      "strasse": "Spengergasse",
+      "hausnummer": "27",
+      "zusatz": "2/603",
+      "plz": ""
+    },
+    "retry_street": "spengergasse",
+    "retry_hausnummer": "27",
+    "lat": 48.1854815,
+    "lon": 16.3565543,
+    "geo_name": "STUWO Spengergasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1316,
+      "titel": "Dr.med.dent.",
+      "vorname": "Damjan",
+      "nachname": "Savic",
+      "arzt_name": "Damjan Savic",
+      "raw_adresse": "Ketzergasse 99/1/9",
+      "strasse": "Ketzergasse",
+      "hausnummer": "99",
+      "zusatz": "1/9",
+      "plz": "1230"
+    },
+    "retry_street": "ketzergasse",
+    "retry_hausnummer": "99",
+    "lat": 48.1332376,
+    "lon": 16.2600845,
+    "geo_name": "Ketzergasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1317,
+      "titel": "Dr.med.dent.",
+      "vorname": "Philippe",
+      "nachname": "Savvidis",
+      "arzt_name": "Philippe Savvidis",
+      "raw_adresse": "Bandgasse 2/30",
+      "strasse": "Bandgasse",
+      "hausnummer": "2",
+      "zusatz": "30",
+      "plz": ""
+    },
+    "retry_street": "bandgasse",
+    "retry_hausnummer": "2",
+    "lat": 48.2006102,
+    "lon": 16.3460772,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1319,
+      "titel": "Dr.med.dent.",
+      "vorname": "Valerie-Sophie",
+      "nachname": "Sayegh",
+      "arzt_name": "Valerie-Sophie Sayegh",
+      "raw_adresse": "Kliergasse 1",
+      "strasse": "Kliergasse",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "kliergasse",
+    "retry_hausnummer": "1",
+    "lat": 48.2449855,
+    "lon": 16.321977,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 1320,
+      "titel": "Dr.",
+      "vorname": "Sophia Maria",
+      "nachname": "Schaar",
+      "arzt_name": "Sophia Maria Schaar",
+      "raw_adresse": "Neulerchenfelder Straße 21/4",
+      "strasse": "Neulerchenfelder Straße",
+      "hausnummer": "21",
+      "zusatz": "4",
+      "plz": "1160"
+    },
+    "retry_street": "neulerchenfelder straße",
+    "retry_hausnummer": "21",
+    "lat": 48.2109139,
+    "lon": 16.3363343,
+    "geo_name": "21"
+  },
+  {
+    "parsed": {
+      "row_num": 1321,
+      "titel": "Dr.med.dent.",
+      "vorname": "Moritz",
+      "nachname": "Schachermayr BSc",
+      "arzt_name": "Moritz Schachermayr BSc",
+      "raw_adresse": "Papagenogasse 1A/14",
+      "strasse": "Papagenogasse",
+      "hausnummer": "1A",
+      "zusatz": "14",
+      "plz": ""
+    },
+    "retry_street": "papagenogasse",
+    "retry_hausnummer": "1A",
+    "lat": 48.2001211,
+    "lon": 16.3647957,
+    "geo_name": "1A"
+  },
+  {
+    "parsed": {
+      "row_num": 1322,
+      "titel": "Dr.",
+      "vorname": "Julia Sophie",
+      "nachname": "Schachinger BScMed",
+      "arzt_name": "Julia Sophie Schachinger BScMed",
+      "raw_adresse": "Ramperstorffergasse 68",
+      "strasse": "Ramperstorffergasse",
+      "hausnummer": "68",
+      "zusatz": "",
+      "plz": "1050"
+    },
+    "retry_street": "ramperstorffergasse",
+    "retry_hausnummer": "68",
+    "lat": 48.1902672,
+    "lon": 16.3551926,
+    "geo_name": "68"
+  },
+  {
+    "parsed": {
+      "row_num": 1324,
+      "titel": "MR Dr.",
+      "vorname": "Gerhard",
+      "nachname": "Schager",
+      "arzt_name": "Gerhard Schager",
+      "raw_adresse": "Koppstraße 88/11",
+      "strasse": "Koppstraße",
+      "hausnummer": "88",
+      "zusatz": "11",
+      "plz": ""
+    },
+    "retry_street": "koppstraße",
+    "retry_hausnummer": "88",
+    "lat": 48.2087191,
+    "lon": 16.3207159,
+    "geo_name": "88"
+  },
+  {
+    "parsed": {
+      "row_num": 1326,
+      "titel": "Mag. Dr.",
+      "vorname": "Catharina",
+      "nachname": "Schalberger",
+      "arzt_name": "Catharina Schalberger",
+      "raw_adresse": "Brausewettergasse 16/13",
+      "strasse": "Brausewettergasse",
+      "hausnummer": "16",
+      "zusatz": "13",
+      "plz": ""
+    },
+    "retry_street": "brausewettergasse",
+    "retry_hausnummer": "16",
+    "lat": 48.2223061,
+    "lon": 16.4513229,
+    "geo_name": "Brausewettergasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1329,
+      "titel": "Dr.med.dent.",
+      "vorname": "Leonie",
+      "nachname": "Schaller",
+      "arzt_name": "Leonie Schaller",
+      "raw_adresse": "Untere Donaustraße 35/47",
+      "strasse": "Untere Donaustraße",
+      "hausnummer": "35",
+      "zusatz": "47",
+      "plz": "1020"
+    },
+    "retry_street": "untere donaustraße",
+    "retry_hausnummer": "35",
+    "lat": 48.2135202,
+    "lon": 16.3866426,
+    "geo_name": "35"
+  },
+  {
+    "parsed": {
+      "row_num": 1331,
+      "titel": "DDr.",
+      "vorname": "Maximilian",
+      "nachname": "Scharnagl BScMed, EMBA",
+      "arzt_name": "Maximilian Scharnagl BScMed, EMBA",
+      "raw_adresse": "Ernst-Karl-Winter-Weg 6/6",
+      "strasse": "Ernst-Karl-Winter-Weg",
+      "hausnummer": "6",
+      "zusatz": "6",
+      "plz": ""
+    },
+    "retry_street": "ernst-karl-winter-weg",
+    "retry_hausnummer": "6",
+    "lat": 48.2468538,
+    "lon": 16.3289587,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1337,
+      "titel": "Dr.",
+      "vorname": "Victoria Fiona",
+      "nachname": "Schatz",
+      "arzt_name": "Victoria Fiona Schatz",
+      "raw_adresse": "Pius-Parsch-Platz 6A",
+      "strasse": "Pius-Parsch-Platz",
+      "hausnummer": "6A",
+      "zusatz": "",
+      "plz": "1210"
+    },
+    "retry_street": "pius-parsch-platz",
+    "retry_hausnummer": "6A",
+    "lat": 48.2591689,
+    "lon": 16.4001954,
+    "geo_name": "6a"
+  },
+  {
+    "parsed": {
+      "row_num": 1339,
+      "titel": "ZÄ",
+      "vorname": "Tatjana",
+      "nachname": "Schechtmann",
+      "arzt_name": "Tatjana Schechtmann",
+      "raw_adresse": "Ferdinandstraße 25/2/608",
+      "strasse": "Ferdinandstraße",
+      "hausnummer": "25",
+      "zusatz": "2/608",
+      "plz": ""
+    },
+    "retry_street": "ferdinandstraße",
+    "retry_hausnummer": "25",
+    "lat": 48.2138269,
+    "lon": 16.3858612,
+    "geo_name": "25"
+  },
+  {
+    "parsed": {
+      "row_num": 1341,
+      "titel": "Dr.",
+      "vorname": "MSc",
+      "nachname": "Scherngell MSc",
+      "arzt_name": "MSc Scherngell MSc",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 1342,
+      "titel": "Dr.med.dent.",
+      "vorname": "Lisa",
+      "nachname": "Scherngell",
+      "arzt_name": "Lisa Scherngell",
+      "raw_adresse": "Hebragasse 7/23",
+      "strasse": "Hebragasse",
+      "hausnummer": "7",
+      "zusatz": "23",
+      "plz": ""
+    },
+    "retry_street": "hebragasse",
+    "retry_hausnummer": "7",
+    "lat": 48.2162106,
+    "lon": 16.3435467,
+    "geo_name": "7"
+  },
+  {
+    "parsed": {
+      "row_num": 1348,
+      "titel": "dr.med.dent.",
+      "vorname": "Regina",
+      "nachname": "Schindler",
+      "arzt_name": "Regina Schindler",
+      "raw_adresse": "Schumanngasse 15/21-23",
+      "strasse": "Schumanngasse",
+      "hausnummer": "15",
+      "zusatz": "21-23",
+      "plz": ""
+    },
+    "retry_street": "schumanngasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2203725,
+    "lon": 16.3405453,
+    "geo_name": "C.M.F. - Institut GesmbH - Fachklinik"
+  },
+  {
+    "parsed": {
+      "row_num": 1349,
+      "titel": "Dr.",
+      "vorname": "Josef",
+      "nachname": "Schintlmeister",
+      "arzt_name": "Josef Schintlmeister",
+      "raw_adresse": "Himmelstraße 75",
+      "strasse": "Himmelstraße",
+      "hausnummer": "75",
+      "zusatz": "",
+      "plz": "1190"
+    },
+    "retry_street": "himmelstraße",
+    "retry_hausnummer": "75",
+    "lat": 48.2572852,
+    "lon": 16.3257219,
+    "geo_name": "75"
+  },
+  {
+    "parsed": {
+      "row_num": 1353,
+      "titel": "DDr.",
+      "vorname": "Christoph",
+      "nachname": "Schlossarek",
+      "arzt_name": "Christoph Schlossarek",
+      "raw_adresse": "Kaiserstraße 105/18+19",
+      "strasse": "Kaiserstraße",
+      "hausnummer": "105",
+      "zusatz": "18+19",
+      "plz": "1070"
+    },
+    "retry_street": "kaiserstraße",
+    "retry_hausnummer": "105",
+    "lat": 48.2066998,
+    "lon": 16.3393853,
+    "geo_name": "105"
+  },
+  {
+    "parsed": {
+      "row_num": 1355,
+      "titel": "DDr.",
+      "vorname": "Viktoria",
+      "nachname": "Schlossarek-Lemberger",
+      "arzt_name": "Viktoria Schlossarek-Lemberger",
+      "raw_adresse": "Neustiftgasse 84/46",
+      "strasse": "Neustiftgasse",
+      "hausnummer": "84",
+      "zusatz": "46",
+      "plz": "1070"
+    },
+    "retry_street": "neustiftgasse",
+    "retry_hausnummer": "84",
+    "lat": 48.2058636,
+    "lon": 16.344342,
+    "geo_name": "84"
+  },
+  {
+    "parsed": {
+      "row_num": 1362,
+      "titel": "Dr.med.dent.",
+      "vorname": "Sophia",
+      "nachname": "Schmiedehausen",
+      "arzt_name": "Sophia Schmiedehausen",
+      "raw_adresse": "Am Tabor 23/176",
+      "strasse": "Am Tabor",
+      "hausnummer": "23",
+      "zusatz": "176",
+      "plz": ""
+    },
+    "retry_street": "am tabor",
+    "retry_hausnummer": "23",
+    "lat": 48.2244514,
+    "lon": 16.3919215,
+    "geo_name": "23"
+  },
+  {
+    "parsed": {
+      "row_num": 1363,
+      "titel": "Dr.med.dent.",
+      "vorname": "Fabian",
+      "nachname": "Schmittner",
+      "arzt_name": "Fabian Schmittner",
+      "raw_adresse": "Währinger Straße 49/18",
+      "strasse": "Währinger Straße",
+      "hausnummer": "49",
+      "zusatz": "18",
+      "plz": ""
+    },
+    "retry_street": "währinger straße",
+    "retry_hausnummer": "49",
+    "lat": 48.2224921,
+    "lon": 16.3527816,
+    "geo_name": "49"
+  },
+  {
+    "parsed": {
+      "row_num": 1367,
+      "titel": "Dr.med.dent.",
+      "vorname": "Benedikt",
+      "nachname": "Schneider",
+      "arzt_name": "Benedikt Schneider",
+      "raw_adresse": "Gatterburggasse 12/1/135",
+      "strasse": "Gatterburggasse",
+      "hausnummer": "12",
+      "zusatz": "1/135",
+      "plz": ""
+    },
+    "retry_street": "gatterburggasse",
+    "retry_hausnummer": "12",
+    "lat": 48.2386762,
+    "lon": 16.3534381,
+    "geo_name": "12"
+  },
+  {
+    "parsed": {
+      "row_num": 1381,
+      "titel": "Dr.",
+      "vorname": "Simon-Iza",
+      "nachname": "Schön MClinDent",
+      "arzt_name": "Simon-Iza Schön MClinDent",
+      "raw_adresse": "Hietzinger Kai 85/3OG",
+      "strasse": "Hietzinger Kai",
+      "hausnummer": "85",
+      "zusatz": "3OG",
+      "plz": "1130"
+    },
+    "retry_street": "hietzinger kai",
+    "retry_hausnummer": "85",
+    "lat": 48.1899528,
+    "lon": 16.291564,
+    "geo_name": "85"
+  },
+  {
+    "parsed": {
+      "row_num": 1382,
+      "titel": "Dr.med.dent.",
+      "vorname": "Lena",
+      "nachname": "Schönberger",
+      "arzt_name": "Lena Schönberger",
+      "raw_adresse": "Mühlweg 43/12/6",
+      "strasse": "Mühlweg",
+      "hausnummer": "43",
+      "zusatz": "12/6",
+      "plz": ""
+    },
+    "retry_street": "mühlweg",
+    "retry_hausnummer": "43",
+    "lat": 48.2885499,
+    "lon": 16.3888256,
+    "geo_name": "43"
+  },
+  {
+    "parsed": {
+      "row_num": 1386,
+      "titel": "DDr.",
+      "vorname": "Michael",
+      "nachname": "Schranz",
+      "arzt_name": "Michael Schranz",
+      "raw_adresse": "Lange Gasse 74/12A",
+      "strasse": "Lange Gasse",
+      "hausnummer": "74",
+      "zusatz": "12A",
+      "plz": "1080"
+    },
+    "retry_street": "lange gasse",
+    "retry_hausnummer": "74",
+    "lat": 48.214194,
+    "lon": 16.3512075,
+    "geo_name": "74"
+  },
+  {
+    "parsed": {
+      "row_num": 1387,
+      "titel": "MDDr.",
+      "vorname": "Marlene",
+      "nachname": "Schratt",
+      "arzt_name": "Marlene Schratt",
+      "raw_adresse": "Linke Wienzeile 108/27",
+      "strasse": "Linke Wienzeile",
+      "hausnummer": "108",
+      "zusatz": "27",
+      "plz": ""
+    },
+    "retry_street": "linke wienzeile",
+    "retry_hausnummer": "108",
+    "lat": 48.1926542,
+    "lon": 16.3537427,
+    "geo_name": "108"
+  },
+  {
+    "parsed": {
+      "row_num": 1389,
+      "titel": "Dr.med.dent.",
+      "vorname": "Lacramioara Aurelia",
+      "nachname": "Schrefl",
+      "arzt_name": "Lacramioara Aurelia Schrefl",
+      "raw_adresse": "Wattmanngasse 2/1/12",
+      "strasse": "Wattmanngasse",
+      "hausnummer": "2",
+      "zusatz": "1/12",
+      "plz": ""
+    },
+    "retry_street": "wattmanngasse",
+    "retry_hausnummer": "2",
+    "lat": 48.1845239,
+    "lon": 16.2979751,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1390,
+      "titel": "Dr.med.dent.",
+      "vorname": "Muna",
+      "nachname": "Schreiber",
+      "arzt_name": "Muna Schreiber",
+      "raw_adresse": "Donaufelder Straße 107/4/9",
+      "strasse": "Donaufelder Straße",
+      "hausnummer": "107",
+      "zusatz": "4/9",
+      "plz": "1210"
+    },
+    "retry_street": "donaufelder straße",
+    "retry_hausnummer": "107",
+    "lat": 48.2535278,
+    "lon": 16.4233036,
+    "geo_name": "107"
+  },
+  {
+    "parsed": {
+      "row_num": 1394,
+      "titel": "Dr.",
+      "vorname": "Luca",
+      "nachname": "Schröder BScMed, B.A.",
+      "arzt_name": "Luca Schröder BScMed, B.A.",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 1397,
+      "titel": "Dr.med.dent.",
+      "vorname": "Annamaria",
+      "nachname": "Schuderne Vecsesy",
+      "arzt_name": "Annamaria Schuderne Vecsesy",
+      "raw_adresse": "Arnikaweg 124/19",
+      "strasse": "Arnikaweg",
+      "hausnummer": "124",
+      "zusatz": "19",
+      "plz": ""
+    },
+    "retry_street": "arnikaweg",
+    "retry_hausnummer": "124",
+    "lat": 48.2506699,
+    "lon": 16.479663,
+    "geo_name": "124"
+  },
+  {
+    "parsed": {
+      "row_num": 1399,
+      "titel": "Dr.",
+      "vorname": "Verena",
+      "nachname": "Schulze Grotthoff",
+      "arzt_name": "Verena Schulze Grotthoff",
+      "raw_adresse": "Ennsgasse 5",
+      "strasse": "Ennsgasse",
+      "hausnummer": "5",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "ennsgasse",
+    "retry_hausnummer": "5",
+    "lat": 48.2217074,
+    "lon": 16.40091,
+    "geo_name": "5"
+  },
+  {
+    "parsed": {
+      "row_num": 1406,
+      "titel": "Dr.med.dent.",
+      "vorname": "Thomas",
+      "nachname": "Schwarzenegger",
+      "arzt_name": "Thomas Schwarzenegger",
+      "raw_adresse": "Matrosengasse 5/2/22",
+      "strasse": "Matrosengasse",
+      "hausnummer": "5",
+      "zusatz": "2/22",
+      "plz": ""
+    },
+    "retry_street": "matrosengasse",
+    "retry_hausnummer": "5",
+    "lat": 48.1946856,
+    "lon": 16.3412916,
+    "geo_name": "5"
+  },
+  {
+    "parsed": {
+      "row_num": 1407,
+      "titel": "Dr.med.dent.",
+      "vorname": "Axel",
+      "nachname": "Schwehr",
+      "arzt_name": "Axel Schwehr",
+      "raw_adresse": "Taborstraße 76/1/3",
+      "strasse": "Taborstraße",
+      "hausnummer": "76",
+      "zusatz": "1/3",
+      "plz": "1020"
+    },
+    "retry_street": "taborstraße",
+    "retry_hausnummer": "76",
+    "lat": 48.2245557,
+    "lon": 16.3835335,
+    "geo_name": "76b"
+  },
+  {
+    "parsed": {
+      "row_num": 1410,
+      "titel": "Dr.-medic stom",
+      "vorname": "Corina Teodora",
+      "nachname": "Scridon",
+      "arzt_name": "Corina Teodora Scridon",
+      "raw_adresse": "Marianne-Pollak-Gasse 3/6/45",
+      "strasse": "Marianne-Pollak-Gasse",
+      "hausnummer": "3",
+      "zusatz": "6/45",
+      "plz": ""
+    },
+    "retry_street": "marianne-pollak-gasse",
+    "retry_hausnummer": "3",
+    "lat": 48.1783319,
+    "lon": 16.384198,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 1411,
+      "titel": "Dr.med.dent.",
+      "vorname": "Marcus",
+      "nachname": "Sedlak",
+      "arzt_name": "Marcus Sedlak",
+      "raw_adresse": "Schottenfeldgasse 78/2/48",
+      "strasse": "Schottenfeldgasse",
+      "hausnummer": "78",
+      "zusatz": "2/48",
+      "plz": "1070"
+    },
+    "retry_street": "schottenfeldgasse",
+    "retry_hausnummer": "78",
+    "lat": 48.2052331,
+    "lon": 16.3432965,
+    "geo_name": "78"
+  },
+  {
+    "parsed": {
+      "row_num": 1412,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alexander",
+      "nachname": "Seemann",
+      "arzt_name": "Alexander Seemann",
+      "raw_adresse": "Hettenkofergasse 14-16/2611",
+      "strasse": "Hettenkofergasse",
+      "hausnummer": "14-16",
+      "zusatz": "2611",
+      "plz": ""
+    },
+    "retry_street": "hettenkofergasse",
+    "retry_hausnummer": "14",
+    "lat": 48.2101298,
+    "lon": 16.3138379,
+    "geo_name": "14"
+  },
+  {
+    "parsed": {
+      "row_num": 1415,
+      "titel": "Priv.-Doz. DI DDr.",
+      "vorname": "Rudolf",
+      "nachname": "Seemann MBA",
+      "arzt_name": "Rudolf Seemann MBA",
+      "raw_adresse": "Wipplingerstraße 20/2/12",
+      "strasse": "Wipplingerstraße",
+      "hausnummer": "20",
+      "zusatz": "2/12",
+      "plz": "1010"
+    },
+    "retry_street": "wipplingerstraße",
+    "retry_hausnummer": "20",
+    "lat": 48.212672,
+    "lon": 16.369096,
+    "geo_name": "20"
+  },
+  {
+    "parsed": {
+      "row_num": 1417,
+      "titel": "Dr.med.dent.",
+      "vorname": "Alexander",
+      "nachname": "Seidl BSc",
+      "arzt_name": "Alexander Seidl BSc",
+      "raw_adresse": "Sonnenallee 33/19",
+      "strasse": "Sonnenallee",
+      "hausnummer": "33",
+      "zusatz": "19",
+      "plz": ""
+    },
+    "retry_street": "sonnenallee",
+    "retry_hausnummer": "33",
+    "lat": 48.22438,
+    "lon": 16.5030686,
+    "geo_name": "33"
+  },
+  {
+    "parsed": {
+      "row_num": 1418,
+      "titel": "Dr.",
+      "vorname": "Katharina",
+      "nachname": "Seifert BScMed",
+      "arzt_name": "Katharina Seifert BScMed",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 1420,
+      "titel": "lek. dent.",
+      "vorname": "Anna Marta",
+      "nachname": "Sek",
+      "arzt_name": "Anna Marta Sek",
+      "raw_adresse": "Talgasse 12/13",
+      "strasse": "Talgasse",
+      "hausnummer": "12",
+      "zusatz": "13",
+      "plz": ""
+    },
+    "retry_street": "talgasse",
+    "retry_hausnummer": "12",
+    "lat": 48.1924188,
+    "lon": 16.333922,
+    "geo_name": "12"
+  },
+  {
+    "parsed": {
+      "row_num": 1422,
+      "titel": "Dr.med.dent.",
+      "vorname": "Ghasaq",
+      "nachname": "Selbe",
+      "arzt_name": "Ghasaq Selbe",
+      "raw_adresse": "Linke Wienzeile 280/49",
+      "strasse": "Linke Wienzeile",
+      "hausnummer": "280",
+      "zusatz": "49",
+      "plz": ""
+    },
+    "retry_street": "linke wienzeile",
+    "retry_hausnummer": "280",
+    "lat": 48.1856827,
+    "lon": 16.3224231,
+    "geo_name": "280"
+  },
+  {
+    "parsed": {
+      "row_num": 1423,
+      "titel": "Dr.med.dent.",
+      "vorname": "Julius",
+      "nachname": "Selbertinger",
+      "arzt_name": "Julius Selbertinger",
+      "raw_adresse": "Josefstädter Straße 71/16",
+      "strasse": "Josefstädter Straße",
+      "hausnummer": "71",
+      "zusatz": "16",
+      "plz": "1080"
+    },
+    "retry_street": "josefstädter straße",
+    "retry_hausnummer": "71",
+    "lat": 48.2103459,
+    "lon": 16.3444398,
+    "geo_name": "71"
+  },
+  {
+    "parsed": {
+      "row_num": 1424,
+      "titel": "DDr.",
+      "vorname": "A. Edmond",
+      "nachname": "Selli",
+      "arzt_name": "A. Edmond Selli",
+      "raw_adresse": "Berggasse 25/18",
+      "strasse": "Berggasse",
+      "hausnummer": "25",
+      "zusatz": "18",
+      "plz": "1090"
+    },
+    "retry_street": "berggasse",
+    "retry_hausnummer": "25",
+    "lat": 48.2189606,
+    "lon": 16.3644876,
+    "geo_name": "Stadtauto carsharing"
+  },
+  {
+    "parsed": {
+      "row_num": 1430,
+      "titel": "Dr.med.dent.",
+      "vorname": "Hella",
+      "nachname": "Seyschab",
+      "arzt_name": "Hella Seyschab",
+      "raw_adresse": "Biedergasse 1/9",
+      "strasse": "Biedergasse",
+      "hausnummer": "1",
+      "zusatz": "9",
+      "plz": ""
+    },
+    "retry_street": "biedergasse",
+    "retry_hausnummer": "1",
+    "lat": 48.2353394,
+    "lon": 16.3500394,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 1431,
+      "titel": "Dr.",
+      "vorname": "Heide",
+      "nachname": "Seyss",
+      "arzt_name": "Heide Seyss",
+      "raw_adresse": "Alfred-Wegener-Gasse 8A",
+      "strasse": "Alfred-Wegener-Gasse",
+      "hausnummer": "8A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "alfred-wegener-gasse",
+    "retry_hausnummer": "8A",
+    "lat": 48.2510683,
+    "lon": 16.3399842,
+    "geo_name": "Susanne Strigl;Heide Seyss-Windischbauer"
+  },
+  {
+    "parsed": {
+      "row_num": 1432,
+      "titel": "Dr.med.dent.",
+      "vorname": "Maram",
+      "nachname": "Shaban",
+      "arzt_name": "Maram Shaban",
+      "raw_adresse": "Tivoligasse 52/6",
+      "strasse": "Tivoligasse",
+      "hausnummer": "52",
+      "zusatz": "6",
+      "plz": ""
+    },
+    "retry_street": "tivoligasse",
+    "retry_hausnummer": "52",
+    "lat": 48.1806715,
+    "lon": 16.3210977,
+    "geo_name": "52"
+  },
+  {
+    "parsed": {
+      "row_num": 1433,
+      "titel": "Dr.med.dent.",
+      "vorname": "Pegah",
+      "nachname": "Shahbazi",
+      "arzt_name": "Pegah Shahbazi",
+      "raw_adresse": "Alszeile 72A",
+      "strasse": "Alszeile",
+      "hausnummer": "72A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "alszeile",
+    "retry_hausnummer": "72A",
+    "lat": 48.2291515,
+    "lon": 16.3049635,
+    "geo_name": "72A"
+  },
+  {
+    "parsed": {
+      "row_num": 1437,
+      "titel": "Dr.med.dent.",
+      "vorname": "Ronen",
+      "nachname": "Shamuilov",
+      "arzt_name": "Ronen Shamuilov",
+      "raw_adresse": "Dammstraße 8/12",
+      "strasse": "Dammstraße",
+      "hausnummer": "8",
+      "zusatz": "12",
+      "plz": ""
+    },
+    "retry_street": "dammstraße",
+    "retry_hausnummer": "8",
+    "lat": 48.2318346,
+    "lon": 16.3751152,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 1438,
+      "titel": "ZA",
+      "vorname": "Oren",
+      "nachname": "Shani",
+      "arzt_name": "Oren Shani",
+      "raw_adresse": "Schumanngasse 15-19",
+      "strasse": "Schumanngasse",
+      "hausnummer": "15-19",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "schumanngasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2203725,
+    "lon": 16.3405453,
+    "geo_name": "C.M.F. - Institut GesmbH - Fachklinik"
+  },
+  {
+    "parsed": {
+      "row_num": 1439,
+      "titel": "Dr.",
+      "vorname": "Faranak",
+      "nachname": "Sharifi Moghaddam",
+      "arzt_name": "Faranak Sharifi Moghaddam",
+      "raw_adresse": "Ramperstorffergasse 68",
+      "strasse": "Ramperstorffergasse",
+      "hausnummer": "68",
+      "zusatz": "",
+      "plz": "1050"
+    },
+    "retry_street": "ramperstorffergasse",
+    "retry_hausnummer": "68",
+    "lat": 48.1902672,
+    "lon": 16.3551926,
+    "geo_name": "68"
+  },
+  {
+    "parsed": {
+      "row_num": 1440,
+      "titel": "Dr.med.dent.",
+      "vorname": "Najah",
+      "nachname": "Shehadeh",
+      "arzt_name": "Najah Shehadeh",
+      "raw_adresse": "Carlbergergasse 107/1/116",
+      "strasse": "Carlbergergasse",
+      "hausnummer": "107",
+      "zusatz": "1/116",
+      "plz": ""
+    },
+    "retry_street": "carlbergergasse",
+    "retry_hausnummer": "107",
+    "lat": 48.1413429,
+    "lon": 16.3109788,
+    "geo_name": "107"
+  },
+  {
+    "parsed": {
+      "row_num": 1442,
+      "titel": "Dr.med.dent.",
+      "vorname": "Eva Yeo Kyung",
+      "nachname": "Shin",
+      "arzt_name": "Eva Yeo Kyung Shin",
+      "raw_adresse": "Sobieskigasse 14-16/8",
+      "strasse": "Sobieskigasse",
+      "hausnummer": "14-16",
+      "zusatz": "8",
+      "plz": "1090"
+    },
+    "retry_street": "sobieskigasse",
+    "retry_hausnummer": "14",
+    "lat": 48.2278298,
+    "lon": 16.3539552,
+    "geo_name": "14-16"
+  },
+  {
+    "parsed": {
+      "row_num": 1443,
+      "titel": "Dr.med.dent.",
+      "vorname": "Carla",
+      "nachname": "Siebenrock",
+      "arzt_name": "Carla Siebenrock",
+      "raw_adresse": "Skodagasse 10/17",
+      "strasse": "Skodagasse",
+      "hausnummer": "10",
+      "zusatz": "17",
+      "plz": "1080"
+    },
+    "retry_street": "skodagasse",
+    "retry_hausnummer": "10",
+    "lat": 48.2122536,
+    "lon": 16.345481,
+    "geo_name": "10"
+  },
+  {
+    "parsed": {
+      "row_num": 1444,
+      "titel": "Dr.med.dent.",
+      "vorname": "Katarina",
+      "nachname": "Sieberer",
+      "arzt_name": "Katarina Sieberer",
+      "raw_adresse": "Wipplingerstraße 24-26/17A",
+      "strasse": "Wipplingerstraße",
+      "hausnummer": "24-26",
+      "zusatz": "17A",
+      "plz": "1010"
+    },
+    "retry_street": "wipplingerstraße",
+    "retry_hausnummer": "24",
+    "lat": 48.2129074,
+    "lon": 16.3685023,
+    "geo_name": "Generalkonsulat der Republik Frankreich"
+  },
+  {
+    "parsed": {
+      "row_num": 1446,
+      "titel": "DDr.",
+      "vorname": "Silvia",
+      "nachname": "Silli",
+      "arzt_name": "Silvia Silli",
+      "raw_adresse": "Waidhausenstraße 26A/1/8",
+      "strasse": "Waidhausenstraße",
+      "hausnummer": "26A",
+      "zusatz": "1/8",
+      "plz": "1140"
+    },
+    "retry_street": "waidhausenstraße",
+    "retry_hausnummer": "26A",
+    "lat": 48.1985084,
+    "lon": 16.2809038,
+    "geo_name": "26a"
+  },
+  {
+    "parsed": {
+      "row_num": 1449,
+      "titel": "Dr.",
+      "vorname": "Afra-Nur",
+      "nachname": "Simsek BScMed, B.A.",
+      "arzt_name": "Afra-Nur Simsek BScMed, B.A.",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 1452,
+      "titel": "Dr.",
+      "vorname": "Daniela",
+      "nachname": "Skiba MSc",
+      "arzt_name": "Daniela Skiba MSc",
+      "raw_adresse": "Himmelpfortgasse 17/10",
+      "strasse": "Himmelpfortgasse",
+      "hausnummer": "17",
+      "zusatz": "10",
+      "plz": "1010"
+    },
+    "retry_street": "himmelpfortgasse",
+    "retry_hausnummer": "17",
+    "lat": 48.2054445,
+    "lon": 16.3740211,
+    "geo_name": "First Escape"
+  },
+  {
+    "parsed": {
+      "row_num": 1469,
+      "titel": "Dr.med.dent.",
+      "vorname": "Berrin",
+      "nachname": "Soyer",
+      "arzt_name": "Berrin Soyer",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 1470,
+      "titel": "Dr.med.dent.",
+      "vorname": "Lisa-Franziska",
+      "nachname": "Spandl-Kremslehner",
+      "arzt_name": "Lisa-Franziska Spandl-Kremslehner",
+      "raw_adresse": "Schmerlingplatz 2/6a",
+      "strasse": "Schmerlingplatz",
+      "hausnummer": "2",
+      "zusatz": "6a",
+      "plz": ""
+    },
+    "retry_street": "schmerlingplatz",
+    "retry_hausnummer": "2",
+    "lat": 48.2078972,
+    "lon": 16.3558094,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1471,
+      "titel": "Dr.",
+      "vorname": "Silke",
+      "nachname": "Spanlang MSc",
+      "arzt_name": "Silke Spanlang MSc",
+      "raw_adresse": "Döblinger Hauptstraße 66/9",
+      "strasse": "Döblinger Hauptstraße",
+      "hausnummer": "66",
+      "zusatz": "9",
+      "plz": "1190"
+    },
+    "retry_street": "döblinger hauptstraße",
+    "retry_hausnummer": "66",
+    "lat": 48.2390231,
+    "lon": 16.3551632,
+    "geo_name": "66"
+  },
+  {
+    "parsed": {
+      "row_num": 1473,
+      "titel": "DDr.",
+      "vorname": "Gregor",
+      "nachname": "Sperl",
+      "arzt_name": "Gregor Sperl",
+      "raw_adresse": "Lorbeergasse 12/12",
+      "strasse": "Lorbeergasse",
+      "hausnummer": "12",
+      "zusatz": "12",
+      "plz": "1030"
+    },
+    "retry_street": "lorbeergasse",
+    "retry_hausnummer": "12",
+    "lat": 48.2090107,
+    "lon": 16.3901074,
+    "geo_name": "12"
+  },
+  {
+    "parsed": {
+      "row_num": 1475,
+      "titel": "Dr.",
+      "vorname": "Simon Peter",
+      "nachname": "Spönlein",
+      "arzt_name": "Simon Peter Spönlein",
+      "raw_adresse": "Dorotheergasse 7/5",
+      "strasse": "Dorotheergasse",
+      "hausnummer": "7",
+      "zusatz": "5",
+      "plz": "1010"
+    },
+    "retry_street": "dorotheergasse",
+    "retry_hausnummer": "7",
+    "lat": 48.2075011,
+    "lon": 16.3695956,
+    "geo_name": "Sindbads Reisen"
+  },
+  {
+    "parsed": {
+      "row_num": 1478,
+      "titel": "Dr.",
+      "vorname": "Michaela",
+      "nachname": "Stadler-Niedermeyer",
+      "arzt_name": "Michaela Stadler-Niedermeyer",
+      "raw_adresse": "Huschkagasse 15",
+      "strasse": "Huschkagasse",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "huschkagasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2521103,
+    "lon": 16.3460714,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 1479,
+      "titel": "Dr.-medic stom",
+      "vorname": "Claudiu-Andrej",
+      "nachname": "Stamate",
+      "arzt_name": "Claudiu-Andrej Stamate",
+      "raw_adresse": "Wehlistraße 61/8/8",
+      "strasse": "Wehlistraße",
+      "hausnummer": "61",
+      "zusatz": "8/8",
+      "plz": "1200"
+    },
+    "retry_street": "wehlistraße",
+    "retry_hausnummer": "61",
+    "lat": 48.2395178,
+    "lon": 16.3871848,
+    "geo_name": "61"
+  },
+  {
+    "parsed": {
+      "row_num": 1482,
+      "titel": "Dr.med.dent.",
+      "vorname": "Marina",
+      "nachname": "Stanley",
+      "arzt_name": "Marina Stanley",
+      "raw_adresse": "Ullmannstraße 54/119A",
+      "strasse": "Ullmannstraße",
+      "hausnummer": "54",
+      "zusatz": "119A",
+      "plz": "1150"
+    },
+    "retry_street": "ullmannstraße",
+    "retry_hausnummer": "54",
+    "lat": 48.1852841,
+    "lon": 16.3298434,
+    "geo_name": "54"
+  },
+  {
+    "parsed": {
+      "row_num": 1484,
+      "titel": "Dr.",
+      "vorname": "Michael",
+      "nachname": "Stanzl MSc",
+      "arzt_name": "Michael Stanzl MSc",
+      "raw_adresse": "Hernalser Gürtel 43/14",
+      "strasse": "Hernalser Gürtel",
+      "hausnummer": "43",
+      "zusatz": "14",
+      "plz": "1170"
+    },
+    "retry_street": "hernalser gürtel",
+    "retry_hausnummer": "43",
+    "lat": 48.2167559,
+    "lon": 16.3411736,
+    "geo_name": "43"
+  },
+  {
+    "parsed": {
+      "row_num": 1487,
+      "titel": "Dr.",
+      "vorname": "Bertly",
+      "nachname": "St. Clair Osorno MSc",
+      "arzt_name": "Bertly St. Clair Osorno MSc",
+      "raw_adresse": "Winckelmannstraße 2/9",
+      "strasse": "Winckelmannstraße",
+      "hausnummer": "2",
+      "zusatz": "9",
+      "plz": "1150"
+    },
+    "retry_street": "winckelmannstraße",
+    "retry_hausnummer": "2",
+    "lat": 48.1862956,
+    "lon": 16.3205825,
+    "geo_name": "2"
+  },
+  {
+    "parsed": {
+      "row_num": 1488,
+      "titel": "DDr.",
+      "vorname": "Christoph",
+      "nachname": "Staudigl",
+      "arzt_name": "Christoph Staudigl",
+      "raw_adresse": "Lannerstraße 28/2",
+      "strasse": "Lannerstraße",
+      "hausnummer": "28",
+      "zusatz": "2",
+      "plz": ""
+    },
+    "retry_street": "lannerstraße",
+    "retry_hausnummer": "28",
+    "lat": 48.2361438,
+    "lon": 16.3438764,
+    "geo_name": "28"
+  },
+  {
+    "parsed": {
+      "row_num": 1493,
+      "titel": "Dr.",
+      "vorname": "Valerie",
+      "nachname": "Steiger-Ronay MAS",
+      "arzt_name": "Valerie Steiger-Ronay MAS",
+      "raw_adresse": "Rudolfsplatz 14",
+      "strasse": "Rudolfsplatz",
+      "hausnummer": "14",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "rudolfsplatz",
+    "retry_hausnummer": "14",
+    "lat": 48.2144216,
+    "lon": 16.3709247,
+    "geo_name": "Dr. Valerie Steiger-Ronay"
+  },
+  {
+    "parsed": {
+      "row_num": 1496,
+      "titel": "Dr.med.dent.",
+      "vorname": "Dejan",
+      "nachname": "Stekic Angerpointner",
+      "arzt_name": "Dejan Stekic Angerpointner",
+      "raw_adresse": "Widerhofergasse 8/2/9",
+      "strasse": "Widerhofergasse",
+      "hausnummer": "8",
+      "zusatz": "2/9",
+      "plz": "1090"
+    },
+    "retry_street": "widerhofergasse",
+    "retry_hausnummer": "8",
+    "lat": 48.2230588,
+    "lon": 16.3550529,
+    "geo_name": "8"
+  },
+  {
+    "parsed": {
+      "row_num": 1497,
+      "titel": "Dr.med.dent.",
+      "vorname": "Kristina",
+      "nachname": "Stemmer",
+      "arzt_name": "Kristina Stemmer",
+      "raw_adresse": "Hernalser Gürtel 34/21",
+      "strasse": "Hernalser Gürtel",
+      "hausnummer": "34",
+      "zusatz": "21",
+      "plz": "1170"
+    },
+    "retry_street": "hernalser gürtel",
+    "retry_hausnummer": "34",
+    "lat": 48.216915,
+    "lon": 16.3424212,
+    "geo_name": "34"
+  },
+  {
+    "parsed": {
+      "row_num": 1499,
+      "titel": "Dr.",
+      "vorname": "Linda",
+      "nachname": "Steurer BA",
+      "arzt_name": "Linda Steurer BA",
+      "raw_adresse": "Sensengasse 2A",
+      "strasse": "Sensengasse",
+      "hausnummer": "2A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "sensengasse",
+    "retry_hausnummer": "2A",
+    "lat": 48.2195524,
+    "lon": 16.3545299,
+    "geo_name": "2A"
+  },
+  {
+    "parsed": {
+      "row_num": 1500,
+      "titel": "Dr.med.dent.",
+      "vorname": "Florentina",
+      "nachname": "Steyrer BScMed",
+      "arzt_name": "Florentina Steyrer BScMed",
+      "raw_adresse": "Krenngasse 9",
+      "strasse": "Krenngasse",
+      "hausnummer": "9",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "krenngasse",
+    "retry_hausnummer": "9",
+    "lat": 48.2304306,
+    "lon": 16.3212173,
+    "geo_name": "9"
+  },
+  {
+    "parsed": {
+      "row_num": 1505,
+      "titel": "Dr.",
+      "vorname": "Robert",
+      "nachname": "Stillmann MSc",
+      "arzt_name": "Robert Stillmann MSc",
+      "raw_adresse": "Krottenbachstraße 82-86/1/2/20",
+      "strasse": "Krottenbachstraße",
+      "hausnummer": "82-86",
+      "zusatz": "1/2/20",
+      "plz": "1190"
+    },
+    "retry_street": "krottenbachstraße",
+    "retry_hausnummer": "82",
+    "lat": 48.241074,
+    "lon": 16.3320755,
+    "geo_name": "82"
+  },
+  {
+    "parsed": {
+      "row_num": 1506,
+      "titel": "Dr.",
+      "vorname": "Alina",
+      "nachname": "Stöber MSc",
+      "arzt_name": "Alina Stöber MSc",
+      "raw_adresse": "Perfektastraße 40/4",
+      "strasse": "Perfektastraße",
+      "hausnummer": "40",
+      "zusatz": "4",
+      "plz": "1230"
+    },
+    "retry_street": "perfektastraße",
+    "retry_hausnummer": "40",
+    "lat": 48.1374797,
+    "lon": 16.3165955,
+    "geo_name": "40"
+  },
+  {
+    "parsed": {
+      "row_num": 1509,
+      "titel": "DDr.",
+      "vorname": "Karin Maria",
+      "nachname": "Stoiber",
+      "arzt_name": "Karin Maria Stoiber",
+      "raw_adresse": "Wagramer Straße 147/5/18",
+      "strasse": "Wagramer Straße",
+      "hausnummer": "147",
+      "zusatz": "5/18",
+      "plz": "1220"
+    },
+    "retry_street": "wagramer straße",
+    "retry_hausnummer": "147",
+    "lat": 48.251841,
+    "lon": 16.4442165,
+    "geo_name": "147"
+  },
+  {
+    "parsed": {
+      "row_num": 1512,
+      "titel": "Dr.med.dent.",
+      "vorname": "Magdalena",
+      "nachname": "Straczek-Helios",
+      "arzt_name": "Magdalena Straczek-Helios",
+      "raw_adresse": "Landstraßer Hauptstraße 146/7/8",
+      "strasse": "Landstraßer Hauptstraße",
+      "hausnummer": "146",
+      "zusatz": "7/8",
+      "plz": "1030"
+    },
+    "retry_street": "landstraßer hauptstraße",
+    "retry_hausnummer": "146",
+    "lat": 48.1936204,
+    "lon": 16.3977183,
+    "geo_name": "146"
+  },
+  {
+    "parsed": {
+      "row_num": 1514,
+      "titel": "Dr.",
+      "vorname": "Markus",
+      "nachname": "Strasser",
+      "arzt_name": "Markus Strasser",
+      "raw_adresse": "Aslangasse 2 Haus 4/4",
+      "strasse": "Aslangasse 2 Haus",
+      "hausnummer": "4",
+      "zusatz": "4",
+      "plz": ""
+    },
+    "retry_street": "aslangasse 2",
+    "retry_hausnummer": "4",
+    "lat": 48.2539403,
+    "lon": 16.3345137,
+    "geo_name": "Aslangasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1515,
+      "titel": "Univ.-Prof. Dr.",
+      "vorname": "Hans",
+      "nachname": "Strassl",
+      "arzt_name": "Hans Strassl",
+      "raw_adresse": "Rustenschacherallee 28/3/6",
+      "strasse": "Rustenschacherallee",
+      "hausnummer": "28",
+      "zusatz": "3/6",
+      "plz": ""
+    },
+    "retry_street": "rustenschacherallee",
+    "retry_hausnummer": "28",
+    "lat": 48.2054246,
+    "lon": 16.4006993,
+    "geo_name": "28"
+  },
+  {
+    "parsed": {
+      "row_num": 1516,
+      "titel": "DDr.",
+      "vorname": "Martin",
+      "nachname": "Strasz",
+      "arzt_name": "Martin Strasz",
+      "raw_adresse": "Wildgänsegasse 6",
+      "strasse": "Wildgänsegasse",
+      "hausnummer": "6",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "wildgänsegasse",
+    "retry_hausnummer": "6",
+    "lat": 48.2420396,
+    "lon": 16.4056813,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1518,
+      "titel": "Dr.med.dent.",
+      "vorname": "Viktoria",
+      "nachname": "Strobl",
+      "arzt_name": "Viktoria Strobl",
+      "raw_adresse": "Schweidlgasse 18/20",
+      "strasse": "Schweidlgasse",
+      "hausnummer": "18",
+      "zusatz": "20",
+      "plz": ""
+    },
+    "retry_street": "schweidlgasse",
+    "retry_hausnummer": "18",
+    "lat": 48.2257113,
+    "lon": 16.3880776,
+    "geo_name": "18"
+  },
+  {
+    "parsed": {
+      "row_num": 1520,
+      "titel": "DDr.",
+      "vorname": "Markus",
+      "nachname": "Stumvoll",
+      "arzt_name": "Markus Stumvoll",
+      "raw_adresse": "Weyrgasse 7/8",
+      "strasse": "Weyrgasse",
+      "hausnummer": "7",
+      "zusatz": "8",
+      "plz": ""
+    },
+    "retry_street": "weyrgasse",
+    "retry_hausnummer": "7",
+    "lat": 48.2046541,
+    "lon": 16.3894128,
+    "geo_name": "Wohngesund"
+  },
+  {
+    "parsed": {
+      "row_num": 1523,
+      "titel": "Dr.",
+      "vorname": "Lea Katharina",
+      "nachname": "Stursa",
+      "arzt_name": "Lea Katharina Stursa",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 1527,
+      "titel": "dr.dent.",
+      "vorname": "Titanilla",
+      "nachname": "Süle",
+      "arzt_name": "Titanilla Süle",
+      "raw_adresse": "Lessinggasse 19/7",
+      "strasse": "Lessinggasse",
+      "hausnummer": "19",
+      "zusatz": "7",
+      "plz": ""
+    },
+    "retry_street": "lessinggasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2236246,
+    "lon": 16.3851091,
+    "geo_name": "19"
+  },
+  {
+    "parsed": {
+      "row_num": 1532,
+      "titel": "Dr.",
+      "vorname": "Sarah",
+      "nachname": "Süssmuth BScMed",
+      "arzt_name": "Sarah Süssmuth BScMed",
+      "raw_adresse": "Mariahilfer Straße 85-87",
+      "strasse": "Mariahilfer Straße",
+      "hausnummer": "85-87",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "mariahilfer straße",
+    "retry_hausnummer": "85",
+    "lat": 48.1971234,
+    "lon": 16.3487159,
+    "geo_name": "Hofer"
+  },
+  {
+    "parsed": {
+      "row_num": 1533,
+      "titel": "Dr.",
+      "vorname": "Anna Viktoria",
+      "nachname": "Sutterlüty",
+      "arzt_name": "Anna Viktoria Sutterlüty",
+      "raw_adresse": "Herbortgasse 22",
+      "strasse": "Herbortgasse",
+      "hausnummer": "22",
+      "zusatz": "",
+      "plz": "1110"
+    },
+    "retry_street": "herbortgasse",
+    "retry_hausnummer": "22",
+    "lat": 48.1713966,
+    "lon": 16.4109541,
+    "geo_name": "22-24"
+  },
+  {
+    "parsed": {
+      "row_num": 1535,
+      "titel": "Dr.med.dent.",
+      "vorname": "Christopher",
+      "nachname": "Swoboda",
+      "arzt_name": "Christopher Swoboda",
+      "raw_adresse": "Haizingergasse 13/11",
+      "strasse": "Haizingergasse",
+      "hausnummer": "13",
+      "zusatz": "11",
+      "plz": ""
+    },
+    "retry_street": "haizingergasse",
+    "retry_hausnummer": "13",
+    "lat": 48.2284111,
+    "lon": 16.3433684,
+    "geo_name": "Takans's Fischrestaurant"
+  },
+  {
+    "parsed": {
+      "row_num": 1539,
+      "titel": "dr. med. dent.",
+      "vorname": "Attila",
+      "nachname": "Szivos M.Sc.",
+      "arzt_name": "Attila Szivos M.Sc.",
+      "raw_adresse": "Schwendergasse 35",
+      "strasse": "Schwendergasse",
+      "hausnummer": "35",
+      "zusatz": "",
+      "plz": "1150"
+    },
+    "retry_street": "schwendergasse",
+    "retry_hausnummer": "35",
+    "lat": 48.1905996,
+    "lon": 16.3256892,
+    "geo_name": "Reparatur- und Service-Zentrum R.U.S.Z"
+  },
+  {
+    "parsed": {
+      "row_num": 1540,
+      "titel": "dr. med. dent.",
+      "vorname": "Julia",
+      "nachname": "Szlepak",
+      "arzt_name": "Julia Szlepak",
+      "raw_adresse": "Wagramer Straße 4 ZW",
+      "strasse": "Wagramer Straße 4",
+      "hausnummer": "ZW",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "wagramer straße 4",
+    "retry_hausnummer": "ZW",
+    "lat": 48.2584549,
+    "lon": 16.4497916,
+    "geo_name": "Wagramer Straße"
+  },
+  {
+    "parsed": {
+      "row_num": 1545,
+      "titel": "ZA",
+      "vorname": "Ishak Janbert",
+      "nachname": "Tamzok",
+      "arzt_name": "Ishak Janbert Tamzok",
+      "raw_adresse": "Engerthstraße 52/2",
+      "strasse": "Engerthstraße",
+      "hausnummer": "52",
+      "zusatz": "2",
+      "plz": ""
+    },
+    "retry_street": "engerthstraße",
+    "retry_hausnummer": "52",
+    "lat": 48.2439001,
+    "lon": 16.3806146,
+    "geo_name": "52"
+  },
+  {
+    "parsed": {
+      "row_num": 1552,
+      "titel": "Dr.",
+      "vorname": "Mehrdad",
+      "nachname": "Tehranchi MSc",
+      "arzt_name": "Mehrdad Tehranchi MSc",
+      "raw_adresse": "Thaliastraße 88/1/16",
+      "strasse": "Thaliastraße",
+      "hausnummer": "88",
+      "zusatz": "1/16",
+      "plz": "1160"
+    },
+    "retry_street": "thaliastraße",
+    "retry_hausnummer": "88",
+    "lat": 48.2113156,
+    "lon": 16.3212508,
+    "geo_name": "88"
+  },
+  {
+    "parsed": {
+      "row_num": 1553,
+      "titel": "Dr.med.dent.",
+      "vorname": "Elif",
+      "nachname": "Tekinkus",
+      "arzt_name": "Elif Tekinkus",
+      "raw_adresse": "Kapellenweg 35/1/73",
+      "strasse": "Kapellenweg",
+      "hausnummer": "35",
+      "zusatz": "1/73",
+      "plz": ""
+    },
+    "retry_street": "kapellenweg",
+    "retry_hausnummer": "35",
+    "lat": 48.2158958,
+    "lon": 16.4683467,
+    "geo_name": "35"
+  },
+  {
+    "parsed": {
+      "row_num": 1564,
+      "titel": "Dr.",
+      "vorname": "Mareike Charlotte",
+      "nachname": "Thies",
+      "arzt_name": "Mareike Charlotte Thies",
+      "raw_adresse": "Renngasse 15",
+      "strasse": "Renngasse",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": "1010"
+    },
+    "retry_street": "renngasse",
+    "retry_hausnummer": "15",
+    "lat": 48.2137159,
+    "lon": 16.368246,
+    "geo_name": "Zahngesundheitszentrum der WGKK"
+  },
+  {
+    "parsed": {
+      "row_num": 1565,
+      "titel": "MR DDr.",
+      "vorname": "Barbara",
+      "nachname": "Thornton",
+      "arzt_name": "Barbara Thornton",
+      "raw_adresse": "Schönburgstraße 4/17",
+      "strasse": "Schönburgstraße",
+      "hausnummer": "4",
+      "zusatz": "17",
+      "plz": ""
+    },
+    "retry_street": "schönburgstraße",
+    "retry_hausnummer": "4",
+    "lat": 48.1896954,
+    "lon": 16.3666963,
+    "geo_name": "4"
+  },
+  {
+    "parsed": {
+      "row_num": 1568,
+      "titel": "Dr.med.dent.",
+      "vorname": "Heinrich",
+      "nachname": "Titz",
+      "arzt_name": "Heinrich Titz",
+      "raw_adresse": "Löwenzahngasse 3A",
+      "strasse": "Löwenzahngasse",
+      "hausnummer": "3A",
+      "zusatz": "",
+      "plz": ""
+    },
+    "retry_street": "löwenzahngasse",
+    "retry_hausnummer": "3A",
+    "lat": 48.2259823,
+    "lon": 16.4655729,
+    "geo_name": "3A"
+  },
+  {
+    "parsed": {
+      "row_num": 1570,
+      "titel": "Dr.med.dent.",
+      "vorname": "Stephan",
+      "nachname": "Toka MSc",
+      "arzt_name": "Stephan Toka MSc",
+      "raw_adresse": "Fuchsröhrenstraße 15",
+      "strasse": "Fuchsröhrenstraße",
+      "hausnummer": "15",
+      "zusatz": "",
+      "plz": "1110"
+    },
+    "retry_street": "fuchsröhrenstraße",
+    "retry_hausnummer": "15",
+    "lat": 48.1812651,
+    "lon": 16.4146472,
+    "geo_name": "Fuchsröhrenstraße"
+  },
+  {
+    "parsed": {
+      "row_num": 1634,
+      "titel": "Dr.med.dent.",
+      "vorname": "Nevena",
+      "nachname": "Vukicevic-Glisic",
+      "arzt_name": "Nevena Vukicevic-Glisic",
+      "raw_adresse": "Leopold-Böhm-Straße 6/3/16",
+      "strasse": "Leopold-Böhm-Straße",
+      "hausnummer": "6",
+      "zusatz": "3/16",
+      "plz": ""
+    },
+    "retry_street": "leopold-böhm-straße",
+    "retry_hausnummer": "6",
+    "lat": 48.1851656,
+    "lon": 16.4106122,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1636,
+      "titel": "DDr.",
+      "vorname": "Benjamin Peter",
+      "nachname": "Wachter",
+      "arzt_name": "Benjamin Peter Wachter",
+      "raw_adresse": "Alserbachstraße 26/66",
+      "strasse": "Alserbachstraße",
+      "hausnummer": "26",
+      "zusatz": "66",
+      "plz": "1090"
+    },
+    "retry_street": "alserbachstraße",
+    "retry_hausnummer": "26",
+    "lat": 48.2262973,
+    "lon": 16.3636932,
+    "geo_name": "Dolly Buster Center"
+  },
+  {
+    "parsed": {
+      "row_num": 1639,
+      "titel": "Dr.med.dent.",
+      "vorname": "Florian",
+      "nachname": "Wagner",
+      "arzt_name": "Florian Wagner",
+      "raw_adresse": "Kafkastraße 9/1/83",
+      "strasse": "Kafkastraße",
+      "hausnummer": "9",
+      "zusatz": "1/83",
+      "plz": ""
+    },
+    "retry_street": "kafkastraße",
+    "retry_hausnummer": "9",
+    "lat": 48.2190315,
+    "lon": 16.4114112,
+    "geo_name": "9"
+  },
+  {
+    "parsed": {
+      "row_num": 1641,
+      "titel": "Dr.med.dent.",
+      "vorname": "Katharina",
+      "nachname": "Walcher",
+      "arzt_name": "Katharina Walcher",
+      "raw_adresse": "Marokkanergasse 3/58",
+      "strasse": "Marokkanergasse",
+      "hausnummer": "3",
+      "zusatz": "58",
+      "plz": "1030"
+    },
+    "retry_street": "marokkanergasse",
+    "retry_hausnummer": "3",
+    "lat": 48.1999857,
+    "lon": 16.3791722,
+    "geo_name": "3"
+  },
+  {
+    "parsed": {
+      "row_num": 1646,
+      "titel": "lek.dent",
+      "vorname": "Claudia",
+      "nachname": "Wasilewska",
+      "arzt_name": "Claudia Wasilewska",
+      "raw_adresse": "Antonigasse 13/3",
+      "strasse": "Antonigasse",
+      "hausnummer": "13",
+      "zusatz": "3",
+      "plz": "1180"
+    },
+    "retry_street": "antonigasse",
+    "retry_hausnummer": "13",
+    "lat": 48.2214376,
+    "lon": 16.3400794,
+    "geo_name": "13"
+  },
+  {
+    "parsed": {
+      "row_num": 1648,
+      "titel": "DDr.",
+      "vorname": "Georg",
+      "nachname": "Watzek",
+      "arzt_name": "Georg Watzek",
+      "raw_adresse": "Wassergasse 28/17",
+      "strasse": "Wassergasse",
+      "hausnummer": "28",
+      "zusatz": "17",
+      "plz": ""
+    },
+    "retry_street": "wassergasse",
+    "retry_hausnummer": "28",
+    "lat": 48.2008361,
+    "lon": 16.3950264,
+    "geo_name": "28"
+  },
+  {
+    "parsed": {
+      "row_num": 1656,
+      "titel": "dr.med.dent.",
+      "vorname": "Isabella",
+      "nachname": "Weiner",
+      "arzt_name": "Isabella Weiner",
+      "raw_adresse": "Paschinggasse 1/2",
+      "strasse": "Paschinggasse",
+      "hausnummer": "1",
+      "zusatz": "2",
+      "plz": ""
+    },
+    "retry_street": "paschinggasse",
+    "retry_hausnummer": "1",
+    "lat": 48.2239248,
+    "lon": 16.3070958,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 1657,
+      "titel": "Dr.",
+      "vorname": "Marie",
+      "nachname": "Weinert BScMed",
+      "arzt_name": "Marie Weinert BScMed",
+      "raw_adresse": "Freudplatz 1",
+      "strasse": "Freudplatz",
+      "hausnummer": "1",
+      "zusatz": "",
+      "plz": "1020"
+    },
+    "retry_street": "freudplatz",
+    "retry_hausnummer": "1",
+    "lat": 48.2151415,
+    "lon": 16.4052807,
+    "geo_name": "Sigmund Freud Privatuniversität"
+  },
+  {
+    "parsed": {
+      "row_num": 1663,
+      "titel": "ZÄ",
+      "vorname": "Magdalena",
+      "nachname": "Weiss BDS, MSc",
+      "arzt_name": "Magdalena Weiss BDS, MSc",
+      "raw_adresse": "Schulgasse 79/5",
+      "strasse": "Schulgasse",
+      "hausnummer": "79",
+      "zusatz": "5",
+      "plz": "1180"
+    },
+    "retry_street": "schulgasse",
+    "retry_hausnummer": "79",
+    "lat": 48.2266743,
+    "lon": 16.335983,
+    "geo_name": "79"
+  },
+  {
+    "parsed": {
+      "row_num": 1664,
+      "titel": "Dr.med.dent.",
+      "vorname": "Patrick",
+      "nachname": "Weiss",
+      "arzt_name": "Patrick Weiss",
+      "raw_adresse": "Quellenstraße 113/3/17",
+      "strasse": "Quellenstraße",
+      "hausnummer": "113",
+      "zusatz": "3/17",
+      "plz": "1100"
+    },
+    "retry_street": "quellenstraße",
+    "retry_hausnummer": "113",
+    "lat": 48.1752323,
+    "lon": 16.3775206,
+    "geo_name": "113"
+  },
+  {
+    "parsed": {
+      "row_num": 1665,
+      "titel": "Dr.med.dent.",
+      "vorname": "Angelika Caroline",
+      "nachname": "Weissenböck",
+      "arzt_name": "Angelika Caroline Weissenböck",
+      "raw_adresse": "Speisinger Straße 18/1/16",
+      "strasse": "Speisinger Straße",
+      "hausnummer": "18",
+      "zusatz": "1/16",
+      "plz": ""
+    },
+    "retry_street": "speisinger straße",
+    "retry_hausnummer": "18",
+    "lat": 48.1718582,
+    "lon": 16.2848168,
+    "geo_name": "18"
+  },
+  {
+    "parsed": {
+      "row_num": 1666,
+      "titel": "Dr.med.dent.",
+      "vorname": "Zeinab",
+      "nachname": "Weli",
+      "arzt_name": "Zeinab Weli",
+      "raw_adresse": "Stachegasse 15/2/1",
+      "strasse": "Stachegasse",
+      "hausnummer": "15",
+      "zusatz": "2/1",
+      "plz": ""
+    },
+    "retry_street": "stachegasse",
+    "retry_hausnummer": "15",
+    "lat": 48.1622189,
+    "lon": 16.3105052,
+    "geo_name": "15"
+  },
+  {
+    "parsed": {
+      "row_num": 1701,
+      "titel": "Mag.stom",
+      "vorname": "Mariya",
+      "nachname": "Yakimova-Sladkarova",
+      "arzt_name": "Mariya Yakimova-Sladkarova",
+      "raw_adresse": "Herzgasse 15-19/1/3",
+      "strasse": "Herzgasse",
+      "hausnummer": "15-19",
+      "zusatz": "1/3",
+      "plz": "1100"
+    },
+    "retry_street": "herzgasse",
+    "retry_hausnummer": "15",
+    "lat": 48.1780029,
+    "lon": 16.3675069,
+    "geo_name": "15-19"
+  },
+  {
+    "parsed": {
+      "row_num": 1715,
+      "titel": "Dr.med.dent.",
+      "vorname": "Katharina",
+      "nachname": "Zikulnig",
+      "arzt_name": "Katharina Zikulnig",
+      "raw_adresse": "Gußriegelstraße 15/7/41",
+      "strasse": "Gußriegelstraße",
+      "hausnummer": "15",
+      "zusatz": "7/41",
+      "plz": "1100"
+    },
+    "retry_street": "gußriegelstraße",
+    "retry_hausnummer": "15",
+    "lat": 48.174096,
+    "lon": 16.3589365,
+    "geo_name": "Hellerpark Bauteil C Passivhaus"
+  },
+  {
+    "parsed": {
+      "row_num": 1719,
+      "titel": "Dr.med.dent.",
+      "vorname": "Marlene",
+      "nachname": "Zimmermann",
+      "arzt_name": "Marlene Zimmermann",
+      "raw_adresse": "Fuchsthallergasse 10/17",
+      "strasse": "Fuchsthallergasse",
+      "hausnummer": "10",
+      "zusatz": "17",
+      "plz": "1090"
+    },
+    "retry_street": "fuchsthallergasse",
+    "retry_hausnummer": "10",
+    "lat": 48.2248633,
+    "lon": 16.3519969,
+    "geo_name": "10"
+  },
+  {
+    "parsed": {
+      "row_num": 1720,
+      "titel": "DDr.",
+      "vorname": "Matthias",
+      "nachname": "Zimmermann",
+      "arzt_name": "Matthias Zimmermann",
+      "raw_adresse": "Weidmanngasse 1/1/115",
+      "strasse": "Weidmanngasse",
+      "hausnummer": "1",
+      "zusatz": "1/115",
+      "plz": ""
+    },
+    "retry_street": "weidmanngasse",
+    "retry_hausnummer": "1",
+    "lat": 48.2201681,
+    "lon": 16.3320197,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 1721,
+      "titel": "Dr.",
+      "vorname": "Jasmina",
+      "nachname": "Zimonjic MSc",
+      "arzt_name": "Jasmina Zimonjic MSc",
+      "raw_adresse": "Schäffergasse 20",
+      "strasse": "Schäffergasse",
+      "hausnummer": "20",
+      "zusatz": "",
+      "plz": "1040"
+    },
+    "retry_street": "schäffergasse",
+    "retry_hausnummer": "20",
+    "lat": 48.1939378,
+    "lon": 16.3637293,
+    "geo_name": "20"
+  },
+  {
+    "parsed": {
+      "row_num": 1723,
+      "titel": "DDr.",
+      "vorname": "Daniela",
+      "nachname": "Zitny-Haberl MDSc",
+      "arzt_name": "Daniela Zitny-Haberl MDSc",
+      "raw_adresse": "Pilgramgasse 1/2/8",
+      "strasse": "Pilgramgasse",
+      "hausnummer": "1",
+      "zusatz": "2/8",
+      "plz": "1050"
+    },
+    "retry_street": "pilgramgasse",
+    "retry_hausnummer": "1",
+    "lat": 48.1915544,
+    "lon": 16.3576847,
+    "geo_name": "1"
+  },
+  {
+    "parsed": {
+      "row_num": 1724,
+      "titel": "DDr.",
+      "vorname": "Farzad",
+      "nachname": "Ziya Ghazvini",
+      "arzt_name": "Farzad Ziya Ghazvini",
+      "raw_adresse": "Menzelgasse 6/1",
+      "strasse": "Menzelgasse",
+      "hausnummer": "6",
+      "zusatz": "1",
+      "plz": "1160"
+    },
+    "retry_street": "menzelgasse",
+    "retry_hausnummer": "6",
+    "lat": 48.2082191,
+    "lon": 16.3369611,
+    "geo_name": "6"
+  },
+  {
+    "parsed": {
+      "row_num": 1727,
+      "titel": "Dr.med.dent.",
+      "vorname": "Karma-Celine",
+      "nachname": "Zöchbauer",
+      "arzt_name": "Karma-Celine Zöchbauer",
+      "raw_adresse": "Columbusgasse 82/19",
+      "strasse": "Columbusgasse",
+      "hausnummer": "82",
+      "zusatz": "19",
+      "plz": ""
+    },
+    "retry_street": "columbusgasse",
+    "retry_hausnummer": "82",
+    "lat": 48.180836,
+    "lon": 16.3745238,
+    "geo_name": "Columbusgasse"
+  },
+  {
+    "parsed": {
+      "row_num": 1730,
+      "titel": "Dr.med.dent.",
+      "vorname": "David",
+      "nachname": "Zymbal",
+      "arzt_name": "David Zymbal",
+      "raw_adresse": "Mollgasse 19/2/5",
+      "strasse": "Mollgasse",
+      "hausnummer": "19",
+      "zusatz": "2/5",
+      "plz": ""
+    },
+    "retry_street": "mollgasse",
+    "retry_hausnummer": "19",
+    "lat": 48.2311143,
+    "lon": 16.3463023,
+    "geo_name": "19"
+  }
+]

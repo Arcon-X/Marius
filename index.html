@@ -288,6 +288,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
 .btn-edit-addr{padding:.28rem .55rem;font-size:.78rem;border-radius:8px;border:2px solid var(--g);background:#fff;cursor:pointer;font-family:inherit;color:var(--g);transition:all .15s;white-space:nowrap}
 .btn-edit-addr:hover{border-color:var(--g);color:var(--g)}
 .verified-badge{display:inline-block;font-size:.82em;margin-left:.25rem;vertical-align:middle;line-height:1;cursor:default}
+.geo-ambig-badge{display:inline-block;font-size:.82em;margin-left:.25rem;vertical-align:middle;line-height:1;color:#b45309;cursor:help}
 .addr-website{margin-top:.18rem}
 .addr-website a{font-size:.78rem;color:var(--g);text-decoration:none;font-weight:600}
 .addr-website a:hover{text-decoration:underline}
@@ -784,6 +785,24 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
             <div class="team-detail">Bezirksvergleich (PLZ→Bezirk), Erledigungsquote und Effizienzmetriken mit Export-Hinweisen.</div>
           </div>
           <button class="team-btn" style="text-decoration:none;padding:.35rem .7rem" onclick="openReportDoc('docs/report_business_kpi.html')">Öffnen ↗</button>
+        </div>
+      </div>
+      <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleDuplicates()"><span id="duplicates-arrow">&#9654;</span> Duplikate</div>
+      <div class="hidden" id="admin-duplicates" style="padding:.3rem 1rem">
+        <div class="team-card" style="margin-bottom:.6rem">
+          <div style="flex:1">
+            <div class="team-name">🗃️ Duplikat-Tabelle (online)</div>
+            <div class="team-detail">Alle markierten Duplikate inklusive Snapshot und Rücksetz-Status.</div>
+          </div>
+          <button class="team-btn" style="text-decoration:none;padding:.35rem .7rem" onclick="openReportDoc('docs/duplicate_markierungen.html')">Öffnen ↗</button>
+        </div>
+        <div class="card" style="margin-bottom:.8rem;padding:.9rem">
+          <div style="font-weight:700;margin-bottom:.5rem">Vorgeschlagene Kandidaten</div>
+          <div id="duplicate-candidates" style="display:grid;gap:.45rem"></div>
+        </div>
+        <div class="card" style="padding:.9rem">
+          <div style="font-weight:700;margin-bottom:.5rem">Aktive Duplikat-Markierungen</div>
+          <div id="duplicate-marked-list" style="display:grid;gap:.45rem"></div>
         </div>
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
@@ -2533,6 +2552,7 @@ const SEED_ADRESSEN = [
 const SB_URL='/api';
 let _sbLastSync=0;
 let _dbUsers=[];
+let _duplicateMarks=[];
 const db={
   _hG(){const t=auth.token();return t?{'Authorization':'Bearer '+t}:{};},
   _h(){const t=auth.token();const h={'Content-Type':'application/json','Prefer':'return=minimal'};if(t)h['Authorization']='Bearer '+t;return h;},
@@ -2650,6 +2670,41 @@ const db={
       if(!res.ok){console.error('API issue delete:',res.status);return false;}
       return true;
     }catch(e){console.error('API issue delete:',e.message);return false;}
+  },
+  async loadDuplicateMarks(){
+    try{
+      const res=await fetch(SB_URL+'/duplicate_markierungen?select=*',{headers:this._hG()});
+      if(!res.ok)return[];
+      return await res.json();
+    }catch(e){console.warn('API duplicates:',e.message);return[];}
+  },
+  async markDuplicateAdresse(adressen_id,markiert_von,duplicate_group,grund){
+    try{
+      const res=await fetch(SB_URL+'/rpc/mark_duplicate_adresse',{
+        method:'POST',headers:this._h(),
+        body:JSON.stringify({p_adressen_id:adressen_id,p_markiert_von:markiert_von,p_duplicate_group:duplicate_group||null,p_grund:grund||null})
+      });
+      if(!res.ok){
+        const txt=await res.text().catch(()=>'');
+        return {ok:false,message:txt||('HTTP '+res.status)};
+      }
+      const data=await res.json().catch(()=>[]);
+      return {ok:true,row:Array.isArray(data)?data[0]:data};
+    }catch(e){return {ok:false,message:e.message};}
+  },
+  async restoreDuplicateAdresse(markierung_id,restored_von){
+    try{
+      const res=await fetch(SB_URL+'/rpc/restore_duplicate_adresse',{
+        method:'POST',headers:this._h(),
+        body:JSON.stringify({p_markierung_id:markierung_id,p_restored_von:restored_von})
+      });
+      if(!res.ok){
+        const txt=await res.text().catch(()=>'');
+        return {ok:false,message:txt||('HTTP '+res.status)};
+      }
+      const data=await res.json().catch(()=>[]);
+      return {ok:true,row:Array.isArray(data)?data[0]:data};
+    }catch(e){return {ok:false,message:e.message};}
   },
 };
 
@@ -3274,13 +3329,15 @@ function buildArchiveStyleCard(a,{entry,isAdmin,currentUserId,users,log}){
   }).join('');
   const safeEntryNotiz=entry&&entry.notiz?(' · '+escHtml(entry.notiz)):'';
   const websiteUrl=safeHttpUrl(a.website||'');
+  const geoAmbigBadge=getGeoAmbigBadgeHtml(a);
+  const safeGeoName=escHtml(cleanGeoName(a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
   return`<div class="arch-card">
         <div class="arch-header">
           <div class="arch-icon">${icon}</div>
           <div style="flex:1">
-            <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
+            <div class="arch-street">${a.strasse} ${a.hnr}, ${a.plz} Wien${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}${geoAmbigBadge}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${[a.titel,a.name].filter(Boolean).join(' ')}</div>`:''}
-            ${a.geo_name?`<div class="addr-geoname">🏛️ ${a.geo_name.split(', ').filter(p=>p.toLowerCase()!==a.strasse.toLowerCase()).join(', ')}</div>`:''}
+            ${a.geo_name?`<div class="addr-geoname">🏛️ ${safeGeoName}</div>`:''}
             ${websiteUrl?`<div class="addr-website"><a href="${websiteUrl}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
             <div class="arch-meta">${label}${ownerStr}${when?' · '+when:''}${safeEntryNotiz}</div>
           </div>
@@ -3330,9 +3387,10 @@ function renderResults(list){
     const safeStrasse=escHtml(a.strasse||'');
     const safeHnr=escHtml(a.hnr||'');
     const safeTitelName=escHtml([a.titel,a.name].filter(Boolean).join(' '));
-    const safeGeoName=escHtml((a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
+    const safeGeoName=escHtml(cleanGeoName(a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
     const safeWebsite=safeHttpUrl(cur.website||'');
     const safePlz=escHtml(a.plz||'');
+    const geoAmbigBadge=getGeoAmbigBadgeHtml(a);
     const latestLogEntry=(latestLogByAddress[cur.id]||{}).entry||null;
     const latestNoteText=latestLogEntry?formatProtokollNotiz(latestLogEntry.aktion,latestLogEntry.notiz||''):'';
     const safeLatestNote=escHtml(latestNoteText);
@@ -3350,7 +3408,7 @@ function renderResults(list){
       <div class="addr-header">
         <div class="addr-num">${idx+1}</div>
         <div class="addr-main">
-          <div class="addr-street">${safeStrasse} ${safeHnr}${cur.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
+          <div class="addr-street">${safeStrasse} ${safeHnr}${cur.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}${geoAmbigBadge}</div>
           ${(a.titel||a.name)?`<div class="addr-arzt">${a.sprache==='pa'?'&#128332; ':''}${safeTitelName}</div>`:''}
           ${a.geo_name?`<div class="addr-geoname">🏛️ ${safeGeoName}</div>`:''}
           ${safeWebsite?`<div class="addr-website"><a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
@@ -3863,14 +3921,15 @@ function renderMeine(){
       const safeStrasse=escHtml(a.strasse||'');
       const safeHnr=escHtml(a.hnr||'');
       const safeTitelName=escHtml([a.titel,a.name].filter(Boolean).join(' '));
-      const safeGeoName=escHtml((a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
+      const safeGeoName=escHtml(cleanGeoName(a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
       const safeWebsite=safeHttpUrl(a.website||'');
       const safePlz=escHtml(a.plz||'');
+      const geoAmbigBadge=getGeoAmbigBadgeHtml(a);
       return`<div class="mine-card">
         <div class="mine-header">
           <div class="mine-icon">📌</div>
           <div class="mine-info">
-            <div class="mine-street">${safeStrasse} ${safeHnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
+            <div class="mine-street">${safeStrasse} ${safeHnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}${geoAmbigBadge}</div>
             ${(a.titel||a.name)?`<div class="addr-arzt">${safeTitelName}</div>`:''}
             ${a.geo_name?`<div class="addr-geoname">🏛️ ${safeGeoName}</div>`:''}
             ${safeWebsite?`<div class="addr-website"><a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
@@ -3993,6 +4052,150 @@ function renderArchive(){
     }).join('');
 }
 
+const DUPLICATE_RESULT_ACTIONS=new Set(['waehlt_uns','waehlt_nicht','ueberlegt','kein_interesse_wahl','sonstige']);
+function _dupNorm(v){
+  return String(v||'')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]/g,'');
+}
+function _dupDisplay(a){
+  return `${a.strasse||''} ${a.hnr||''}, ${a.plz||''} Wien`;
+}
+function _dupHasResultSet(log){
+  const out=new Set();
+  (log||[]).forEach(l=>{if(DUPLICATE_RESULT_ACTIONS.has(l.aktion))out.add(l.adressen_id);});
+  return out;
+}
+function _dupActiveMarkSet(){
+  return new Set((_duplicateMarks||[]).filter(m=>!m.restored_at).map(m=>m.adressen_id));
+}
+function _isDupSafeCandidate(a,hasResult,activeMarks){
+  if(!a)return {ok:false,reason:'Datensatz fehlt'};
+  if(a.status!=='verfuegbar')return {ok:false,reason:'Status nicht verfuegbar'};
+  if(a.benutzer_id||a.reserviert_am)return {ok:false,reason:'Reserviert'};
+  if(hasResult.has(a.id))return {ok:false,reason:'Ergebnis vorhanden'};
+  if(activeMarks.has(a.id))return {ok:false,reason:'Bereits markiert'};
+  return {ok:true,reason:''};
+}
+function _computeDuplicateCandidates(){
+  const adressen=S.getAdressen();
+  const log=S.getProtokoll();
+  const hasResult=_dupHasResultSet(log);
+  const activeMarks=_dupActiveMarkSet();
+  const groups=new Map();
+  adressen.forEach(a=>{
+    const name=_dupNorm(a.name||a.arzt_name);
+    const street=_dupNorm(a.strasse);
+    const hnr=_dupNorm(a.hnr||a.hausnummer);
+    const plz=_dupNorm(a.plz);
+    if(!name||!street||!hnr||!plz)return;
+    const key=`${name}|${street}|${hnr}|${plz}`;
+    if(!groups.has(key))groups.set(key,[]);
+    groups.get(key).push(a);
+  });
+  const out=[];
+  groups.forEach((rows,key)=>{
+    if(rows.length<2)return;
+    const sorted=[...rows].sort((a,b)=>String(a.id).localeCompare(String(b.id)));
+    const keep=sorted[0];
+    sorted.slice(1).forEach(dup=>{
+      const check=_isDupSafeCandidate(dup,hasResult,activeMarks);
+      out.push({
+        key,
+        keep,
+        dup,
+        eligible:check.ok,
+        reason:check.reason
+      });
+    });
+  });
+  return out;
+}
+async function markAdresseAlsDuplikat(adressenId,groupKey){
+  const user=auth.current();
+  const a=S.getAdressen().find(x=>x.id===adressenId);
+  if(!a){toast('Adresse nicht gefunden');return;}
+  if(!confirm(`Diese Adresse als Duplikat markieren?\n\n${_dupDisplay(a)}`))return;
+  const res=await db.markDuplicateAdresse(adressenId,user.id,groupKey,'Manuelle Markierung via Admin');
+  if(!res.ok){toast('⚠️ '+(res.message||'Markierung fehlgeschlagen'));return;}
+  const row=res.row||{};
+  if(row.status!=='marked'&&row.status!=='skipped'){
+    toast('⚠️ Unerwartete Antwort der API');
+    return;
+  }
+  toast(row.message||'Duplikat verarbeitet');
+  _sbLastSync=0;
+  await db.load();
+  _duplicateMarks=await db.loadDuplicateMarks();
+  renderAdmin();
+  renderArchive();
+  if(lastResults.length)renderResults(lastResults);
+}
+async function restoreDuplicateMarkierung(markierungId){
+  const user=auth.current();
+  if(!confirm('Markierung aufheben und Adresse wieder auf verfuegbar setzen?'))return;
+  const res=await db.restoreDuplicateAdresse(markierungId,user.id);
+  if(!res.ok){toast('⚠️ '+(res.message||'Ruecksetzen fehlgeschlagen'));return;}
+  const row=res.row||{};
+  toast(row.message||'Rueckgesetzt');
+  _sbLastSync=0;
+  await db.load();
+  _duplicateMarks=await db.loadDuplicateMarks();
+  renderAdmin();
+  renderArchive();
+  if(lastResults.length)renderResults(lastResults);
+}
+async function renderDuplicatePanel(){
+  const candidatesEl=q('#duplicate-candidates');
+  const marksEl=q('#duplicate-marked-list');
+  if(!candidatesEl||!marksEl)return;
+  candidatesEl.innerHTML='<div class="team-detail">Lade ...</div>';
+  marksEl.innerHTML='<div class="team-detail">Lade ...</div>';
+  _duplicateMarks=await db.loadDuplicateMarks();
+  const candidates=_computeDuplicateCandidates();
+  if(!candidates.length){
+    candidatesEl.innerHTML='<div class="team-detail">Keine Kandidaten gefunden.</div>';
+  }else{
+    candidatesEl.innerHTML=candidates.map(c=>{
+      const keepTxt=escHtml(_dupDisplay(c.keep));
+      const dupTxt=escHtml(_dupDisplay(c.dup));
+      const dupName=escHtml([c.dup.titel,c.dup.name||c.dup.arzt_name].filter(Boolean).join(' '));
+      const reason=c.eligible?'':`<div class="team-detail" style="color:#b45309">Nicht markierbar: ${escHtml(c.reason)}</div>`;
+      const btn=c.eligible
+        ?`<button class="team-btn" onclick="markAdresseAlsDuplikat('${c.dup.id}','${escHtml(c.key)}')">Als Duplikat markieren</button>`
+        :'';
+      return `<div class="team-card">
+        <div style="flex:1">
+          <div class="team-name">${dupName||'Adresse ohne Namen'}</div>
+          <div class="team-detail">Duplikat: ${dupTxt}</div>
+          <div class="team-detail">Keep: ${keepTxt}</div>
+          ${reason}
+        </div>
+        ${btn}
+      </div>`;
+    }).join('');
+  }
+  const activeMarks=(_duplicateMarks||[]).filter(m=>!m.restored_at);
+  if(!activeMarks.length){
+    marksEl.innerHTML='<div class="team-detail">Keine aktiven Duplikat-Markierungen.</div>';
+    return;
+  }
+  marksEl.innerHTML=activeMarks.map(m=>{
+    const label=escHtml(`${m.strasse||''} ${m.hausnummer||''}, ${m.plz||''} Wien`);
+    const by=escHtml(((_dbUsers.find(u=>u.id===m.markiert_von)||{}).name)||m.markiert_von||'unbekannt');
+    const when=new Date(m.markiert_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return `<div class="team-card">
+      <div style="flex:1">
+        <div class="team-name">${label}</div>
+        <div class="team-detail">Markiert von ${by} · ${when}</div>
+      </div>
+      <button class="team-btn" onclick="restoreDuplicateMarkierung('${m.id}')">Auf verfuegbar setzen</button>
+    </div>`;
+  }).join('');
+}
+
 /* ── ADMIN ───────────────────────────────────────────── */
 function renderAdmin(){
   const adressen=S.getAdressen();const log=S.getProtokoll();
@@ -4051,6 +4254,7 @@ function renderAdmin(){
     </div>`;
   }).join('')+`<button class="team-add-btn" onclick="teamAdd()">➕ Neues Mitglied hinzufügen</button>`;
   renderIssues();
+  renderDuplicatePanel();
 }
 
 /* ── ADMIN FILTER ─────────────────────────────────────── */
@@ -4090,6 +4294,8 @@ function renderAdminFilter(){
 function renderAdminList(){
   const user=auth.current();
   const list=adminGetFiltered();
+  const resultSet=_dupHasResultSet(S.getProtokoll());
+  const activeMarkSet=_dupActiveMarkSet();
   const el=document.getElementById('admin-addr-list');
   if(!el)return;
   if(!list.length){
@@ -4105,18 +4311,25 @@ function renderAdminList(){
     const arztLine=(a.titel||a.name)?escHtml([a.titel,a.name].filter(Boolean).join(' ')):'';
     const safeStrasse=escHtml(a.strasse||'');
     const safeHnr=escHtml(a.hnr||'');
-    const safeGeoName=escHtml((a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
+    const safeGeoName=escHtml(cleanGeoName(a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
     const safeWebsite=safeHttpUrl(a.website||'');
     const safePlz=escHtml(a.plz||'');
     const safeStatusLabel=escHtml(statusLabel||'');
+    const geoAmbigBadge=getGeoAmbigBadgeHtml(a);
     let action=`<button class="btn-edit-addr" onclick="editDlg.open('${a.id}')">⚙️</button>`;
     if(a.status==='verfuegbar')action=`<button class="btn-take" style="padding:.35rem .65rem;font-size:.75rem" onclick="uebernehmen('${a.id}')">📌</button>`+action;
     else if(isMine)action=`<button class="btn-done" style="padding:.35rem .65rem;font-size:.75rem" onclick="dlg.open('${a.id}')">✏️</button>`+action;
+    if(user.rolle==='admin'){
+      const check=_isDupSafeCandidate(a,resultSet,activeMarkSet);
+      if(check.ok){
+        action=`<button class="team-btn" style="padding:.35rem .6rem;font-size:.72rem" onclick="markAdresseAlsDuplikat('${a.id}','manual')">🗃️</button>`+action;
+      }
+    }
     const ownerName=escHtml(((_dbUsers.find(u=>u.id===a.benutzer_id)||DEMO_USERS.find(u=>u.id===a.benutzer_id))?.name)||'');
     return`<div class="kl-card">
       <div class="kl-dot ${dotCls}"></div>
       <div class="kl-main">
-        <div class="kl-street">${safeStrasse} ${safeHnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
+        <div class="kl-street">${safeStrasse} ${safeHnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}${geoAmbigBadge}</div>
         ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
         ${a.geo_name?`<div class="addr-geoname">🏛️ ${safeGeoName}</div>`:''}
         ${safeWebsite?`<div class="addr-website"><a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
@@ -4319,6 +4532,7 @@ function toggleTeam(){const el=q('#admin-users');el.classList.toggle('hidden');q
 function toggleLog(){const el=q('#admin-log');el.classList.toggle('hidden');q('#log-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleDocs(){const el=q('#admin-docs');el.classList.toggle('hidden');q('#docs-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function toggleReports(){const el=q('#admin-reports');el.classList.toggle('hidden');q('#reports-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
+function toggleDuplicates(){const el=q('#admin-duplicates');el.classList.toggle('hidden');q('#duplicates-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';if(!el.classList.contains('hidden'))renderDuplicatePanel();}
 function toggleIssues(){const el=q('#admin-issues');el.classList.toggle('hidden');q('#issues-arrow').innerHTML=el.classList.contains('hidden')?'&#9654;':'&#9660;';}
 function openReportDoc(path){
   try{
@@ -4591,9 +4805,11 @@ function renderKarteList(){
       const arztLine=(a.titel||a.name)?escHtml([a.titel,a.name].filter(Boolean).join(' ')):'';
       const safeStrasse=escHtml(a.strasse||'');
       const safeHnr=escHtml(a.hnr||'');
+      const safeGeoName=escHtml(cleanGeoName(a.geo_name||'').split(', ').filter(p=>p.toLowerCase()!==(a.strasse||'').toLowerCase()).join(', '));
       const safeWebsite=safeHttpUrl(a.website||'');
       const safePlz=escHtml(a.plz||'');
       const safeStatusLabel=escHtml(statusLabel||'');
+      const geoAmbigBadge=getGeoAmbigBadgeHtml(a);
       let action='';
       if(a.status==='verfuegbar')action=`<button class="btn-take" style="padding:.35rem .65rem;font-size:.75rem" onclick="uebernehmen('${a.id}')">📌</button>`;
       else if(isMine)action=`<button class="btn-done" style="padding:.35rem .65rem;font-size:.75rem" onclick="dlg.open('${a.id}')">✏️</button>`;
@@ -4601,8 +4817,9 @@ function renderKarteList(){
       return`<div class="kl-card">
         <div class="kl-dot ${dotCls}"></div>
         <div class="kl-main">
-          <div class="kl-street">${safeStrasse} ${safeHnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}</div>
+          <div class="kl-street">${safeStrasse} ${safeHnr}${a.verifiziert?' <span class="verified-badge" title="Verifiziert">\u2714\uFE0F</span>':''}${geoAmbigBadge}</div>
           ${arztLine?`<div class="kl-arzt">${arztLine}</div>`:''}
+          ${a.geo_name?`<div class="addr-geoname">🏛️ ${safeGeoName}</div>`:''}
           ${safeWebsite?`<div class="addr-website"><a href="${safeWebsite}" target="_blank" rel="noopener noreferrer">🌐 Website</a></div>`:''}
           <div class="kl-meta">${safePlz} Wien &nbsp;·&nbsp; ${safeStatusLabel}${isMine?' &nbsp;·&nbsp; 📌 Meine':''}</div>
         </div>
@@ -4696,6 +4913,17 @@ function safeHttpUrl(raw){
 }
 function safeTelHref(raw){
   return String(raw??'').replace(/[^0-9+]/g,'');
+}
+function isGeoAmbiguous(a){
+  const geo=String((a&&a.geo_name)||'');
+  return geo.startsWith('AMBIG|');
+}
+function cleanGeoName(raw){
+  return String(raw||'').replace(/^AMBIG\|/,'');
+}
+function getGeoAmbigBadgeHtml(a){
+  if(!isGeoAmbiguous(a))return '';
+  return ' <span class="geo-ambig-badge" title="Hinweis: Geocoding war nicht eindeutig. Die Position kann abweichen.">⚠</span>';
 }
 function formatFieldName(field){
   const labels={
