@@ -796,12 +796,17 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
           </div>
           <button class="team-btn" style="text-decoration:none;padding:.35rem .7rem" onclick="openReportDoc('docs/duplicate_markierungen.html')">Öffnen ↗</button>
         </div>
-        <div class="card" style="margin-bottom:.8rem;padding:.9rem">
-          <div style="font-weight:700;margin-bottom:.5rem">Vorgeschlagene Kandidaten</div>
-          <div id="duplicate-candidates" style="display:grid;gap:.45rem"></div>
-        </div>
         <div class="card" style="padding:.9rem">
-          <div style="font-weight:700;margin-bottom:.5rem">Aktive Duplikat-Markierungen</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem">
+            <div style="font-weight:700">Aktive Duplikat-Markierungen</div>
+            <button id="duplicate-restore-selected" class="team-btn" onclick="restoreSelectedDuplicateMarkierungen()" disabled>Ausgewählte auf verfuegbar setzen</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.5rem;margin-bottom:.5rem">
+            <input id="duplicate-filter-name" class="edit-inp" placeholder="Filter Name (ab 3 Zeichen)" oninput="onDuplicateMarkedFilterInput()">
+            <input id="duplicate-filter-address" class="edit-inp" placeholder="Filter Adresse (ab 3 Zeichen)" oninput="onDuplicateMarkedFilterInput()">
+            <button class="team-btn" onclick="resetDuplicateMarkedFilters()">Filter zurücksetzen</button>
+          </div>
+          <div id="duplicate-marked-selection-info" class="team-detail" style="margin-bottom:.45rem">0 ausgewählt</div>
           <div id="duplicate-marked-list" style="display:grid;gap:.45rem"></div>
         </div>
       </div>
@@ -2553,6 +2558,9 @@ const SB_URL='/api';
 let _sbLastSync=0;
 let _dbUsers=[];
 let _duplicateMarks=[];
+const _selectedDuplicateMarkIds=new Set();
+let _duplicateFilterName='';
+let _duplicateFilterAddress='';
 const db={
   _hG(){const t=auth.token();return t?{'Authorization':'Bearer '+t}:{};},
   _h(){const t=auth.token();const h={'Content-Type':'application/json','Prefer':'return=minimal'};if(t)h['Authorization']='Bearer '+t;return h;},
@@ -4149,53 +4157,121 @@ async function restoreDuplicateMarkierung(markierungId){
   renderArchive();
   if(lastResults.length)renderResults(lastResults);
 }
-async function renderDuplicatePanel(){
-  const candidatesEl=q('#duplicate-candidates');
+function toggleDuplicateMarkSelection(markierungId,checked){
+  if(checked)_selectedDuplicateMarkIds.add(markierungId);
+  else _selectedDuplicateMarkIds.delete(markierungId);
+  updateDuplicateBulkRestoreState();
+}
+function updateDuplicateBulkRestoreState(){
+  const btn=q('#duplicate-restore-selected');
+  const info=q('#duplicate-marked-selection-info');
+  if(!btn||!info)return;
+  const n=_selectedDuplicateMarkIds.size;
+  btn.disabled=n===0;
+  info.textContent=`${n} ausgewählt`;
+}
+function _dupFilterNorm(v){
+  return String(v||'').trim().toLowerCase();
+}
+function _dupFilterActive(v){
+  return _dupFilterNorm(v).length>=3;
+}
+function onDuplicateMarkedFilterInput(){
+  _duplicateFilterName=q('#duplicate-filter-name')?.value||'';
+  _duplicateFilterAddress=q('#duplicate-filter-address')?.value||'';
+  renderDuplicateMarkedRows();
+}
+function resetDuplicateMarkedFilters(){
+  _duplicateFilterName='';
+  _duplicateFilterAddress='';
+  const nameEl=q('#duplicate-filter-name');
+  const addrEl=q('#duplicate-filter-address');
+  if(nameEl)nameEl.value='';
+  if(addrEl)addrEl.value='';
+  renderDuplicateMarkedRows();
+}
+function renderDuplicateMarkedRows(){
   const marksEl=q('#duplicate-marked-list');
-  if(!candidatesEl||!marksEl)return;
-  candidatesEl.innerHTML='<div class="team-detail">Lade ...</div>';
-  marksEl.innerHTML='<div class="team-detail">Lade ...</div>';
-  _duplicateMarks=await db.loadDuplicateMarks();
-  const candidates=_computeDuplicateCandidates();
-  if(!candidates.length){
-    candidatesEl.innerHTML='<div class="team-detail">Keine Kandidaten gefunden.</div>';
-  }else{
-    candidatesEl.innerHTML=candidates.map(c=>{
-      const keepTxt=escHtml(_dupDisplay(c.keep));
-      const dupTxt=escHtml(_dupDisplay(c.dup));
-      const dupName=escHtml([c.dup.titel,c.dup.name||c.dup.arzt_name].filter(Boolean).join(' '));
-      const reason=c.eligible?'':`<div class="team-detail" style="color:#b45309">Nicht markierbar: ${escHtml(c.reason)}</div>`;
-      const btn=c.eligible
-        ?`<button class="team-btn" onclick="markAdresseAlsDuplikat('${c.dup.id}','${escHtml(c.key)}')">Als Duplikat markieren</button>`
-        :'';
-      return `<div class="team-card">
-        <div style="flex:1">
-          <div class="team-name">${dupName||'Adresse ohne Namen'}</div>
-          <div class="team-detail">Duplikat: ${dupTxt}</div>
-          <div class="team-detail">Keep: ${keepTxt}</div>
-          ${reason}
-        </div>
-        ${btn}
-      </div>`;
-    }).join('');
-  }
+  if(!marksEl)return;
   const activeMarks=(_duplicateMarks||[]).filter(m=>!m.restored_at);
+  const activeIds=new Set(activeMarks.map(m=>m.id));
+  [..._selectedDuplicateMarkIds].forEach(id=>{if(!activeIds.has(id))_selectedDuplicateMarkIds.delete(id);});
   if(!activeMarks.length){
     marksEl.innerHTML='<div class="team-detail">Keine aktiven Duplikat-Markierungen.</div>';
+    updateDuplicateBulkRestoreState();
     return;
   }
-  marksEl.innerHTML=activeMarks.map(m=>{
+
+  const nameNeedle=_dupFilterNorm(_duplicateFilterName);
+  const addrNeedle=_dupFilterNorm(_duplicateFilterAddress);
+  const useName=_dupFilterActive(nameNeedle);
+  const useAddr=_dupFilterActive(addrNeedle);
+  const filtered=activeMarks.filter(m=>{
+    const fullName=_dupFilterNorm([m.titel,m.arzt_name].filter(Boolean).join(' '));
+    const addr=_dupFilterNorm(`${m.strasse||''} ${m.hausnummer||''} ${m.plz||''} ${m.ort||''}`);
+    if(useName&&!fullName.includes(nameNeedle))return false;
+    if(useAddr&&!addr.includes(addrNeedle))return false;
+    return true;
+  });
+
+  if(!filtered.length){
+    marksEl.innerHTML='<div class="team-detail">Keine Treffer für den aktuellen Filter.</div>';
+    updateDuplicateBulkRestoreState();
+    return;
+  }
+
+  marksEl.innerHTML=filtered.map(m=>{
     const label=escHtml(`${m.strasse||''} ${m.hausnummer||''}, ${m.plz||''} Wien`);
     const by=escHtml(((_dbUsers.find(u=>u.id===m.markiert_von)||{}).name)||m.markiert_von||'unbekannt');
+    const name=escHtml([m.titel,m.arzt_name].filter(Boolean).join(' ')||'Unbekannt');
     const when=new Date(m.markiert_am).toLocaleString('de-AT',{timeZone:'Europe/Vienna',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const checked=_selectedDuplicateMarkIds.has(m.id)?'checked':'';
     return `<div class="team-card">
+      <label style="display:flex;align-items:center;justify-content:center;padding-right:.45rem;cursor:pointer">
+        <input type="checkbox" style="width:.95rem;height:.95rem;accent-color:var(--g)" ${checked} onchange="toggleDuplicateMarkSelection('${m.id}',this.checked)">
+      </label>
       <div style="flex:1">
-        <div class="team-name">${label}</div>
+        <div class="team-name">${name}</div>
+        <div class="team-detail">${label}</div>
         <div class="team-detail">Markiert von ${by} · ${when}</div>
       </div>
       <button class="team-btn" onclick="restoreDuplicateMarkierung('${m.id}')">Auf verfuegbar setzen</button>
     </div>`;
   }).join('');
+  updateDuplicateBulkRestoreState();
+}
+async function restoreSelectedDuplicateMarkierungen(){
+  const user=auth.current();
+  const activeSet=new Set((_duplicateMarks||[]).filter(m=>!m.restored_at).map(m=>m.id));
+  const selected=[..._selectedDuplicateMarkIds].filter(id=>activeSet.has(id));
+  if(!selected.length){
+    toast('Keine aktiven Markierungen ausgewählt');
+    updateDuplicateBulkRestoreState();
+    return;
+  }
+  if(!confirm(`${selected.length} markierte Adresse(n) wieder auf verfuegbar setzen?`))return;
+  let ok=0,fail=0;
+  for(const id of selected){
+    const res=await db.restoreDuplicateAdresse(id,user.id);
+    if(res.ok)ok++; else fail++;
+    _selectedDuplicateMarkIds.delete(id);
+  }
+  toast(`Ruecksetzen abgeschlossen: ${ok} ok${fail?`, ${fail} fehlgeschlagen`:''}`);
+  _sbLastSync=0;
+  await db.load();
+  _duplicateMarks=await db.loadDuplicateMarks();
+  renderAdmin();
+  renderArchive();
+  if(lastResults.length)renderResults(lastResults);
+}
+async function renderDuplicatePanel(){
+  const marksEl=q('#duplicate-marked-list');
+  if(!marksEl)return;
+  marksEl.innerHTML='<div class="team-detail">Lade ...</div>';
+  _duplicateFilterName=q('#duplicate-filter-name')?.value||_duplicateFilterName;
+  _duplicateFilterAddress=q('#duplicate-filter-address')?.value||_duplicateFilterAddress;
+  _duplicateMarks=await db.loadDuplicateMarks();
+  renderDuplicateMarkedRows();
 }
 
 /* ── ADMIN ───────────────────────────────────────────── */
