@@ -906,6 +906,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
           <input type="checkbox" id="ef-verifiziert" style="width:1.1rem;height:1.1rem;cursor:pointer;accent-color:var(--g)">
           <span>&#10004;&#65039; Verifiziert</span>
         </label>
+        <label id="ef-duplicate-wrap" style="display:flex;align-items:center;gap:.55rem;font-size:.88rem;cursor:pointer;user-select:none;margin-left:1rem">
+          <input type="checkbox" id="ef-duplicate" style="width:1.1rem;height:1.1rem;cursor:pointer;accent-color:#b91c1c">
+          <span>⚠️ Duplikat</span>
+        </label>
       </div>
     </div>
     <div id="edit-geo" class="edit-geo hidden"></div>
@@ -3622,8 +3626,10 @@ const editDlg={
     document.getElementById('edit-dlg-title').innerHTML=this.mode==='create'?'&#10133; Neue Adresse anlegen':'&#9998; Adresse bearbeiten';
     const btn=document.getElementById('edit-save-btn');
     btn.textContent=this.mode==='create'?'\ud83d\udccc Anlegen':'\ud83d\udccc Speichern';
+    const dupWrap=document.getElementById('ef-duplicate-wrap');
+    if(dupWrap)dupWrap.classList.toggle('hidden',this.mode==='create');
   },
-  open(id){
+  async open(id){
     this.mode='edit';
     this.currentId=id;
     const a=S.getAdressen().find(x=>x.id===id);
@@ -3637,6 +3643,19 @@ const editDlg={
     document.getElementById('ef-sprache').value=a.sprache||'de';
     document.getElementById('ef-website').value=a.website||'';
     document.getElementById('ef-verifiziert').checked=!!a.verifiziert;
+    const dupCb=document.getElementById('ef-duplicate');
+    const setDupState=()=>{
+      const active=(_duplicateMarks||[]).some(m=>m.adressen_id===id&&!m.restored_at);
+      if(!dupCb)return;
+      dupCb.checked=active;
+      dupCb.disabled=active;
+      dupCb.title=active?'Adresse ist bereits als aktives Duplikat markiert':'';
+    };
+    setDupState();
+    try{
+      _duplicateMarks=await db.loadDuplicateMarks();
+      setDupState();
+    }catch(_e){}
     // Änderungshistorie laden
     const histEl=document.getElementById('edit-history');
     const his=S.getProtokoll().filter(l=>l.adressen_id===id&&l.aktion==='bearbeitet')
@@ -3679,6 +3698,8 @@ const editDlg={
     document.getElementById('ef-sprache').value='de';
     document.getElementById('ef-website').value='';
     document.getElementById('ef-verifiziert').checked=false;
+    const dupCb=document.getElementById('ef-duplicate');
+    if(dupCb){dupCb.checked=false;dupCb.disabled=false;dupCb.title='';}
     const histEl=document.getElementById('edit-history');
     histEl.classList.add('hidden');
     const geo=document.getElementById('edit-geo');
@@ -3701,6 +3722,7 @@ const editDlg={
     const sprache=document.getElementById('ef-sprache').value;
     const website=document.getElementById('ef-website').value.trim();
     const verifiziert=document.getElementById('ef-verifiziert').checked;
+    const duplicateChecked=!!document.getElementById('ef-duplicate')?.checked;
     if(!strasse||!hnr||!plz){
       geo.className='edit-geo geo-warn';
       geo.textContent='⚠️ Straße, Hausnummer und PLZ sind Pflichtfelder.';
@@ -3825,9 +3847,34 @@ const editDlg={
       S.saveAdressen(adressen);
       pOk=await db.patch(a.id,{strasse:a.strasse,hausnummer:a.hnr,plz:a.plz,titel:a.titel||null,arzt_name:a.name||null,lat:a.lat||null,lon:a.lon||null,geo_name:a.geo_name||null,sprache:a.sprache||'de',website:a.website||null,verifiziert:!!a.verifiziert});
     }
+
+    let duplicateMsg='';
+    let duplicateMarkedNow=false;
+    if(pOk&&mode==='edit'&&duplicateChecked){
+      const alreadyActive=(_duplicateMarks||[]).some(m=>m.adressen_id===a.id&&!m.restored_at);
+      if(!alreadyActive){
+        const user=auth.current();
+        const dupRes=await db.markDuplicateAdresse(a.id,user.id,null,'Manuelle Markierung via Bearbeiten');
+        if(dupRes.ok){
+          const row=dupRes.row||{};
+          duplicateMsg=row.message||'Duplikat verarbeitet';
+          if(row.status==='marked')duplicateMarkedNow=true;
+        }else{
+          duplicateMsg='Duplikat-Markierung fehlgeschlagen: '+(dupRes.message||'unbekannt');
+        }
+      }
+    }
+
+    if(duplicateMarkedNow){
+      _sbLastSync=0;
+      await db.load();
+      _duplicateMarks=await db.loadDuplicateMarks();
+    }
+
     btn.disabled=false;
     this._setModeUi();
-    toast(pOk?(mode==='create'?'Adresse angelegt \u2713':'Adresse gespeichert \u2713'):'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden');
+    const baseMsg=pOk?(mode==='create'?'Adresse angelegt \u2713':'Adresse gespeichert \u2713'):'\u26a0\ufe0f Serverfehler \u2013 bitte Seite neu laden';
+    toast(duplicateMsg?`${baseMsg} · ${duplicateMsg}`:baseMsg);
     if(pOk&&currentTab==='home')await doSearch(true);
     setTimeout(()=>this.close(),3000);
     // Ansichten aktualisieren
