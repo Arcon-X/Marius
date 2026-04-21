@@ -796,19 +796,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Ro
           </div>
           <button class="team-btn" style="text-decoration:none;padding:.35rem .7rem" onclick="openReportDoc('docs/duplicate_markierungen.html')">Öffnen ↗</button>
         </div>
-        <div class="card" style="padding:.9rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem">
-            <div style="font-weight:700">Aktive Duplikat-Markierungen</div>
-            <button id="duplicate-restore-selected" class="team-btn" onclick="restoreSelectedDuplicateMarkierungen()" disabled>Ausgewählte auf verfuegbar setzen</button>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.5rem;margin-bottom:.5rem">
-            <input id="duplicate-filter-name" class="edit-inp" placeholder="Filter Name (ab 3 Zeichen)" oninput="onDuplicateMarkedFilterInput()">
-            <input id="duplicate-filter-address" class="edit-inp" placeholder="Filter Adresse (ab 3 Zeichen)" oninput="onDuplicateMarkedFilterInput()">
-            <button class="team-btn" onclick="resetDuplicateMarkedFilters()">Filter zurücksetzen</button>
-          </div>
-          <div id="duplicate-marked-selection-info" class="team-detail" style="margin-bottom:.45rem">0 ausgewählt</div>
-          <div id="duplicate-marked-list" style="display:grid;gap:.45rem"></div>
-        </div>
       </div>
       <div class="section-title" style="cursor:pointer;user-select:none" onclick="toggleIssues()"><span id="issues-arrow">&#9654;</span> Fehler &amp; Wünsche</div>
       <div class="hidden" id="admin-issues" style="padding:.3rem 1rem">
@@ -4265,12 +4252,12 @@ async function restoreSelectedDuplicateMarkierungen(){
   if(lastResults.length)renderResults(lastResults);
 }
 async function renderDuplicatePanel(){
-  const marksEl=q('#duplicate-marked-list');
-  if(!marksEl)return;
-  marksEl.innerHTML='<div class="team-detail">Lade ...</div>';
   _duplicateFilterName=q('#duplicate-filter-name')?.value||_duplicateFilterName;
   _duplicateFilterAddress=q('#duplicate-filter-address')?.value||_duplicateFilterAddress;
   _duplicateMarks=await db.loadDuplicateMarks();
+  const marksEl=q('#duplicate-marked-list');
+  if(!marksEl)return;
+  marksEl.innerHTML='<div class="team-detail">Lade ...</div>';
   renderDuplicateMarkedRows();
 }
 
