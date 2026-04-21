@@ -3979,11 +3979,13 @@ function renderArchive(){
   const user=auth.current();const isAdmin=user.rolle==='admin';
   const adressen=S.getAdressen();
   const log=S.getProtokoll();
+  const activeDupIds=_dupActiveMarkSet();
+  const statsAdressen=adressen.filter(a=>!activeDupIds.has(a.id));
   const {activeLog,latestResultByAddress}=getArchiveLogState(log);
-  const total=adressen.length;
-  const verf=adressen.filter(a=>a.status==='verfuegbar').length;
-  const bear=adressen.filter(a=>a.status==='in_bearbeitung').length;
-  const archivedIds=new Set(adressen.filter(a=>a.status==='archiviert').map(a=>a.id));
+  const total=statsAdressen.length;
+  const verf=statsAdressen.filter(a=>a.status==='verfuegbar').length;
+  const bear=statsAdressen.filter(a=>a.status==='in_bearbeitung').length;
+  const archivedIds=new Set(statsAdressen.filter(a=>a.status==='archiviert').map(a=>a.id));
   const activeResults=Object.entries(latestResultByAddress)
     .filter(([addrId])=>archivedIds.has(addrId))
     .map(([,v])=>v.entry);
