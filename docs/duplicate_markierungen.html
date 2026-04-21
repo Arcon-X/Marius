@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Duplikat-Markierungen</title>
+  <title>Aktive Duplikat-Markierungen</title>
   <style>
     body{font-family:Segoe UI,Arial,sans-serif;background:#f5f7fb;color:#1f2937;margin:0;padding:1rem}
     .wrap{max-width:1100px;margin:0 auto}
@@ -12,12 +12,11 @@
     .sub{color:#6b7280;font-size:.9rem}
     .btn{border:1px solid #cbd5e1;background:#fff;border-radius:8px;padding:.45rem .7rem;cursor:pointer}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:.8rem;margin-top:.8rem}
+    .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.5rem;margin-top:.7rem}
+    .inp{border:1px solid #cbd5e1;border-radius:8px;padding:.45rem .55rem;font:inherit}
     table{width:100%;border-collapse:collapse;font-size:.88rem}
     th,td{padding:.48rem .45rem;border-bottom:1px solid #eef2f7;text-align:left;vertical-align:top}
     th{background:#f8fafc;font-weight:700;position:sticky;top:0}
-    .pill{display:inline-block;border-radius:999px;padding:.1rem .5rem;font-size:.72rem;font-weight:700}
-    .pill-active{background:#fee2e2;color:#991b1b}
-    .pill-restored{background:#dcfce7;color:#166534}
     .muted{color:#6b7280}
     .error{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:8px;padding:.55rem;margin-top:.6rem}
   </style>
@@ -26,10 +25,15 @@
   <div class="wrap">
     <div class="head">
       <div>
-        <div class="title">Duplikat-Markierungen</div>
-        <div class="sub">Live-Ansicht aus /api/duplicate_markierungen</div>
+        <div class="title">Aktive Duplikat-Markierungen</div>
+        <div class="sub">Nur aktive Einträge aus /api/duplicate_markierungen (restored_at is null)</div>
       </div>
       <button class="btn" onclick="loadData()">Neu laden</button>
+    </div>
+    <div class="filters">
+      <input id="filter-name" class="inp" placeholder="Filter Name (ab 3 Zeichen)" oninput="applyFilters()">
+      <input id="filter-address" class="inp" placeholder="Filter Adresse (ab 3 Zeichen)" oninput="applyFilters()">
+      <button class="btn" onclick="resetFilters()">Filter zurücksetzen</button>
     </div>
     <div id="meta" class="sub" style="margin-top:.6rem"></div>
     <div id="err"></div>
@@ -38,13 +42,10 @@
         <table>
           <thead>
             <tr>
-              <th>Status</th>
               <th>Adresse</th>
               <th>Name</th>
               <th>Markiert von</th>
               <th>Markiert am</th>
-              <th>Zurückgesetzt von</th>
-              <th>Zurückgesetzt am</th>
               <th>Grund</th>
             </tr>
           </thead>
@@ -54,6 +55,7 @@
     </div>
   </div>
   <script>
+    const state={marks:[],nameById:{}};
     function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
     function fmt(ts){
       if(!ts)return '';
@@ -71,45 +73,71 @@
         return {Authorization:'Bearer '+parsed.token};
       }catch(_e){return {};}
     }
+    function norm(v){
+      return String(v||'').trim().toLowerCase();
+    }
+    function filterActive(v){
+      return norm(v).length>=3;
+    }
+    function renderRows(list){
+      const rowsEl=document.getElementById('rows');
+      if(!list.length){
+        rowsEl.innerHTML='<tr><td colspan="5" class="muted">Keine aktiven Markierungen gefunden.</td></tr>';
+        return;
+      }
+      rowsEl.innerHTML=list.map(m=>{
+        const addr=esc(`${m.strasse||''} ${m.hausnummer||''}, ${m.plz||''} ${m.ort||'Wien'}`.trim());
+        const name=esc([m.titel,m.arzt_name].filter(Boolean).join(' ')||'Unbekannt');
+        const markedBy=esc(state.nameById[m.markiert_von]||m.markiert_von||'');
+        return `<tr>
+          <td>${addr}</td>
+          <td>${name}</td>
+          <td>${markedBy}</td>
+          <td>${esc(fmt(m.markiert_am))}</td>
+          <td>${esc(m.grund||'')}</td>
+        </tr>`;
+      }).join('');
+    }
+    function applyFilters(){
+      const nameNeedle=norm(document.getElementById('filter-name')?.value||'');
+      const addrNeedle=norm(document.getElementById('filter-address')?.value||'');
+      const useName=filterActive(nameNeedle);
+      const useAddr=filterActive(addrNeedle);
+      const out=state.marks.filter(m=>{
+        const fullName=norm([m.titel,m.arzt_name].filter(Boolean).join(' '));
+        const addr=norm(`${m.strasse||''} ${m.hausnummer||''} ${m.plz||''} ${m.ort||''}`);
+        if(useName&&!fullName.includes(nameNeedle))return false;
+        if(useAddr&&!addr.includes(addrNeedle))return false;
+        return true;
+      });
+      document.getElementById('meta').textContent=`Aktive Einträge: ${out.length} / ${state.marks.length}`;
+      renderRows(out);
+    }
+    function resetFilters(){
+      const n=document.getElementById('filter-name');
+      const a=document.getElementById('filter-address');
+      if(n)n.value='';
+      if(a)a.value='';
+      applyFilters();
+    }
     async function loadData(){
       const err=document.getElementById('err');
       const rowsEl=document.getElementById('rows');
-      const meta=document.getElementById('meta');
       err.innerHTML='';
-      rowsEl.innerHTML='<tr><td colspan="8" class="muted">Lade ...</td></tr>';
+      rowsEl.innerHTML='<tr><td colspan="5" class="muted">Lade ...</td></tr>';
       try{
         const h=authHeader();
         const [mr,ur]=await Promise.all([
-          fetch('/api/duplicate_markierungen?select=*', {headers:h}),
+          fetch('/api/duplicate_markierungen?select=*&restored_at=is.null', {headers:h}),
           fetch('/api/benutzer?select=id,name', {headers:h})
         ]);
         if(!mr.ok)throw new Error('HTTP '+mr.status+' beim Laden der Duplikat-Tabelle');
         const marks=await mr.json();
         const users=ur.ok?await ur.json():[];
-        const nameById={};
-        users.forEach(u=>{nameById[u.id]=u.name;});
-        meta.textContent=`Einträge: ${marks.length}`;
-        if(!marks.length){
-          rowsEl.innerHTML='<tr><td colspan="8" class="muted">Keine Markierungen vorhanden.</td></tr>';
-          return;
-        }
-        rowsEl.innerHTML=marks.map(m=>{
-          const active=!m.restored_at;
-          const addr=esc(`${m.strasse||''} ${m.hausnummer||''}, ${m.plz||''} ${m.ort||'Wien'}`.trim());
-          const name=esc([m.titel,m.arzt_name].filter(Boolean).join(' '));
-          const markedBy=esc(nameById[m.markiert_von]||m.markiert_von||'');
-          const restoredBy=esc(nameById[m.restored_von]||m.restored_von||'');
-          return `<tr>
-            <td><span class="pill ${active?'pill-active':'pill-restored'}">${active?'aktiv':'zurueckgesetzt'}</span></td>
-            <td>${addr}</td>
-            <td>${name}</td>
-            <td>${markedBy}</td>
-            <td>${esc(fmt(m.markiert_am))}</td>
-            <td>${restoredBy}</td>
-            <td>${esc(fmt(m.restored_at))}</td>
-            <td>${esc(m.grund||'')}</td>
-          </tr>`;
-        }).join('');
+        state.nameById={};
+        users.forEach(u=>{state.nameById[u.id]=u.name;});
+        state.marks=Array.isArray(marks)?marks:[];
+        applyFilters();
       }catch(e){
         rowsEl.innerHTML='';
         err.innerHTML='<div class="error">'+esc(e.message||e)+'</div>';
